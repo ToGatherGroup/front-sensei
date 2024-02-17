@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  font-family: "Roboto", Helvetica, Arial, sans-serif;
+}
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -16,7 +20,7 @@
   }
 }
 
-body {
+/* body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
       to bottom,
@@ -24,10 +28,63 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+} */
+
+body {
+  background-image: url("../../public/background_1920_1080.jpg");
+  background-size: cover;
+  /*   background-position: right; */
+}
+
+/* Dark shadow above the background */
+.bg_shadow {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  background-size: cover;
+  background-position: right;
+  /* Prevents the margin of child to explode the parent (this) */
+  overflow: auto;
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+}
+
+/* Forms */
+
+.btnSubmit {
+  margin: 20px auto;
+  background-color: #000;
+  padding: 10px 60px;
+  border-radius: 10px;
+  border: 1px solid #000;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+textarea {
+  height: 10em;
+}
+
+select {
+  cursor: pointer;
+}
+
+input[type="date"] {
+  cursor: pointer;
+}
+
+@media (max-width: 450px) {
+  .btnSubmit {
+    margin-top: 40px;
+    padding: 20px 70px;
+    font-size: 22px;
   }
 }
