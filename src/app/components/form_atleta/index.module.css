@@ -1,0 +1,147 @@
+.container {
+  height: 100vh;
+  display: flex;
+  margin: auto 0;
+
+  align-items: center;
+  justify-content: center;
+}
+
+.content {
+  align-self: center;
+  min-width: fit-content;
+  max-width: 700px;
+  background-color: white;
+  margin: 0 auto;
+  border-radius: 5px;
+  padding: 40px;
+}
+
+.title {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 40px;
+  font-weight: 800;
+  font-size: 24px;
+}
+
+.form {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.inputRow {
+  margin: 10px auto;
+  box-sizing: border-box;
+}
+
+.inputRow label {
+  display: inline-block;
+  width: 200px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.inputRow input,
+.inputRow textarea,
+.inputRow select {
+  background-color: #eee;
+  width: 300px;
+  padding: 5px;
+  padding-left: 10px;
+  border-radius: 5px;
+}
+
+.textareaRow {
+  display: flex;
+  align-items: center;
+}
+
+.inputRow input[type="number"] {
+  width: 100px;
+  margin: 0 200px 0 0;
+}
+
+/* Tablet */
+@media (max-width: 700px) {
+  .content {
+    max-width: 80%;
+  }
+
+  .inputRow {
+    display: flex;
+    gap: 10px;
+    flex: 1 1 0px;
+  }
+
+  .inputRow label {
+    width: 165px;
+    font-weight: 500;
+  }
+
+  .inputRow input,
+  .inputRow select {
+    width: 200px;
+  }
+
+  .inputRow input[type="number"] {
+    margin-right: 50px;
+    margin-left: 50px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 450px) {
+  .container {
+    display: block;
+  }
+
+  .content {
+    background-color: rgb(255, 255, 255);
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 80%;
+    margin: 20px auto;
+  }
+
+  .inputRow {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    align-items: center;
+  }
+
+  .inputRow input,
+  .inputRow textarea,
+  .inputRow select {
+    width: 200px;
+    font-size: 20px;
+    height: 2em;
+  }
+
+  .inputRow label {
+    font-size: 22px;
+    margin: 0 auto;
+    margin-top: 10px;
+    margin-bottom: 0px;
+  }
+
+  .inputRow input[type="number"] {
+    margin: 0 auto;
+  }
+
+  .inputRow *::placeholder,
+  .inputRow input[type="date"],
+  .inputRow select {
+    text-align: center;
+  }
+
+  .inputRow select {
+    text-align-last: center;
+  }
+}
