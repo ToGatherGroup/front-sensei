@@ -1,12 +1,12 @@
-import Title from "../components/title/index";
+import Title from "../../components/Title/index";
 
 export default function LoginPage() {
   return (
-    <main
+    <div
       className={`flex w-full items-center justify-center w-100 min-h-dvh bg-[#F5F5F5]`}
     >
       <div
-        className={`bg-[#CD2626] rounded-3xl p-16 flex flex-col items-center justify-items-center gap-10 w-full max-w-lg`}
+        className={`bg-[#CD2626] rounded-3xl p-16 flex flex-col items-center justify-items-center gap-10 w-full max-w-lg max-container`}
       >
         <Title title="Login" />
 
@@ -34,6 +34,6 @@ export default function LoginPage() {
           </button>
         </form>
       </div>
-    </main>
+    </div>
   );
 }

@@ -1,8 +1,8 @@
-type Title = {
+type TitleProps = {
     title: string;
 }
 
-export default function Title({title} : Title){
+export default function Title({title} : TitleProps){
     return (
         <h2 className="text-5xl	font-extrabold text-white uppercase">{title}</h2>
     )

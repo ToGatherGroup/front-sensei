@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import { Roboto_Flex } from "next/font/google";
 import "./globals.css";
 import "./reset.css";
 
 // Font
-const roboto = Roboto_Flex({ subsets: ["latin"] });
+
 
 export const metadata: Metadata = {
   title: "Sensei Divino",
@@ -18,8 +17,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-br">
-      <body className={roboto.className}>
-        <div className="bg_shadow">{children}</div>
+      <body>
+        <div className="min-h-screen w-full">
+          <header>HEADER</header>
+          <main className="bg-[url('/background_1920_1080.jpg')] bg-cover bg-right-top bg-no-repeat w-full h-full">
+            {children}
+          </main>
+          <footer>FOOTER</footer>
+        </div>
       </body>
     </html>
   );
