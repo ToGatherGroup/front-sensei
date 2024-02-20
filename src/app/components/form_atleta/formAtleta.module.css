@@ -66,16 +66,40 @@
   margin: 0 200px 0 0;
 }
 
+.required::after {
+  content: "*";
+  color: rgb(107, 10, 10);
+  font-size: 12px;
+  vertical-align: top;
+}
+
+.displayError {
+  display: block;
+  padding-left: 200px;
+  color: red;
+}
+
 /* Tablet */
 @media (max-width: 700px) {
   .content {
     max-width: 80%;
+    margin-right: 10%;
+    margin-left: 10%;
+  }
+
+  .displayError {
+    padding-left: 0;
+    width: 100%;
+    text-align: center;
   }
 
   .inputRow {
     display: flex;
+    justify-content: center;
     gap: 10px;
-    flex: 1 1 0px;
+    /*     flex: 1 1 0px; */
+    flex-wrap: wrap;
+    width: 100%;
   }
 
   .inputRow label {
@@ -119,7 +143,7 @@
   .inputRow input,
   .inputRow textarea,
   .inputRow select {
-    width: 200px;
+    width: 250px;
     font-size: 20px;
     height: 2em;
   }
@@ -133,6 +157,8 @@
 
   .inputRow input[type="number"] {
     margin: 0 auto;
+    width: 150px;
+    text-align: center;
   }
 
   .inputRow *::placeholder,
@@ -143,5 +169,12 @@
 
   .inputRow select {
     text-align-last: center;
+  }
+
+  .required::after {
+    content: "*";
+    color: rgb(107, 10, 10);
+    font-size: 16px;
+    vertical-align: top;
   }
 }
