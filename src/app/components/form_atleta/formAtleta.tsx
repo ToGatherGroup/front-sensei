@@ -8,34 +8,12 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
-interface Atleta {
-  name: string;
-  email?: string;
-  birthdate: Date;
-  sex: "male" | "female" | "other";
-  weight: number | string;
-  height: number;
-  faixa:
-    | "branca"
-    | "cinza"
-    | "azulClaro"
-    | "azulEscuro"
-    | "amarela"
-    | "laranja"
-    | "verde"
-    | "roxa"
-    | "marrom"
-    | "preta"
-    | "coral"
-    | "vermelha";
-}
-
 const atletaSchema = yup.object().shape({
   name: yup.string().required("Este campo é obrigatório."),
   email: yup.string().optional().email("Insira um e-mail válido"),
   birthdate: yup
     .date()
-    .min(new Date(1900, 0, 1), "Você não é tão velho.")
+    .min(new Date(1900, 0, 1), "Essa pessoa não é tão velha assim.")
     .max(new Date(), "Insira uma data válida.")
     .typeError("Insira uma data válida."),
   sex: yup
@@ -76,7 +54,21 @@ const atletaSchema = yup.object().shape({
     .typeError("Selecione a faixa."),
 });
 
-const FormAtleta = () => {
+type Atleta = {
+  name: string;
+  email?: string;
+  birthdate: Date;
+  sex: string;
+  weight: number | string;
+  height: number;
+  faixa: string;
+};
+
+type Props = {
+  atleta?: Atleta;
+};
+
+const FormAtleta = ({ atleta }: Props) => {
   const {
     register,
     handleSubmit: handleSubmit,
@@ -92,11 +84,11 @@ const FormAtleta = () => {
     reset();
   };
 
-  /*   // Data for validation test
+  /*     // Data for validation test
   const data: Atleta = {
     name: "Bruno Amado",
-    email: "bru-a@hotmail.com",
-    birthdate: new Date(1995, 1, 2),
+    email: "2225973@hotmail.com",
+    birthdate: new Date(1990, 0, 0),
     sex: "male",
     weight: "10.50",
     height: 172,
@@ -117,14 +109,30 @@ const FormAtleta = () => {
       console.log(`Mês: ${error.birthdate.getMonth()}`);
     }); */
 
+  //  Treatment for date before fill input (from GET)
+  function twoDigits(n: number) {
+    if (n < 10) {
+      return `0${n}`;
+    }
+    return n.toString();
+  }
+
+  function dateForInput(date: Date) {
+    const year = date.getFullYear();
+    const month = twoDigits(date.getMonth() + 1); // Yeah... This shit.. Need to be increased by 1, since the index starts on zero. (0 = January)
+    const day = twoDigits(date.getDate());
+    const dateFormat = `${year}-${month}-${day}`;
+    return dateFormat;
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.content}>
         <div className={styles.title}>
-          <h1>Cadastrar atleta</h1>
+          {atleta ? <h1>Alterar Atleta</h1> : <h1>Cadastrar Atleta</h1>}
           <Image
             src="/icons/person_24x24.png"
-            alt="Ícone de cadastro"
+            alt={atleta ? "Ícone de alteração" : "Ícone de cadastro"}
             width={24}
             height={24}
           />
@@ -140,6 +148,7 @@ const FormAtleta = () => {
               type="text"
               id="name"
               placeholder="Insira seu nome"
+              value={atleta ? atleta.name : ""}
             />
             {errors.name && (
               <p className={styles.displayError}>{errors.name.message}</p>
@@ -153,6 +162,7 @@ const FormAtleta = () => {
               type="email"
               id="email"
               placeholder="Insira seu e-mail"
+              value={atleta ? atleta.email : ""}
             />
             {errors.email && (
               <p className={styles.displayError}>{errors.email.message}</p>
@@ -163,7 +173,12 @@ const FormAtleta = () => {
             <label htmlFor="birthdate" className={styles.required}>
               Data de nascimento
             </label>
-            <input {...register("birthdate")} type="date" id="birthdate" />
+            <input
+              {...register("birthdate")}
+              type="date"
+              id="birthdate"
+              /* value={atleta ? dateForInput(atleta.birthdate) : ""} */
+            />
             {errors.birthdate && (
               <p className={styles.displayError}>{errors.birthdate.message}</p>
             )}
@@ -173,7 +188,11 @@ const FormAtleta = () => {
             <label htmlFor="sex" className={styles.required}>
               Sexo
             </label>
-            <select {...register("sex")} id="sex" defaultValue="">
+            <select
+              {...register("sex")}
+              id="sex"
+              defaultValue={atleta ? atleta.sex : ""}
+            >
               <option value="" disabled hidden>
                 Selecione
               </option>
@@ -196,6 +215,7 @@ const FormAtleta = () => {
               id="weight"
               placeholder={"0,0"}
               step={0.01}
+              value={atleta ? atleta.weight : ""}
             />
             {errors.weight && (
               <p className={styles.displayError}>{errors.weight.message}</p>
@@ -212,6 +232,7 @@ const FormAtleta = () => {
               id="height"
               placeholder={"0"}
               step={0.5}
+              value={atleta ? atleta.height : ""}
             />
             {errors.height && (
               <p className={styles.displayError}>{errors.height.message}</p>
@@ -237,7 +258,11 @@ const FormAtleta = () => {
             <label htmlFor="faixa" className={styles.required}>
               Faixa
             </label>
-            <select {...register("faixa")} id="faixa" defaultValue="">
+            <select
+              {...register("faixa")}
+              id="faixa"
+              defaultValue={atleta ? atleta.faixa : ""}
+            >
               <option value="" disabled hidden>
                 Selecione
               </option>
@@ -258,6 +283,8 @@ const FormAtleta = () => {
               <p className={styles.displayError}>{errors.faixa.message}</p>
             )}
           </div>
+
+          <input type="date" name="teste" id="teste" />
 
           <input type="submit" value="Cadastrar" className="btnSubmit" />
         </form>
