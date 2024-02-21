@@ -8,8 +8,6 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
-import { IMaskInput } from "react-imask";
-
 interface Atleta {
   name: string;
   email?: string;
@@ -33,8 +31,8 @@ interface Atleta {
 }
 
 const atletaSchema = yup.object().shape({
-  name: yup.string().nonNullable().required("Este campo é obrigatório."),
-  email: yup.string().email("Insira um e-mail válido"),
+  name: yup.string().required("Este campo é obrigatório."),
+  email: yup.string().optional().email("Insira um e-mail válido"),
   birthdate: yup
     .date()
     .min(new Date(1900, 0, 1), "Você não é tão velho.")
@@ -52,6 +50,7 @@ const atletaSchema = yup.object().shape({
     .typeError("Insira o peso em quilogramas."),
   height: yup
     .number()
+    .integer("Insira a altura em centímetros.")
     .required("Este campo é obrigatório.")
     .typeError("Insira a altura em centímetros."),
   faixa: yup
