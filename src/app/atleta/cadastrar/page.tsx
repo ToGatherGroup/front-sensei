@@ -1,4 +1,4 @@
-import FormAtleta from "@/app/components/form_atleta/formAtleta";
+import FormAtleta from "@/components/form_atleta/formAtleta";
 
 const atleta = {
   name: "Bruno Amado",
@@ -7,14 +7,14 @@ const atleta = {
   sex: "male",
   weight: 100.0,
   height: 173,
-  faixa: "branca",
+  faixa: "marrom",
 };
 
 type Props = {};
 const CadastrarAtleta = (props: Props) => {
   return (
     <div>
-      {/* <FormAtleta atleta={atleta} /> */}
+      <FormAtleta atleta={atleta} />
       <FormAtleta />
     </div>
   );

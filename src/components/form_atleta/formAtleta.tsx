@@ -84,7 +84,7 @@ const FormAtleta = ({ atleta }: Props) => {
     reset();
   };
 
-  /*     // Data for validation test
+  // Data for validation test
   const data: Atleta = {
     name: "Bruno Amado",
     email: "2225973@hotmail.com",
@@ -99,15 +99,11 @@ const FormAtleta = ({ atleta }: Props) => {
   atletaSchema
     .validate(data)
     .then((valid) => {
-      console.log(valid);
-      console.log(
-        `Mês: ${valid.birthdate ? valid.birthdate.getMonth() : "null"}`
-      );
+      console.log("Validou: " + valid);
     })
     .catch((error) => {
-      console.log(error);
-      console.log(`Mês: ${error.birthdate.getMonth()}`);
-    }); */
+      console.log("Não validou: " + error);
+    });
 
   //  Treatment for date before fill input (from GET)
   function twoDigits(n: number) {
@@ -148,7 +144,7 @@ const FormAtleta = ({ atleta }: Props) => {
               type="text"
               id="name"
               placeholder="Insira seu nome"
-              value={atleta ? atleta.name : ""}
+              value={atleta && atleta.name}
             />
             {errors.name && (
               <p className={styles.displayError}>{errors.name.message}</p>
@@ -162,7 +158,7 @@ const FormAtleta = ({ atleta }: Props) => {
               type="email"
               id="email"
               placeholder="Insira seu e-mail"
-              value={atleta ? atleta.email : ""}
+              value={atleta && atleta.email}
             />
             {errors.email && (
               <p className={styles.displayError}>{errors.email.message}</p>
@@ -177,7 +173,7 @@ const FormAtleta = ({ atleta }: Props) => {
               {...register("birthdate")}
               type="date"
               id="birthdate"
-              /* value={atleta ? dateForInput(atleta.birthdate) : ""} */
+              value={atleta && dateForInput(atleta.birthdate)}
             />
             {errors.birthdate && (
               <p className={styles.displayError}>{errors.birthdate.message}</p>
@@ -210,12 +206,12 @@ const FormAtleta = ({ atleta }: Props) => {
               Peso (kg)
             </label>
             <input
-              type="number"
               {...register("weight")}
+              type="number"
               id="weight"
               placeholder={"0,0"}
               step={0.01}
-              value={atleta ? atleta.weight : ""}
+              value={atleta && atleta.weight}
             />
             {errors.weight && (
               <p className={styles.displayError}>{errors.weight.message}</p>
@@ -227,12 +223,12 @@ const FormAtleta = ({ atleta }: Props) => {
               Altura (cm)
             </label>
             <input
-              type="number"
               {...register("height")}
+              type="number"
               id="height"
               placeholder={"0"}
-              step={0.5}
-              value={atleta ? atleta.height : ""}
+              step={1}
+              value={atleta && atleta.height}
             />
             {errors.height && (
               <p className={styles.displayError}>{errors.height.message}</p>
@@ -284,9 +280,11 @@ const FormAtleta = ({ atleta }: Props) => {
             )}
           </div>
 
-          <input type="date" name="teste" id="teste" />
-
-          <input type="submit" value="Cadastrar" className="btnSubmit" />
+          <input
+            type="submit"
+            value={atleta ? "Alterar" : "Cadastrar"}
+            className="btnSubmit"
+          />
         </form>
       </div>
     </div>
