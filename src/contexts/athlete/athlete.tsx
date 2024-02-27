@@ -5,15 +5,15 @@ import { AthleteProps } from "./athlete.type";
 const AthleteContext = createContext({});
 
 export const AthleteProvider = ({ children }: {children: React.ReactNode}) => {
-    const [athlete, setAthlete] = useEffect<AthleteProps | null>(null);
-    const { get } = useApiProvider();
+    // const [athlete, setAthlete] = useEffect<AthleteProps | []>([]);
+    // const { get } = useApiProvider();
 
-    const listAthletes = get('atletas');
+    //const listAthletes = get('atletas');
 
     
     
     return (
-        <AthleteContext.Provider value={{ athlete }}>
+        <AthleteContext.Provider value={{ }}>
             {children}
         </AthleteContext.Provider>
     )
