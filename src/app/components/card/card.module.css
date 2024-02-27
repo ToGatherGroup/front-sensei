@@ -21,13 +21,14 @@
   text-align: center;
   height: 3em;
   width: 80%;
-  margin: 20px auto;
+  margin-top: 5px;
+  padding: 1.2rem;
   background-color: #000;
 }
 
 .cardTitle h2 {
   color: white;
-  font-size: 16px;
+  font-size: 1.2rem;
   font-weight: 700;
   text-transform: uppercase;
 }
@@ -50,29 +51,23 @@
 }
 
 @media (max-width: 800px) {
-  /* 25% smaller */
   .cardContainer {
     width: 150px;
-    height: 262.5px;
-  }
-
-  .cardTitle h2 {
-    font-size: 16px;
-  }
-}
-
-@media (max-width: 450px) {
-  .cardContainer {
-    width: 150px;
-    height: 262.5px;
+    height: 175px;
     margin: 5px;
-  }
-
-  .cardTitle h2 {
-    font-size: 20px;
   }
 
   .cardTitle {
     width: 95%;
+    height: 2em;
+  }
+
+  .cardTitle h2 {
+    font-size: 1rem;
+  }
+
+  .icon img {
+    width: calc(100% - 50px);
+    margin: 0 5px;
   }
 }

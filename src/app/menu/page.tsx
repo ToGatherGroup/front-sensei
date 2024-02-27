@@ -41,11 +41,13 @@ const cards: Card[] = [
 const menu = (props: Props) => {
   return (
     <div className={styles.container}>
-      {cards.map((card: Card) => (
-        <div className={styles.card} key={card.title}>
-          <Card cardTitle={card.title} src={card.imgSrc} />
-        </div>
-      ))}
+      <div className={styles.cardContainer}>
+        {cards.map((card: Card) => (
+          <div className={styles.card} key={card.title}>
+            <Card cardTitle={card.title} src={card.imgSrc} />
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
