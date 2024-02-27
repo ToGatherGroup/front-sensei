@@ -84,7 +84,7 @@ const FormAtleta = ({ atleta }: Props) => {
     reset();
   };
 
-  // Data for validation test
+  /* // Data for validation test
   const data: Atleta = {
     name: "Bruno Amado",
     email: "2225973@hotmail.com",
@@ -103,7 +103,7 @@ const FormAtleta = ({ atleta }: Props) => {
     })
     .catch((error) => {
       console.log("Não validou: " + error);
-    });
+    }); */
 
   //  Treatment for date before fill input (from GET)
   function twoDigits(n: number) {
