@@ -1,5 +1,5 @@
 .container {
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   margin: auto 0;
 
@@ -24,7 +24,7 @@
   align-items: center;
   padding-bottom: 40px;
   font-weight: 800;
-  font-size: 24px;
+  font-size: 1.5rem;
 }
 
 .form {
@@ -42,7 +42,7 @@
   display: inline-block;
   width: 200px;
   text-align: center;
-  font-size: 18px;
+  font-size: 1rem;
   font-weight: 500;
 }
 
@@ -62,14 +62,27 @@
 }
 
 .inputRow input[type="number"] {
+  width: 80px;
+}
+
+.weightHeight label {
   width: 100px;
-  margin: 0 200px 0 0;
+}
+
+.weightHeight {
+  display: flex;
+  flex-direction: row;
+  max-width: 500px;
+}
+
+.weightHeight div {
+  padding: 10px;
 }
 
 .required::after {
   content: "*";
   color: rgb(107, 10, 10);
-  font-size: 12px;
+  font-size: 1rem;
   vertical-align: top;
 }
 
@@ -77,6 +90,10 @@
   display: block;
   padding-left: 200px;
   color: red;
+}
+
+.displayErrorWidthHeight {
+  padding: 0;
 }
 
 /* Tablet */
@@ -97,7 +114,6 @@
     display: flex;
     justify-content: center;
     gap: 10px;
-    /*     flex: 1 1 0px; */
     flex-wrap: wrap;
     width: 100%;
   }
@@ -105,6 +121,10 @@
   .inputRow label {
     width: 165px;
     font-weight: 500;
+  }
+
+  .weightHeight label {
+    width: 100px;
   }
 
   .inputRow input,
@@ -129,27 +149,17 @@
     padding-left: 10px;
     padding-right: 10px;
     width: 80%;
-    margin: 20px auto;
+    margin: 20px auto 0;
   }
 
   .inputRow {
     display: flex;
     flex-direction: column;
     justify-content: center;
-
     align-items: center;
   }
 
-  .inputRow input,
-  .inputRow textarea,
-  .inputRow select {
-    width: 250px;
-    font-size: 20px;
-    height: 2em;
-  }
-
   .inputRow label {
-    font-size: 22px;
     margin: 0 auto;
     margin-top: 10px;
     margin-bottom: 0px;
@@ -157,7 +167,6 @@
 
   .inputRow input[type="number"] {
     margin: 0 auto;
-    width: 150px;
     text-align: center;
   }
 
@@ -174,7 +183,6 @@
   .required::after {
     content: "*";
     color: rgb(107, 10, 10);
-    font-size: 16px;
     vertical-align: top;
   }
 }

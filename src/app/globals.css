@@ -80,11 +80,3 @@ select {
 input[type="date"] {
   cursor: pointer;
 }
-
-@media (max-width: 450px) {
-  .btnSubmit {
-    margin-top: 40px;
-    padding: 20px 70px;
-    font-size: 22px;
-  }
-}

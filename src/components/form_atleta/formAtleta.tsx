@@ -201,54 +201,50 @@ const FormAtleta = ({ atleta }: Props) => {
             )}
           </div>
 
-          <div className={styles.inputRow}>
-            <label htmlFor="weight" className={styles.required}>
-              Peso (kg)
-            </label>
-            <input
-              {...register("weight")}
-              type="number"
-              id="weight"
-              placeholder={"0,0"}
-              step={0.01}
-              value={atleta && atleta.weight}
-            />
-            {errors.weight && (
-              <p className={styles.displayError}>{errors.weight.message}</p>
-            )}
+          <div className={styles.weightHeight}>
+            <div className={styles.inputRow}>
+              <label htmlFor="weight" className={styles.required}>
+                Peso (kg)
+              </label>
+              <input
+                {...register("weight")}
+                type="number"
+                id="weight"
+                placeholder={"0,0"}
+                step={0.01}
+                value={atleta && atleta.weight}
+              />
+            </div>
+
+            <div className={styles.inputRow}>
+              <label htmlFor="height" className={styles.required}>
+                Altura (cm)
+              </label>
+              <input
+                {...register("height")}
+                type="number"
+                id="height"
+                placeholder={"0"}
+                step={1}
+                value={atleta && atleta.height}
+              />
+            </div>
           </div>
 
-          <div className={styles.inputRow}>
-            <label htmlFor="height" className={styles.required}>
-              Altura (cm)
-            </label>
-            <input
-              {...register("height")}
-              type="number"
-              id="height"
-              placeholder={"0"}
-              step={1}
-              value={atleta && atleta.height}
-            />
-            {errors.height && (
-              <p className={styles.displayError}>{errors.height.message}</p>
-            )}
-          </div>
-
-          {/*           <div className={styles.inputRow}>
-            <label htmlFor="category">Categoria</label>
-            <select name="category" id="category" defaultValue="">
-              <option value="" disabled hidden>
-                Selecione
-              </option>
-              <option value="branca">Sub 9</option>
-              <option value="cinza">Sub 11</option>
-              <option value="azulClaro">Sub 13</option>
-              <option value="azulEscuro">Sub 15</option>
-              <option value="amarela">Sub 18</option>
-              <option value="laranja">Adulto</option>
-            </select>
-          </div> */}
+          {errors.weight && (
+            <p
+              className={`${styles.displayError} ${styles.displayErrorWidthHeight}`}
+            >
+              {errors.weight.message}
+            </p>
+          )}
+          {errors.height && (
+            <p
+              className={`${styles.displayError} ${styles.displayErrorWidthHeight}`}
+            >
+              {errors.height.message}
+            </p>
+          )}
 
           <div className={styles.inputRow}>
             <label htmlFor="faixa" className={styles.required}>
