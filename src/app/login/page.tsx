@@ -1,4 +1,5 @@
-import Title from "@components/Title/index";
+import Title from "@/components/title/index";
+
 
 export default function LoginPage() {
   return (
