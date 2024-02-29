@@ -30,10 +30,8 @@
     rgb(var(--background-start-rgb));
 } */
 
-body {
-  background-image: url("../../public/background_1920_1080.jpg");
-  background-size: cover;
-  /*   background-position: right; */
+.max-container {
+  @apply mx-auto max-w-[1440px];
 }
 
 /* Dark shadow above the background */
@@ -50,9 +48,18 @@ body {
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  .btn_default  { 
+    @apply  bg-black py-[10px] px-[60px] rounded-md font-bold uppercase cursor-pointer block text-base text-center text-white
   }
+
+  .btn_red  { 
+    @apply  bg-[#C90B00] py-[10px] px-[60px] rounded-md font-bold uppercase cursor-pointer block text-base text-center text-white
+  }
+
+  .btn_white  { 
+    @apply  bg-white py-[10px] px-[60px] rounded-md font-bold uppercase cursor-pointer block text-base text-center text-black
+  }
+
 }
 
 /* Forms */
@@ -67,6 +74,7 @@ body {
   font-size: 18px;
   font-weight: 500;
   cursor: pointer;
+  display: block;
 }
 
 textarea {
