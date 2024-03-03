@@ -1,7 +1,21 @@
-'use client'
 import { createContext, useContext } from "react";
+import { AxiosResponse } from "../../../node_modules/axios/index";
 
-const ApiContext = createContext({});
+type ApiState = {
+    get: (endpoint: string) => Promise<AxiosResponse> | null;
+    post: (endpoint: string, body: object) => Promise<AxiosResponse> | null;
+    patch: (endpoint: string, body: object) => Promise<AxiosResponse> | null;
+    remove: (endpoint: string, body: object) => Promise<AxiosResponse> | null;
+}
+
+const initialState = {
+    get: () => null,
+    post: () => null,
+    patch: () => null,
+    remove: () => null,
+}
+
+const ApiContext = createContext<ApiState>(initialState);
 
 export const ApiProvider = ({ children }: {children: React.ReactNode}) => {
     const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
@@ -17,16 +31,20 @@ export const ApiProvider = ({ children }: {children: React.ReactNode}) => {
         return apiInstance.get(endpoint);
     }
 
-    const post = (endpoint: string, data: object) => {
-        return apiInstance.post(endpoint, data);
+    const post = (endpoint: string, body: object) => {
+        return apiInstance.post(endpoint, body);
     }
 
-    const delet = (endpoint: string, data: object) => {
-        return apiInstance.delete(endpoint, data);
+    const patch = (endpoint: string, body: object) => {
+        return apiInstance.patch(endpoint, body);
+    }
+
+    const remove = (endpoint: string, body: object) => {
+        return apiInstance.delete(endpoint, body);
     }
 
     return (
-        <ApiContext.Provider value={{ get, post, delet }}>
+        <ApiContext.Provider value={{ get, post, patch, remove }}>
             {children}
         </ApiContext.Provider>
     )
