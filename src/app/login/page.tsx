@@ -1,14 +1,15 @@
+import Button from "@/components/Button/index";
 import Title from "../../components/Title/index";
 
 export default function LoginPage() {
   return (
     <div
-      className={`flex w-full items-center justify-center w-100 min-h-dvh bg-[#F5F5F5]`}
+      className={`flex w-full items-center justify-center w-100 min-h-dvh`}
     >
       <div
-        className={`bg-[#CD2626] rounded-3xl p-16 flex flex-col items-center justify-items-center gap-10 w-full max-w-lg max-container`}
+        className={`bg-white rounded-3xl p-16 flex flex-col items-center justify-items-center gap-10 w-full max-w-[60%]`}
       >
-        <Title title="Login" />
+        <Title title="Login" color="#000" />
 
         <form
           action="javascript:;"
@@ -19,19 +20,14 @@ export default function LoginPage() {
           <input
             type="text"
             placeholder="Usuário"
-            className="p-2 w-full rounded-md"
+            className="p-2 w-full rounded-md bg-[#929292] text-white placeholder:text-white"
           />
           <input
-            type="text"
+            type="password"
             placeholder="Senha"
-            className="p-2 w-full rounded-md"
+            className="p-2 w-full rounded-md bg-[#929292] text-white placeholder:text-white"
           />
-          <button
-            type="submit"
-            className="bg-white py-2 w-[200px] rounded-md font-bold text-black uppercase"
-          >
-            Entrar
-          </button>
+          <Button label="Entrar" type="submit" style="btn_default" />
         </form>
       </div>
     </div>
