@@ -33,4 +33,4 @@ const Card = ({ cardTitle, src, width, height }: Props) => {
     </div>
   );
 };
-export default card;
+export default Card;
