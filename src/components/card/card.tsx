@@ -13,7 +13,7 @@ import styles from "./card.module.css";
 const defaultWidth = 180;
 const defaultHeight = 180;
 
-const card = ({ cardTitle, src, width, height }: Props) => {
+const Card = ({ cardTitle, src, width, height }: Props) => {
   return (
     <div className={styles.cardContainer}>
       <div className={styles.cardTitle}>
