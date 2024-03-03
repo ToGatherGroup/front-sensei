@@ -2,8 +2,8 @@ import React from 'react'
 import ListAthletes from '@/components/ListAthletes/index'
 
 const athletes = [
-    {id: 1, name: 'Felipe Marcelino do Nascimento'},
-    {id: 2, name: 'Bruno'},
+    {id: 1, name: 'Felipe Marcelino Do Nascimento'},
+    {id: 2, name: 'Bruno Amado'},
     {id: 3, name: 'Alex'},
     {id: 4, name: 'Michel'},
     {id: 5, name: 'Denilson'},
