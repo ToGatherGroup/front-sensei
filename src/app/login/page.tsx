@@ -1,5 +1,5 @@
-import Button from "../../components/button/button";
-import Title from "../../components/title/title";
+import Button from "../../components/button/index";
+import Title from "../../components/title/index";
 
 export default function LoginPage() {
   return (
