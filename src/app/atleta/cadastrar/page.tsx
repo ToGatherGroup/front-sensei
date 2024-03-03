@@ -1,4 +1,4 @@
-import FormAtleta from "../../../components/form_atleta/formAtleta";
+import FormAtleta from "../../../components/FormAtleta/FormAtleta";
 
 const atleta = {
   name: "Bruno Amado",

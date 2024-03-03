@@ -1,5 +1,5 @@
 import React from 'react'
-import ListAthletes from '../../components/listAthletes/index'
+import ListAthletes from '../../components/ListAthletes/ListAthletes'
 
 const athletes = [
     {id: 1, name: 'Felipe Marcelino Do Nascimento'},
