@@ -1,4 +1,4 @@
-import Button from "../button/index";
+import Button from "../button/Button";
 
 type ListAthletesProps = {
     listAthletes: AthletesProps[];

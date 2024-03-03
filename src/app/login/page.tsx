@@ -1,4 +1,4 @@
-import Button from "../../components/button/index";
+import Button from "../../components/button/Button";
 import Title from "../../components/title/index";
 
 export default function LoginPage() {
