@@ -1,4 +1,4 @@
-import Button from "../Button/index";
+import Button from "../button/index";
 
 type ListAthletesProps = {
     listAthletes: AthletesProps[];
@@ -9,7 +9,7 @@ type AthletesProps = {
     name: string;
 }
 
-export default function ss({ listAthletes } : ListAthletesProps){
+export default function ListAthletes({ listAthletes } : ListAthletesProps){
     return (
         <form className="bg-defaultGray px-36 py-20 rounded-md">
             <h2 className="font-bold uppercase text-4xl mb-10">Lista de Atletas</h2>
