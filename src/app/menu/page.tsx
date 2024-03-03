@@ -2,7 +2,7 @@ type Props = {};
 
 import styles from "./menu.module.css";
 
-import Card from "@/components/card/card";
+import Card from "../../components/card/card";
 
 type Card = {
   title: string;
