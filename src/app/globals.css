@@ -48,18 +48,17 @@
 }
 
 @layer utilities {
-  .btn_default  { 
-    @apply  bg-black py-[10px] px-[60px] rounded-md font-bold uppercase cursor-pointer block text-base text-center text-white
+  .btn_default {
+    @apply bg-black py-[10px] px-[60px] rounded-md font-bold uppercase cursor-pointer block text-base text-center text-white;
   }
 
-  .btn_red  { 
-    @apply  bg-[#C90B00] py-[10px] px-[60px] rounded-md font-bold uppercase cursor-pointer block text-base text-center text-white
+  .btn_red {
+    @apply bg-[#C90B00] py-[10px] px-[60px] rounded-md font-bold uppercase cursor-pointer block text-base text-center text-white;
   }
 
-  .btn_white  { 
-    @apply  bg-white py-[10px] px-[60px] rounded-md font-bold uppercase cursor-pointer block text-base text-center text-black
+  .btn_white {
+    @apply bg-white py-[10px] px-[60px] rounded-md font-bold uppercase cursor-pointer block text-base text-center text-black;
   }
-
 }
 
 /* Forms */
@@ -75,6 +74,11 @@
   font-weight: 500;
   cursor: pointer;
   display: block;
+}
+
+.btnSubmit[disabled=""] {
+  background-color: #ccc;
+  border: 1px solid #ccc;
 }
 
 textarea {

@@ -3,12 +3,36 @@
 import styles from "./formAtleta.module.css";
 import Image from "next/image";
 
+import Loading from "@/components/loading/index";
+
 import { useForm } from "react-hook-form";
+import { useState } from "react";
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
+//Config for file upload
+const MAX_FILE_SIZE = 2 * 1000 * 1000; //MB to KB
+const validFileExtensions: string[] = ["image/png"];
+
 const atletaSchema = yup.object().shape({
+  avatar: yup
+    .mixed<FileList>()
+    .test(
+      "is-valid-size",
+      `Arquivo muito grande. Peso máximo: ${MAX_FILE_SIZE / 1000 / 1000} MB`,
+      (value) => {
+        console.log(value);
+        console.log(value && value[0]);
+        console.log("Max_File_Size: " + MAX_FILE_SIZE);
+        if (value && value.length <= 0) return true;
+        return value && value[0].size <= MAX_FILE_SIZE;
+      }
+    )
+    .test("is-valid-format", "Formato inválido. Use .PNG", (value) => {
+      if (value && value.length <= 0) return true;
+      return value && validFileExtensions.includes(value[0].type);
+    }),
   name: yup.string().required("Este campo é obrigatório."),
   email: yup.string().optional().email("Insira um e-mail válido"),
   birthdate: yup
@@ -55,6 +79,7 @@ const atletaSchema = yup.object().shape({
 });
 
 type Atleta = {
+  avatar: string;
   name: string;
   email?: string;
   birthdate: Date;
@@ -69,8 +94,18 @@ type Props = {
 };
 
 const FormAtleta = ({ atleta }: Props) => {
+  const [avatarBase64, setAvatarBase64] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [disableSubmitBtn, setDisableSubmitBtn] = useState<boolean>(false);
+
+  //Load avatar if it exists
+  if (atleta?.avatar && avatarBase64 === "") {
+    setAvatarBase64(atleta.avatar);
+  }
+
   const {
     register,
+    getValues,
     handleSubmit: handleSubmit,
     formState: { errors },
     reset,
@@ -79,8 +114,19 @@ const FormAtleta = ({ atleta }: Props) => {
     resolver: yupResolver(atletaSchema),
   });
   const onSubmit = (data: any) => {
-    alert(`Objeto gerado com sucesso!\n\n${JSON.stringify(data)}`);
-    console.log(data);
+    file2Base64(data.avatar[0])
+      .then((avatarBase64) => {
+        console.log("Submeter a API aqui:");
+        data.avatarBase64 = avatarBase64;
+        alert(`Objeto gerado com sucesso!\n\n${JSON.stringify(data)}`);
+        console.log(data);
+      })
+      .catch((error) => {
+        alert(
+          "Houve um erro ao carregar a imagem de avatar. Tente usar uma outra imagem!"
+        );
+        console.log(error);
+      });
     reset();
   };
 
@@ -121,8 +167,48 @@ const FormAtleta = ({ atleta }: Props) => {
     return dateFormat;
   }
 
+  const file2Base64 = (file: File): Promise<string> => {
+    return new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result?.toString() || "");
+      reader.onerror = (error) => reject(error);
+    });
+  };
+
+  /*   const fileToBase64 = (file: File) => {
+    let reader = new FileReader();
+
+    reader.onloadstart = () => console.log("Carregando imagem...");
+    reader.onloadend = () => {
+      const base64 = reader.result as string;
+      setAvatar(base64);
+    };
+
+    reader.readAsDataURL(file);
+  }; */
+
+  const uploadAvatar = (event: EventListener) => {
+    console.log("Realizando upload...");
+    console.log(getValues("avatar"));
+    setDisableSubmitBtn(true);
+    setLoading(true);
+
+    const avatarFile = getValues("avatar")![0];
+    file2Base64(avatarFile)
+      .then((avatarBase64) => {
+        setAvatarBase64(avatarBase64);
+        console.log(avatarBase64);
+      })
+      .finally(() => {
+        setDisableSubmitBtn(false);
+        setLoading(false);
+      });
+  };
+
   return (
     <div className={styles.container}>
+      <Loading enable={loading} />
       <div className={styles.content}>
         <div className={styles.title}>
           {atleta ? <h1>Alterar Atleta</h1> : <h1>Cadastrar Atleta</h1>}
@@ -135,6 +221,29 @@ const FormAtleta = ({ atleta }: Props) => {
         </div>
 
         <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
+          <div className={`${styles.inputRow} ${styles.avatar}`}>
+            <label htmlFor="avatar">
+              <p>Foto do atleta</p>
+              <img
+                src={avatarBase64 ? avatarBase64 : "/formAtleta/avatar.png"}
+                alt="Foto do atleta"
+              ></img>
+            </label>
+            <input
+              {...register("avatar", {
+                onChange: (e) => {
+                  uploadAvatar(e);
+                },
+              })}
+              type="file"
+              id="avatar"
+              accept="image/png"
+            />
+            {errors.avatar && (
+              <p className={styles.displayError}>{errors.avatar.message}</p>
+            )}
+          </div>
+
           <div className={styles.inputRow}>
             <label htmlFor="name" className={styles.required}>
               Nome
@@ -280,6 +389,7 @@ const FormAtleta = ({ atleta }: Props) => {
             type="submit"
             value={atleta ? "Alterar" : "Cadastrar"}
             className="btnSubmit"
+            disabled={disableSubmitBtn}
           />
         </form>
       </div>

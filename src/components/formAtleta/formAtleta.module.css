@@ -12,7 +12,7 @@
   min-width: fit-content;
   max-width: 700px;
   background-color: white;
-  margin: 0 auto;
+  margin: 40px auto;
   border-radius: 5px;
   padding: 40px;
 }
@@ -61,8 +61,16 @@
   align-items: center;
 }
 
+.inputRow input[type="submit"] {
+  color: green;
+}
+
 .inputRow input[type="number"] {
   width: 80px;
+}
+
+.inputRow input[type="file"] {
+  font-size: 14px;
 }
 
 .weightHeight label {
@@ -81,7 +89,7 @@
 
 .required::after {
   content: "*";
-  color: rgb(107, 10, 10);
+  color: rgb(110, 10, 10);
   font-size: 1rem;
   vertical-align: top;
 }
@@ -94,6 +102,34 @@
 
 .displayErrorWidthHeight {
   padding: 0;
+}
+
+.avatar {
+  width: max-content;
+  height: 300px;
+  text-align: center;
+}
+
+.avatar > label {
+  width: 250px;
+  height: 250px;
+}
+
+.avatar > label > p {
+  font-size: 1rem;
+}
+
+.avatar > label > img {
+  border-radius: 50%;
+  border: 3px solid rgb(0, 0, 0);
+  width: 250px;
+  height: 250px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.avatar > input {
+  display: none;
 }
 
 /* Tablet */
@@ -123,6 +159,10 @@
     font-weight: 500;
   }
 
+  .avatar label {
+    width: max-content;
+  }
+
   .weightHeight label {
     width: 100px;
   }
@@ -140,16 +180,14 @@
 
 /* Mobile */
 @media (max-width: 450px) {
-  .container {
-    display: block;
-  }
 
   .content {
     background-color: rgb(255, 255, 255);
     padding-left: 10px;
     padding-right: 10px;
     width: 80%;
-    margin: 20px auto 0;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .inputRow {
@@ -182,7 +220,7 @@
 
   .required::after {
     content: "*";
-    color: rgb(107, 10, 10);
+    color: rgb(110, 10, 10);
     vertical-align: top;
   }
 }
