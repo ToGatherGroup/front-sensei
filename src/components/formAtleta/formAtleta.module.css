@@ -1,0 +1,225 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  margin: auto 0;
+
+  align-items: center;
+  justify-content: center;
+}
+
+.content {
+  align-self: center;
+  min-width: fit-content;
+  max-width: 700px;
+  background-color: white;
+  margin: 40px auto;
+  border-radius: 5px;
+  padding: 40px;
+}
+
+.title {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 40px;
+  font-weight: 800;
+  font-size: 1.5rem;
+}
+
+.form {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.inputRow {
+  margin: 10px auto;
+  box-sizing: border-box;
+}
+
+.inputRow label {
+  display: inline-block;
+  width: 200px;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.inputRow input,
+.inputRow textarea,
+.inputRow select {
+  background-color: #eee;
+  width: 300px;
+  padding: 5px;
+  padding-left: 10px;
+  border-radius: 5px;
+}
+
+.textareaRow {
+  display: flex;
+  align-items: center;
+}
+
+.inputRow input[type="submit"] {
+  color: green;
+}
+
+.inputRow input[type="number"] {
+  width: 80px;
+}
+
+.inputRow input[type="file"] {
+  font-size: 14px;
+}
+
+.weightHeight label {
+  width: 100px;
+}
+
+.weightHeight {
+  display: flex;
+  flex-direction: row;
+  max-width: 500px;
+}
+
+.weightHeight div {
+  padding: 10px;
+}
+
+.required::after {
+  content: "*";
+  color: rgb(110, 10, 10);
+  font-size: 1rem;
+  vertical-align: top;
+}
+
+.displayError {
+  display: block;
+  padding-left: 200px;
+  color: red;
+}
+
+.displayErrorWidthHeight {
+  padding: 0;
+}
+
+.avatar {
+  width: max-content;
+  height: 300px;
+  text-align: center;
+}
+
+.avatar > label {
+  width: 250px;
+  height: 250px;
+}
+
+.avatar > label > p {
+  font-size: 1rem;
+}
+
+.avatar > label > img {
+  border-radius: 50%;
+  border: 3px solid rgb(0, 0, 0);
+  width: 250px;
+  height: 250px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.avatar > input {
+  display: none;
+}
+
+/* Tablet */
+@media (max-width: 700px) {
+  .content {
+    max-width: 80%;
+    margin-right: 10%;
+    margin-left: 10%;
+  }
+
+  .displayError {
+    padding-left: 0;
+    width: 100%;
+    text-align: center;
+  }
+
+  .inputRow {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .inputRow label {
+    width: 165px;
+    font-weight: 500;
+  }
+
+  .avatar label {
+    width: max-content;
+  }
+
+  .weightHeight label {
+    width: 100px;
+  }
+
+  .inputRow input,
+  .inputRow select {
+    width: 200px;
+  }
+
+  .inputRow input[type="number"] {
+    margin-right: 50px;
+    margin-left: 50px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 450px) {
+  .content {
+    background-color: rgb(255, 255, 255);
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .inputRow {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .inputRow label {
+    margin: 0 auto;
+    margin-top: 10px;
+    margin-bottom: 0px;
+  }
+
+  .inputRow input[type="number"] {
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .inputRow *::placeholder,
+  .inputRow input[type="date"],
+  .inputRow select {
+    text-align: center;
+  }
+
+  .inputRow select {
+    text-align-last: center;
+  }
+
+  .required::after {
+    content: "*";
+    color: rgb(110, 10, 10);
+    vertical-align: top;
+  }
+}
