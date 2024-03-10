@@ -208,7 +208,7 @@ const FormAtleta = ({ atleta }: Props) => {
 
   return (
     <div className={styles.container}>
-      <Loading enable={loading} />
+      {loading && <Loading />}
       <div className={styles.content}>
         <div className={styles.title}>
           {atleta ? <h1>Alterar Atleta</h1> : <h1>Cadastrar Atleta</h1>}
