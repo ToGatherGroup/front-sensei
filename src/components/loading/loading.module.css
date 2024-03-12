@@ -12,7 +12,7 @@
   position: relative;
   top: calc(50% - 60px);
   left: calc(50% - 60px);
-  border: 16px solid #f3f3f3; /* Light grey */
+  border: 16px solid #fff; /* Light grey */
   border-top: 16px solid rgb(110, 10, 10); /* Blue */
   border-radius: 50%;
   width: 120px;

@@ -16,8 +16,8 @@ type Props = {};
 const CadastrarAtleta = (props: Props) => {
   return (
     <div>
-      {/* {<FormAtleta atleta={atleta} />} */}
-      {<FormAtleta />}
+      {<FormAtleta atleta={atleta} />}
+      {/* {<FormAtleta />} */}
     </div>
   );
 };

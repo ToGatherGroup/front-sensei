@@ -34,6 +34,16 @@
   @apply mx-auto max-w-[1440px];
 }
 
+.form-container {
+  background-color: #fff;
+  max-width: 1440px;
+  min-height: 100vh;
+  padding: 40px;
+  margin: 40px auto;
+  box-sizing: border-box;
+  border-radius: 5px;
+}
+
 /* Dark shadow above the background */
 .bg_shadow {
   position: absolute;
