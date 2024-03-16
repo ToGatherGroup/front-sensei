@@ -31,6 +31,12 @@ export const AthleteProvider = ({ children }: {children: React.ReactNode}) => {
     }, [get]);
     
     
+    useEffect(() => {
+        const listAthletes = get('atletas');
+        console.log(listAthletes)
+    }, [])
+    
+    
     
     return (
         <AthleteContext.Provider value={{athlete}}>
