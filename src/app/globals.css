@@ -34,6 +34,22 @@
   @apply mx-auto max-w-[1440px];
 }
 
+.form-container {
+  background-color: #fff;
+  max-width: 1440px;
+  min-height: calc(100vh - 110px);
+  padding: 40px;
+  margin: 40px auto;
+  box-sizing: border-box;
+  border-radius: 5px;
+}
+
+@media (max-width: 600px) {
+  .form-container {
+    margin: 40px 10px;
+  }
+}
+
 /* Dark shadow above the background */
 .bg_shadow {
   position: absolute;
@@ -87,6 +103,12 @@ textarea {
 
 select {
   cursor: pointer;
+}
+
+input {
+  background-color: #eee;
+  border-radius: 5px;
+  padding: 5px 5px 5px 10px;
 }
 
 input[type="date"] {

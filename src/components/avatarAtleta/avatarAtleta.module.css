@@ -1,0 +1,37 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.avatarBg {
+  width: 100px;
+  height: 100px;
+  background-color: #5f0404;
+  border: 2px solid #fff;
+  border-radius: 50%;
+}
+
+.avatar {
+  position: absolute;
+  z-index: 1;
+  width: 130px;
+  height: 130px;
+  transform: translateY(-20px);
+}
+
+.name {
+  background-color: #5f0404;
+  font-weight: 600;
+  text-align: center;
+  color: white;
+  padding: 5px;
+  transform: translateY(-15px);
+  max-width: 120px;
+  max-height: calc(2rem + 10px);
+  overflow: scroll;
+  z-index: 2;
+  border-radius: 10px;
+}

@@ -1,0 +1,41 @@
+.container {
+  display: flex;
+  min-width: 200px;
+}
+
+.container input {
+  margin: 40px auto;
+  display: block;
+  width: 250px;
+}
+
+.content {
+  margin: 40px auto;
+}
+
+.title {
+  width: 100%;
+  text-align: center;
+}
+
+.listAtletas {
+  display: flex;
+  margin: 0 auto;
+  flex-wrap: wrap;
+  max-width: 540px;
+  gap: 20px;
+}
+
+@media (max-width: 600px) {
+  .listAtletas {
+    gap: 10px;
+    max-width: 380px;
+  }
+}
+
+@media (max-width: 480px) {
+  .listAtletas {
+    gap: 10px;
+    max-width: 250px;
+  }
+}
