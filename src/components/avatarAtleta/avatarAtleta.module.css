@@ -10,7 +10,7 @@
   width: 100px;
   height: 100px;
   background-color: #5f0404;
-  border: 2px solid #fff;
+  border: 2px solid #350202;
   border-radius: 50%;
 }
 
@@ -29,9 +29,47 @@
   color: white;
   padding: 5px;
   transform: translateY(-15px);
-  max-width: 120px;
-  max-height: calc(2rem + 10px);
+  width: 120px;
+  height: calc(2rem + 10px);
   overflow: scroll;
   z-index: 2;
+  border: 2px solid #3b0101;
   border-radius: 10px;
+}
+
+.avatarBgBig {
+  width: 200px;
+  height: 200px;
+  background-color: #5f0404;
+  border: 2px solid #fff;
+  border-radius: 50%;
+}
+
+.avatarBig {
+  position: absolute;
+  z-index: 1;
+  width: 200px;
+  height: 200px;
+  transform: translateY(-40px);
+}
+
+.nameBig {
+  background-color: #5f0404;
+  font-weight: 600;
+  text-align: center;
+  color: white;
+  padding: 5px;
+  transform: translateY(-30px);
+  width: 240px;
+  height: 3rem;
+  overflow: scroll;
+  z-index: 2;
+  border: 2px solid;
+  border-radius: 10px;
+}
+
+.container p {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

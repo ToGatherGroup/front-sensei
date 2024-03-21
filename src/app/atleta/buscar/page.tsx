@@ -55,6 +55,7 @@ const AtletaSelecionar = () => {
                 name={atleta.name}
                 avatar={atleta.avatar}
                 faixa="branca"
+                size="small"
               />
             </li>
           ))}
