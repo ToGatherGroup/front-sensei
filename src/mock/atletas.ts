@@ -93,4 +93,14 @@ export const Atletas: IAtleta[] =
     faixa: "azulEscuro",
     avatar: "https://i.ibb.co/mJTDLjB/leandrolojiujitsu-removebg-preview.png",
   },
+/*   {
+    name: "Sérgio de Oliveira Cabral Santos Filho",
+    email: "gabriel_cruz@gmail.com",
+    birthdate: new Date(2005, 5, 10),
+    sex: "male",
+    weight: 71.0,
+    height: 167,
+    faixa: "coral",
+    avatar: "https://i.ibb.co/wh7YntR/3-adjusted.png",
+  }, */
 ];

@@ -27,12 +27,12 @@
   font-weight: 600;
   text-align: center;
   color: white;
-  padding: 5px;
   transform: translateY(-15px);
   width: 120px;
-  height: calc(2rem + 10px);
+  height: 2.2rem;
   overflow: scroll;
   z-index: 2;
+  box-sizing: border-box;
   border: 2px solid #3b0101;
   border-radius: 10px;
 }
@@ -58,16 +58,17 @@
   font-weight: 600;
   text-align: center;
   color: white;
-  padding: 5px;
   transform: translateY(-30px);
   width: 240px;
   height: 3rem;
   overflow: scroll;
   z-index: 2;
   border: 2px solid;
+  box-sizing: content-box;
   border-radius: 10px;
 }
 
+/* Está causando o problema de corte no nome com scroll */
 .container p {
   display: flex;
   justify-content: center;
