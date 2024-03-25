@@ -1,5 +1,6 @@
 import Button from "@/components/button";
 import styles from "./campeonatos.module.css";
+import { useForm } from "react-hook-form";
 
 import FormTitle from "@/components/Title/formTitle/index";
 
