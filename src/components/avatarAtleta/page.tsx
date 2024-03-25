@@ -75,7 +75,7 @@ const AvatarAtleta = ({ name, avatar, faixa, size }: Props) => {
     },
     coral: {
       background:
-        "linear-gradient(to bottom, #ff0000 0, #ff0000 30%, #fff 31%, #fff 69%, #ff0000 70%)",
+        "linear-gradient(to right, #ff0000 0, #ff0000 30%, #fff 31%, #fff 69%, #ff0000 70%)",
       backgroundBorder: "#fff",
       name: "#000",
       nameBorder: "#990000",
@@ -106,16 +106,15 @@ const AvatarAtleta = ({ name, avatar, faixa, size }: Props) => {
           src={avatar}
           alt={`Avatar de ${name}`}
         />
-        <p
-          className={styles.nameBig}
+        <div
+          className={styles.nameContainerBig}
           style={{
-            color: `${faixasColor[faixa].name}`,
             background: `${faixasColor[faixa].background}`,
             borderColor: `${faixasColor[faixa].nameBorder}`,
           }}
         >
-          {name}
-        </p>
+          <p style={{ color: `${faixasColor[faixa].name}` }}>{name}</p>
+        </div>
       </div>
     );
   } else if (size === "small") {
@@ -126,7 +125,9 @@ const AvatarAtleta = ({ name, avatar, faixa, size }: Props) => {
       >
         <div className={styles.avatarBg}></div>
         <img className={styles.avatar} src={avatar} alt={`Avatar de ${name}`} />
-        <p className={styles.name}>{name}</p>
+        <div className={styles.nameContainer}>
+          <p>{name}</p>
+        </div>
       </div>
     );
   }

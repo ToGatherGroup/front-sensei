@@ -22,19 +22,27 @@
   transform: translateY(-20px);
 }
 
-.name {
+.nameContainer {
   background-color: #5f0404;
-  font-weight: 600;
   text-align: center;
-  color: white;
-  transform: translateY(-15px);
-  width: 120px;
-  height: 2.2rem;
-  overflow: scroll;
   z-index: 2;
+  overflow: scroll;
   box-sizing: border-box;
   border: 2px solid #3b0101;
   border-radius: 10px;
+  transform: translateY(-15px);
+  height: 2.3rem;
+  width: 7.2rem;
+}
+
+.nameContainer > p {
+  font-weight: 600;
+  color: white;
+  max-width: 7.2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 2rem;
 }
 
 .avatarBgBig {
@@ -53,23 +61,24 @@
   transform: translateY(-40px);
 }
 
-.nameBig {
+.nameContainerBig {
   background-color: #5f0404;
-  font-weight: 600;
-  text-align: center;
-  color: white;
-  transform: translateY(-30px);
-  width: 240px;
-  height: 3rem;
-  overflow: scroll;
-  z-index: 2;
-  border: 2px solid;
-  box-sizing: content-box;
+  box-sizing: border-box;
   border-radius: 10px;
+  border: 2px solid;
+  text-align: center;
+  z-index: 2;
+  overflow: scroll;
+  transform: translateY(-30px);
+  height: 3rem;
+  width: 15rem;
 }
 
-/* Está causando o problema de corte no nome com scroll */
-.container p {
+.nameContainerBig > p {
+  font-weight: 600;
+  color: rgb(255, 255, 255);
+  max-width: 15rem;
+  min-height: 2.7rem;
   display: flex;
   justify-content: center;
   align-items: center;
