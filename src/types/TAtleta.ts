@@ -1,12 +1,14 @@
 import { Faixas } from "@/enums/faixas";
 
-export type IAtleta = {
+export type TAtleta = {
+    id: number;
     name: string;
     email: string;
     birthdate: Date;
     sex: "male" | "female";
     weight: number;
     height: number;
-    faixa: (typeof Faixas)[number];
-    avatar: string;
+    belt: (typeof Faixas)[number];
+    photo: string;
+    category?: string;
 }

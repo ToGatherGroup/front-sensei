@@ -1,6 +1,6 @@
 import AvatarAtleta from "@/components/avatarAtleta/page";
 import { Atletas } from "@/mock/atletas";
-import { IAtleta } from "@/types/IAtleta";
+import { TAtleta } from "@/types/TAtleta";
 
 import styles from "./page.module.css";
 
@@ -12,14 +12,14 @@ type Props = {
   params: Params;
 };
 const page = ({ params }: Props) => {
-  const atleta: IAtleta = Atletas[parseInt(params.id)];
+  const atleta: TAtleta = Atletas[parseInt(params.id)];
 
   return (
     <div className={styles.container}>
       <AvatarAtleta
         name={atleta.name}
-        faixa={atleta.faixa}
-        avatar={atleta.avatar}
+        belt={atleta.belt}
+        photo={atleta.photo}
         size="big"
       />
     </div>

@@ -1,18 +1,23 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+
 import { Faixas } from "@/enums/faixas";
 
 import styles from "./avatarAtleta.module.css";
 
 type Props = {
+  id: string;
   name: string;
-  avatar: string;
+  photo: string;
   size: "small" | "big";
-  faixa?: (typeof Faixas)[number];
+  belt?: (typeof Faixas)[number];
 };
 
-const AvatarAtleta = ({ name, avatar, faixa, size }: Props) => {
-  const faixasColor = {
+const AvatarAtleta = ({ id, name, photo, belt, size }: Props) => {
+  const router = useRouter();
+
+  const beltsColor = {
     branca: {
       background: "#fff",
       backgroundBorder: "#000",
@@ -88,32 +93,28 @@ const AvatarAtleta = ({ name, avatar, faixa, size }: Props) => {
     },
   };
 
-  if (size === "big" && faixa) {
+  if (size === "big" && belt) {
     return (
       <div
         className={styles.container}
         onClick={() => alert(`Você clicou no ${name}`)}
       >
         <div
-          className={styles.avatarBgBig}
+          className={styles.photoBgBig}
           style={{
-            background: `${faixasColor[faixa].background}`,
-            borderColor: `${faixasColor[faixa].backgroundBorder}`,
+            background: `${beltsColor[belt].background}`,
+            borderColor: `${beltsColor[belt].backgroundBorder}`,
           }}
         ></div>
-        <img
-          className={styles.avatarBig}
-          src={avatar}
-          alt={`Avatar de ${name}`}
-        />
+        <img className={styles.photoBig} src={photo} alt={`Foto de ${name}`} />
         <div
           className={styles.nameContainerBig}
           style={{
-            background: `${faixasColor[faixa].background}`,
-            borderColor: `${faixasColor[faixa].nameBorder}`,
+            background: `${beltsColor[belt].background}`,
+            borderColor: `${beltsColor[belt].nameBorder}`,
           }}
         >
-          <p style={{ color: `${faixasColor[faixa].name}` }}>{name}</p>
+          <p style={{ color: `${beltsColor[belt].name}` }}>{name}</p>
         </div>
       </div>
     );
@@ -121,10 +122,10 @@ const AvatarAtleta = ({ name, avatar, faixa, size }: Props) => {
     return (
       <div
         className={styles.container}
-        onClick={() => alert(`Você clicou no ${name}`)}
+        onClick={() => router.push(`/atleta/perfil/${id}`)}
       >
-        <div className={styles.avatarBg}></div>
-        <img className={styles.avatar} src={avatar} alt={`Avatar de ${name}`} />
+        <div className={styles.photoBg}></div>
+        <img className={styles.photo} src={photo} alt={`Foto de ${name}`} />
         <div className={styles.nameContainer}>
           <p>{name}</p>
         </div>

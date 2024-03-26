@@ -6,7 +6,7 @@
   cursor: pointer;
 }
 
-.avatarBg {
+.photoBg {
   width: 100px;
   height: 100px;
   background-color: #5f0404;
@@ -14,12 +14,25 @@
   border-radius: 50%;
 }
 
-.avatar {
+.photo {
   position: absolute;
   z-index: 1;
   width: 130px;
   height: 130px;
   transform: translateY(-20px);
+  font-size: 12px;
+}
+
+/* Styling the img alternative text that is displayed when the image fails */
+.photo::before {
+  position: absolute;
+  top: 50%;
+  transform: translate(0, -50%);
+  left: calc(50% - 25px);
+  width: 60px;
+  height: 50px;
+  overflow: scroll;
+  color: #fff;
 }
 
 .nameContainer {
@@ -45,7 +58,7 @@
   min-height: 2rem;
 }
 
-.avatarBgBig {
+.photoBgBig {
   width: 200px;
   height: 200px;
   background-color: #5f0404;
@@ -53,12 +66,26 @@
   border-radius: 50%;
 }
 
-.avatarBig {
+.photoBig {
   position: absolute;
   z-index: 1;
   width: 200px;
   height: 200px;
   transform: translateY(-40px);
+}
+
+.photoBig::before {
+  font-size: 1.3rem;
+  position: absolute;
+  top: 50%;
+  transform: translate(0, -50%);
+  left: calc(50% - 50px);
+  width: 100px;
+  height: 100px;
+  overflow: scroll;
+  color: #000;
+
+  text-shadow: 1px 0 0 white, 0 1px 0 white, -1px 0 0 white, 0 -1px 0 white;
 }
 
 .nameContainerBig {
