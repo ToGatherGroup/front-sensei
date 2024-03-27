@@ -89,7 +89,7 @@
 
 .required::after {
   content: "*";
-  color: #6e0a0a;
+  color: rgb(110, 10, 10);
   font-size: 1rem;
   vertical-align: top;
 }

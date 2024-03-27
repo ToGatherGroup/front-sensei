@@ -11,14 +11,12 @@ import { useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
-import { TAtleta } from "@/types/TAtleta";
-
 //Config for file upload
 const MAX_FILE_SIZE = 2 * 1000 * 1000; //MB to KB
 const validFileExtensions: string[] = ["image/png"];
 
 const atletaSchema = yup.object().shape({
-  photo: yup
+  avatar: yup
     .mixed<FileList>()
     .test(
       "is-valid-size",
@@ -57,7 +55,7 @@ const atletaSchema = yup.object().shape({
     .integer("Insira a altura em centímetros.")
     .required("Este campo é obrigatório.")
     .typeError("Insira a altura em centímetros."),
-  belt: yup
+  faixa: yup
     .string()
     .oneOf(
       [
@@ -92,7 +90,7 @@ type Atleta = {
 };
 
 type Props = {
-  atleta?: TAtleta;
+  atleta?: Atleta;
 };
 
 const FormAtleta = ({ atleta }: Props) => {
@@ -101,8 +99,8 @@ const FormAtleta = ({ atleta }: Props) => {
   const [disableSubmitBtn, setDisableSubmitBtn] = useState<boolean>(false);
 
   //Load avatar if it exists
-  if (atleta?.photo && avatarBase64 === "") {
-    setAvatarBase64(atleta.photo);
+  if (atleta?.avatar && avatarBase64 === "") {
+    setAvatarBase64(atleta.avatar);
   }
 
   const {
@@ -116,7 +114,7 @@ const FormAtleta = ({ atleta }: Props) => {
     resolver: yupResolver(atletaSchema),
   });
   const onSubmit = (data: any) => {
-    file2Base64(data.photo[0])
+    file2Base64(data.avatar[0])
       .then((avatarBase64) => {
         console.log("Submeter a API aqui:");
         data.avatarBase64 = avatarBase64;
@@ -192,11 +190,11 @@ const FormAtleta = ({ atleta }: Props) => {
 
   const uploadAvatar = (event: EventListener) => {
     console.log("Realizando upload...");
-    console.log(getValues("photo"));
+    console.log(getValues("avatar"));
     setDisableSubmitBtn(true);
     setLoading(true);
 
-    const avatarFile = getValues("photo")![0];
+    const avatarFile = getValues("avatar")![0];
     file2Base64(avatarFile)
       .then((avatarBase64) => {
         setAvatarBase64(avatarBase64);
@@ -224,7 +222,7 @@ const FormAtleta = ({ atleta }: Props) => {
 
         <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
           <div className={`${styles.inputRow} ${styles.avatar}`}>
-            <label htmlFor="photo">
+            <label htmlFor="avatar">
               <p>Foto do atleta</p>
               <img
                 src={avatarBase64 ? avatarBase64 : "/formAtleta/avatar.png"}
@@ -232,17 +230,17 @@ const FormAtleta = ({ atleta }: Props) => {
               ></img>
             </label>
             <input
-              {...register("photo", {
+              {...register("avatar", {
                 onChange: (e) => {
                   uploadAvatar(e);
                 },
               })}
               type="file"
-              id="photo"
+              id="avatar"
               accept="image/png"
             />
-            {errors.photo && (
-              <p className={styles.displayError}>{errors.photo.message}</p>
+            {errors.avatar && (
+              <p className={styles.displayError}>{errors.avatar.message}</p>
             )}
           </div>
 
@@ -358,13 +356,13 @@ const FormAtleta = ({ atleta }: Props) => {
           )}
 
           <div className={styles.inputRow}>
-            <label htmlFor="belt" className={styles.required}>
+            <label htmlFor="faixa" className={styles.required}>
               Faixa
             </label>
             <select
-              {...register("belt")}
-              id="belt"
-              defaultValue={atleta ? atleta.belt : ""}
+              {...register("faixa")}
+              id="faixa"
+              defaultValue={atleta ? atleta.faixa : ""}
             >
               <option value="" disabled hidden>
                 Selecione
@@ -382,8 +380,8 @@ const FormAtleta = ({ atleta }: Props) => {
               <option value="coral">Coral</option>
               <option value="vermelha">Vermelha</option>
             </select>
-            {errors.belt && (
-              <p className={styles.displayError}>{errors.belt.message}</p>
+            {errors.faixa && (
+              <p className={styles.displayError}>{errors.faixa.message}</p>
             )}
           </div>
 
