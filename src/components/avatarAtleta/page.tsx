@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 
 import { useRouter } from "next/navigation";
 
@@ -126,6 +127,7 @@ const AvatarAtleta = ({ id, name, photo, belt, size }: Props) => {
       >
         <div className={styles.photoBg}></div>
         <img className={styles.photo} src={photo} alt={`Foto de ${name}`} />
+        {/* <Image className={styles.photo} src={photo} alt={`Foto de ${name}`} height={200} width={200}/> */}
         <div className={styles.nameContainer}>
           <p>{name}</p>
         </div>

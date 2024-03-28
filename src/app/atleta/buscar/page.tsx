@@ -1,103 +1,90 @@
 "use client";
 
-import {
-  FormEvent,
-  RefObject,
-  createRef,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { getAtletas, getAtletasByName } from "@/api/endpoints";
 
-import FormTitle from "@/components/Title/formTitle";
+import FormTitle from "@/components/title/formTitle";
 import AvatarAtleta from "@/components/avatarAtleta/page";
 import { apiToAtletas } from "@/api/middleware/atletas";
 
 import { TAtletas } from "@/types/TAtletas";
 
 import styles from "./selecionar.module.css";
+import { useDebounce } from "@/hooks/useDebounce";
 
-//How many elements per request (paginable)?
-const elementsPerPage = null; // 'null' to let back server decide
+const { innerHeight: height } = window;
+
+const ELEMENTS_PER_PAGE = Math.ceil(((height - 250) * 4) / 130);
+
+function Observer({ selector, callback }: any) {
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => callback(entries), {
+      root: null,
+      rootMargin: "0px",
+      threshold: 0,
+    });
+
+    const element = document.querySelector(selector);
+
+    observer.observe(element);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  return null;
+}
 
 const AtletaSelecionar = () => {
   const [listAtleta, setListAtleta] = useState<TAtletas[]>([]);
-  const [currentPage, setCurrentPage] = useState<number>(0);
-  const [lastPage, setLastPage] = useState<boolean>(false);
-  const [requestName, setRequestName] = useState<string | null>(null);
-  const [requestError, setRequestError] = useState<boolean>(false);
-  const loaderRef = useRef<HTMLDivElement>(null);
-  const inputNameRef = useRef<HTMLInputElement>(null);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [lastPage, setLastPage] = useState(false);
+  const [requestName, setRequestName] = useState("");
+  const [requestError, setRequestError] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [scrollListener, setScrollListener] = useState(false);
+  const [blockListener, setBlockListener] = useState(false);
 
-  let allowRequest = false;
+  const debouncedValue = useDebounce(requestName, 500);
 
-  useEffect(() => {
-    if (requestName) {
-      getAtletasByName(requestName, currentPage, elementsPerPage)
-        .then((response: any) => {
-          const atletas = apiToAtletas(response.data.content);
-          setLastPage(response.data.last);
-          setListAtleta((currentAtletas) => [...currentAtletas, ...atletas]);
-          allowRequest = true;
-        })
-        .catch((err: any) => {
-          setRequestError(true);
-        });
-    } else {
-      getAtletas(currentPage, elementsPerPage)
-        .then((response: any) => {
-          const atletas = apiToAtletas(response.data.content);
-          setLastPage(response.data.last);
-          setListAtleta((currentAtletas) => [...currentAtletas, ...atletas]);
-          allowRequest = true;
-        })
-        .catch((err: any) => {
-          setRequestError(true);
-        });
+  async function fetchData(restartSearch: boolean, isLastPage: boolean) {
+    try {
+      if (isLastPage) return;
+
+      const page = restartSearch ? 0 : currentPage;
+      
+      setLoading(true);
+      const response = requestName
+        ? await getAtletasByName(requestName, page, ELEMENTS_PER_PAGE)
+        : await getAtletas(page, ELEMENTS_PER_PAGE);
+      const atletas = apiToAtletas(response.data.content);
+      setLastPage(response.data.last);
+      setListAtleta((currentAtletas) => [...currentAtletas, ...atletas]);
+
+      setCurrentPage((current) => current + 1);
+    } catch (error) {
+      setRequestError(true);
+    } finally {
+      setLoading(false);
     }
-  }, [currentPage, requestName]);
+  }
 
-  useEffect(() => {
-    const intersectionObserver = new IntersectionObserver((entries) => {
-      console.log(entries);
-      if (entries.some((entry) => entry.isIntersecting)) {
-        if (allowRequest) setCurrentPage((current) => current + 1);
-      }
-    });
-    intersectionObserver.observe(loaderRef.current!);
-    return () => intersectionObserver.disconnect();
-  }, []);
-
-  const searchByName = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (inputNameRef.current) {
-      const inputNameEl = inputNameRef.current;
-
-      if (inputNameEl.value == "") {
-        if (requestName) {
-          //Reset variables
-          setLastPage(false);
-          setRequestError(false);
-          setListAtleta([]);
-          setCurrentPage(0);
-          setRequestName(null);
-          allowRequest = false;
-        } else {
-          inputNameEl.focus();
-        }
-        return;
-      } else {
-        //Reset variables
-        setLastPage(false);
-        setRequestError(false);
-        setListAtleta([]);
-        setCurrentPage(0);
-        setRequestName(inputNameEl.value);
-        allowRequest = false;
-      }
-    }
+  const searchByName = async () => {
+    setBlockListener(true);
+    setListAtleta([]);
+    setCurrentPage(0);
+    await fetchData(true, false);
+    setBlockListener(false);
   };
+
+  useEffect(() => {
+    if (scrollListener && !blockListener) fetchData(false, lastPage);
+  }, [scrollListener, blockListener]);
+
+  useEffect(() => {
+    if (currentPage > 0) searchByName();
+  }, [debouncedValue]);
 
   return (
     <div className={styles.container}>
@@ -108,17 +95,14 @@ const AtletaSelecionar = () => {
           className={styles.title}
         />
 
-        <form className={styles.form} onSubmit={(e) => searchByName(e)}>
-          <input
-            ref={inputNameRef}
-            className={styles.inputName}
-            type="text"
-            placeholder="Insira o nome do atleta"
-            autoComplete="off"
-          />
-
-          <input className={styles.submit} type="submit" value="Buscar" />
-        </form>
+        <input
+          onChange={(e) => setRequestName(e.target.value)}
+          value={requestName}
+          className={styles.inputName}
+          type="text"
+          placeholder="Insira o nome do atleta"
+          autoComplete="off"
+        />
 
         <ul className={styles.listAtletas}>
           {listAtleta.map((atleta, i) => (
@@ -131,20 +115,11 @@ const AtletaSelecionar = () => {
               />
             </li>
           ))}
+          <li className="lastElement" />
+          {loading && <div className={styles.loader} />}
         </ul>
 
-
-        <div
-          className={styles.loader}
-          ref={loaderRef}
-          style={{
-            //Make sure to display loading before first request (on page load)
-            //Hide the loading if an error occurs
-            display: lastPage === false && !requestError ? "block" : "none",
-          }}
-        ></div>
-
-        {listAtleta.length <= 0 && lastPage && (
+        {!loading && listAtleta.length <= 0 && lastPage && (
           <p className={styles.notFound}>Nenhum atleta encontrado.</p>
         )}
 
@@ -155,6 +130,12 @@ const AtletaSelecionar = () => {
           </p>
         )}
       </div>
+      <Observer
+        selector=".lastElement"
+        callback={(e: any) => {
+          setScrollListener(e[0].isIntersecting ? true : false);
+        }}
+      />
     </div>
   );
 };
