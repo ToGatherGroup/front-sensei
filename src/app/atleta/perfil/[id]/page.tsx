@@ -17,6 +17,7 @@ const page = ({ params }: Props) => {
   return (
     <div className={styles.container}>
       <AvatarAtleta
+        id={atleta.id}
         name={atleta.name}
         belt={atleta.belt}
         photo={atleta.photo}
