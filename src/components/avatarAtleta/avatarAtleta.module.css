@@ -47,7 +47,7 @@
   border-radius: 10px;
   transform: translateY(-15px);
   height: 2.3rem;
-  width: 7.2rem;
+  width: 7.3rem;
 }
 
 .nameContainer > p {
@@ -100,7 +100,16 @@
   overflow: scroll;
   transform: translateY(-30px);
   height: 3rem;
-  width: 15rem;
+  width: 15.5rem;
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.nameContainerBig::-webkit-scrollbar {
+  display: none;
 }
 
 .nameContainerBig > p {
