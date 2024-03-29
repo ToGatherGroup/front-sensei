@@ -16,7 +16,7 @@ export const Atletas: TAtleta[] =
   },
   {
     id: "1",
-    name: "Gabriel Cruz",
+    name: "Gabriel Cruz Gabriel Cruz Gabriel Cruz Gabriel Cruz Gabriel Cruz Gabriel Cruz Gabriel Cruz Gabriel Cruz Gabriel Cruz Gabriel Cruz Gabriel Cruz Gabriel Cruz Gabriel Cruz Gabriel Cruz Gabriel Cruz Gabriel Cruz Gabriel Cruz Gabriel Cruz Gabriel Cruz Gabriel Cruz Gabriel Cruz Gabriel Cruz Gabriel Cruz Gabriel Cruz",
     email: "gabriel_cruz@gmail.com",
     birthdate: new Date(2005, 5, 10),
     sex: "male",
