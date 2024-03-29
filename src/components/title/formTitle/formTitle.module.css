@@ -1,0 +1,13 @@
+.formTitle {
+  display: inline-block;
+}
+
+.formTitle h2 {
+  font-weight: 800;
+  font-size: 1.5rem;
+}
+
+.formTitle img {
+  display: inline;
+  margin: auto auto;
+}
