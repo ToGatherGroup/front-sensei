@@ -13,20 +13,20 @@ const ListItem: React.FC<ItemProps> = ({ itemTitle, subItem }) => {
     const toggleOpen = () => setIsOpen(!isOpen);
 
     return (
-        <div>
-        <button onClick={subItem? toggleOpen : () => {}} className="bg-auto bg-white" style={{ cursor: 'pointer' }}>
+        <>
+        <button onClick={subItem? toggleOpen : () => {}} className="bg-auto bg-white flex-grow" style={{ cursor: 'pointer' }}>
           {itemTitle}
         </button>
         {isOpen && (
-                <div className='flex-col' >
+                <div className='flex flex-col' >
                     {Array.isArray(subItem)
                         ? subItem.map((item, index) => (
-                              <button className="bg-auto bg-gray-50" key={index}>{"chaves"}</button>
+                              <button className="bg-auto bg-gray-50" key={index}>{item}</button>
                           ))
                         : <button>{subItem}</button>}
                 </div>
             )}
-      </div>
+      </>
     );
 };
 
