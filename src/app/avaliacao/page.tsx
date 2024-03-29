@@ -1,5 +1,6 @@
 import React from 'react'
 import ListItem from '../../components/assessment/index'
+import Button from "../../components/button/index";
 
 const assesmentArray = [
         {id: 1, itemTitle: 'Core'},
@@ -14,11 +15,16 @@ const assesmentArray = [
 ]
 
 const ListAssessmentPage = () => {
+      {/* Não vou mexer com botão, pois o componente pode ficar muito hibrido */}
     return (
-        <div className='min-h-screen w-full flex items-center justify-center'>
-                {assesmentArray.map(item => (
-                    <ListItem key={item.id} itemTitle={item.itemTitle} />
-                ))}
+        <div className='min-h-screen w-full flex flex-1 flex-col items-center justify-center'>
+                {assesmentArray.map(item => {
+                    return (
+
+                        // <Button label={item.itemTitle} type="button" style="btn_white" />
+                        <ListItem key={item.id} itemTitle={item.itemTitle} subItem={(item.subItem ? item.subItem : undefined)} />
+                    );
+                })}
         </div>
     )
 }
