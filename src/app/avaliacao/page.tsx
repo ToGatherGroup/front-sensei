@@ -15,9 +15,9 @@ const assesmentArray = [
 ]
 
 const ListAssessmentPage = () => {
-      {/* Não vou mexer com botão, pois o componente pode ficar muito hibrido */}
+      {/* Não vou mexer com botão, pois o componente pode ficar muito hibrido / w-full min-h-dvhn min-h-screen */}
     return (
-        <div className='items-center justify-center w-full min-h-dvhn min-h-screen w-full flex flex-1 flex-col items-center justify-center'>
+        <div className='max-h-70 max-w-lg bg-red-50 justify-center flex flex-1 flex-col space-y-2 justify-center p-1'>
                 {assesmentArray.map(item => {
                     return (
 
