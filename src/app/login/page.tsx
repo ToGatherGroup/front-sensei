@@ -1,11 +1,9 @@
 import Button from "../../components/button/index";
-import Title from "../../components/Title/index";
+import Title from "../../components/title/index";
 
 export default function LoginPage() {
   return (
-    <div
-      className={`flex w-full items-center justify-center w-100 min-h-dvh`}
-    >
+    <div className={`flex w-full items-center justify-center w-100 min-h-dvh`}>
       <div
         className={`bg-white rounded-3xl p-16 flex flex-col items-center justify-items-center gap-10 w-full max-w-[60%]`}
       >
