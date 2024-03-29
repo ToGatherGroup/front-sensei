@@ -12,7 +12,11 @@ import { TAtletas } from "@/types/TAtletas";
 import styles from "./selecionar.module.css";
 import { useDebounce } from "@/hooks/useDebounce";
 
-const { innerHeight: height } = window;
+let height = 1500; // A secure large height definition, in case window is not defined
+
+if (typeof window !== "undefined") {
+  height = window.innerHeight;
+}
 
 const ELEMENTS_PER_PAGE = Math.ceil(((height - 250) * 4) / 130);
 
@@ -53,7 +57,7 @@ const AtletaSelecionar = () => {
       if (isLastPage) return;
 
       const page = restartSearch ? 0 : currentPage;
-      
+
       setLoading(true);
       const response = requestName
         ? await getAtletasByName(requestName, page, ELEMENTS_PER_PAGE)
