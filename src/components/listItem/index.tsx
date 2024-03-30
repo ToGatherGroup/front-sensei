@@ -1,7 +1,14 @@
 'use client';
 import React, { useState } from 'react';
-import Button from '../button';
 
+/**
+ * A list item component that can toggle the visibility of its sub items.
+ * 
+ * @param {ItemProps} props - The props for the component.
+ * @param {string} props.itemTitle - The title of the item.
+ * @param {string|string[]} [props.subItem] - Optional sub items for the list item.
+ * @returns {React.ReactElement} The list item component.
+ */
 interface ItemProps {
     itemTitle: string;
     subItem?: string | string[];
@@ -12,27 +19,30 @@ const ListItem: React.FC<ItemProps> = ({ itemTitle, subItem }) => {
 
     const toggleOpen = () => setIsOpen(!isOpen);
 
-    //const containerClass = isOpen ? "max-h-96" : "max-h-0"; // Ajuste os valores de max-height conforme necessário
     const opacityClass = isOpen ? "opacity-100" : "opacity-0";
+
+    const baseClasses = "py-3 px-2 text-left transition duration-300 ease-in-out";
+    const variantClasses = {
+        subItem: "bg-gray-200 border-b-2 border-black",
+      };
 
     return (
         <>
-            <button onClick={subItem ? toggleOpen : () => {}} className="bg-auto bg-white flex-grow py-3 px-2 text-left transition duration-300 ease-in-out" style={{ cursor: 'pointer' }}>
+            <button onClick={subItem ? toggleOpen : () => {}} className={`bg-auto bg-white flex-grow ${baseClasses}`} style={{ cursor: 'pointer' }}>
               {itemTitle}
             </button>
-            <div className={`flex flex-col transition-max-height duration-200 ease-in-out align-middle transition-opacity -mt-2 duration-500 ease-in-out ${opacityClass}`}>
+            <div className={`transition-max-height align-middle transition-opacity -mt-2 flex flex-col duration-300 ease-in-out ${opacityClass}`}>
                 {isOpen && Array.isArray(subItem)
                     ? subItem.map((item, index) => (
-                          <button className="bg-auto bg-gray-200 py-3 px-2 text-left border-b-2 border-black" key={index}>{item}</button>
+                          <button className={`${baseClasses} ${variantClasses.subItem}`} key={index}>{item}</button>
                       ))
-                    : isOpen && <button>{subItem}</button>}
+                    : isOpen && <button className={`${baseClasses} ${variantClasses.subItem}`}>{subItem}</button>}
             </div>
-      </>
+        </>
     );
 };
 
 export default ListItem;
 
-
-// TIPS:
-// Dá pra trabalhar com visibilidade do tailwind para renderizar o accordion https://v2.tailwindcss.com/docs/visibility
+// TODO:
+// Router push to the selected item
