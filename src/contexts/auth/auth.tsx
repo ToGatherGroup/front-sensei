@@ -1,36 +1,51 @@
+import { useRouter } from 'next/navigation'
 import { createContext, useContext, useEffect, useState } from "react";
 
 type AuthState = {
-    login: string | null;
-    password: string | null;
-    authentication: (login: string, password: string) => null;
-    logout: () => null;
+    isLoading: boolean;
+    isAuth: boolean;
+    error: string;
+    authentication: (login: string, password: string) => void;
+    logout: () => void;
 }
 
-const initialState = {
-    login: null,
-    password: null,
-    authentication: () => null,
-    logout: () => null,
+const initialState: AuthState = {
+    isLoading: false,
+    isAuth: false,
+    error: '',
+    authentication: () => {},
+    logout: () => {},
 }
 
 const AuthContext = createContext<AuthState>(initialState);
 
 export const AuthProvider = ({ children }: {children: React.ReactNode}) => {
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isAuth, setIsAuth] = useState<boolean>(false);
-    
+    const [error, setError] = useState<string>('');
+    const router = useRouter()
+
     const checkAuth = () => {
-       const auth = localStorage.getItem("auth");
-       if(auth) {
+        const auth = localStorage.getItem("auth");
+        if(auth == '1') {
             setIsAuth(true);
-       }
+        }
     }
 
     const authentication = (login: string, password: string) => {
-        if(login === 'admin' && password === 'admin') {
-            setIsAuth(true);
-            localStorage.setItem("auth", '1');
-        }
+        setIsLoading(true); 
+        setError('');
+        setTimeout(() => {
+            if(login == 'admin' && password == 'admin') {
+                setIsAuth(true);
+                localStorage.setItem("auth", '1');
+                setIsLoading(false);
+                router.push('/menu')
+            } else {
+                setIsLoading(false);
+                setError('Login e/ou senha inválidos!')
+            }
+        }, 1000);
     }
 
     const logout = () => {
@@ -40,10 +55,12 @@ export const AuthProvider = ({ children }: {children: React.ReactNode}) => {
 
     useEffect(() => {
         checkAuth();
+        setError('');
+        setIsLoading(false);
     }, [])
 
     return (
-        <AuthContext.Provider value={{isAuth, authentication, logout}}>
+        <AuthContext.Provider value={{isLoading, isAuth, error, authentication, logout}}>
             {children}
         </AuthContext.Provider>
     )
