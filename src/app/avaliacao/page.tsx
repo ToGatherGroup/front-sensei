@@ -2,18 +2,18 @@ import React from 'react'
 import ListItem, { ListItemProps } from '../../components/listItem/index'
 
 const assesmentArray: ListItemProps[] = [
-        {id: 1, itemTitle: 'Core'},
-        {id: 2, itemTitle: 'Força Máxima'},
-        {id: 3, itemTitle: 'Força Explosiva'},
-        {id: 4, itemTitle: 'Força Isométrica'},
-        {id: 5, itemTitle: 'Mobilidade do Tornozelo'},
-        {id: 6, itemTitle: 'Resistência muscular localizada', subItem: ['Abdominal', 'MMSS']},
-        {id: 7, itemTitle: 'Resistência Anaeróbica'},
-        {id: 8, itemTitle: 'Resistência Aeróbica'}
+        {key: 1, itemTitle: 'Core'},
+        {key: 2, itemTitle: 'Força Máxima'},
+        {key: 3, itemTitle: 'Força Explosiva'},
+        {key: 4, itemTitle: 'Força Isométrica'},
+        {key: 5, itemTitle: 'Mobilidade do Tornozelo'},
+        {key: 6, itemTitle: 'Resistência muscular localizada', subItem: ['Abdominal', 'MMSS']},
+        {key: 7, itemTitle: 'Resistência Anaeróbica'},
+        {key: 8, itemTitle: 'Resistência Aeróbica'}
 ]
 
 const indiceArray: ListItemProps[] = [
-    {id: 1, itemTitle: 'IMC'},
+    {key: 1, itemTitle: 'IMC'},
 ]
 
 const ListAssessmentPage: React.FC<any> = () => {
@@ -27,7 +27,7 @@ const ListAssessmentPage: React.FC<any> = () => {
                 <h1 className={`${headerClass}`}>Valências Físicas</h1>
                     {assesmentArray.map(item => {
                         return (
-                            <ListItem id={item.id} itemTitle={item.itemTitle} subItem={(item.subItem ? item.subItem : undefined)} />
+                            <ListItem key={item.key} itemTitle={item.itemTitle} subItem={(item.subItem ? item.subItem : undefined)} />
                         );
                     })}
             </ul>
@@ -35,7 +35,7 @@ const ListAssessmentPage: React.FC<any> = () => {
                 <h1 className={`${headerClass}`}>Índices</h1>
                     {indiceArray.map(item => {
                         return (
-                            <ListItem id={item.id} itemTitle={item.itemTitle} subItem={(item.subItem ? item.subItem : undefined)} />
+                            <ListItem key={item.key} itemTitle={item.itemTitle} subItem={(item.subItem ? item.subItem : undefined)} />
                         );
                     })}
             </ul>

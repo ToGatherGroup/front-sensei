@@ -10,7 +10,7 @@ import React, { useState } from 'react';
  * @returns {React.ReactElement} The list item component.
  */
 export interface ListItemProps {
-    id: number;
+    key: number;
     itemTitle: string;
     subItem?: string | string[];
 }
