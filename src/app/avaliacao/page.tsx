@@ -1,8 +1,7 @@
 import React from 'react'
-import ListItem from '../../components/listItem/index'
-import Title from "../../components/title/index";
+import ListItem, { ListItemProps } from '../../components/listItem/index'
 
-const assesmentArray = [
+const assesmentArray: ListItemProps[] = [
         {id: 1, itemTitle: 'Core'},
         {id: 2, itemTitle: 'Força Máxima'},
         {id: 3, itemTitle: 'Força Explosiva'},
@@ -13,7 +12,7 @@ const assesmentArray = [
         {id: 8, itemTitle: 'Resistência Aeróbica'}
 ]
 
-const indiceArray = [
+const indiceArray: ListItemProps[] = [
     {id: 1, itemTitle: 'IMC'},
 ]
 
@@ -28,7 +27,7 @@ const ListAssessmentPage: React.FC<any> = () => {
                 <h1 className={`${headerClass}`}>Valências Físicas</h1>
                     {assesmentArray.map(item => {
                         return (
-                            <ListItem key={item.id} itemTitle={item.itemTitle} subItem={(item.subItem ? item.subItem : undefined)} />
+                            <ListItem id={item.id} itemTitle={item.itemTitle} subItem={(item.subItem ? item.subItem : undefined)} />
                         );
                     })}
             </ul>
@@ -36,7 +35,7 @@ const ListAssessmentPage: React.FC<any> = () => {
                 <h1 className={`${headerClass}`}>Índices</h1>
                     {indiceArray.map(item => {
                         return (
-                            <ListItem key={item.id} itemTitle={item.itemTitle} subItem={(item.subItem ? item.subItem : undefined)} />
+                            <ListItem id={item.id} itemTitle={item.itemTitle} subItem={(item.subItem ? item.subItem : undefined)} />
                         );
                     })}
             </ul>

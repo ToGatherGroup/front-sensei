@@ -9,12 +9,13 @@ import React, { useState } from 'react';
  * @param {string|string[]} [props.subItem] - Optional sub items for the list item.
  * @returns {React.ReactElement} The list item component.
  */
-interface ItemProps {
+export interface ListItemProps {
+    id: number;
     itemTitle: string;
     subItem?: string | string[];
 }
 
-const ListItem: React.FC<ItemProps> = ({ itemTitle, subItem }) => {
+const ListItem: React.FC<ListItemProps> = ({ itemTitle, subItem }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const toggleOpen = () => setIsOpen(!isOpen);
