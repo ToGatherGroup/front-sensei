@@ -38,7 +38,7 @@ const cards: Card[] = [
   },
 ];
 
-const menu = (props: Props) => {
+const Menu = (props: Props) => {
   return (
     <div className={styles.container}>
       <div className={styles.cardContainer}>
@@ -51,4 +51,4 @@ const menu = (props: Props) => {
     </div>
   );
 };
-export default menu;
+export default Menu;

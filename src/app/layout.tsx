@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description: "Aplicativo para gerenciamento de atletas",
 };
 
-export default function RootLayout({ children,}: Readonly<{ children: React.ReactNode;}>) {
+export default function RootLayout({ children,}: Readonly<{ children: React.ReactNode;}>) {  
   return (
     <html lang="pt-br">
       <body>
@@ -19,7 +19,7 @@ export default function RootLayout({ children,}: Readonly<{ children: React.Reac
               {children}
             </main>
             <footer>FOOTER</footer>
-          </div>
+          </div>          
         </Providers>
       </body>
     </html>

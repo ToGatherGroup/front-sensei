@@ -22,8 +22,6 @@ export default function ListAthletes({ listAthletes } : ListAthletesProps){
                 ))}
             </ul>
             <Button label="Finalizar Chamada" type="submit" />
-            <Button label="Finalizar Chamada" type="submit" style="btn_red" align="left"/>
-            <Button label="Finalizar Chamada" type="submit" style="btn_white" align="right"/>
         </form>
     )
 }
