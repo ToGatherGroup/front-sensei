@@ -1,0 +1,28 @@
+.frequency {
+  display: flex;
+  flex-direction: column;
+  color: white;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.dates {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 35px;
+}
+
+.grafic {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  margin: 30px;
+}
+
+.inputText {
+  color: black;
+}
