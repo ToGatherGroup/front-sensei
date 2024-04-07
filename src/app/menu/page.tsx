@@ -83,7 +83,11 @@ const Menu = () => {
       <div className={styles.cardContainer}>
         {cards.map((card: Card) => (
           <div className={styles.card} key={card.title}>
-            {card.title === "Iniciar Avaliação" ? (
+            {card.title === "Chamada" ? (
+              <Link href="/chamada">
+                <Card cardTitle={card.title} src={card.imgSrc} />
+              </Link>
+            ) : card.title === "Iniciar Avaliação" ? (
               <Link href="/avaliacao">
                 <Card cardTitle={card.title} src={card.imgSrc} />
               </Link>
