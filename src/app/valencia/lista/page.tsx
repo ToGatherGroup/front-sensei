@@ -1,5 +1,6 @@
 import React from 'react'
-import ListItem, { ListItemProps } from '../../../components/listItem/index'
+import ListItem from '../../../components/listItem/index'
+import { ListItemProps } from '@/types/Assessment'
 
 const assesmentArray: ListItemProps[] = [
         {key: 1, itemTitle: 'Core'},

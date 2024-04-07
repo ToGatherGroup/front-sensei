@@ -1,5 +1,6 @@
 'use client';
 import React, { useState } from 'react';
+import { ListItemProps } from '@/types/Assessment';
 
 /**
  * A list item component that can toggle the visibility of its sub items.
@@ -9,11 +10,6 @@ import React, { useState } from 'react';
  * @param {string|string[]} [props.subItem] - Optional sub items for the list item.
  * @returns {React.ReactElement} The list item component.
  */
-export interface ListItemProps {
-    key: number;
-    itemTitle: string;
-    subItem?: string | string[];
-}
 
 const ListItem: React.FC<ListItemProps> = ({ itemTitle, subItem }) => {
     const [isOpen, setIsOpen] = useState(false);
