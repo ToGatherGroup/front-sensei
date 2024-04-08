@@ -62,6 +62,14 @@ const Menu = () => {
               <Link href="/atleta/cadastrar">
                 <Card cardTitle={card.title} src={card.imgSrc} />
               </Link>
+            ) : card.title === "Relatório Avaliação" ? (
+              <Link href="/relatorioAvaliacao">
+                <Card cardTitle={card.title} src={card.imgSrc} />
+              </Link>
+            ) : card.title === "Comparação" ? (
+              <Link href="/comparison">
+                <Card cardTitle={card.title} src={card.imgSrc} />
+              </Link>
             ) : (
               <Card cardTitle={card.title} src={card.imgSrc} />
             )}
