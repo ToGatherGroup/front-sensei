@@ -40,43 +40,6 @@ const cards: Card[] = [
   },
 ];
 
-// const Menu = (props: Props) => {
-//   return (
-//     <div className={styles.container}>
-//       <div className={styles.cardContainer}>
-//         {cards.map((card: Card) => (
-//           <div className={styles.card} key={card.title}>
-//             <Card cardTitle={card.title} src={card.imgSrc} />
-//           </div>
-//         ))}
-//       </div>
-//     </div>
-//   );
-// };
-// export default Menu;
-
-// const Menu = () => {
-//   return (
-//     <div className={styles.container}>
-//       <div className={styles.cardContainer}>
-//         {cards.map((card: Card) => (
-//           <div className={styles.card} key={card.title}>
-//             {card.title === "Cadastrar Atleta" ? (
-//               <Link href="/atleta/cadastrar">
-//                 <Card cardTitle={card.title} src={card.imgSrc} />
-//               </Link>
-//             ) : (
-//               <Card cardTitle={card.title} src={card.imgSrc} />
-//             )}
-//           </div>
-//         ))}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Menu;
-
 const Menu = () => {
   return (
     <div className={styles.container}>
