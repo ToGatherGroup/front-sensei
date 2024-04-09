@@ -51,7 +51,7 @@ const Menu = () => {
                 <Card cardTitle={card.title} src={card.imgSrc} />
               </Link>
             ) : card.title === "Iniciar Avaliação" ? (
-              <Link href="/valencia/avaliacao">
+              <Link href="/valencia/lista">
                 <Card cardTitle={card.title} src={card.imgSrc} />
               </Link>
             ) : card.title === "Ficha Do Atleta" ? (
