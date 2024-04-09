@@ -1,17 +1,11 @@
+'use client'
 import React from 'react'
 import ListItem from '../../../components/listItem/index'
 import { ListItemProps } from '@/types/Assessment'
+import { AVALIACOES_FISICAS } from '@/consts/const';
 
-const assesmentArray: ListItemProps[] = [
-        {key: 1, itemTitle: 'Core'},
-        {key: 2, itemTitle: 'Força Máxima'},
-        {key: 3, itemTitle: 'Força Explosiva'},
-        {key: 4, itemTitle: 'Força Isométrica'},
-        {key: 5, itemTitle: 'Mobilidade do Tornozelo'},
-        {key: 6, itemTitle: 'Resistência muscular localizada', subItem: ['Abdominal', 'MMSS']},
-        {key: 7, itemTitle: 'Resistência Anaeróbica'},
-        {key: 8, itemTitle: 'Resistência Aeróbica'}
-]
+
+const assesmentArrayAlt = AVALIACOES_FISICAS
 
 const indiceArray: ListItemProps[] = [
     {key: 1, itemTitle: 'IMC'},
@@ -26,9 +20,9 @@ const ListAssessmentPage: React.FC<any> = () => {
         <div className={`${baseClasses} p-8 max-w-screen-sm`}>
             <ul className={`${baseClasses} p-1`}>
                 <h1 className={`${headerClass}`}>Valências Físicas</h1>
-                    {assesmentArray.map(item => {
+                    {assesmentArrayAlt.map(item => {
                         return (
-                            <ListItem key={item.key} itemTitle={item.itemTitle} subItem={(item.subItem ? item.subItem : undefined)} />
+                                <ListItem key={item.key} id={item.key} itemTitle={item.itemTitle} subItem={(item.subItems ? item.subItems : undefined)} />
                         );
                     })}
             </ul>
@@ -36,7 +30,7 @@ const ListAssessmentPage: React.FC<any> = () => {
                 <h1 className={`${headerClass}`}>Índices</h1>
                     {indiceArray.map(item => {
                         return (
-                            <ListItem key={item.key} itemTitle={item.itemTitle} subItem={(item.subItem ? item.subItem : undefined)} />
+                            <ListItem key={item.key} itemTitle={item.itemTitle} subItem={(item.subItem ? item.subItem : undefined)} id={0} />
                         );
                     })}
             </ul>

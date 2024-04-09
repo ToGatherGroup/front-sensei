@@ -1,8 +1,10 @@
-import Button from "../button/index";
+import Button from "../../button/index";
+import { AVALIACOES_FISICAS } from "@/consts/const";
 
 type ListAvaliacaoProps = {
+    identificador: number;
     listAthletes: AthletesProps[];
-    assessmentType: string;
+    //header: string;
     isIMC?: boolean;
 }
 
@@ -11,10 +13,10 @@ type AthletesProps = {
     name: string;
 }
 
-export default function ListAvaliacao({ listAthletes, isIMC, assessmentType } : ListAvaliacaoProps){
+export default function ListAvaliacao({ listAthletes, isIMC, identificador } : ListAvaliacaoProps){
     return (
         <form className="bg-defaultGray px-36 py-20 rounded-md">
-            <h2 className="font-bold uppercase text-4xl mb-10">{assessmentType}</h2>
+            <h2 className="font-bold uppercase text-4xl mb-10">{AVALIACOES_FISICAS[identificador].itemTitle}</h2>
             <ul className="w-full grid  justify-items-stretch">
                 {listAthletes.map((athlete) => (
                     <li className="bg-green-500 border-4 border-light-blue-500 border-opacity-100  flex items-center justify-between gap-2 mb-3" key={athlete.id}>
