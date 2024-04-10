@@ -3,13 +3,10 @@ import React, { useState } from 'react';
 import { ListItemProps } from '@/types/Assessment';
 import Link from 'next/link';
 
-
-// Se bem que no ListItem posso passar a info (header) pra pegar lá no avaliação page, faz sentido?
 const ListItem = ({ id, itemTitle, subItem }: ListItemProps) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const href = `avaliacao/${encodeURIComponent(id)}`;
-
     const handleItemClick = () => {
         if (subItem) {
             setIsOpen(!isOpen);
@@ -37,9 +34,9 @@ const ListItem = ({ id, itemTitle, subItem }: ListItemProps) => {
                   <Link href={href} className={`bg-auto bg-white flex-grow ${baseClasses}`}>{renderItemButton(false)}</Link>
               )}
           <div className={`transition-max-height align-middle transition-opacity -mt-2 flex flex-col duration-300 ease-in-out ${opacityClass}`}>
-              {isOpen && Array.isArray(subItem) && subItem.map((item, index) => (
-                  <Link className={`${baseClasses} ${variantClasses}`} href={`/subItemPage/${encodeURIComponent(item)}`} key={index}>
-                          {item}
+              {isOpen && Array.isArray(subItem) && subItem.map((subItemName, index) => (
+                  <Link className={`${baseClasses} ${variantClasses}`} href={`${href + "/" +  encodeURIComponent(index)}`} key={index}>
+                          {subItemName}
                   </Link>
               ))}
           </div>

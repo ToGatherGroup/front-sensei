@@ -6,6 +6,7 @@ type ListAvaliacaoProps = {
     listAthletes: AthletesProps[];
     //header: string;
     isIMC?: boolean;
+    identificadorSubItem?: number;
 }
 
 type AthletesProps = {
@@ -14,12 +15,12 @@ type AthletesProps = {
 }
 
 
-export default function ListAvaliacao({ listAthletes, isIMC, identificador } : ListAvaliacaoProps){
+export default function ListAvaliacao({ listAthletes, isIMC, identificador, identificadorSubItem } : ListAvaliacaoProps){
 
-
+    const assessmentIndex = identificadorSubItem ? identificadorSubItem : 0
     // TODO: desacoplar o id do array de avaliações
-    const tituloAvaliacao = AVALIACOES_FISICAS[identificador].assessments[0].title // validar se tem subItem, caso tenha, pegar segundo parâmetro para navegar na array de assessments
-    const tipoAvaliacao = AVALIACOES_FISICAS[identificador].assessments[0].type
+    const tituloAvaliacao = AVALIACOES_FISICAS[identificador].assessments[assessmentIndex].title // validar se tem subItem, caso tenha, pegar segundo parâmetro para navegar na array de assessments
+    const tipoAvaliacao = AVALIACOES_FISICAS[identificador].assessments[assessmentIndex].type
     console.log(`identificador chegando: ${identificador}`)
 
     return (

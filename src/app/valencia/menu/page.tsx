@@ -11,7 +11,7 @@ const indiceArray: ListItemProps[] = [
     {key: 1, itemTitle: 'IMC'},
 ]
 
-const ListAssessmentPage: React.FC<any> = () => {
+const MenuAvaliacaoPage: React.FC<any> = () => {
 
     const headerClass = "text-white font-bold"
     const baseClasses = "flex flex-1 flex-col gap-y-2 justify-center fadeIn";
@@ -38,4 +38,4 @@ const ListAssessmentPage: React.FC<any> = () => {
     )
 }
 
-export default ListAssessmentPage
+export default MenuAvaliacaoPage
