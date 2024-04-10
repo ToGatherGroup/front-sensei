@@ -1,6 +1,6 @@
 'use client';
 import React from 'react'
-import ListAvaliacao from '../../../../components/listAvaliacao/[id]/index'
+import ListAvaliacao from '../../../../components/listAvaliacao/index'
 import { useParams } from 'next/navigation'
 import { AVALIACOES_FISICAS } from '@/consts/const';
 import { useRouter, NextRouter } from 'next/router';
@@ -29,15 +29,16 @@ type Props = {
   params: Params;
 };
 
-const AvaliacaoPage = ({ params }: Props) => {
-  const parametrosAlt = useParams<{ id: string}>()
+const ListAvaliacaoPage = ({ params }: Props) => {
+  const parametros = useParams<{ id: string}>()
   // const router: NextRouter = useRouter();
   // const { id } = router.query;
 
   // const avaliacao = AVALIACOES_FISICAS[Number(id)] //TODO: desacoplar o id do array de avaliações
   // console.log(avaliacao)
   // console.log(AVALIACOES_FISICAS[Number(id)])
-  // console.log(id)
+  console.log("Identificador saindo: ")
+   console.log(parametros.id)
   // Poh, talvez eu tenha que pegar a const aqui ??
 
 // -----------------------------------------------
@@ -61,12 +62,12 @@ const AvaliacaoPage = ({ params }: Props) => {
   return (
     <div className='min-h-screen w-full flex items-center justify-center'>
       <div className='max-container'>
-        <ListAvaliacao listAthletes={athletes} identificador={Number(parametrosAlt.id)} />
+        <ListAvaliacao listAthletes={athletes} identificador={Number(parametros.id)} />
       </div>
     </div>
   )
 }
 
-export default AvaliacaoPage
+export default ListAvaliacaoPage
 
 // https://nextjs.org/docs/app/api-reference/functions/use-params

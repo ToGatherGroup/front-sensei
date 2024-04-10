@@ -22,7 +22,7 @@ const ListAssessmentPage: React.FC<any> = () => {
                 <h1 className={`${headerClass}`}>Valências Físicas</h1>
                     {assesmentArrayAlt.map(item => {
                         return (
-                                <ListItem key={item.key} id={item.key} itemTitle={item.itemTitle} subItem={(item.subItems ? item.subItems : undefined)} />
+                                <ListItem id={item.key} itemTitle={item.itemTitle} subItem={(item.subItems ? item.subItems : undefined)} />
                         );
                     })}
             </ul>
@@ -30,7 +30,7 @@ const ListAssessmentPage: React.FC<any> = () => {
                 <h1 className={`${headerClass}`}>Índices</h1>
                     {indiceArray.map(item => {
                         return (
-                            <ListItem key={item.key} itemTitle={item.itemTitle} subItem={(item.subItem ? item.subItem : undefined)} id={0} />
+                            <ListItem key={item.key} itemTitle={item.itemTitle} subItem={(item.subItem ? item.subItem : undefined)} id={Number(item.key)} />
                         );
                     })}
             </ul>

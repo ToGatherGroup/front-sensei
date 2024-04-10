@@ -1,8 +1,8 @@
 export enum AssessmentType {
-    Tempo = 'Tempo',
-    Repeticao = 'Repetição',
-    Peso = 'Peso', //(kg)
-    Distancia = 'Distância', // (m) e (cm)
+    Tempo = 'time',
+    Repeticao = 'number',
+    Peso = 'number', //(kg)
+    Distancia = 'number', // (m) e (cm)
   }
 
 export interface Assessment {
@@ -11,7 +11,7 @@ export interface Assessment {
   }
   
   export interface ListItemProps {
-    key: number;
+    key?: number;
     id: number
     itemTitle: string;
     assessments?:  Assessment | Assessment[];
