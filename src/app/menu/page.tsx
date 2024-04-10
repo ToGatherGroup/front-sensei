@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 type Props = {};
 
 import styles from "./menu.module.css";
@@ -38,17 +40,44 @@ const cards: Card[] = [
   },
 ];
 
-const Menu = (props: Props) => {
+const Menu = () => {
   return (
     <div className={styles.container}>
       <div className={styles.cardContainer}>
         {cards.map((card: Card) => (
           <div className={styles.card} key={card.title}>
-            <Card cardTitle={card.title} src={card.imgSrc} />
+            {card.title === "Chamada" ? (
+              <Link href="/athletes">
+                <Card cardTitle={card.title} src={card.imgSrc} />
+              </Link>
+            ) : card.title === "Iniciar Avaliação" ? (
+              <Link href="/avaliacao">
+                <Card cardTitle={card.title} src={card.imgSrc} />
+              </Link>
+            ) : card.title === "Ficha Do Atleta" ? (
+              <Link href="/atleta/buscar">
+                <Card cardTitle={card.title} src={card.imgSrc} />
+              </Link>
+            ) : card.title === "Cadastrar Atleta" ? (
+              <Link href="/atleta/cadastrar">
+                <Card cardTitle={card.title} src={card.imgSrc} />
+              </Link>
+            ) : card.title === "Relatório Avaliação" ? (
+              <Link href="/relatorioAvaliacao">
+                <Card cardTitle={card.title} src={card.imgSrc} />
+              </Link>
+            ) : card.title === "Comparação" ? (
+              <Link href="/comparison">
+                <Card cardTitle={card.title} src={card.imgSrc} />
+              </Link>
+            ) : (
+              <Card cardTitle={card.title} src={card.imgSrc} />
+            )}
           </div>
         ))}
       </div>
     </div>
   );
 };
+
 export default Menu;
