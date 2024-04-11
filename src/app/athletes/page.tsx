@@ -1,22 +1,25 @@
-import React from 'react'
+"use client"
+import React, { useEffect } from 'react'
+import Loading from "@/components/loading/index";
 import ListAthletes from '../../components/listAthletes/index'
-
-const athletes = [
-    {id: 1, name: 'Felipe Marcelino Do Nascimento'},
-    {id: 2, name: 'Bruno Amado'},
-    {id: 3, name: 'Alex'},
-    {id: 4, name: 'Michel'},
-    {id: 5, name: 'Denilson'},
-    {id: 6, name: 'Maiara'},
-    {id: 7, name: 'Kaka'},
-    {id: 8, name: 'Edipo'},
-]
+import { useAthleteProvider } from '@/contexts'
 
 const ListAthletesPage = () => {
+  const { listAthletes, isLoading }  = useAthleteProvider();
+
+  useEffect(() => {
+    console.log(isLoading)
+  }, [isLoading])
+  
+
   return (
     <div className='min-h-screen w-full flex items-center justify-center'>
       <div className='max-container'>
-        <ListAthletes listAthletes={athletes} />
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <ListAthletes athletes={listAthletes} />
+        )}
       </div>
     </div>
   )

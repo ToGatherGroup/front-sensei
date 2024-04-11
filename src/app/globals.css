@@ -44,6 +44,12 @@
   border-radius: 5px;
 }
 
+@media (max-width: 1440px) { 
+  .max-container {
+    @apply mx-auto max-w-full w-full px-3;
+  }
+}
+
 @media (max-width: 600px) {
   .form-container {
     margin: 40px 10px;
@@ -75,6 +81,27 @@
   .btn_white {
     @apply bg-white py-[10px] px-[60px] rounded-md font-bold uppercase cursor-pointer block text-base text-center text-black;
   }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    border-radius: 100vh;
+    background: #f7f4ed;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: red;
+    border-radius: 100vh;
+    border: 3px solid #f7f4ed;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #c0a0b9;
+  }
+  
 }
 
 @keyframes fadeIn {
