@@ -15,11 +15,12 @@ const indiceArray = INDICES_FISICOS
 const MenuAvaliacaoPage: React.FC<any> = () => {
 
     const headerClass = "text-white font-bold"
-    const baseClasses = "flex flex-1 flex-col gap-y-2 justify-center fadeIn";
+    const baseClasses = "flex flex-1 flex-col gap-y-2 fadeIn";
 
     return (
-        <div className={`${baseClasses} p-8 max-w-screen-sm`}>
-            <ul className={`${baseClasses} p-1`}>
+        <div className={`${baseClasses} p-8 grid justify-items-center min-h-screen`}>
+            <div className={`m-auto`}>
+            <ul className={`${baseClasses} p-1 min-w-80 max-h-fit`}>
                 <h1 className={`${headerClass}`}>Valências Físicas</h1>
                     {assesmentArray.map(item => {
                         return (
@@ -27,7 +28,7 @@ const MenuAvaliacaoPage: React.FC<any> = () => {
                         );
                     })}
             </ul>
-            <ul className={`${baseClasses} p-1`}>
+            <ul className={`${baseClasses} p-1 min-w-80 `}>
                 <h1 className={`${headerClass}`}>Índices</h1>
                     {indiceArray.map(item => {
                         console.log('Item: ')
@@ -38,6 +39,7 @@ const MenuAvaliacaoPage: React.FC<any> = () => {
                     })}
             </ul>
             </div>
+        </div>
     )
 }
 
