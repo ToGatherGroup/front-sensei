@@ -2,8 +2,6 @@
 import React from 'react'
 import ListAvaliacao from '../../../../components/listAvaliacao/index'
 import { useParams } from 'next/navigation'
-import { AVALIACOES_FISICAS } from '@/consts/const';
-import { useRouter, NextRouter } from 'next/router';
 
 // TODO: API integration
 const athletes = [
@@ -14,7 +12,11 @@ const athletes = [
     {id: 5, name: 'Denilson'},
     {id: 6, name: 'Maiara'},
     {id: 7, name: 'Kaka'},
-    {id: 8, name: 'teste'},
+    {id: 8, name: 'Post Hoc Ergo'},
+    {id: 9, name: 'Lorem Ipsum'},
+    {id: 10, name: 'Dolor Sit Amet'},
+    {id: 11, name: 'Consectetur Adipiscing'},
+    {id: 12, name: 'Propter Hoc'},
 ]
 
 // export type AvaliacaoPageProps = {

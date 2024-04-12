@@ -1,5 +1,6 @@
 import Button from "../button/index";
 import { AVALIACOES_FISICAS, INDICES_FISICOS } from "@/consts/const";
+import { useState } from "react";
 
 type ListAvaliacaoProps = {
     identificador: number | string;
@@ -15,6 +16,15 @@ type AthletesProps = {
 
 
 export default function ListAvaliacao({ listAthletes, isIMC, identificador } : ListAvaliacaoProps){
+
+    function getDate() {
+        const today = new Date();
+        const formatter = new Intl.DateTimeFormat('pt-BR', { month: 'long', year: 'numeric' });
+        const formattedDate = formatter.format(today);
+        return formattedDate.replace(' de ', '/');
+      }
+
+    const [currentDate, setCurrentDate] = useState(getDate());
 
     let tituloAvaliacao = "Avaliação Física" // Default
     let tipoAvaliacao = "Avaliação Física" // Default
@@ -35,6 +45,8 @@ export default function ListAvaliacao({ listAthletes, isIMC, identificador } : L
     }
     const assessmentIndex = identificadorSubItem ? identificadorSubItem : 0
 
+
+
     // TODO: refatorar para um switch case -?-
     // TODO: desacoplar/refatorar o id do array de avaliações/indices
     if (Number(identificador) < Number(8)) {    
@@ -52,20 +64,28 @@ export default function ListAvaliacao({ listAthletes, isIMC, identificador } : L
     }
 
     return (
-        <form className="bg-defaultGray px-36 py-20 rounded-md">
-            <h2 className="font-bold uppercase text-4xl mb-10">{tituloAvaliacao}</h2>
+        <div className="  min-h-screen flex items-center justify-center">
+        <form className="bg-gray-200 p-8 rounded-lg shadow-md  w-90">
+        <h2 className="text-2xl font-semibold mb-6 text-center">{tituloAvaliacao}</h2>
+
+        <div className="flex items-center justify-between mb-4">
+            <label className="block text-sm font-medium text-gray-700 mr-2">Data:</label>
+            <input type="text" readOnly className="block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50 text-center" value={currentDate} />
+        </div>
+
             <ul className="w-full grid  justify-items-stretch">
                 {listAthletes.map((athlete) => (
-                    <li className="border-4 border-light-blue-500 border-opacity-100 flex items-center justify-between gap-2 mb-3" key={athlete.id}>
-                        <span className="uppercase text-lg whitespace-nowrap">{athlete.name}</span>
-                        <div> 
-                            {isIMC && <input placeholder="Peso (kg)" type="number" key={athlete.id} className="w-20 h-8 bg-gray-100 rounded-md border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"></input>}
-                            <input id="idAthlete" type={tipoAvaliacao} className="w-20 h-8 bg-gray-100 rounded-md border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"></input>
+                    <li key={athlete.id} className="flex justify-around items-center py-2 ">
+                        <span className="uppercase text-gray-700 w-40 text-xs font-semibold">{athlete.name}</span>
+                        <div className="flex flex-row space-x-2"> 
+                            {isIMC && <input placeholder="Peso" key={athlete.id} className=" text-sm w-14 h-8 bg-gray-100 rounded-md border-gray-300 placeholder:italic placeholder:text-slate-400 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"></input>}
+                            <input id="idAthlete" type={tipoAvaliacao} className="pl-2 w-14 h-8 bg-gray-100 rounded-md border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"></input>
                         </div>
                     </li>
                 ))}
             </ul>
             <Button label="Finalizar Exercício" type="submit" />
         </form>
+    </div>
     )   
 }
