@@ -7,18 +7,18 @@ export default function ListAthletes({ listAthletes } : {listAthletes: ListAthle
     const { call, success, error } = useAthleteProvider()
 
     const handleSubmit = (event: React.FormEvent) => {
-        console.log('teste')
         event.preventDefault();
         
         const form = event.target as HTMLFormElement;
         const selectedIds: number[] = [];
         const checkboxes = form.querySelectorAll('input[name="ids"]:checked');
-    
+        
         checkboxes.forEach((checkbox) => {
-            const value = checkbox.value;
+            const inputCheckbox = checkbox as HTMLInputElement;
+            const value = inputCheckbox.value;
             selectedIds.push(Number(value));
         });
-    
+        
         call(selectedIds);
     };
 
