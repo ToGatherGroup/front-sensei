@@ -7,18 +7,13 @@ import { useAthleteProvider } from '@/contexts'
 const ListAthletesPage = () => {
   const { listAthletes, isLoading }  = useAthleteProvider();
 
-  useEffect(() => {
-    console.log(isLoading)
-  }, [isLoading])
-  
-
   return (
     <div className='min-h-screen w-full flex items-center justify-center'>
       <div className='max-container'>
         {isLoading ? (
           <Loading />
         ) : (
-          <ListAthletes athletes={listAthletes} />
+          <ListAthletes listAthletes={listAthletes} />
         )}
       </div>
     </div>

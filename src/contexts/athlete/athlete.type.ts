@@ -17,5 +17,5 @@ type AthleteListProps = {
 }
 
 export type ListAthletesProps = {
-    athletes: AthleteListProps[],
+    data: AthleteListProps[] | [],
 }

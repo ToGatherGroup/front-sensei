@@ -39,7 +39,7 @@ export const AthleteProvider = ({ children }: {children: React.ReactNode}) => {
         try {
             const response = await get('/atleta/lista');
             if(response?.data) {
-                setListAthletes(response?.data);
+                setListAthletes(response);
             }
         } catch (error) {
             setError("Erro ao carregar a lista de atletas");
