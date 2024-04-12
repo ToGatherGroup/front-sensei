@@ -1,15 +1,16 @@
 'use client'
 import React from 'react'
-import ListItem from '../../../components/listItem/index'
+import ListMenuItem from '../../../components/listItem/index'
 import { ListItemProps } from '@/types/Assessment'
-import { AVALIACOES_FISICAS } from '@/consts/const';
+import { AVALIACOES_FISICAS, INDICES_FISICOS } from '@/consts/const';
+// import { AVALIACOES_FISICAS, INDICES_FISICOS } from '@/consts/const';
 
 
-const assesmentArrayAlt = AVALIACOES_FISICAS
+// const assesmentArray = AVALIACOES_FISICAS
+// const indiceArray= INDICES_FISICOS
 
-const indiceArray: ListItemProps[] = [
-    {key: 1, itemTitle: 'IMC'},
-]
+const assesmentArray = AVALIACOES_FISICAS
+const indiceArray = INDICES_FISICOS
 
 const MenuAvaliacaoPage: React.FC<any> = () => {
 
@@ -20,17 +21,19 @@ const MenuAvaliacaoPage: React.FC<any> = () => {
         <div className={`${baseClasses} p-8 max-w-screen-sm`}>
             <ul className={`${baseClasses} p-1`}>
                 <h1 className={`${headerClass}`}>Valências Físicas</h1>
-                    {assesmentArrayAlt.map(item => {
+                    {assesmentArray.map(item => {
                         return (
-                                <ListItem id={item.key} itemTitle={item.itemTitle} subItem={(item.subItems ? item.subItems : undefined)} />
+                                <ListMenuItem id={item.key} key={item.key} itemTitle={item.itemTitle} subItem={(item.subItems ? item.subItems : undefined)} isIMC={false}/> //TODO: Refatorar para validar assessment ao invés de subItem
                         );
                     })}
             </ul>
             <ul className={`${baseClasses} p-1`}>
                 <h1 className={`${headerClass}`}>Índices</h1>
                     {indiceArray.map(item => {
+                        console.log('Item: ')
+                        console.log(item)
                         return (
-                            <ListItem key={item.key} itemTitle={item.itemTitle} subItem={(item.subItem ? item.subItem : undefined)} id={Number(item.key)} />
+                            <ListMenuItem key={item.key} itemTitle={item.itemTitle} subItem={(item.subItem ? item.subItem : undefined)} id={Number(item.key)} isIMC={true}/> //TODO: Refatorar para validar assessment ao invés de subItem
                         );
                     })}
             </ul>

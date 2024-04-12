@@ -39,7 +39,7 @@ export const AVALIACOES_FISICAS = [
     {
       key: 5,
       itemTitle: 'Resistência muscular localizada',
-      subItems: ['Abdominal', 'MMSS'],
+      subItems: ['Abdominal', 'Flexão'], //TODO: Refatorar essa coisa horrorosa
       assessments: [
         { title: 'Abdominal', type: AssessmentType.Repeticao },
         { title: 'Flexão', type: AssessmentType.Repeticao },

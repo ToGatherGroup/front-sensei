@@ -31,7 +31,7 @@ type Props = {
 };
 
 const ListAvaliacaoPage = ({ params }: Props) => {
-  const parametros = useParams<{ id: string; index?: string}>()
+  const parametros = useParams<{ id: string;}>() // index?: string
   // const router: NextRouter = useRouter();
   // const { id } = router.query;
 
@@ -63,7 +63,7 @@ const ListAvaliacaoPage = ({ params }: Props) => {
   return (
     <div className='min-h-screen w-full flex items-center justify-center'>
       <div className='max-container'>
-        <ListAvaliacao listAthletes={athletes} identificador={Number(parametros.id)} identificadorSubItem={Number(parametros.index)} />
+        <ListAvaliacao listAthletes={athletes} identificador={parametros.id}  />
       </div>
     </div>
   )

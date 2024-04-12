@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { ListItemProps } from '@/types/Assessment';
 import Link from 'next/link';
 
-const ListItem = ({ id, itemTitle, subItem }: ListItemProps) => {
+const ListMenuItem = ({ id, key, itemTitle, subItem, isIMC }: ListItemProps) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const href = `avaliacao/${encodeURIComponent(id)}`;
@@ -31,11 +31,11 @@ const ListItem = ({ id, itemTitle, subItem }: ListItemProps) => {
                   renderItemButton(true)
               ) : (
                   // Se não houver subItem, envolve o botão com Link
-                  <Link href={href} className={`bg-auto bg-white flex-grow ${baseClasses}`}>{renderItemButton(false)}</Link>
+                  <Link href={href} className={`bg-auto bg-white flex-grow ${baseClasses}`} >{renderItemButton(false)}</Link>
               )}
           <div className={`transition-max-height align-middle transition-opacity -mt-2 flex flex-col duration-300 ease-in-out ${opacityClass}`}>
-              {isOpen && Array.isArray(subItem) && subItem.map((subItemName, index) => (
-                  <Link className={`${baseClasses} ${variantClasses}`} href={`${href + "/" +  encodeURIComponent(index)}`} key={index}>
+              {isOpen && Array.isArray(subItem) && subItem.map((subItemName, index) => ( // TODO: Validar assessment ao invés de subItem
+                  <Link className={`${baseClasses} ${variantClasses}`} href={`${href + "-" +  encodeURIComponent(index)}`} key={index}>
                           {subItemName}
                   </Link>
               ))}
@@ -44,4 +44,4 @@ const ListItem = ({ id, itemTitle, subItem }: ListItemProps) => {
   );
 };
 
-export default ListItem;
+export default ListMenuItem;

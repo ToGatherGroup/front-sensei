@@ -11,9 +11,10 @@ export interface Assessment {
   }
   
   export interface ListItemProps {
-    key?: number;
+    key: number;
     id: number
     itemTitle: string;
     assessments?:  Assessment | Assessment[];
     subItem?: string | string[];
+    isIMC?: boolean;
   }
