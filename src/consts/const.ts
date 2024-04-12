@@ -66,7 +66,7 @@ export const AVALIACOES_FISICAS = [
       key: 8,
       itemTitle: 'IMC',
       assessments: [
-        { title: 'Avaliação IMC', type: AssessmentType.Tempo },
+        { title: 'Avaliação IMC', type: AssessmentType.Repeticao },
       ],
     },
   ]
