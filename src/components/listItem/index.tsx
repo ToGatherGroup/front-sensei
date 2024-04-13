@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { ListItemProps } from '@/types/Assessment';
 import Link from 'next/link';
 
-const ListMenuItem = ({ id, key, itemTitle, subItem, isIMC }: ListItemProps) => {
+const ListMenuItem = ({id, itemTitle, subItem}: ListItemProps) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const href = `avaliacao/${encodeURIComponent(id)}`;

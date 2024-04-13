@@ -1,43 +1,36 @@
 'use client'
 import React from 'react'
 import ListMenuItem from '../../../components/listItem/index'
-import { ListItemProps } from '@/types/Assessment'
+import { Assessment} from '@/types/Assessment'
 import { AVALIACOES_FISICAS, INDICES_FISICOS } from '@/consts/const';
-// import { AVALIACOES_FISICAS, INDICES_FISICOS } from '@/consts/const';
 
+const headerClass = "text-white font-bold"
+const baseClasses = "flex flex-1 flex-col gap-y-2 fadeIn";
 
-// const assesmentArray = AVALIACOES_FISICAS
-// const indiceArray= INDICES_FISICOS
+const hasMultipleAssessments = (assessments: Assessment[]) => assessments.length > 1;
 
-const assesmentArray = AVALIACOES_FISICAS
-const indiceArray = INDICES_FISICOS
+const RenderList = ({ items, isIMC }: { items: typeof AVALIACOES_FISICAS | typeof INDICES_FISICOS, isIMC: boolean }) => (
+    <ul className={`${baseClasses} p-1 min-w-80 max-h-fit`}>
+        <h1 className={headerClass}>{isIMC ? 'Índices' : 'Valências Físicas'}</h1>
+        {items.map(({ key, itemTitle, assessments }) => (
+            <ListMenuItem
+                key={key}
+                id={key}
+                itemTitle={itemTitle}
+                subItem={hasMultipleAssessments(assessments) ? assessments.map(a => a.title) : undefined}
+                isIMC={isIMC}
+            />
+        ))}
+    </ul>
+);
 
-const MenuAvaliacaoPage: React.FC<any> = () => {
-
-    const headerClass = "text-white font-bold"
-    const baseClasses = "flex flex-1 flex-col gap-y-2 fadeIn";
+const MenuAvaliacaoPage = () => {
 
     return (
         <div className={`${baseClasses} p-8 grid justify-items-center min-h-screen`}>
-            <div className={`m-auto`}>
-            <ul className={`${baseClasses} p-1 min-w-80 max-h-fit`}>
-                <h1 className={`${headerClass}`}>Valências Físicas</h1>
-                    {assesmentArray.map(item => {
-                        return (
-                                <ListMenuItem id={item.key} key={item.key} itemTitle={item.itemTitle} subItem={(item.subItems ? item.subItems : undefined)} isIMC={false}/> //TODO: Refatorar para validar assessment ao invés de subItem
-                        );
-                    })}
-            </ul>
-            <ul className={`${baseClasses} p-1 min-w-80 `}>
-                <h1 className={`${headerClass}`}>Índices</h1>
-                    {indiceArray.map(item => {
-                        console.log('Item: ')
-                        console.log(item)
-                        return (
-                            <ListMenuItem key={item.key} itemTitle={item.itemTitle} subItem={(item.subItem ? item.subItem : undefined)} id={Number(item.key)} isIMC={true}/> //TODO: Refatorar para validar assessment ao invés de subItem
-                        );
-                    })}
-            </ul>
+            <div className="m-auto">
+                <RenderList items={AVALIACOES_FISICAS} isIMC={false} />
+                <RenderList items={INDICES_FISICOS} isIMC={true} />
             </div>
         </div>
     )
