@@ -3,9 +3,9 @@ import { AxiosResponse } from "../../../node_modules/axios/index";
 
 type ApiState = {
     get: (endpoint: string) => Promise<AxiosResponse> | null;
-    post: (endpoint: string, body: object) => Promise<AxiosResponse> | null;
-    patch: (endpoint: string, body: object) => Promise<AxiosResponse> | null;
-    remove: (endpoint: string, body: object) => Promise<AxiosResponse> | null;
+    post: (endpoint: string, body: object | string) => Promise<AxiosResponse> | null;
+    patch: (endpoint: string, body: object | string) => Promise<AxiosResponse> | null;
+    remove: (endpoint: string, body: object | string) => Promise<AxiosResponse> | null;
 }
 
 const initialState = {
@@ -24,22 +24,25 @@ export const ApiProvider = ({ children }: {children: React.ReactNode}) => {
 
     const apiInstance = axios.create({
         baseURL: BASE_URL,
-        timeout: 3000,
+        timeout: 10000,
+        headers: {
+            'Content-Type': 'application/json',
+        },
     });  
 
     const get = (endpoint: string) => {
         return apiInstance.get(endpoint);
     }
 
-    const post = (endpoint: string, body: object) => {
+    const post = (endpoint: string, body: object | string) => {
         return apiInstance.post(endpoint, body);
     }
 
-    const patch = (endpoint: string, body: object) => {
+    const patch = (endpoint: string, body: object | string) => {
         return apiInstance.patch(endpoint, body);
     }
 
-    const remove = (endpoint: string, body: object) => {
+    const remove = (endpoint: string, body: object | string) => {
         return apiInstance.delete(endpoint, body);
     }
 
