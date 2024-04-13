@@ -3,9 +3,9 @@ import { AxiosResponse } from "../../../node_modules/axios/index";
 
 type ApiState = {
     get: (endpoint: string) => Promise<AxiosResponse> | null;
-    post: (endpoint: string, body: object) => Promise<AxiosResponse> | null;
-    patch: (endpoint: string, body: object) => Promise<AxiosResponse> | null;
-    remove: (endpoint: string, body: object) => Promise<AxiosResponse> | null;
+    post: (endpoint: string, body: object | string) => Promise<AxiosResponse> | null;
+    patch: (endpoint: string, body: object | string) => Promise<AxiosResponse> | null;
+    remove: (endpoint: string, body: object | string) => Promise<AxiosResponse> | null;
 }
 
 const initialState = {
