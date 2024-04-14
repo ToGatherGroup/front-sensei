@@ -10,3 +10,12 @@ export type AthleteProps = {
     foto: string,
     email: string
 }
+
+type AthleteListProps = {
+    id: number,
+    nome: string,
+}
+
+export type ListAthletesProps = {
+    data: AthleteListProps[] | [],
+}
