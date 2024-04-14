@@ -1,6 +1,7 @@
 .frequency {
   display: flex;
   flex-direction: column;
+  gap: 30px;
   color: white;
 }
 
@@ -13,16 +14,37 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 10px;
   gap: 35px;
 }
 
 .grafic {
-  text-align: center;
   display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
   justify-content: center;
-  margin: 30px;
 }
-
+.grafic p {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+.grafic .chart-container {
+  width: 200px;
+  height: 200px;
+  position: relative;
+}
+.grafic .chart-container .percentage {
+  position: absolute;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+}
 .inputText {
   color: black;
+}
+
+.errorText {
+  color: rgb(230, 9, 9);
 }
