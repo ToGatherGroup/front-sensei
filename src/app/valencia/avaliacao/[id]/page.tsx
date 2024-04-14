@@ -5,10 +5,6 @@ import Loading from "@/components/loading/index";
 import { useParams } from 'next/navigation'
 import { useAthleteProvider } from '@/contexts'
 
-// export type AvaliacaoPageProps = {
-//   id: number;
-// };
-
 type Params = {
   id: string;
   index?: string

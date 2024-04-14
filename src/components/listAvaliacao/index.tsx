@@ -46,12 +46,12 @@ export default function ListAvaliacao({ listAthletes, isIMC, identificador } : L
         console.log(`currentDate: ${currentDate}`)
         console.log(`tituloAvaliacao: ${tituloAvaliacao}`)
         console.log(`tipoAvaliacao: ${tipoAvaliacao}`)
-        console.log(formValues); // Aqui você pode também logar outras informações se necessário
+        console.log(formValues);
     };
 
     //TODO: Guardar n'um utils
     const identificadorStr = String(identificador);
-    const regex = /^(.+)-(.+)$/; // Regex para identificar se a string contém um hífen no meio
+    const regex = /^(.+)-(.+)$/; // Regex checking if a string has "-" somewhere in it
     const match = identificadorStr.match(regex);
     let identificadorSubItem = 0;
     if (match) {
@@ -119,7 +119,7 @@ export default function ListAvaliacao({ listAthletes, isIMC, identificador } : L
     )   
 }
 
-//TODO: extrair para um arquivo de estilos -?-
+//TODO: extrair para um arquivo de estilos, sugestão alternativa de organização -?-
 const styles = {
     input: "w-16 h-6 bg-gray-100 rounded-md border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 placeholder:italic placeholder:text-slate-400 placeholder:text-xs",
     feedbackParagraph: "xl:text-base md:text-sm sm:text-xs text-xs text-center text-orange-700 xl:mt-10 md:mt-7 sm:mt-5 mt-5 font-bold",
@@ -127,5 +127,5 @@ const styles = {
     formWrapper: "bg-defaultGray px-10 py-6 sm:px-8 sm:py-4 md:px-24 md:py-16 xl:px-36 xl:py-20 rounded-md max-h-[650px] overflow-y-auto custom-scrollbar",
     athleteNameSpan: "uppercase xl:text-md md:text-base sm:text-sm text-sm",
     dateInput: "italic text-slate-400 block w-18 border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50 text-center",
-    listItem: "flex items-center justify-between xl:gap-4 md:gap-4 sm:gap-4 gap-4 xl:mb-6 md:mb-4 sm:mb-2 mb-2"
+    listItem: "flex items-center justify-between xl:gap-4 md:gap-4 sm:gap-4 gap-4 xl:mb-6 md:mb-4 sm:mb-2 mb-2",
 }
