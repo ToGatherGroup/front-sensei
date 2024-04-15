@@ -4,6 +4,7 @@ import { AVALIACOES_FISICAS, INDICES_FISICOS } from "@/consts/const";
 import { useAthleteProvider } from "@/contexts";
 import { useState } from "react";
 import { ListAthletesProps } from "@/contexts/athlete/athlete.type";
+import { FormWrapper } from "../formWrapper";
 
 type ListAvaliacaoProps = {
     identificador: number | string;
@@ -16,7 +17,7 @@ type FormValues = {
     [key: number]: string;
 };
 
-export default function ListAvaliacao({ listAthletes, isIMC, identificador } : ListAvaliacaoProps){
+export default function ListAvaliacao({ listAthletes, isIMC, identificador }: ListAvaliacaoProps) {
     const { call, success, error } = useAthleteProvider()
     const [formValues, setFormValues] = useState<FormValues>({});
     const handleInputChange = (athleteId: number, value: string) => {
@@ -55,19 +56,19 @@ export default function ListAvaliacao({ listAthletes, isIMC, identificador } : L
     const match = identificadorStr.match(regex);
     let identificadorSubItem = 0;
     if (match) {
-     identificador = Number(match[1]);
-     identificadorSubItem = Number(match[2]);
+        identificador = Number(match[1]);
+        identificadorSubItem = Number(match[2]);
     }
     const assessmentIndex = identificadorSubItem ? identificadorSubItem : 0
 
     // TODO: refatorar para um switch case -?-
     // TODO: desacoplar/refatorar o id do array de avaliações/indices
-    if (Number(identificador) < Number(8)) {       
+    if (Number(identificador) < Number(8)) {
         tituloAvaliacao = AVALIACOES_FISICAS[Number(identificador)].assessments[assessmentIndex].title // Validar se tem subItem, caso tenha, pegar segundo parâmetro para navegar na array de assessments
         tipoAvaliacao = AVALIACOES_FISICAS[Number(identificador)].assessments[assessmentIndex].type
-        
+
     } else {
-    // TODO: tirar magic number
+        // TODO: tirar magic number
         identificador = 8; // Hide any possible pagination error
         tituloAvaliacao = INDICES_FISICOS[0].assessments[assessmentIndex].title
         tipoAvaliacao = INDICES_FISICOS[0].assessments[assessmentIndex].type
@@ -75,33 +76,31 @@ export default function ListAvaliacao({ listAthletes, isIMC, identificador } : L
     }
 
     return (
-        <form className={styles.formWrapper} onSubmit={handleSubmit} >
-        <h2 className={styles.header}>{tituloAvaliacao}</h2>
-
-        <div className="flex items-center justify-center mb-4">
-            <label className="block text-gray-700 mr-2">Data:</label>
-            <input type="text" readOnly className={styles.dateInput} value={currentDate} />
-        </div>
+        <FormWrapper header={tituloAvaliacao} handleSubmit={handleSubmit}>
+            <div className="flex items-center justify-center mb-4">
+                <label className="block text-gray-700 mr-2">Data:</label>
+                <input type="text" readOnly className={styles.dateInput} value={currentDate} />
+            </div>
 
             <ul className="w-full xl:mb-10 md:mb-7 sm:mb-5 mb-5">
                 {listAthletes?.data?.map((athlete) => (
                     <li key={athlete.id} className={styles.listItem}>
                         <span className={styles.athleteNameSpan}>{athlete?.nome}</span>
-                        <div className="flex flex-row space-x-2"> 
-                            {isIMC && 
-                            <input 
-                                id="idAthlete" 
-                                placeholder="Peso" 
-                                key={athlete?.id} 
-                                onChange={(e) => handleInputChange(athlete.id, e.target.value)}
-                                className={(styles.input)}>
+                        <div className="flex flex-row space-x-2">
+                            {isIMC &&
+                                <input
+                                    id="idAthlete"
+                                    placeholder="Peso"
+                                    key={athlete?.id}
+                                    onChange={(e) => handleInputChange(athlete.id, e.target.value)}
+                                    className={(styles.input)}>
                                 </input>}
-                            <input 
-                                id="idAthlete" 
+                            <input
+                                id="idAthlete"
                                 placeholder="Altura"
-                                type={tipoAvaliacao} 
-                                value={formValues[athlete.id] || ''} 
-                                onChange={(e) => handleInputChange(athlete.id, e.target.value)} 
+                                type={tipoAvaliacao}
+                                value={formValues[athlete.id] || ''}
+                                onChange={(e) => handleInputChange(athlete.id, e.target.value)}
                                 className={(styles.input)}>
                             </input>
                         </div>
@@ -115,8 +114,8 @@ export default function ListAvaliacao({ listAthletes, isIMC, identificador } : L
             {error && (
                 <p className={styles.feedbackParagraph}>{error}</p>
             )}
-        </form>
-    )   
+        </FormWrapper>
+    )
 }
 
 //TODO: extrair para um arquivo de estilos, sugestão alternativa de organização -?-
