@@ -1,21 +1,32 @@
 .frequency {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 10px;
   color: white;
 }
 
-.header {
-  text-align: center;
-  margin-bottom: 50px;
+.formContainer {
+  display: flex;
+  gap: 15px;
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.inputErrors {
+  display: flex;
+  gap: 15px;
 }
 
 .dates {
   display: flex;
   justify-content: center;
+  flex-direction: column;
   align-items: center;
-  padding: 10px;
-  gap: 35px;
+  /* padding: 10px; */
+  /* gap: 35px; */
 }
 
 .grafic {
