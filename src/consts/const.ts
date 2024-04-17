@@ -1,61 +1,59 @@
-import { AssessmentType } from "@/types/Assessment"
-
 export const AVALIACOES_FISICAS = [
     {
       key: 0,
       itemTitle: 'Core',
       assessments: [
-        { title: 'Prancha Isométrica', type: AssessmentType.Tempo },
+        { title: 'Prancha Isométrica', type: { key: "Tempo", value: "time" }},
       ],
     },
     {
       key: 1,
       itemTitle: 'Força Máxima',
       assessments: [
-        { title: '1RM Terra', type: AssessmentType.Peso },
+        { title: '1RM Terra', type: { key: "Peso", value: "number" }},
       ],
     },
     {
       key: 2,
       itemTitle: 'Força Explosiva',
       assessments: [
-        { title: 'Impulsão Vertical', type: AssessmentType.Distancia },
+        { title: 'Impulsão Vertical', type: { key: "Distancia", value: "number" }},
       ],
     },
     {
       key: 3,
       itemTitle: 'Força Isométrica',
       assessments: [
-        { title: 'Força de prensão manual com quimono', type: AssessmentType.Tempo },
+        { title: 'Força de prensão manual com quimono', type: { key: "Tempo", value: "time" } },
       ],
     },
     {
       key: 4,
       itemTitle: 'Mobilidade do Tornozelo',
       assessments: [
-        { title: 'Lunge', type: AssessmentType.Distancia },
+        { title: 'Lunge', type: { key: "Distancia", value: "number" }},
       ],
     },
     {
       key: 5,
       itemTitle: 'Resistência muscular localizada',
       assessments: [
-        { title: 'Abdominal', type: AssessmentType.Repeticao },
-        { title: 'Flexão', type: AssessmentType.Repeticao },
+        { title: 'Abdominal', type: { key: "Repeticao", value: "number" }},
+        { title: 'MMSS', altTitle: 'Flexão', type: { key: "Repeticao", value: "number" }},
       ],
     },
     {
       key: 6, 
       itemTitle: 'Resistência Anaeróbica',
       assessments: [
-      { title: 'Burpee', type: AssessmentType.Repeticao },
+      { title: 'Burpee', type: { key: "Repeticao", value: "number" }},
     ],
     },
     {
       key: 7, 
       itemTitle: 'Resistência Aeróbica',
       assessments: [
-      { title: 'Teste de Cooper', type: AssessmentType.Distancia },
+      { title: 'Teste de Cooper', type: { key: "Distancia", value: "number" }},
     ],
   },
   ]
@@ -65,7 +63,7 @@ export const AVALIACOES_FISICAS = [
       key: 8,
       itemTitle: 'IMC',
       assessments: [
-        { title: 'Avaliação IMC', type: AssessmentType.Repeticao },
+        { title: 'Avaliação IMC', type: { key: "Altura", value: "number" }},
       ],
     },
   ]

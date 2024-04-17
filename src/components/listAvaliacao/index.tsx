@@ -5,6 +5,9 @@ import { useAthleteProvider } from "@/contexts";
 import { useState } from "react";
 import { ListAthletesProps } from "@/contexts/athlete/athlete.type";
 import { FormWrapper } from "../formWrapper";
+import { Assessment } from "@/types/Assessment";
+import TimeInput from "../timeInput";
+
 
 type ListAvaliacaoProps = {
     identificador: number | string;
@@ -20,6 +23,7 @@ type FormValues = {
 export default function ListAvaliacao({ listAthletes, isIMC, identificador }: ListAvaliacaoProps) {
     const { call, success, error } = useAthleteProvider()
     const [formValues, setFormValues] = useState<FormValues>({});
+
     const handleInputChange = (athleteId: number, value: string) => {
         setFormValues(prevValues => ({
             ...prevValues,
@@ -34,10 +38,14 @@ export default function ListAvaliacao({ listAthletes, isIMC, identificador }: Li
         return formattedDate.replace(' de ', '/');
     }
 
+    const handleTimeChange = (minutes: number, seconds: number) => {
+        console.log(`Tempo atualizado: ${minutes} minutos e ${seconds} segundos`);
+    };
+
     const [currentDate, setCurrentDate] = useState(getDate());
 
     let tituloAvaliacao = "Avaliação Física" // Default
-    let tipoAvaliacao = "Avaliação Física" // Default
+    //let tipoAvaliacao: typeof Object | string = "Avaliação Física" // Default
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
@@ -46,8 +54,9 @@ export default function ListAvaliacao({ listAthletes, isIMC, identificador }: Li
         console.log(`isIMC: ${isIMC}`)
         console.log(`currentDate: ${currentDate}`)
         console.log(`tituloAvaliacao: ${tituloAvaliacao}`)
-        console.log(`tipoAvaliacao: ${tipoAvaliacao}`)
-        console.log(formValues);
+        //console.log(`tipoAvaliacao: ${tipoAvaliacao}`)
+        console.log(`formValues: ${JSON.stringify(formValues)}`);
+        //console.log(assessment?.type != null ? getKeyByValue(assessment.type) : "deu zebra");
     };
 
     //TODO: Guardar n'um utils
@@ -59,21 +68,26 @@ export default function ListAvaliacao({ listAthletes, isIMC, identificador }: Li
         identificador = Number(match[1]);
         identificadorSubItem = Number(match[2]);
     }
-    const assessmentIndex = identificadorSubItem ? identificadorSubItem : 0
+    //---
 
-    // TODO: refatorar para um switch case -?-
-    // TODO: desacoplar/refatorar o id do array de avaliações/indices
+    let assessmentIndex = identificadorSubItem && identificadorSubItem < 1 ? identificadorSubItem : 0 // Hide any possible pagination error manually
+
+    let assessment: Assessment | null = null;
     if (Number(identificador) < Number(8)) {
-        tituloAvaliacao = AVALIACOES_FISICAS[Number(identificador)].assessments[assessmentIndex].title // Validar se tem subItem, caso tenha, pegar segundo parâmetro para navegar na array de assessments
-        tipoAvaliacao = AVALIACOES_FISICAS[Number(identificador)].assessments[assessmentIndex].type
-
+        assessment = AVALIACOES_FISICAS[Number(identificador)].assessments[assessmentIndex];
     } else {
         // TODO: tirar magic number
-        identificador = 8; // Hide any possible pagination error
-        tituloAvaliacao = INDICES_FISICOS[0].assessments[assessmentIndex].title
-        tipoAvaliacao = INDICES_FISICOS[0].assessments[assessmentIndex].type
+        assessment = INDICES_FISICOS[0].assessments[assessmentIndex];
         isIMC = true
     }
+
+    tituloAvaliacao = assessment.altTitle ? assessment.altTitle : assessment.title // Verificar se dá certo
+    let tipoAvaliacao = assessment.type
+    console.log(`tipoAvaliacao: ${tipoAvaliacao}`);
+    console.log(`Mapping: ${JSON.stringify(tipoAvaliacao)}`);
+    
+    
+
 
     return (
         <FormWrapper header={tituloAvaliacao} handleSubmit={handleSubmit}>
@@ -95,14 +109,19 @@ export default function ListAvaliacao({ listAthletes, isIMC, identificador }: Li
                                     onChange={(e) => handleInputChange(athlete.id, e.target.value)}
                                     className={(styles.input)}>
                                 </input>}
-                            <input
-                                id="idAthlete"
-                                placeholder="Altura"
-                                type={tipoAvaliacao}
-                                value={formValues[athlete.id] || ''}
-                                onChange={(e) => handleInputChange(athlete.id, e.target.value)}
-                                className={(styles.input)}>
-                            </input>
+                            {tipoAvaliacao.key == "Tempo" &&
+                                <TimeInput onTimeChange={handleTimeChange} />
+                            }
+                            {tipoAvaliacao.key != "Tempo" &&
+                                <input
+                                    id="idAthlete"
+                                    placeholder={tipoAvaliacao.key}
+                                    type={tipoAvaliacao.value}
+                                    value={formValues[athlete.id] || ''}
+                                    onChange={(e) => handleInputChange(athlete.id, e.target.value)}
+                                    className={(styles.input)}>
+                                </input>
+                            }
                         </div>
                     </li>
                 ))}
@@ -120,7 +139,7 @@ export default function ListAvaliacao({ listAthletes, isIMC, identificador }: Li
 
 //TODO: extrair para um arquivo de estilos, sugestão alternativa de organização -?-
 const styles = {
-    input: "w-16 h-6 bg-gray-100 rounded-md border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 placeholder:italic placeholder:text-slate-400 placeholder:text-xs",
+    input: "w-16 h-6 rounded-md focus:ring-blue-500 dark:focus:ring-blue-600 focus:ring-2 placeholder:italic placeholder:text-slate-400 placeholder:text-xs",
     feedbackParagraph: "xl:text-base md:text-sm sm:text-xs text-xs text-center text-orange-700 xl:mt-10 md:mt-7 sm:mt-5 mt-5 font-bold",
     header: "font-bold uppercase xl:text-4xl md:text-1xl sm:text-lg text-lg xl:mb-10 md:mb-7 sm:mb-5 mb-5 text-center",
     formWrapper: "bg-defaultGray px-10 py-6 sm:px-8 sm:py-4 md:px-24 md:py-16 xl:px-36 xl:py-20 rounded-md max-h-[650px] overflow-y-auto custom-scrollbar",

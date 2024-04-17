@@ -10,6 +10,7 @@ const config: Config = {
     extend: {
       colors: {
         defaultGray: '#D9D9D9',
+        winePattern: '#410606'
       },
       backgroundImage: {
         'bg-default': "url('/background_1920_1080.jpg')",

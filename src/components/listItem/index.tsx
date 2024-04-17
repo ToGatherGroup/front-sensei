@@ -14,12 +14,12 @@ const ListMenuItem = ({id, itemTitle, subItem}: ListItemProps) => {
     };
 
     const opacityClass = isOpen ? "opacity-100" : "opacity-0";
-    const baseClasses = "py-3 px-2 text-left transition duration-300 ease-in-out ";
-    const variantClasses = "bg-gray-200 border-b-2 border-black";
+    const baseClasses = "py-3 px-2 text-left transition duration-400 hover:ease-in hover:border-winePattern hover:border-solid hover:-m-2 hover:border-2 z-1 hover:z-0 hover:scale-110";
+    const variantClasses = "bg-gray-200";
 
     // Renderiza o botão, opcionalmente dentro de um <Link> se não houver subItem
     const renderItemButton = (renderClass: boolean) => (
-        <button onClick={handleItemClick} className={renderClass ? `bg-auto bg-white  ${baseClasses}` : ""} style={{ cursor: 'pointer' }}>
+        <button onClick={handleItemClick} className={renderClass ? `bg-auto bg-white ${baseClasses}` : ""} style={{ cursor: 'pointer' }}>
             {itemTitle}
         </button>
     );

@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react'
 
-type Props = {
+type FormWrapperProps = {
     header: string;
     handleSubmit?: (event: React.FormEvent) => void;
     formStyle?: React.CSSProperties;
@@ -14,7 +14,7 @@ const defaultStyles: any = {
   };
 
 
-export const FormWrapper = ({children, header, handleSubmit, formClass = '', formStyle}: Props) => {
+export const FormWrapper = ({children, header, handleSubmit, formClass = '', formStyle}: FormWrapperProps) => {
     
     const combinedClasses = `${defaultStyles.formWrapper} ${formClass}`
 
