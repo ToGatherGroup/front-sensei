@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useApiProvider } from "../api/api";
 import { ListAthletesProps } from "./athlete.type";
+import { useRouter } from "next/navigation";
 
 
 type AthleteState = {
@@ -27,6 +28,7 @@ export const AthleteProvider = ({ children }: {children: React.ReactNode}) => {
     const [success, setSuccess] = useState<string>('');
     const [error, setError] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const router = useRouter()
 
     useEffect(() => {
         setError("")
@@ -54,7 +56,7 @@ export const AthleteProvider = ({ children }: {children: React.ReactNode}) => {
             const response = await post('atleta/chamada', JSON.stringify(ids));
             
             if (response?.status == 204) {
-                setSuccess("Chamamada realizada!")
+                router.push('/menu');
             } else {
                 setError("Tivemos um problema ao realizar a chamada, por favor, tente novamente mais tarde!")
             }
