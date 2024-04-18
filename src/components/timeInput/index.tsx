@@ -16,12 +16,12 @@ const TimeInput = ({ onTimeChange }: TimeInputProps) => {
 
     const handleSecondsChange = (e: ChangeEvent<HTMLInputElement>) => {
         const sec = Math.max(0, Math.min(59, parseInt(e.target.value) || 0));
-        setSeconds(sec);
+        sec < 10 ? setSeconds(`0${sec}`) : setSeconds(sec);
         onTimeChange(Number(minutes), sec);
     };
 
     return (
-        <div className='bg-white rounded-md'>
+        <div className='bg-inputColor rounded-md'>
             <input
                 value={minutes}
                 onChange={handleMinutesChange}
@@ -30,7 +30,7 @@ const TimeInput = ({ onTimeChange }: TimeInputProps) => {
                 placeholder="Min"
                 className={`${styles.input} mr-1 z-0`}
             />
-            <span className='h-6 w-12 -z-3 px-1 bg-white overflow-visible'>:</span>
+            <span className='h-6 w-12 -z-3 px-1 bg-inputColor overflow-visible'>:</span>
             <input
                 value={seconds}
                 onChange={handleSecondsChange}
@@ -46,5 +46,5 @@ const TimeInput = ({ onTimeChange }: TimeInputProps) => {
 export default TimeInput;
 
 const styles = {
-    input: "w-10 h-6  bg-white focus:ring-blue-500 focus:ring-2 placeholder:italic placeholder:text-slate-400 placeholder:text-xs",
+    input: "w-10 h-6 bg-inputColor focus:ring-blue-500 focus:ring-2 placeholder:italic placeholder:text-slate-400 placeholder:text-xs",
 }

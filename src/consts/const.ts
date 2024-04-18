@@ -10,14 +10,14 @@ export const AVALIACOES_FISICAS = [
       key: 1,
       itemTitle: 'Força Máxima',
       assessments: [
-        { title: '1RM Terra', type: { key: "Peso", value: "number" }},
+        { title: '1RM Terra', type: { key: "Kg", value: "number" }},
       ],
     },
     {
       key: 2,
       itemTitle: 'Força Explosiva',
       assessments: [
-        { title: 'Impulsão Vertical', type: { key: "Distancia", value: "number" }},
+        { title: 'Impulsão Vertical', type: { key: "Cm", value: "number" }},
       ],
     },
     {
@@ -31,7 +31,7 @@ export const AVALIACOES_FISICAS = [
       key: 4,
       itemTitle: 'Mobilidade do Tornozelo',
       assessments: [
-        { title: 'Lunge', type: { key: "Distancia", value: "number" }},
+        { title: 'Lunge', type: { key: "Cm", value: "number" }},
       ],
     },
     {
@@ -53,7 +53,7 @@ export const AVALIACOES_FISICAS = [
       key: 7, 
       itemTitle: 'Resistência Aeróbica',
       assessments: [
-      { title: 'Teste de Cooper', type: { key: "Distancia", value: "number" }},
+      { title: 'Teste de Cooper', type: { key: "Metros", value: "number" }},
     ],
   },
   ]
