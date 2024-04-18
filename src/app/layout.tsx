@@ -8,7 +8,9 @@ export const metadata: Metadata = {
   description: "Aplicativo para gerenciamento de atletas",
 };
 
-export default function RootLayout({ children,}: Readonly<{ children: React.ReactNode;}>) {  
+export default function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="pt-br">
       <body>
@@ -18,8 +20,9 @@ export default function RootLayout({ children,}: Readonly<{ children: React.Reac
             <main className="bg-[url('/background_1920_1080.jpg')] bg-cover bg-right-top bg-no-repeat w-full h-full">
               {children}
             </main>
+
             <footer>FOOTER</footer>
-          </div>          
+          </div>
         </Providers>
       </body>
     </html>
