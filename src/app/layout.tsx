@@ -2,7 +2,6 @@ import { Providers } from "@/providers";
 import type { Metadata } from "next";
 import "./globals.css";
 import "./reset.css";
-import Frequency from "@/components/frequency";
 
 export const metadata: Metadata = {
   title: "Sensei Divino",
