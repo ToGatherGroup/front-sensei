@@ -141,9 +141,7 @@ export default function ListAvaliacao({ listAthletes, isIMC, identificador }: Li
 const styles = {
     input: "w-20 h-6 rounded-md focus:ring-blue-500 dark:focus:ring-blue-600 focus:ring-2 placeholder:italic placeholder:text-slate-400 placeholder:text-xs",
     feedbackParagraph: "xl:text-base md:text-sm sm:text-xs text-xs text-center text-orange-700 xl:mt-10 md:mt-7 sm:mt-5 mt-5 font-bold",
-    header: "font-bold uppercase xl:text-4xl md:text-1xl sm:text-lg text-lg xl:mb-10 md:mb-7 sm:mb-5 mb-5 text-center",
-    formWrapper: "bg-defaultGray px-10 py-6 sm:px-8 sm:py-4 md:px-24 md:py-16 xl:px-36 xl:py-20 rounded-md max-h-[650px] overflow-y-auto custom-scrollbar",
-    athleteNameSpan: "uppercase xl:text-base md:text-sm sm:text-xs text-xs",
+    athleteNameSpan: "uppercase xl:text-base md:text-sm sm:text-xs text-xs truncate",
     dateInput: "italic text-slate-400 block w-fit border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50 text-center",
-    listItem: "flex items-center justify-between xl:gap-4 md:gap-4 sm:gap-4 gap-4 xl:mb-6 md:mb-4 sm:mb-2 mb-2",
+    listItem: "flex items-center justify-between xl:gap-4 lg:gap-4 md:gap-4 sm:gap-4 gap-4 xl:mb-6 lg:mb-4 md:mb-4 sm:mb-2 mb-4 max-h-[24px]",
 }
