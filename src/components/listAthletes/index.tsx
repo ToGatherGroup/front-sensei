@@ -2,6 +2,7 @@
 import { useAthleteProvider } from "@/contexts";
 import Button from "../button/index";
 import { ListAthletesProps } from "@/contexts/athlete/athlete.type";
+import { FormWrapper } from "../formWrapper";
 
 export default function ListAthletes({ listAthletes } : {listAthletes: ListAthletesProps | null}){
     const { call, success, error } = useAthleteProvider()
@@ -21,11 +22,9 @@ export default function ListAthletes({ listAthletes } : {listAthletes: ListAthle
         
         call(selectedIds);
     };
-
+    
     return (
-        <div>
-            <form className="bg-defaultGray my-0 mx-auto px-10 py-6 sm:px-8 sm:py-4 md:px-24 md:py-16 xl:px-36 xl:py-20 rounded-md max-h-[650px] sm:max-w-[350px] md:max-w-[450px] xl:max-w-[650px] max-w-[350px] overflow-y-auto custom-scrollbar" onSubmit={handleSubmit}>
-                <h2 className="font-bold uppercase xl:text-4xl md:text-1xl sm:text-lg text-lg xl:mb-10 md:mb-7 sm:mb-5 mb-5 text-center">Lista de Atletas</h2>
+        <FormWrapper header="Lista de Atletas" handleSubmit={handleSubmit}>
                 <ul className="w-full xl:mb-10 md:mb-7 sm:mb-5 mb-5">
                     {listAthletes?.data?.map((athlete) => (
                         <li className="flex items-center justify-start xl:gap-2 md:gap-1 sm:gap-1 gap-1 xl:mb-3 md:mb-2 sm:mb-2 mb-2" key={athlete?.id}>
@@ -38,7 +37,6 @@ export default function ListAthletes({ listAthletes } : {listAthletes: ListAthle
                 {error && (
                     <p className="xl:text-base md:text-sm sm:text-xs text-xs text-center text-orange-700 xl:mt-10 md:mt-7 sm:mt-5 mt-5 font-bold">{error}</p>
                 )}
-            </form>
-        </div>
+        </FormWrapper>
     )
 }
