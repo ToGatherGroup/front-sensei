@@ -10,7 +10,7 @@ const baseClasses = "flex flex-1 flex-col gap-y-2 fadeIn";
 const hasMultipleAssessments = (assessments: Assessment[]) => assessments.length > 1;
 
 const RenderList = ({ items, isIMC }: { items: typeof AVALIACOES_FISICAS | typeof INDICES_FISICOS, isIMC: boolean }) => (
-    <ul className={`${baseClasses} p-1 min-w-80 max-h-fit`}>
+    <ul className={`${baseClasses} p-1 min-w-80`}>
         <h1 className={headerClass}>{isIMC ? 'Índices' : 'Valências Físicas'}</h1>
         {items.map(({ key, itemTitle, assessments }) => (
             <ListMenuItem

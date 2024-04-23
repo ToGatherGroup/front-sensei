@@ -4,6 +4,10 @@ import { AVALIACOES_FISICAS, INDICES_FISICOS } from "@/consts/const";
 import { useAthleteProvider } from "@/contexts";
 import { useState } from "react";
 import { ListAthletesProps } from "@/contexts/athlete/athlete.type";
+import { FormWrapper } from "../formWrapper";
+import { Assessment } from "@/types/Assessment";
+import TimeInput from "../timeInput";
+
 
 type ListAvaliacaoProps = {
     identificador: number | string;
@@ -16,27 +20,27 @@ type FormValues = {
     [key: number]: string;
 };
 
-export default function ListAvaliacao({ listAthletes, isIMC, identificador } : ListAvaliacaoProps){
+export default function ListAvaliacao({ listAthletes, isIMC, identificador }: ListAvaliacaoProps) {
     const { call, success, error } = useAthleteProvider()
     const [formValues, setFormValues] = useState<FormValues>({});
-    const handleInputChange = (athleteId: number, value: string) => {
-        setFormValues(prevValues => ({
-            ...prevValues,
-            [athleteId]: value
-        }));
-    };
-
-    const getDate = () => {
-        const today = new Date();
-        const formatter = new Intl.DateTimeFormat('pt-BR', { month: 'long', year: 'numeric' });
-        const formattedDate = formatter.format(today);
-        return formattedDate.replace(' de ', '/');
-    }
-
-    const [currentDate, setCurrentDate] = useState(getDate());
+    const [altFormValues, setAltFormValues] = useState<FormValues>({});
 
     let tituloAvaliacao = "Avaliação Física" // Default
-    let tipoAvaliacao = "Avaliação Física" // Default
+    //let tipoAvaliacao: typeof Object | string = "Avaliação Física" // Default
+
+    // Handlers
+    const handleInputChange = (athleteId: number, value: string, altInput: boolean) => {
+        let filteredValue = value.replace(/[^0-9.,]/g, '');
+        if (altInput) {
+            setAltFormValues(prevValues => ({ ...prevValues, [athleteId]: filteredValue }));
+            return;
+        }
+        setFormValues(prevValues => ({ ...prevValues, [athleteId]: filteredValue }));
+    };
+
+    const handleTimeChange = (minutes: number, seconds: number) => {
+        console.log(`Tempo atualizado: ${minutes} minutos e ${seconds} segundos`);
+    };
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
@@ -46,64 +50,78 @@ export default function ListAvaliacao({ listAthletes, isIMC, identificador } : L
         console.log(`currentDate: ${currentDate}`)
         console.log(`tituloAvaliacao: ${tituloAvaliacao}`)
         console.log(`tipoAvaliacao: ${tipoAvaliacao}`)
-        console.log(formValues);
+        console.log(`formValues: ${JSON.stringify(formValues)}`);
+        console.log(`altFormValues: ${JSON.stringify(altFormValues)}`);
     };
+    //------------------------//
 
     //TODO: Guardar n'um utils
+    const getDate = () => {
+        const today = new Date();
+        const formatter = new Intl.DateTimeFormat('pt-BR', { month: 'long', year: 'numeric' });
+        const formattedDate = formatter.format(today);
+        return formattedDate.replace(' de ', '/');
+    }
+    const [currentDate, setCurrentDate] = useState(getDate());
+
     const identificadorStr = String(identificador);
     const regex = /^(.+)-(.+)$/; // Regex checking if a string has "-" somewhere in it
     const match = identificadorStr.match(regex);
     let identificadorSubItem = 0;
     if (match) {
-     identificador = Number(match[1]);
-     identificadorSubItem = Number(match[2]);
+        identificador = Number(match[1]);
+        identificadorSubItem = Number(match[2]);
     }
-    const assessmentIndex = identificadorSubItem ? identificadorSubItem : 0
+    //------------------------//
 
-    // TODO: refatorar para um switch case -?-
-    // TODO: desacoplar/refatorar o id do array de avaliações/indices
-    if (Number(identificador) < Number(8)) {       
-        tituloAvaliacao = AVALIACOES_FISICAS[Number(identificador)].assessments[assessmentIndex].title // Validar se tem subItem, caso tenha, pegar segundo parâmetro para navegar na array de assessments
-        tipoAvaliacao = AVALIACOES_FISICAS[Number(identificador)].assessments[assessmentIndex].type
-        
+    let assessmentIndex = identificadorSubItem && identificadorSubItem < 1 ? identificadorSubItem : 0 // Hide any possible pagination error manually
+    let assessment: Assessment | null = null;
+    if (Number(identificador) < Number(8)) {
+        assessment = AVALIACOES_FISICAS[Number(identificador)].assessments[assessmentIndex];
     } else {
-    // TODO: tirar magic number
-        identificador = 8; // Hide any possible pagination error
-        tituloAvaliacao = INDICES_FISICOS[0].assessments[assessmentIndex].title
-        tipoAvaliacao = INDICES_FISICOS[0].assessments[assessmentIndex].type
+        // TODO: tirar magic number
+        assessment = INDICES_FISICOS[0].assessments[assessmentIndex];
         isIMC = true
     }
 
-    return (
-        <form className={styles.formWrapper} onSubmit={handleSubmit} >
-        <h2 className={styles.header}>{tituloAvaliacao}</h2>
+    tituloAvaliacao = assessment.altTitle ? assessment.altTitle : assessment.title
+    let tipoAvaliacao = assessment.type
 
-        <div className="flex items-center justify-center mb-4">
-            <label className="block text-gray-700 mr-2">Data:</label>
-            <input type="text" readOnly className={styles.dateInput} value={currentDate} />
-        </div>
+    return (
+        <FormWrapper header={tituloAvaliacao} handleSubmit={handleSubmit}>
+            <div className="flex items-center justify-center mb-4">
+                <label className="block text-gray-700 mr-2">Data:</label>
+                <input type="text" disabled readOnly className={styles.dateInput} value={currentDate} />
+            </div>
 
             <ul className="w-full xl:mb-10 md:mb-7 sm:mb-5 mb-5">
                 {listAthletes?.data?.map((athlete) => (
                     <li key={athlete.id} className={styles.listItem}>
                         <span className={styles.athleteNameSpan}>{athlete?.nome}</span>
-                        <div className="flex flex-row space-x-2"> 
-                            {isIMC && 
-                            <input 
-                                id="idAthlete" 
-                                placeholder="Peso" 
-                                key={athlete?.id} 
-                                onChange={(e) => handleInputChange(athlete.id, e.target.value)}
-                                className={(styles.input)}>
+                        <div className="flex flex-row space-x-2">
+                            {isIMC &&
+                                <input
+                                    id="idAthlete"
+                                    placeholder="Peso"
+                                    type="number"
+                                    key={athlete?.id}
+                                    value={altFormValues[athlete.id] || ''}
+                                    onChange={(e) => handleInputChange(athlete.id, e.target.value, true)}
+                                    className={(styles.input)}>
                                 </input>}
-                            <input 
-                                id="idAthlete" 
-                                placeholder="Altura"
-                                type={tipoAvaliacao} 
-                                value={formValues[athlete.id] || ''} 
-                                onChange={(e) => handleInputChange(athlete.id, e.target.value)} 
-                                className={(styles.input)}>
-                            </input>
+                            {tipoAvaliacao.key == "Tempo" &&
+                                <TimeInput onTimeChange={handleTimeChange} />
+                            }
+                            {tipoAvaliacao.key != "Tempo" &&
+                                <input
+                                    id="idAthlete"
+                                    placeholder={tipoAvaliacao.key}
+                                    type={tipoAvaliacao.value}
+                                    value={formValues[athlete.id] || ''}
+                                    onChange={(e) => handleInputChange(athlete.id, e.target.value, false)}
+                                    className={`${styles.input} ${tipoAvaliacao.key == "Repeticao" ? "w-24" : ""}`}>
+                                </input>
+                            }
                         </div>
                     </li>
                 ))}
@@ -115,17 +133,15 @@ export default function ListAvaliacao({ listAthletes, isIMC, identificador } : L
             {error && (
                 <p className={styles.feedbackParagraph}>{error}</p>
             )}
-        </form>
-    )   
+        </FormWrapper>
+    )
 }
 
 //TODO: extrair para um arquivo de estilos, sugestão alternativa de organização -?-
 const styles = {
-    input: "w-16 h-6 bg-gray-100 rounded-md border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 placeholder:italic placeholder:text-slate-400 placeholder:text-xs",
+    input: "w-20 h-6 rounded-md focus:ring-blue-500 dark:focus:ring-blue-600 focus:ring-2 placeholder:italic placeholder:text-slate-400 placeholder:text-xs",
     feedbackParagraph: "xl:text-base md:text-sm sm:text-xs text-xs text-center text-orange-700 xl:mt-10 md:mt-7 sm:mt-5 mt-5 font-bold",
-    header: "font-bold uppercase xl:text-4xl md:text-1xl sm:text-lg text-lg xl:mb-10 md:mb-7 sm:mb-5 mb-5 text-center",
-    formWrapper: "bg-defaultGray px-10 py-6 sm:px-8 sm:py-4 md:px-24 md:py-16 xl:px-36 xl:py-20 rounded-md max-h-[650px] overflow-y-auto custom-scrollbar",
-    athleteNameSpan: "uppercase xl:text-md md:text-base sm:text-sm text-sm",
-    dateInput: "italic text-slate-400 block w-18 border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50 text-center",
-    listItem: "flex items-center justify-between xl:gap-4 md:gap-4 sm:gap-4 gap-4 xl:mb-6 md:mb-4 sm:mb-2 mb-2",
+    athleteNameSpan: "uppercase xl:text-base md:text-sm sm:text-xs text-xs truncate",
+    dateInput: "italic text-slate-400 block w-fit border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50 text-center",
+    listItem: "flex items-center justify-between xl:gap-4 lg:gap-4 md:gap-4 sm:gap-4 gap-4 xl:mb-6 lg:mb-4 md:mb-4 sm:mb-2 mb-4 max-h-[24px]",
 }
