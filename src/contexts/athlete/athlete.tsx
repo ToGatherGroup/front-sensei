@@ -7,17 +7,21 @@ import { useRouter } from "next/navigation";
 type AthleteState = {
     listAthletes: ListAthletesProps | null;
     isLoading: boolean;
+    injuries: string[];
     success: string;
     error: string;
     call: (ids: number[]) => void
+    getInjuries: (id: number | string) => void
 }
 
 const initialState = {
     listAthletes: null,
     isLoading: false,
+    injuries: [],
     success: '',
     error: '',
-    call: () => {}
+    call: () => {},
+    getInjuries: () => {}
 }
 
 const AthleteContext = createContext<AthleteState>(initialState);
@@ -27,6 +31,7 @@ export const AthleteProvider = ({ children }: {children: React.ReactNode}) => {
     const [listAthletes, setListAthletes] = useState<ListAthletesProps | null>(null);
     const [success, setSuccess] = useState<string>('');
     const [error, setError] = useState<string>('');
+    const [injuries, setInjuries] = useState<string[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const router = useRouter()
 
@@ -49,6 +54,24 @@ export const AthleteProvider = ({ children }: {children: React.ReactNode}) => {
             setIsLoading(false)
         }
     };
+
+    const getInjuries = async (id: number | string) => {
+        try {
+            const response = await get(`lesao/${id}`);
+
+            if (response) { 
+                response?.data.map((injurie:any) => {
+                    return injurie.regiaoLesao; 
+                })
+
+                setInjuries(response.data.map((injurie:any) => injurie.regiaoLesao));
+            } else {
+                setError("Erro ao carregar lesões!")
+            }
+        } catch (error) {
+            setError("Erro ao carregar lesões!")
+        }
+    }
     
     const call = async (ids: number[]) => {
         setIsLoading(true)
@@ -68,7 +91,7 @@ export const AthleteProvider = ({ children }: {children: React.ReactNode}) => {
     }
         
     return (
-        <AthleteContext.Provider value={{isLoading, listAthletes, success, error, call}}>
+        <AthleteContext.Provider value={{isLoading, listAthletes, injuries, success, error, call, getInjuries}}>
             {children}
         </AthleteContext.Provider>
     )
