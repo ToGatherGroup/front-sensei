@@ -40,8 +40,6 @@ const Back = ({ injuries }: BackProps) => {
             }}
             version="1.1" 
             viewBox="0 0 21000 29700"
-            xmlnsXlink="http://www.w3.org/1999/xlink"
-            xmlnsXodm="http://www.corel.com/coreldraw/odm/2003"
         >
             <defs>
                 <style>
