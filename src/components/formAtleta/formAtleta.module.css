@@ -2,7 +2,6 @@
   min-height: 100vh;
   display: flex;
   margin: auto 0;
-
   align-items: center;
   justify-content: center;
 }
@@ -121,7 +120,7 @@
 
 .avatar > label > img {
   border-radius: 50%;
-  border: 3px solid rgb(0, 0, 0);
+  /* border: 3px solid rgb(0, 0, 0); */
   width: 250px;
   height: 250px;
   cursor: pointer;

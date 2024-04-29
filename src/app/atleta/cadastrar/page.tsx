@@ -1,14 +1,14 @@
 import FormAtleta from "../../../components/formAtleta/index";
 
-import { Atleta } from "@/mock/atleta";
+//import { Atleta } from "@/mock/atleta";
 
 type Props = {};
 const CadastrarAtleta = (props: Props) => {
-  console.log(Atleta);
+  //console.log(Atleta);
   return (
     <div>
-      {<FormAtleta atleta={Atleta} />}
-      {/* {<FormAtleta />} */}
+      {/* {<FormAtleta atleta={Atleta} />} */}
+      {<FormAtleta />}
     </div>
   );
 };
