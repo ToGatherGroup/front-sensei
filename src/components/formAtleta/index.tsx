@@ -65,7 +65,7 @@ const FormAtleta = ({ atleta }: Props) => {
         console.log(error);
       });
     reset();
-    router.push("/atleta/perfil/0");
+    //router.push("/atleta/perfil/0");
   };
 
   //  Treatment for date before fill input (from GET)
