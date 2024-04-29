@@ -65,6 +65,7 @@ const FormAtleta = ({ atleta }: Props) => {
         console.log(error);
       });
     reset();
+    setAvatarBase64("");
     //router.push("/atleta/perfil/0");
   };
 
