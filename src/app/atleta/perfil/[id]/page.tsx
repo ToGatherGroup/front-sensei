@@ -201,6 +201,7 @@ import { TAtleta } from "@/types/TAtleta";
 import Image from "next/image";
 import { axios } from "@/api/api"; // Importe o tipo AtletaData aqui
 
+
 import styles from "./page.module.css";
 import { useEffect, useState, useCallback } from "react";
 import Injuries from "@/components/injuries";
@@ -330,6 +331,20 @@ const Page = ({ params }: Props) => {
             </button>
           </section>
     {/* <Injuries/> */}
+        </section>
+        <section className="flex flex-wrap justify-end mt-8 space-x-4">
+          <button className="bg-gray-300 hover:bg-blue-500 text-black font-semibold py-2 px-4 rounded-lg">
+            Lesões
+          </button>
+          <button className="bg-gray-300 hover:bg-blue-500 text-black font-semibold py-2 px-4 rounded-lg">
+            Frequência
+          </button>
+          <button className="bg-gray-300 hover:bg-blue-500 text-black font-semibold py-2 px-4 rounded-lg">
+            Qualitativos
+          </button>
+          <button className="bg-gray-300 hover:bg-blue-500 text-black font-semibold py-2 px-4 rounded-lg">
+            Gráfico
+          </button>
         </section>
       </div>
       <Frequency id={params.id} />
