@@ -11,7 +11,7 @@ import { PosturasType } from "@/types/Posturas"; // Import the missing type
 import React from 'react';
 import { useRouter } from "next/navigation";
 import { set } from 'react-hook-form';
-import PosturaCard from '@/components/posturaAtleta';
+import PosturaCard from '@/components/posturaCard';
 
 
 const PosturaPage = () => {
@@ -24,6 +24,7 @@ const PosturaPage = () => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [viewSide, setViewSide] = useState<number>(0);
   const parametros = useParams<{ id: string; }>()
+  const rotateIcon = "/icons/axis_z_rotate_counterclockwise_icon.png"
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,7 +50,6 @@ const PosturaPage = () => {
   }, [parametros.id]);
 
   const handleViewSide = () => {
-    
     if (viewSide === 2) {
       setViewSide(0);
     } else {
@@ -79,8 +79,12 @@ const PosturaPage = () => {
 
 return (
   <div className="mx-auto min-h-screen flex flex-col justify-center">
+    <button
+        className=" mx-auto justify-center mx-2 px-2 mb-4 w-fit h-8 bg-stone-200 rounded flex justify-center items-center text-black font-bold"
+
+      > + Avaliação
+      </button> 
     <style jsx>{cssGrid}</style>
-    <h1 className="text-2xl font-bold text-center rounded text-white mb-4">Avaliação</h1>
     <div className="flex justify-center items-center space-x-2 mb-4 mx-4">
       {/* <div className="shadow rounded grid-overlay">
         <Image
@@ -108,13 +112,15 @@ return (
       <PosturaCard atletaId={parametros.id} datasAvaliacaoArray={datasAvaliacaoArray} viewSide={viewSide}/>
     </div>
 
-    {(datasAvaliacaoArray.length == 0) && <p>Nenhuma data de avaliação encontrada.</p>}
-    <button
-        className="mx-2 w-14 h-14 bg-stone-200 rounded flex justify-center items-center text-black font-bold"
+    {(datasAvaliacaoArray.length == 0) && <p className='mx-auto my-2 italic text-white block w-fit border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50 text-center'>Nenhuma data de avaliação encontrada.</p>}
+    {(datasAvaliacaoArray.length > 0) && <button
+        className=" mx-auto justify-center mx-2 w-14 h-14 bg-stone-200 rounded flex justify-center items-center text-black font-bold"
         onClick={handleViewSide}
       >
-        &#x21bb;
-      </button>
+        <Image src={rotateIcon}           alt="Rotate Icon"
+          width='80'
+          height='80'/>
+      </button> }
 
   </div>
 );

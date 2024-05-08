@@ -4,6 +4,8 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { PosturasType } from "@/types/Posturas"; // Import the missing type
 import { getAvaliacaoPostural } from "@/api/endpoints";
+import { converterData } from '@/utils/utils';
+
 
 interface PosturaCardProps {
     atletaId: string;
@@ -42,9 +44,9 @@ const PosturaCard = ({atletaId, datasAvaliacaoArray, viewSide}: PosturaCardProps
     
       const RenderDatasAvaliacaoOptions = ({ datasAvaliacaoArray }: { datasAvaliacaoArray: string[] }) => (
         <>
-          { (datasAvaliacaoArray.length > 0) && <select onChange={handleOptionSelect} value={selectedOption}>
+          { (datasAvaliacaoArray.length > 0) && <select id='possibleDates' className='p-2 mt-4 shadow mx-auto w-fit rounded' onChange={handleOptionSelect} value={selectedOption}>
             {datasAvaliacaoArray.map((data) => (
-              <option key={data} value={data}>{data}</option>
+              <option key={data} value={data}>{converterData(data)}</option>
             ))}
           </select>}
         </>
@@ -55,9 +57,9 @@ const PosturaCard = ({atletaId, datasAvaliacaoArray, viewSide}: PosturaCardProps
         <div className="shadow rounded grid-overlay">
         <Image
           src={posturasAtleta[viewSide]?.foto ? posturasAtleta[viewSide].foto : defaultImage} //src={posturasAtleta[viewSide].foto}
-          alt="Lateral View"
+          alt="Athlete Posture View"
           object-fit="contain"
-          className="object-cover shadow w-full rounded aspect-[4/12] max-h-[750px]"
+          className="object-cover shadow w-full rounded aspect-[4/12] max-h-[600px]"
           width='750'
           height='750'
         />
