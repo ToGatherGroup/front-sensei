@@ -95,6 +95,7 @@ export default function ListAvaliacao({ listAthletes, isIMC, identificador }: Li
             </div>
 
             <ul className="w-full xl:mb-10 md:mb-7 sm:mb-5 mb-5">
+            {isIMC && <div className="flex flex-row space-x-2 justify-end"><h3 className={styles.inputHeader}>Peso:</h3> <h3 className={styles.inputHeader}>Altura:</h3></div>}
                 {listAthletes?.data?.map((athlete) => (
                     <li key={athlete.id} className={styles.listItem}>
                         <span className={styles.athleteNameSpan}>{athlete?.nome}</span>
@@ -102,7 +103,7 @@ export default function ListAvaliacao({ listAthletes, isIMC, identificador }: Li
                             {isIMC &&
                                 <input
                                     id="idAthlete"
-                                    placeholder="Peso"
+                                    placeholder="Kg"
                                     type="number"
                                     key={athlete?.id}
                                     value={altFormValues[athlete.id] || ''}
@@ -113,6 +114,7 @@ export default function ListAvaliacao({ listAthletes, isIMC, identificador }: Li
                                 <TimeInput onTimeChange={handleTimeChange} />
                             }
                             {tipoAvaliacao.key != "Tempo" &&
+                            
                                 <input
                                     id="idAthlete"
                                     placeholder={tipoAvaliacao.key}
@@ -139,6 +141,7 @@ export default function ListAvaliacao({ listAthletes, isIMC, identificador }: Li
 
 //TODO: extrair para um arquivo de estilos, sugestão alternativa de organização -?-
 const styles = {
+    inputHeader: "w-20 h-6 block text-gray-700 xl:text-base md:text-sm sm:text-xs text-xs",
     input: "w-20 h-6 rounded-md focus:ring-blue-500 dark:focus:ring-blue-600 focus:ring-2 placeholder:italic placeholder:text-slate-400 placeholder:text-xs",
     feedbackParagraph: "xl:text-base md:text-sm sm:text-xs text-xs text-center text-orange-700 xl:mt-10 md:mt-7 sm:mt-5 mt-5 font-bold",
     athleteNameSpan: "uppercase xl:text-base md:text-sm sm:text-xs text-xs truncate",
