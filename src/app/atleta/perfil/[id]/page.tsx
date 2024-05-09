@@ -351,5 +351,4 @@ const Page = ({ params }: Props) => {
     </div>
   );
 };
-
-export default Page;
+export default page;
