@@ -1,11 +1,15 @@
 'use client'
-import React from 'react'
+import React, { useState } from 'react'
 import ListMenuItem from '../../../components/listItem/index'
+import Loading from '../../../components/loading/index'
 import { Assessment} from '@/types/Assessment'
 import { AVALIACOES_FISICAS, INDICES_FISICOS } from '@/consts/const';
+import { useAAssessmentsProvider } from '@/contexts';
 
 const headerClass = "text-white font-bold"
 const baseClasses = "flex flex-1 flex-col gap-y-2 fadeIn";
+
+import Modal from '@/components/modal';
 
 const hasMultipleAssessments = (assessments: Assessment[]) => assessments.length > 1;
 
@@ -25,13 +29,34 @@ const RenderList = ({ items, isIMC }: { items: typeof AVALIACOES_FISICAS | typeo
 );
 
 const MenuAvaliacaoPage = () => {
-
+    const {isLoading, hasIncompleteAssessments, modalVisible, error, closeModal, clearError} = useAAssessmentsProvider();
+   
     return (
-        <div className={`${baseClasses} p-8 grid justify-items-center min-h-screen`}>
-            <div className="m-auto">
-                <RenderList items={AVALIACOES_FISICAS} isIMC={false} />
-                <RenderList items={INDICES_FISICOS} isIMC={true} />
+        <div>
+            {isLoading ? (
+                <Loading />
+            ) : (
+            <div className={`${baseClasses} p-8 grid justify-items-center min-h-screen`}>
+                {modalVisible && error == '' && (
+                    <div className='absolute min-h-screen w-full flex items-center justify-center bg-black/40 z-50 px-3.5'>
+                        {hasIncompleteAssessments ? (
+                            <Modal title='Avaliações Incompletas' text='Ainda existem avaliações incompletas, por favor, termine-as para poder iniciar um novo período de avaliações.' closeModal={closeModal} />
+                        ) : (
+                            <Modal title='Deseja criar novas avaliações?' closeModal={closeModal} button={true} buttonText='Criar' buttonClick={closeModal} />
+                        )}
+                    </div>
+                )}
+                {error != '' && (
+                    <div className='absolute min-h-screen w-full flex items-center justify-center bg-black/40 z-50 px-3.5'>
+                        <Modal title='Ops! Tivemos um problema...' text={error} closeModal={clearError} />
+                    </div>
+                )}
+                <div className="m-auto">
+                    <RenderList items={AVALIACOES_FISICAS} isIMC={false} />
+                    <RenderList items={INDICES_FISICOS} isIMC={true} />
+                </div>
             </div>
+            )}
         </div>
     )
 }
