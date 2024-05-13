@@ -15,8 +15,8 @@ interface PosturaCardProps {
 const PosturaCard = ({atletaId, datasAvaliacaoArray, viewSide}: PosturaCardProps) => {
 
   const defaultImage = "/postura/placeholderpostura.png"
-    const [selectedOption, setSelectedOption] = useState(datasAvaliacaoArray[0]);// useState<string | null>(null);
-    const [posturasAtleta, setPosturasAtleta] = useState<Array<PosturasType>>([]); // Fix the syntax error and provide an initial value
+    const [selectedOption, setSelectedOption] = useState(datasAvaliacaoArray[0]);
+    const [posturasAtleta, setPosturasAtleta] = useState<Array<PosturasType>>([]);
 
     useEffect(() => {
       const fetchData = async () => {

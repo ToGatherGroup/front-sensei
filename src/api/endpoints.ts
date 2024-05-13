@@ -19,9 +19,3 @@ export const getAvaliacaoPostural = (atletaId: number, data: string) => {
     console.log(`Requisição feita para /avaliacaopostural/${atletaId}/${data}`)
     return axios.get(`/avaliacaopostural/${atletaId}/${data}`);
 }
-
-
-//teste temporario
-export const getAtletaById = (id: number) => {
-    return axios.get(`/atleta/${id}`);
-}
