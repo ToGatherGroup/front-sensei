@@ -2,10 +2,9 @@
 
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { PosturasType } from "@/types/Posturas"; // Import the missing type
+import { PosturasType } from "@/types/Posturas";
 import { getAvaliacaoPostural } from "@/api/endpoints";
 import { converterData } from '@/utils/utils';
-
 
 interface PosturaCardProps {
     atletaId: string;
@@ -31,15 +30,11 @@ const PosturaCard = ({atletaId, datasAvaliacaoArray, viewSide}: PosturaCardProps
           }
       };
       fetchData();
-  }, [selectedOption, atletaId]); // Dependency array ensures fetch is called on change
+  }, [selectedOption, atletaId]);
 
     const handleOptionSelect = async (event: React.ChangeEvent<HTMLSelectElement>) => {
         const selectedOption = event.currentTarget.value;
         setSelectedOption(selectedOption);
-        // let posturasAtleta = await getAvaliacaoPostural(Number(atletaId), selectedOption != null  ? selectedOption : datasAvaliacaoArray[0]);
-        // console.log("posturasAtleta:");
-        // console.log(posturasAtleta);
-        // setPosturasAtleta(posturasAtleta.data);
       }
     
       const RenderDatasAvaliacaoOptions = ({ datasAvaliacaoArray }: { datasAvaliacaoArray: string[] }) => (
