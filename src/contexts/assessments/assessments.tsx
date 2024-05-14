@@ -43,6 +43,7 @@ export const AssessmentsProvider = ({ children }: {children: React.ReactNode}) =
         setError("")
         setSuccess("")
         setModalVisible(false)
+        getIncompleteAssessments();
     }, []);
 
     const getIncompleteAssessments = async () => {
