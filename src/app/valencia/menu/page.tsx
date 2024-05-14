@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ListMenuItem from '../../../components/listItem/index'
 import Loading from '../../../components/loading/index'
 import { Assessment} from '@/types/Assessment'
@@ -29,7 +29,12 @@ const RenderList = ({ items, isIMC }: { items: typeof AVALIACOES_FISICAS | typeo
 );
 
 const MenuAvaliacaoPage = () => {
-    const {isLoading, hasIncompleteAssessments, modalVisible, error, closeModal, clearError} = useAAssessmentsProvider();
+    const {isLoading, hasIncompleteAssessments, modalVisible, error, closeModal, clearError, getIncompleteAssessments} = useAAssessmentsProvider();
+
+    useEffect(() => {
+        //getIncompleteAssessments();
+    }, [])
+    
    
     return (
         <div>
