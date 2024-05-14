@@ -10,6 +10,7 @@ type AssessmentsState = {
     hasIncompleteAssessments: boolean;
     modalVisible: boolean;
     createAssessments: () => void;
+    getIncompleteAssessments: () => void;
     closeModal: () => void;
     clearError: () => void;
 }
@@ -21,6 +22,7 @@ const initialState = {
     hasIncompleteAssessments: false,
     modalVisible: false,
     createAssessments: () => {},
+    getIncompleteAssessments: () => {},
     closeModal: () => {},
     clearError: () => {},
 }
@@ -41,7 +43,6 @@ export const AssessmentsProvider = ({ children }: {children: React.ReactNode}) =
         setError("")
         setSuccess("")
         setModalVisible(false)
-        getIncompleteAssessments();
     }, []);
 
     const getIncompleteAssessments = async () => {
@@ -92,7 +93,7 @@ export const AssessmentsProvider = ({ children }: {children: React.ReactNode}) =
     }
 
     return (
-        <AssessmentsContext.Provider value={{isLoading, success, error, hasIncompleteAssessments, modalVisible, createAssessments, closeModal, clearError}}>
+        <AssessmentsContext.Provider value={{isLoading, success, error, hasIncompleteAssessments, modalVisible, createAssessments, closeModal, clearError, getIncompleteAssessments}}>
             {children}
         </AssessmentsContext.Provider>
     )
