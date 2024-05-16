@@ -1,6 +1,5 @@
 "use client";
 import { useApiProvider } from "@/contexts";
-import axios from "axios";
 import { Chart, registerables } from "chart.js/auto";
 import { useEffect, useState } from "react";
 import { Radar } from "react-chartjs-2";
@@ -12,16 +11,15 @@ interface IApiData {
   values: number[];
 }
 
-export const ReviewsChart = () => {
+export const ReviewsChart = (id: number | string) => {
   const [apiData, setApiData] = useState<IApiData | null>(null);
   const { get } = useApiProvider();
-  const idAtleta = 2;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log(`Fetching data for atleta id: ${idAtleta}`);
-        const response = await get(`avaliacao/${idAtleta}`);
+        console.log(`Fetching data for atleta id: ${id}`);
+        const response = await get(`avaliacao/${id}`);
         console.log("API response:", response);
         if (response?.data) {
           const { labels, values } = response.data;
@@ -35,7 +33,7 @@ export const ReviewsChart = () => {
       }
     };
     fetchData();
-  }, [get, idAtleta]);
+  }, [get, id]);
 
   const chartData = {
     //labels: apiData ? apiData.labels : [],
