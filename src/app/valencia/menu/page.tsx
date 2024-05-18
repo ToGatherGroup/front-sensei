@@ -29,10 +29,10 @@ const RenderList = ({ items, isIMC }: { items: typeof AVALIACOES_FISICAS | typeo
 );
 
 const MenuAvaliacaoPage = () => {
-    const {isLoading, hasIncompleteAssessments, modalVisible, error, closeModal, clearError, getAllIncompleteAssessments} = useAssessmentsProvider();
+    const {isLoading, allAssessmentsComplete, modalVisible, error, closeModal, clearError, getAllIncompleteAssessments} = useAssessmentsProvider();
 
     useEffect(() => {
-        //getAllIncompleteAssessments();
+        getAllIncompleteAssessments();
     }, [])
     
    
@@ -44,9 +44,7 @@ const MenuAvaliacaoPage = () => {
             <div className={`${baseClasses} p-8 grid justify-items-center min-h-screen`}>
                 {modalVisible && error == '' && (
                     <div className='absolute min-h-screen w-full flex items-center justify-center bg-black/40 z-50 px-3.5'>
-                        {hasIncompleteAssessments ? (
-                            <Modal title='Avaliações Incompletas' text='Ainda existem avaliações incompletas, por favor, termine-as para poder iniciar um novo período de avaliações.' closeModal={closeModal} />
-                        ) : (
+                        {allAssessmentsComplete && (
                             <Modal title='Deseja criar novas avaliações?' closeModal={closeModal} button={true} buttonText='Criar' buttonClick={closeModal} />
                         )}
                     </div>
