@@ -7,7 +7,7 @@ type AssessmentsState = {
     isLoading: boolean;
     success: string;
     error: string;
-    hasIncompleteAssessments: boolean;
+    allAssessmentsComplete: boolean;
     modalVisible: boolean;
     listAthletes: ListAthletesProps | null;
     createAssessments: () => void;
@@ -22,7 +22,7 @@ const initialState = {
     isLoading: false,
     success: '',
     error: '',
-    hasIncompleteAssessments: false,
+    allAssessmentsComplete: false,
     modalVisible: false,
     listAthletes: null,
     createAssessments: () => {},
@@ -40,7 +40,7 @@ export const AssessmentsProvider = ({ children }: {children: React.ReactNode}) =
     const [success, setSuccess] = useState<string>('');
     const [error, setError] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [hasIncompleteAssessments, setHasIncompleteAssessments] = useState<boolean>(false);
+    const [allAssessmentsComplete, setAllAssessmentsComplete] = useState<boolean>(false);
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [listAthletes, setListAthletes] = useState<ListAthletesProps | null>(null);
 
@@ -55,8 +55,13 @@ export const AssessmentsProvider = ({ children }: {children: React.ReactNode}) =
     const getAllIncompleteAssessments = async () => {
         setIsLoading(true)
         try {
-            const response = await get('/verificarAvaliacaoIncompleta');
-            setHasIncompleteAssessments(response?.data)    
+            const response = await get('/avaliacoes_incompletas/verificar');
+            // Este endpoint retorna se há avaliações incompletas (True ou false)
+            // A negação feita abaixo para saber se aparece ou não o modal de criação de nova avaliação;
+            if(response) {
+                setModalVisible(!response?.data); 
+                setAllAssessmentsComplete(!response?.data);    
+            }
         } catch (error) {
             setError("Erro ao carregar a lista de avaliações incompletas");
         } finally {
@@ -131,7 +136,7 @@ export const AssessmentsProvider = ({ children }: {children: React.ReactNode}) =
     }
 
     return (
-        <AssessmentsContext.Provider value={{isLoading, success, error, hasIncompleteAssessments, modalVisible, listAthletes, createAssessments, closeModal, clearError, clearSuccess, getAllIncompleteAssessments, getIncompleteAssessments}}>
+        <AssessmentsContext.Provider value={{isLoading, success, error, allAssessmentsComplete, modalVisible, listAthletes, createAssessments, closeModal, clearError, clearSuccess, getAllIncompleteAssessments, getIncompleteAssessments}}>
             {children}
         </AssessmentsContext.Provider>
     )
