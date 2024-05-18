@@ -24,7 +24,7 @@ const ListAvaliacaoPage = ({ params }: Props) => {
         {isLoading ? (
           <Loading />
         ) : (
-          <ListAvaliacao listAthletes={listAthletes} identificador={parametros.id}  />
+          <ListAvaliacao identificador={parametros.id}  />
         )}
       </div>
     </div>
