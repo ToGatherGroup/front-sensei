@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useApiProvider } from "../api/api";
 import { useRouter } from "next/navigation";
-
+import { ListAthletesProps } from "./assessments.type";
 
 type AssessmentsState = {
     isLoading: boolean;
@@ -9,9 +9,13 @@ type AssessmentsState = {
     error: string;
     hasIncompleteAssessments: boolean;
     modalVisible: boolean;
+    listAthletes: ListAthletesProps | null;
     createAssessments: () => void;
+    getIncompleteAssessments: (param: string) => void;
+    getAllIncompleteAssessments: () => void;
     closeModal: () => void;
     clearError: () => void;
+    clearSuccess: () => void;
 }
 
 const initialState = {
@@ -20,9 +24,13 @@ const initialState = {
     error: '',
     hasIncompleteAssessments: false,
     modalVisible: false,
+    listAthletes: null,
     createAssessments: () => {},
+    getIncompleteAssessments: () => {},
+    getAllIncompleteAssessments: () => {},
     closeModal: () => {},
     clearError: () => {},
+    clearSuccess: () => {},
 }
 
 const AssessmentsContext = createContext<AssessmentsState>(initialState);
@@ -34,6 +42,7 @@ export const AssessmentsProvider = ({ children }: {children: React.ReactNode}) =
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [hasIncompleteAssessments, setHasIncompleteAssessments] = useState<boolean>(false);
     const [modalVisible, setModalVisible] = useState<boolean>(false);
+    const [listAthletes, setListAthletes] = useState<ListAthletesProps | null>(null);
 
     const router = useRouter()
 
@@ -41,18 +50,44 @@ export const AssessmentsProvider = ({ children }: {children: React.ReactNode}) =
         setError("")
         setSuccess("")
         setModalVisible(false)
-        getIncompleteAssessments();
     }, []);
 
-    const getIncompleteAssessments = async () => {
+    const getAllIncompleteAssessments = async () => {
         setIsLoading(true)
         try {
-            const response = await get('/avaliacoes_incompletas');
+            const response = await get('/verificarAvaliacaoIncompleta');
+            setHasIncompleteAssessments(response?.data)    
+        } catch (error) {
+            setError("Erro ao carregar a lista de avaliações incompletas");
+        } finally {
+            setIsLoading(false)
+        }
+    };
+
+    const getIncompleteAssessments = async (slug: string) => {
+        setIsLoading(true)
+        clearStates();
+        if(slug == '') return;
+        try {
+            const response = await get(`/avaliacoes_incompletas/${slug}`);
+                    
             if(response?.data.length > 0) {
-                setHasIncompleteAssessments(true)
+                response?.data.sort((a:any, b:any) => {
+                    const nomeA = a.nome.toLowerCase();
+                    const nomeB = b.nome.toLowerCase();
+                    
+                    if (nomeA < nomeB) {
+                      return -1;
+                    }
+                    if (nomeA > nomeB) {
+                      return 1;
+                    }
+                    return 0;
+                  });
+                  
+                setListAthletes(response)    
             } else {
-                clearStates()
-                setHasIncompleteAssessments(false)
+                setSuccess(`Todas as avaliações dessa valência física foram feitas.`)
             }
         } catch (error) {
             setError("Erro ao carregar a lista de avaliações incompletas");
@@ -63,11 +98,11 @@ export const AssessmentsProvider = ({ children }: {children: React.ReactNode}) =
 
     const createAssessments = async () => {
         setIsLoading(true)
+        clearStates();
         try {
             const response = await post('/avaliacao/coletiva', {});
     
             if (response?.status == 204 || response?.status == 200) {
-                clearStates();
                 router.push('/valencia/menu')
             }
         } catch (error) {
@@ -85,6 +120,10 @@ export const AssessmentsProvider = ({ children }: {children: React.ReactNode}) =
         setError('')
     }
 
+    const clearSuccess = () => {
+        setSuccess('')
+    }
+
     const clearStates = () => {
         setError("")
         setSuccess("")
@@ -92,10 +131,10 @@ export const AssessmentsProvider = ({ children }: {children: React.ReactNode}) =
     }
 
     return (
-        <AssessmentsContext.Provider value={{isLoading, success, error, hasIncompleteAssessments, modalVisible, createAssessments, closeModal, clearError}}>
+        <AssessmentsContext.Provider value={{isLoading, success, error, hasIncompleteAssessments, modalVisible, listAthletes, createAssessments, closeModal, clearError, clearSuccess, getAllIncompleteAssessments, getIncompleteAssessments}}>
             {children}
         </AssessmentsContext.Provider>
     )
 }
 
-export const useAAssessmentsProvider = () => useContext(AssessmentsContext)
+export const useAssessmentsProvider = () => useContext(AssessmentsContext)

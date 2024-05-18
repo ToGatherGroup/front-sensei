@@ -1,10 +1,10 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ListMenuItem from '../../../components/listItem/index'
 import Loading from '../../../components/loading/index'
 import { Assessment} from '@/types/Assessment'
 import { AVALIACOES_FISICAS, INDICES_FISICOS } from '@/consts/const';
-import { useAAssessmentsProvider } from '@/contexts';
+import { useAssessmentsProvider } from '@/contexts';
 
 const headerClass = "text-white font-bold"
 const baseClasses = "flex flex-1 flex-col gap-y-2 fadeIn";
@@ -16,7 +16,7 @@ const hasMultipleAssessments = (assessments: Assessment[]) => assessments.length
 const RenderList = ({ items, isIMC }: { items: typeof AVALIACOES_FISICAS | typeof INDICES_FISICOS, isIMC: boolean }) => (
     <ul className={`${baseClasses} p-1 min-w-80`}>
         <h1 className={headerClass}>{isIMC ? 'Índices' : 'Valências Físicas'}</h1>
-        {items.map(({ key, itemTitle, assessments }) => (
+        {items.map(({ key, itemTitle, assessments}) => (
             <ListMenuItem
                 key={key}
                 id={key}
@@ -29,7 +29,12 @@ const RenderList = ({ items, isIMC }: { items: typeof AVALIACOES_FISICAS | typeo
 );
 
 const MenuAvaliacaoPage = () => {
-    const {isLoading, hasIncompleteAssessments, modalVisible, error, closeModal, clearError} = useAAssessmentsProvider();
+    const {isLoading, hasIncompleteAssessments, modalVisible, error, closeModal, clearError, getAllIncompleteAssessments} = useAssessmentsProvider();
+
+    useEffect(() => {
+        //getAllIncompleteAssessments();
+    }, [])
+    
    
     return (
         <div>
