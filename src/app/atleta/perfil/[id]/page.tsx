@@ -23,6 +23,7 @@ const Page = ({ params }: Props) => {
   const [dadosAtleta, setDadosAtleta] = useState<any | null>(null);
   const [lesoes, setLesoes] = useState<any | null>(null);
   const [grafico, setGrafico] = useState<any | null>(null);
+  const [qualitativos, setQualitativos] = useState<any | null>(null);
   const [frequencia, setFrequencia] = useState<any | null>(null);
   const [medalhaOuro, setMedalhaOuro] = useState<number>(0);
   const [medalhaPrata, setMedalhaPrata] = useState<number>(0);
@@ -52,6 +53,12 @@ const Page = ({ params }: Props) => {
     untoggleAll();
     setFrequencia(true);
     console.log() 
+  }
+
+  const handleQualitativoClick = () => {
+    console.log("Qualitativos");
+    untoggleAll();
+    setQualitativos(true);
   }
 
   const getDadosAtleta = useCallback(async () => {
@@ -165,18 +172,20 @@ const Page = ({ params }: Props) => {
             <button onClick={handleFrequenciaClick} className="text-xs bg-gray-300 hover:bg-blue-500 text-black font-semibold py-2 px-2 rounded-md">
               Frequência
             </button>
-            <button className="text-xs bg-gray-300 hover:bg-blue-500 text-black font-semibold py-2 px-2 rounded-md">
+            <button onClick={handleQualitativoClick} className="text-xs bg-gray-300 hover:bg-blue-500 text-black font-semibold py-2 px-2 rounded-md">
               Qualitativos
             </button>
             <button onClick={handleGraficoClick}  className="text-xs bg-gray-300 hover:bg-blue-500 text-black font-semibold py-2 px-2 rounded-md">
               Gráfico
             </button>
           </section>
-          <div>
-            {frequencia && <div className="max-w-full">
+          <div className="max-w-full mt-2">
+            {qualitativos && <div >
+              </div>}
+            {frequencia && <div>
               <Frequency id={params.id}/>
             </div>}
-            {grafico && <div className="max-w-full">
+            {grafico && <div>
               <ReviewsChart id={params.id}/>
             </div>}
           {/*
