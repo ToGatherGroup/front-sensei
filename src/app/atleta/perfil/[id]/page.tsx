@@ -33,7 +33,8 @@ const Page = ({ params }: Props) => {
     setLesoes(null);
     setGrafico(null);
     setFrequencia(null);
-  }
+    setQualitativos(null);
+  };
 
   const handleLesoesClick = () => {
     console.log("Lesões");
@@ -45,21 +46,19 @@ const Page = ({ params }: Props) => {
     console.log("Gráfico");
     untoggleAll();
     setGrafico(true);
-    console.log(dadosAtleta?.medalhaDTO.posicao == "Medalha de ouro" ? dadosAtleta?.medalhaDTO.quantidade : 0)
-  }
+  };
 
   const handleFrequenciaClick = () => {
     console.log("Frequência");
     untoggleAll();
     setFrequencia(true);
-    console.log() 
-  }
+  };
 
   const handleQualitativoClick = () => {
     console.log("Qualitativos");
     untoggleAll();
     setQualitativos(true);
-  }
+  };
 
   const getDadosAtleta = useCallback(async () => {
     try {
@@ -84,7 +83,7 @@ const Page = ({ params }: Props) => {
             break;
         }
       });
-    }  catch (error) {
+    } catch (error) {
       console.error("Erro ao obter dados do atleta", error);
     }
   }, [params.id, setDadosAtleta]);
@@ -93,10 +92,31 @@ const Page = ({ params }: Props) => {
     getDadosAtleta();
   }, [getDadosAtleta]);
 
+  const buttons = [
+    { label: 'Lesões', onClick: handleLesoesClick },
+    { label: 'Frequência', onClick: handleFrequenciaClick },
+    { label: 'Qualitativos', onClick: handleQualitativoClick },
+    { label: 'Gráfico', onClick: handleGraficoClick }
+  ];
+
+  const renderButtons = () => (
+    <section className="flex mt-6 space-x-1">
+      {buttons.map((button, index) => (
+        <button
+          key={index}
+          onClick={button.onClick}
+          className="text-xs bg-gray-300 hover:bg-blue-500 text-black font-semibold py-2 px-2 rounded-md"
+        >
+          {button.label}
+        </button>
+      ))}
+    </section>
+  );
+
   return (
-    <div className="flex justify-center  h-screen">
+    <div className="flex justify-center h-screen">
       <div className="flex mt-8">
-        <section className="flex flex-col lg:flex-row ">
+        <section className="flex flex-col lg:flex-row">
           <div> {/* Seção lateral esquerda Inicio */}
             <div className="flex justify-center space-x-6 mb-4">
               <Image
@@ -115,93 +135,72 @@ const Page = ({ params }: Props) => {
               />
               <Image
                 src="/icons/postura.png"
-                alt="Ícone Campeonato"
+                alt="Ícone Postura"
                 width={60}
                 height={60}
                 className="bg-white rounded-lg p-1 object-contain w-12 h-12"
               />
             </div>
-                <AvatarAtleta
-                id={atleta.id}
-                name={atleta.name}
-                belt={atleta.belt}
-                photo={atleta.photo}
-                size="big"
-              />
-              <section>
-                <div className="flex flex-col items-center space-y-2">
-                  <div className="outline outline-offset-2 outline-winePattern bg-gray-300 p-2 rounded-md text-center text-black flex justify-center items-center w-60 h-7">
-                    <h4 className="text-lg font-semibold">{dadosAtleta?.nome}</h4>
-                  </div>
-                  <div className="outline outline-offset-2 outline-winePattern bg-gray-300 p-2 rounded-md text-center text-black flex justify-center items-center w-60 h-7">
-                    <h4 className="text-lg font-semibold">{dadosAtleta?.faixa}</h4>
-                  </div>
-                  <div className="outline outline-offset-2 outline-winePattern bg-gray-300 p-2 rounded-md text-center text-black flex justify-center items-center w-60 h-7">
-                    <h4 className="text-lg font-semibold">
-                      {dadosAtleta?.categoria}
-                    </h4>
-                  </div>
-                  <div>
-                    <Image
-                      src="/formAtleta/medals/medalhasLight.png"
-                      className="rounded w-40"
-                      alt="Imagem das Medalhas"
-                      width={100}
-                      height={50}
-                    />
-                    <div className="bottom-0 left-0 w-full flex justify-between">
-                      <div className="w-1/3 text-center text-white font-semibold">
-                        {medalhaOuro}
-                      </div>
-                      <div className="w-1/3 text-center text-white font-semibold">
-                        {medalhaPrata}
-                      </div>
-                      <div className="w-1/3 text-center text-white font-semibold">
-                        {medalhaBronze}
-                      </div>
+            <AvatarAtleta
+              id={atleta.id}
+              name={atleta.name}
+              belt={atleta.belt}
+              photo={atleta.photo}
+              size="big"
+            />
+            <section>
+              <div className="flex flex-col items-center space-y-2">
+                <div className="outline outline-offset-2 outline-winePattern bg-gray-300 p-2 rounded-md text-center text-black flex justify-center items-center w-60 h-7">
+                  <h4 className="text-lg font-semibold">{dadosAtleta?.nome}</h4>
+                </div>
+                <div className="outline outline-offset-2 outline-winePattern bg-gray-300 p-2 rounded-md text-center text-black flex justify-center items-center w-60 h-7">
+                  <h4 className="text-lg font-semibold">{dadosAtleta?.faixa}</h4>
+                </div>
+                <div className="outline outline-offset-2 outline-winePattern bg-gray-300 p-2 rounded-md text-center text-black flex justify-center items-center w-60 h-7">
+                  <h4 className="text-lg font-semibold">
+                    {dadosAtleta?.categoria}
+                  </h4>
+                </div>
+                <div>
+                  <Image
+                    src="/formAtleta/medals/medalhasLight.png"
+                    className="rounded w-40"
+                    alt="Imagem das Medalhas"
+                    width={100}
+                    height={50}
+                  />
+                  <div className="bottom-0 left-0 w-full flex justify-between">
+                    <div className="w-1/3 text-center text-white font-semibold">
+                      {medalhaOuro}
+                    </div>
+                    <div className="w-1/3 text-center text-white font-semibold">
+                      {medalhaPrata}
+                    </div>
+                    <div className="w-1/3 text-center text-white font-semibold">
+                      {medalhaBronze}
                     </div>
                   </div>
                 </div>
-              </section>
-          </div> {/*  Seção lateral Fim  */}
-          <div> {/*  Seção Botões Começo  */}
-          <section className="flex mt-6 space-x-1">
-            <button onClick={handleLesoesClick} className="text-xs bg-gray-300 hover:bg-blue-500 text-black font-semibold py-2 px-2 rounded-md">
-              Lesões
-            </button>
-            <button onClick={handleFrequenciaClick} className="text-xs bg-gray-300 hover:bg-blue-500 text-black font-semibold py-2 px-2 rounded-md">
-              Frequência
-            </button>
-            <button onClick={handleQualitativoClick} className="text-xs bg-gray-300 hover:bg-blue-500 text-black font-semibold py-2 px-2 rounded-md">
-              Qualitativos
-            </button>
-            <button onClick={handleGraficoClick}  className="text-xs bg-gray-300 hover:bg-blue-500 text-black font-semibold py-2 px-2 rounded-md">
-              Gráfico
-            </button>
-          </section>
-          <div className="max-w-full mt-2">
-            {qualitativos && <div >
-              </div>}
-            {frequencia && <div>
-              <Frequency id={params.id}/>
-            </div>}
-            {grafico && <div>
-              <ReviewsChart id={params.id}/>
-            </div>}
-          {/*
-          lesões está setada com valores dificeis de manipular, postergarei a implementação
-          {lesoes &&
-          <div className="max-w-full"> 
-          <Injuries injuries={[]} type={"back"}/>
-          </div>} 
-          */}
-          </div>
-          </div> {/*  Seção Botões Fim  */}
-    {/* <Injuries/> */}
+              </div>
+            </section>
+          </div> {/* Seção lateral Fim */}
+          <div> {/* Seção Botões Começo */}
+            {renderButtons()}
+            <div className="max-w-full mt-2">
+              {qualitativos && <div></div>}
+              {frequencia && <div><Frequency id={params.id} /></div>}
+              {grafico && <div><ReviewsChart id={params.id} /></div>}
+              {/*
+              lesões está setada com valores difíceis de manipular, postergarei a implementação
+              {lesoes && <div className="max-w-full"><Injuries injuries={[]} type={"back"}/></div>}
+              */}
+            </div>
+          </div> {/* Seção Botões Fim */}
         </section>
       </div>
       <Frequency id={params.id} />
     </div>
   );
 };
+
 export default Page;
