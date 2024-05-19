@@ -8,6 +8,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useApiProvider } from "@/contexts";
 
+type FrequencyProps = {
+  id: number | string;
+};
+
 const frequencyDatesSchema = yup.object().shape({
   startDate: yup.date().typeError("Insira a data inicial."),
   endDate: yup

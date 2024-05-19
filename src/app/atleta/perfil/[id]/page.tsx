@@ -5,12 +5,10 @@ import { Atletas } from "@/mock/atletas";
 import { TAtleta } from "@/types/TAtleta";
 import Image from "next/image";
 import { axios } from "@/api/api"; // Importe o tipo AtletaData aqui
-
-
-import styles from "./page.module.css";
 import { useEffect, useState, useCallback } from "react";
 import Injuries from "@/components/injuries";
 import { ReviewsChart } from "@/components/reviewsChart";
+import Frequency from "@/components/frequency";
 
 type Params = {
   id: string;
@@ -25,10 +23,15 @@ const Page = ({ params }: Props) => {
   const [dadosAtleta, setDadosAtleta] = useState<any | null>(null);
   const [lesoes, setLesoes] = useState<any | null>(null);
   const [grafico, setGrafico] = useState<any | null>(null);
+  const [frequencia, setFrequencia] = useState<any | null>(null);
+  const [medalhaOuro, setMedalhaOuro] = useState<number>(0);
+  const [medalhaPrata, setMedalhaPrata] = useState<number>(0);
+  const [medalhaBronze, setMedalhaBronze] = useState<number>(0);
 
   const untoggleAll = () => {
     setLesoes(null);
     setGrafico(null);
+    setFrequencia(null);
   }
 
   const handleLesoesClick = () => {
@@ -41,14 +44,40 @@ const Page = ({ params }: Props) => {
     console.log("Gráfico");
     untoggleAll();
     setGrafico(true);
+    console.log(dadosAtleta?.medalhaDTO.posicao == "Medalha de ouro" ? dadosAtleta?.medalhaDTO.quantidade : 0)
+  }
+
+  const handleFrequenciaClick = () => {
+    console.log("Frequência");
+    untoggleAll();
+    setFrequencia(true);
+    console.log() 
   }
 
   const getDadosAtleta = useCallback(async () => {
     try {
       const response = await axios.get(`/atleta/ficha/${params.id}`);
+      console.log("response.data:");
       console.log(response.data);
       setDadosAtleta(response.data);
-    } catch (error) {
+      const medalhaDTO = response.data.medalhaDTO;
+
+      medalhaDTO.forEach((medalha: { posicao: string; quantidade: number }) => {
+        switch (medalha.posicao) {
+          case 'Medalha de ouro':
+            setMedalhaOuro(medalha.quantidade);
+            break;
+          case 'Medalha de prata':
+            setMedalhaPrata(medalha.quantidade);
+            break;
+          case 'Medalha de bronze':
+            setMedalhaBronze(medalha.quantidade);
+            break;
+          default:
+            break;
+        }
+      });
+    }  catch (error) {
       console.error("Erro ao obter dados do atleta", error);
     }
   }, [params.id, setDadosAtleta]);
@@ -115,13 +144,13 @@ const Page = ({ params }: Props) => {
                     />
                     <div className="bottom-0 left-0 w-full flex justify-between">
                       <div className="w-1/3 text-center text-white font-semibold">
-                        99
+                        {medalhaOuro}
                       </div>
                       <div className="w-1/3 text-center text-white font-semibold">
-                        99
+                        {medalhaPrata}
                       </div>
                       <div className="w-1/3 text-center text-white font-semibold">
-                        99
+                        {medalhaBronze}
                       </div>
                     </div>
                   </div>
@@ -133,7 +162,7 @@ const Page = ({ params }: Props) => {
             <button onClick={handleLesoesClick} className="text-xs bg-gray-300 hover:bg-blue-500 text-black font-semibold py-2 px-2 rounded-md">
               Lesões
             </button>
-            <button className="text-xs bg-gray-300 hover:bg-blue-500 text-black font-semibold py-2 px-2 rounded-md">
+            <button onClick={handleFrequenciaClick} className="text-xs bg-gray-300 hover:bg-blue-500 text-black font-semibold py-2 px-2 rounded-md">
               Frequência
             </button>
             <button className="text-xs bg-gray-300 hover:bg-blue-500 text-black font-semibold py-2 px-2 rounded-md">
@@ -144,6 +173,9 @@ const Page = ({ params }: Props) => {
             </button>
           </section>
           <div>
+            {frequencia && <div className="max-w-full">
+              <Frequency id={params.id}/>
+            </div>}
             {grafico && <div className="max-w-full">
               <ReviewsChart id={params.id}/>
             </div>}
