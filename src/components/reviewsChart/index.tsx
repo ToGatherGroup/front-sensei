@@ -36,17 +36,17 @@ export const ReviewsChart = (id: number | string) => {
   }, [get, id]);
 
   const chartData = {
-    //labels: apiData ? apiData.labels : [],
-    labels: [
-      "Core",
-      "Explosiva",
-      "Isométrica",
-      "Tornozelo",
-      "Abdominal",
-      "MMSS",
-      "Anaeróbica",
-      "Aeróbica",
-    ],
+    labels: apiData ? apiData.labels : [],
+    // labels: [
+    //   "Core",
+    //   "Explosiva",
+    //   "Isométrica",
+    //   "Tornozelo",
+    //   "Abdominal",
+    //   "MMSS",
+    //   "Anaeróbica",
+    //   "Aeróbica",
+    // ],
     datasets: [
       {
         label: "Avaliação Atual",
