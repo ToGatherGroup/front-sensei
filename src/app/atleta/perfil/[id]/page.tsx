@@ -9,6 +9,8 @@ import { useEffect, useState, useCallback } from "react";
 import Injuries from "@/components/injuries";
 import { ReviewsChart } from "@/components/reviewsChart";
 import Frequency from "@/components/frequency";
+import Back from "../../../../../public/svg/injuries/Back";
+import Front from "../../../../../public/svg/injuries/Front";
 
 type Params = {
   id: string;
@@ -60,6 +62,19 @@ const Page = ({ params }: Props) => {
     setQualitativos(true);
   };
 
+  const athleteInfo = [
+    { label: dadosAtleta?.nome },
+    { label: dadosAtleta?.faixa },
+    { label: dadosAtleta?.categoria }
+  ];
+
+  const buttons = [
+    { label: 'Lesões', onClick: handleLesoesClick },
+    { label: 'Frequência', onClick: handleFrequenciaClick },
+    { label: 'Qualitativos', onClick: handleQualitativoClick },
+    { label: 'Gráfico', onClick: handleGraficoClick }
+  ];
+
   const getDadosAtleta = useCallback(async () => {
     try {
       const response = await axios.get(`/atleta/ficha/${params.id}`);
@@ -92,20 +107,13 @@ const Page = ({ params }: Props) => {
     getDadosAtleta();
   }, [getDadosAtleta]);
 
-  const buttons = [
-    { label: 'Lesões', onClick: handleLesoesClick },
-    { label: 'Frequência', onClick: handleFrequenciaClick },
-    { label: 'Qualitativos', onClick: handleQualitativoClick },
-    { label: 'Gráfico', onClick: handleGraficoClick }
-  ];
-
   const renderButtons = () => (
-    <section className="flex mt-6 space-x-1">
+    <section className="flex mt-6 space-x-1 lg:">
       {buttons.map((button, index) => (
         <button
           key={index}
           onClick={button.onClick}
-          className="text-xs bg-gray-300 hover:bg-blue-500 text-black font-semibold py-2 px-2 rounded-md"
+          className=" lg:px-7 lg:py-3 lg:text-lg text-xs bg-gray-300 hover:bg-blue-500 text-black font-semibold py-2 px-2 rounded-md"
         >
           {button.label}
         </button>
@@ -113,12 +121,21 @@ const Page = ({ params }: Props) => {
     </section>
   );
 
+  const renderAthleteInfo = () => (
+    <div className="flex flex-col items-center space-y-2 lg:space-y-6">
+      {athleteInfo.map((info, index) => (
+        <div key={index} className="outline outline-offset-2 outline-winePattern bg-gray-300 p-2 rounded-md text-center text-black flex justify-center items-center w-60 h-7">
+          <h4 className="text-lg font-semibold">{info.label}</h4>
+        </div>
+      ))}
+    </div>
+  );
+
   return (
     <div className="flex justify-center h-screen">
-      <div className="flex mt-8">
-        <section className="flex flex-col lg:flex-row">
+        <section className="flex flex-col lg:flex-row lg:justify-around lg:w-full">
           <div> {/* Seção lateral esquerda Inicio */}
-            <div className="flex justify-center space-x-6 mb-4">
+            <div className="flex justify-center space-x-6 mb-4 mt-6">
               <Image
                 src="/icons/avaliacao_fisica.png"
                 alt="Ícone Avaliação Física"
@@ -149,18 +166,8 @@ const Page = ({ params }: Props) => {
               size="big"
             />
             <section>
-              <div className="flex flex-col items-center space-y-2">
-                <div className="outline outline-offset-2 outline-winePattern bg-gray-300 p-2 rounded-md text-center text-black flex justify-center items-center w-60 h-7">
-                  <h4 className="text-lg font-semibold">{dadosAtleta?.nome}</h4>
-                </div>
-                <div className="outline outline-offset-2 outline-winePattern bg-gray-300 p-2 rounded-md text-center text-black flex justify-center items-center w-60 h-7">
-                  <h4 className="text-lg font-semibold">{dadosAtleta?.faixa}</h4>
-                </div>
-                <div className="outline outline-offset-2 outline-winePattern bg-gray-300 p-2 rounded-md text-center text-black flex justify-center items-center w-60 h-7">
-                  <h4 className="text-lg font-semibold">
-                    {dadosAtleta?.categoria}
-                  </h4>
-                </div>
+              <div className="flex flex-col items-center space-y-2 lg:space-y-6">
+                {renderAthleteInfo()}
                 <div>
                   <Image
                     src="/formAtleta/medals/medalhasLight.png"
@@ -190,16 +197,17 @@ const Page = ({ params }: Props) => {
               {qualitativos && <div></div>}
               {frequencia && <div><Frequency id={params.id} /></div>}
               {grafico && <div><ReviewsChart id={params.id} /></div>}
-              {/*
-              lesões está setada com valores difíceis de manipular, postergarei a implementação
-              {lesoes && <div className="max-w-full"><Injuries injuries={[]} type={"back"}/></div>}
-              */}
+              
+              {/* lesões está setada com valores difíceis de manipular, postergarei a implementação */}
+              {lesoes && <div className="w-12 h-12" >
+                {/* <Back injuries={[]}></Back> */}
+                <Front injuries={[]}></Front>
+                                </div>}
+             
             </div>
           </div> {/* Seção Botões Fim */}
         </section>
       </div>
-      <Frequency id={params.id} />
-    </div>
   );
 };
 
