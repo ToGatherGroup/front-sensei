@@ -6,12 +6,16 @@ import { Radar } from "react-chartjs-2";
 
 Chart.register(...registerables);
 
+type ReviewsChartProps = {
+  id: number | string;
+};
+
 interface IApiData {
   labels: string[];
   values: number[];
 }
 
-export const ReviewsChart = (id: number | string) => {
+export const ReviewsChart = ({ id }: ReviewsChartProps) => {
   const [apiData, setApiData] = useState<IApiData | null>(null);
   const { get } = useApiProvider();
 
