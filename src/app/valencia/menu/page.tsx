@@ -29,7 +29,7 @@ const RenderList = ({ items, isIMC }: { items: typeof AVALIACOES_FISICAS | typeo
 );
 
 const MenuAvaliacaoPage = () => {
-    const {isLoading, allAssessmentsComplete, modalVisible, error, closeModal, clearError, getAllIncompleteAssessments} = useAssessmentsProvider();
+    const {isLoading, allAssessmentsComplete, modalVisible, error, closeModal, clearError, getAllIncompleteAssessments, createAssessments} = useAssessmentsProvider();
 
     useEffect(() => {
         getAllIncompleteAssessments();
@@ -45,7 +45,7 @@ const MenuAvaliacaoPage = () => {
                 {modalVisible && error == '' && (
                     <div className='absolute min-h-screen w-full flex items-center justify-center bg-black/40 z-50 px-3.5'>
                         {allAssessmentsComplete && (
-                            <Modal title='Deseja criar novas avaliações?' closeModal={closeModal} button={true} buttonText='Criar' buttonClick={closeModal} />
+                            <Modal title='Deseja criar novas avaliações?' closeModal={closeModal} button={true} buttonText='Criar' buttonClick={createAssessments} />
                         )}
                     </div>
                 )}

@@ -25,17 +25,17 @@ const initialState = {
     allAssessmentsComplete: false,
     modalVisible: false,
     listAthletes: null,
-    createAssessments: () => {},
-    getIncompleteAssessments: () => {},
-    getAllIncompleteAssessments: () => {},
-    closeModal: () => {},
-    clearError: () => {},
-    clearSuccess: () => {},
+    createAssessments: () => { },
+    getIncompleteAssessments: () => { },
+    getAllIncompleteAssessments: () => { },
+    closeModal: () => { },
+    clearError: () => { },
+    clearSuccess: () => { },
 }
 
 const AssessmentsContext = createContext<AssessmentsState>(initialState);
 
-export const AssessmentsProvider = ({ children }: {children: React.ReactNode}) => {
+export const AssessmentsProvider = ({ children }: { children: React.ReactNode }) => {
     const { get, post } = useApiProvider();
     const [success, setSuccess] = useState<string>('');
     const [error, setError] = useState<string>('');
@@ -58,9 +58,9 @@ export const AssessmentsProvider = ({ children }: {children: React.ReactNode}) =
             const response = await get('/avaliacoes_incompletas/verificar');
             // Este endpoint retorna se há avaliações incompletas (True ou false)
             // A negação feita abaixo para saber se aparece ou não o modal de criação de nova avaliação;
-            if(response) {
-                setModalVisible(!response?.data); 
-                setAllAssessmentsComplete(!response?.data);    
+            if (response) {
+                setModalVisible(!response?.data);
+                setAllAssessmentsComplete(!response?.data);
             }
         } catch (error) {
             setError("Erro ao carregar a lista de avaliações incompletas");
@@ -72,25 +72,25 @@ export const AssessmentsProvider = ({ children }: {children: React.ReactNode}) =
     const getIncompleteAssessments = async (slug: string) => {
         setIsLoading(true)
         clearStates();
-        if(slug == '') return;
+        if (slug == '') return;
         try {
             const response = await get(`/avaliacoes_incompletas/${slug}`);
-                    
-            if(response?.data.length > 0) {
-                response?.data.sort((a:any, b:any) => {
+
+            if (response?.data.length > 0) {
+                response?.data.sort((a: any, b: any) => {
                     const nomeA = a.nome.toLowerCase();
                     const nomeB = b.nome.toLowerCase();
-                    
+
                     if (nomeA < nomeB) {
-                      return -1;
+                        return -1;
                     }
                     if (nomeA > nomeB) {
-                      return 1;
+                        return 1;
                     }
                     return 0;
-                  });
-                  
-                setListAthletes(response)    
+                });
+
+                setListAthletes(response)
             } else {
                 setSuccess(`Todas as avaliações dessa valência física foram feitas.`)
             }
@@ -105,8 +105,8 @@ export const AssessmentsProvider = ({ children }: {children: React.ReactNode}) =
         setIsLoading(true)
         clearStates();
         try {
-            const response = await post('/avaliacao/coletiva', {});
-    
+            const response = await post('/avaliacaocoletiva', {});
+
             if (response?.status == 204 || response?.status == 200) {
                 router.push('/valencia/menu')
             }
@@ -136,7 +136,7 @@ export const AssessmentsProvider = ({ children }: {children: React.ReactNode}) =
     }
 
     return (
-        <AssessmentsContext.Provider value={{isLoading, success, error, allAssessmentsComplete, modalVisible, listAthletes, createAssessments, closeModal, clearError, clearSuccess, getAllIncompleteAssessments, getIncompleteAssessments}}>
+        <AssessmentsContext.Provider value={{ isLoading, success, error, allAssessmentsComplete, modalVisible, listAthletes, createAssessments, closeModal, clearError, clearSuccess, getAllIncompleteAssessments, getIncompleteAssessments }}>
             {children}
         </AssessmentsContext.Provider>
     )
