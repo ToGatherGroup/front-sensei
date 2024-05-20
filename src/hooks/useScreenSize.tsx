@@ -1,4 +1,3 @@
-// useScreenSize.js
 import { useState, useEffect } from 'react';
 
 const useScreenSize = () => {
