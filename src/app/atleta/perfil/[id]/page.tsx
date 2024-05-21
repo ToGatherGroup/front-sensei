@@ -3,15 +3,17 @@
 import AvatarAtleta from "@/components/avatarAtleta/page";
 import { Atletas } from "@/mock/atletas";
 import { TAtleta } from "@/types/TAtleta";
-import Image from "next/image";
-import { axios } from "@/api/api"; // Importe o tipo AtletaData aqui
+import { axios } from "@/api/api";
 import { useEffect, useState, useCallback } from "react";
 import useScreenSize from "@/hooks/useScreenSize";
 import Injuries from "@/components/injuries";
 import { ReviewsChart } from "@/components/reviewsChart";
 import Frequency from "@/components/frequency";
-import Back from "../../../../../public/svg/injuries/Back";
-import Front from "../../../../../public/svg/injuries/Front";
+import Link from "next/link";
+import { useAthleteProvider } from "@/contexts";
+
+
+useAthleteProvider
 
 type Params = {
   id: string;
@@ -22,7 +24,7 @@ type Props = {
 };
 
 const Page = ({ params }: Props) => {
-  const atleta: TAtleta = Atletas[parseInt(params.id)];
+  //const atleta: TAtleta = Atletas[parseInt(params.id)];
   const [dadosAtleta, setDadosAtleta] = useState<any | null>(null);
   const [lesoes, setLesoes] = useState<any | null>(null);
   const [grafico, setGrafico] = useState<any | null>(null);
@@ -43,6 +45,7 @@ const Page = ({ params }: Props) => {
     console.log("Lesões");
     untoggleAll();
     setLesoes(true);
+   // console.log(listAthletes)
   };
 
   const handleGraficoClick = () => {
@@ -64,9 +67,9 @@ const Page = ({ params }: Props) => {
   };
 
   const athleteInfo = [
-    { label: dadosAtleta?.nome },
     { label: dadosAtleta?.faixa },
-    { label: dadosAtleta?.categoria }
+    { label: dadosAtleta?.idade + " anos"},
+    { label: dadosAtleta?.categoria ? dadosAtleta?.categoria : "Sem categoria" },
   ];
 
   const buttons = [
@@ -139,16 +142,22 @@ const Page = ({ params }: Props) => {
       <section className="flex flex-col lg:flex-row lg:justify-around lg:w-full">
         <div> {/* Seção lateral esquerda Inicio */}
           <div className="flex justify-center space-x-6 mb-4 mt-6 lg:space-x-10 lg:mt-8 lg:mb-8">
-            <img src="/icons/avaliacao_fisica.png" alt="Ícone Postura" className="bg-white rounded-lg p-1 object-contain w-12 h-12 lg:w-16 lg:h-16" />
-            <img src="/icons/campeonato.png" alt="Ícone Postura" className="bg-white rounded-lg p-1 object-contain w-12 h-12 lg:w-16 lg:h-16" />
-            <img src="/icons/postura.png" alt="Ícone Postura" className="bg-white rounded-lg p-1 object-contain w-12 h-12 lg:w-16 lg:h-16" />
+            <Link href="/aDecidir">
+              <img src="/icons/avaliacao_fisica.png" alt="Ícone Postura" className="bg-white rounded-lg p-1 object-contain w-12 h-12 lg:w-16 lg:h-16" />
+            </Link>
+            <Link href="/aDecidir">
+              <img src="/icons/campeonato.png" alt="Ícone Postura" className="bg-white rounded-lg p-1 object-contain w-12 h-12 lg:w-16 lg:h-16" />
+            </Link>
+            <Link href="/aDecidir">
+              <img src="/icons/postura.png" alt="Ícone Postura" className="bg-white rounded-lg p-1 object-contain w-12 h-12 lg:w-16 lg:h-16" />
+            </Link>
           </div>
           <AvatarAtleta
-            id={atleta.id}
-            name={atleta.name}
-            belt={atleta.belt}
-            photo={atleta.photo}
-            size={screenSize.width > 1024 ? "big" : "small"} // Operador ternario com window size?
+            id={params.id}
+            name={dadosAtleta?.nome}
+            belt={dadosAtleta?.faixa}
+            photo={dadosAtleta?.foto}
+            size={screenSize.width > 1024 ? "big" : "small"}
           />
           <section>
             <div className="flex flex-col items-center space-y-2 lg:space-y-6">
