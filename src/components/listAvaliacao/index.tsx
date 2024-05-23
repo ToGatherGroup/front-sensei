@@ -21,9 +21,14 @@ type FormValues = {
     [key: number]: string;
 };
 
+type TimeValues = {
+    [key: number]: { minutes: number, seconds: number };
+};
+
 export default function ListAvaliacao({ isIMC, identificador }: ListAvaliacaoProps) {
     const { collectiveAssessment, success, error } = useAthleteProvider()
     const [formValues, setFormValues] = useState<FormValues>({});
+    const [timeValues, setTimeValues] = useState<TimeValues>({});
     const {isLoading, error: errorAssessments, listAthletes, success: successAssessments, clearError, clearSuccess, getIncompleteAssessments} = useAssessmentsProvider();
     const [currentDate, setCurrentDate] = useState<string>('');
     const [tituloAvaliacao, setTituloAvaliacao] = useState<string>('Avaliação');
@@ -32,28 +37,41 @@ export default function ListAvaliacao({ isIMC, identificador }: ListAvaliacaoPro
 
     const router = useRouter()
 
-    const handleInputChange = (athleteId: number, value: string, altInput: boolean) => {
+    const handleInputChange = (athleteId: number, value: string) => {
         let filteredValue = value.replace(/[^0-9.,]/g, '');
         setFormValues(prevValues => ({ ...prevValues, [athleteId]: filteredValue }));
     };
 
-    const handleTimeChange = (minutes: number, seconds: number) => {
-        console.log(`Tempo atualizado: ${minutes} minutos e ${seconds} segundos`);
+    const handleTimeChange = (athleteId: number, minutes: number, seconds: number) => {
+        setTimeValues(prevValues => ({ ...prevValues, [athleteId]: { minutes, seconds } }));
+    };
+
+    const convertTime = (minutes: number, seconds: number) => {
+        return `PT${minutes}M${seconds}S`;
     };
 
     const handleSubmit = (tipoValencia: string) => (event: React.FormEvent) => {
         event.preventDefault();
-        if (formValues && Object.keys(formValues).length > 0) {
-        
-            const payload = Object.entries(formValues).map(([athleteId, value]) => ({
-                resultado: {
-                    [tipoValencia]: parseFloat(value),
-                },
-                atletaId: parseInt(athleteId, 10)
-            }));
-            console.log("Payload para API:", JSON.stringify(payload));
-            collectiveAssessment(payload);
-        }
+        const payload = Object.entries(tipoAvaliacao.key === "Tempo" ? timeValues : formValues).map(([athleteId, value]) => {
+            if (tipoAvaliacao.key === "Tempo") {
+                const { minutes, seconds } = value as { minutes: number, seconds: number };
+                return {
+                    resultado: {
+                        [tipoValencia]: convertTime(minutes, seconds),
+                    },
+                    atletaId: parseInt(athleteId, 10)
+                };
+            } else {
+                return {
+                    resultado: {
+                        [tipoValencia]: parseFloat(value as string),
+                    },
+                    atletaId: parseInt(athleteId, 10)
+                };
+            }
+        });
+        console.log("Payload para API:", JSON.stringify(payload));
+       collectiveAssessment(payload);
     };
 
     const getDate = () => {
@@ -124,7 +142,7 @@ export default function ListAvaliacao({ isIMC, identificador }: ListAvaliacaoPro
                                     <span className={styles.athleteNameSpan}>{athlete?.nome}</span>
                                     <div className="flex flex-row space-x-2">
                                         {tipoAvaliacao.key == "Tempo" &&
-                                            <TimeInput onTimeChange={handleTimeChange} />
+                                            <TimeInput onTimeChange={(minutes, seconds) => handleTimeChange(athlete.id, minutes, seconds)} />
                                         }
                                         {tipoAvaliacao.key != "Tempo" &&
                                             <input
@@ -132,7 +150,7 @@ export default function ListAvaliacao({ isIMC, identificador }: ListAvaliacaoPro
                                                 placeholder={tipoAvaliacao.key}
                                                 type={tipoAvaliacao.value}
                                                 value={formValues[athlete.id] || ''}
-                                                onChange={(e) => handleInputChange(athlete.id, e.target.value, false)}
+                                                onChange={(e) => handleInputChange(athlete.id, e.target.value)}
                                                 className={`${styles.input} ${tipoAvaliacao.key == "Repeticao" ? "w-24" : ""}`}>
                                             </input>
                                         }
