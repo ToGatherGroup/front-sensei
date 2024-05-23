@@ -26,7 +26,7 @@ export default function ListAvaliacao({ isIMC, identificador }: ListAvaliacaoPro
     const [formValues, setFormValues] = useState<FormValues>({});
     const {isLoading, error: errorAssessments, listAthletes, success: successAssessments, clearError, clearSuccess, getIncompleteAssessments} = useAssessmentsProvider();
     const [currentDate, setCurrentDate] = useState<string>('');
-    const [tituloAvaliacao, setTituloAvaliacao] = useState<string>('');
+    const [tituloAvaliacao, setTituloAvaliacao] = useState<string>('Avaliação');
     const [tipoAvaliacao, setTipoAvaliacao] = useState<{key: string, value: string}>({key: '', value: ''});
     const [avaliacao, setAvaliacao] = useState<Assessment | null>(null);
 
@@ -69,21 +69,24 @@ export default function ListAvaliacao({ isIMC, identificador }: ListAvaliacaoPro
 
     useEffect(() => {
         setCurrentDate(getDate());
+
         const identificadorStr = String(identificador);
         const regex = /^(.+)-(.+)$/;
         const match = identificadorStr.match(regex);
         let identificadorSubItem = 0;
+        let newIdentificador = identificador;
+
         if (match) {
-            identificador = Number(match[1]);
+            newIdentificador = Number(match[1]);
             identificadorSubItem = Number(match[2]);
         }
-        
-        let assessmentIndex = identificadorSubItem && identificadorSubItem < 1 ? identificadorSubItem : 0;
+
+        let assessmentIndex = identificadorSubItem && identificadorSubItem <= 1 ? identificadorSubItem : 0;
         let assessment: Assessment | null = null;
 
-        if (Number(identificador) < Number(8)) {
-            assessment = AVALIACOES_FISICAS[Number(identificador)].assessments[assessmentIndex];
-            getIncompleteAssessments(AVALIACOES_FISICAS[Number(identificador)].assessments[assessmentIndex].slug);
+        if (Number(newIdentificador) < Number(8)) {
+            assessment = AVALIACOES_FISICAS[Number(newIdentificador)].assessments[assessmentIndex];
+            getIncompleteAssessments(AVALIACOES_FISICAS[Number(newIdentificador)].assessments[assessmentIndex].slug);
         } else {
             assessment = INDICES_FISICOS[0].assessments[assessmentIndex];
             getIncompleteAssessments(INDICES_FISICOS[0].assessments[assessmentIndex].slug);
