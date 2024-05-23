@@ -27,6 +27,7 @@ export default function ListAvaliacao({ isIMC, identificador }: ListAvaliacaoPro
     const [altFormValues, setAltFormValues] = useState<FormValues>({});
     const {isLoading, error: errorAssessments, listAthletes, success: successAssessments, clearError, clearSuccess, getIncompleteAssessments} = useAssessmentsProvider();
     const [currentDate, setCurrentDate] = useState<string>('');
+    const [isIMCState, setIsIMC] = useState<boolean>(false);
     const [tituloAvaliacao, setTituloAvaliacao] = useState<string>('');
     const [tipoAvaliacao, setTipoAvaliacao] = useState<{key: string, value: string}>({key: '', value: ''});
 
@@ -54,8 +55,21 @@ export default function ListAvaliacao({ isIMC, identificador }: ListAvaliacaoPro
         console.log(`tituloAvaliacao: ${tituloAvaliacao}`)
         console.log(`tipoAvaliacao: ${tipoAvaliacao}`)
         console.log(`formValues: ${JSON.stringify(formValues)}`);
-        console.log(`altFormValues: ${JSON.stringify(altFormValues)}`);
+
+        const payload = Object.entries(formValues).map(([athleteId, value]) => ({
+            resultado: {
+                peso: parseFloat(value),  // Supondo que "peso" é o campo necessário
+            },
+            atletaId: parseInt(athleteId, 10)
+        }));
+
+        console.log("Payload para API:", JSON.stringify(payload));
+        console.log("is IMC STATE", isIMCState)
+
     };
+
+        // Transform formValues to API expected format
+
 
     const getDate = () => {
         const today = new Date();
@@ -85,16 +99,21 @@ export default function ListAvaliacao({ isIMC, identificador }: ListAvaliacaoPro
         let assessment: Assessment | null = null;
 
         if (Number(identificador) < Number(8)) {
+            console.log("Entrei lá")
             assessment = AVALIACOES_FISICAS[Number(identificador)].assessments[assessmentIndex];
             getIncompleteAssessments(AVALIACOES_FISICAS[Number(identificador)].assessments[assessmentIndex].slug);
         } else {
+            console.log("Entrei aqui")
             assessment = INDICES_FISICOS[0].assessments[assessmentIndex];
             getIncompleteAssessments(INDICES_FISICOS[0].assessments[assessmentIndex].slug);
-            isIMC = true;
+            setIsIMC(true);
         }
 
         setTituloAvaliacao(assessment.altTitle ? assessment.altTitle : assessment.title);
         setTipoAvaliacao(assessment.type);
+
+        console.log("iS IMC", isIMC)
+        console.log("is IMC STATE", isIMCState)
 
     }, [identificador]);
 
@@ -121,21 +140,10 @@ export default function ListAvaliacao({ isIMC, identificador }: ListAvaliacaoPro
                         </div>
 
                         <ul className="w-full xl:mb-10 md:mb-7 sm:mb-5 mb-5">
-                            {isIMC && <div className="flex flex-row space-x-2 justify-end"><h3 className={styles.inputHeader}>Peso:</h3> <h3 className={styles.inputHeader}>Altura:</h3></div>}
                             {listAthletes?.data?.map((athlete) => (
                                 <li key={athlete.id} className={styles.listItem}>
                                     <span className={styles.athleteNameSpan}>{athlete?.nome}</span>
                                     <div className="flex flex-row space-x-2">
-                                        {isIMC &&
-                                            <input
-                                                id="idAthlete"
-                                                placeholder="Kg"
-                                                type="number"
-                                                key={athlete?.id}
-                                                value={altFormValues[athlete.id] || ''}
-                                                onChange={(e) => handleInputChange(athlete.id, e.target.value, true)}
-                                                className={(styles.input)}>
-                                            </input>}
                                         {tipoAvaliacao.key == "Tempo" &&
                                             <TimeInput onTimeChange={handleTimeChange} />
                                         }

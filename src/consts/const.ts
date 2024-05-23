@@ -63,7 +63,8 @@ export const AVALIACOES_FISICAS = [
       key: 8,
       itemTitle: 'IMC',
       assessments: [
-        { title: 'Avaliação IMC', slug: 'peso', type: { key: "Cm", value: "number" }},
+        { title: 'Peso', slug: 'peso', type: { key: "Kg", value: "number" }},
+        { title: 'Altura', slug: 'altura', type: { key: "Cm", value: "number" }},
       ],
     },
   ]
