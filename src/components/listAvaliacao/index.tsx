@@ -130,7 +130,7 @@ export default function ListAvaliacao({ isIMC, identificador }: ListAvaliacaoPro
                             <Modal title='Tudo certo!' text={successAssessments} closeModal={clearSuccess} button={true} buttonText="Voltar ao menu" buttonClick={goToMenu} />
                         </div>
                     )}
-                    <FormWrapper header={tituloAvaliacao} handleSubmit={handleSubmit(avaliacao?.slug ? avaliacao?.slug : "fudeu")}>
+                    <FormWrapper header={tituloAvaliacao} handleSubmit={handleSubmit(avaliacao?.slug ? avaliacao?.slug : "")}>
                         <div className="flex items-center justify-center mb-4">
                             <label className="block text-gray-700 mr-2">Data:</label>
                             <input type="text" disabled readOnly className={styles.dateInput} value={currentDate} />
