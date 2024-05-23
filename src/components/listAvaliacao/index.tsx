@@ -22,23 +22,18 @@ type FormValues = {
 };
 
 export default function ListAvaliacao({ isIMC, identificador }: ListAvaliacaoProps) {
-    const { call, success, error } = useAthleteProvider()
+    const { collectiveAssessment, success, error } = useAthleteProvider()
     const [formValues, setFormValues] = useState<FormValues>({});
-    const [altFormValues, setAltFormValues] = useState<FormValues>({});
     const {isLoading, error: errorAssessments, listAthletes, success: successAssessments, clearError, clearSuccess, getIncompleteAssessments} = useAssessmentsProvider();
     const [currentDate, setCurrentDate] = useState<string>('');
-    const [isIMCState, setIsIMC] = useState<boolean>(false);
     const [tituloAvaliacao, setTituloAvaliacao] = useState<string>('');
     const [tipoAvaliacao, setTipoAvaliacao] = useState<{key: string, value: string}>({key: '', value: ''});
+    const [avaliacao, setAvaliacao] = useState<Assessment | null>(null);
 
     const router = useRouter()
 
     const handleInputChange = (athleteId: number, value: string, altInput: boolean) => {
         let filteredValue = value.replace(/[^0-9.,]/g, '');
-        if (altInput) {
-            setAltFormValues(prevValues => ({ ...prevValues, [athleteId]: filteredValue }));
-            return;
-        }
         setFormValues(prevValues => ({ ...prevValues, [athleteId]: filteredValue }));
     };
 
@@ -46,30 +41,20 @@ export default function ListAvaliacao({ isIMC, identificador }: ListAvaliacaoPro
         console.log(`Tempo atualizado: ${minutes} minutos e ${seconds} segundos`);
     };
 
-    const handleSubmit = (event: React.FormEvent) => {
+    const handleSubmit = (tipoValencia: string) => (event: React.FormEvent) => {
         event.preventDefault();
-        // Console.log enquanto não houver integração com API
-        console.log(`identificador: ${identificador}`)
-        console.log(`isIMC: ${isIMC}`)
-        console.log(`currentDate: ${currentDate}`)
-        console.log(`tituloAvaliacao: ${tituloAvaliacao}`)
-        console.log(`tipoAvaliacao: ${tipoAvaliacao}`)
-        console.log(`formValues: ${JSON.stringify(formValues)}`);
-
-        const payload = Object.entries(formValues).map(([athleteId, value]) => ({
-            resultado: {
-                peso: parseFloat(value),  // Supondo que "peso" é o campo necessário
-            },
-            atletaId: parseInt(athleteId, 10)
-        }));
-
-        console.log("Payload para API:", JSON.stringify(payload));
-        console.log("is IMC STATE", isIMCState)
-
+        if (formValues && Object.keys(formValues).length > 0) {
+        
+            const payload = Object.entries(formValues).map(([athleteId, value]) => ({
+                resultado: {
+                    [tipoValencia]: parseFloat(value),
+                },
+                atletaId: parseInt(athleteId, 10)
+            }));
+            console.log("Payload para API:", JSON.stringify(payload));
+            collectiveAssessment(payload);
+        }
     };
-
-        // Transform formValues to API expected format
-
 
     const getDate = () => {
         const today = new Date();
@@ -81,8 +66,6 @@ export default function ListAvaliacao({ isIMC, identificador }: ListAvaliacaoPro
     const goToMenu = () => {
         router.push('/valencia/menu')
     }
-
-    console.log(successAssessments)
 
     useEffect(() => {
         setCurrentDate(getDate());
@@ -99,22 +82,15 @@ export default function ListAvaliacao({ isIMC, identificador }: ListAvaliacaoPro
         let assessment: Assessment | null = null;
 
         if (Number(identificador) < Number(8)) {
-            console.log("Entrei lá")
             assessment = AVALIACOES_FISICAS[Number(identificador)].assessments[assessmentIndex];
             getIncompleteAssessments(AVALIACOES_FISICAS[Number(identificador)].assessments[assessmentIndex].slug);
         } else {
-            console.log("Entrei aqui")
             assessment = INDICES_FISICOS[0].assessments[assessmentIndex];
             getIncompleteAssessments(INDICES_FISICOS[0].assessments[assessmentIndex].slug);
-            setIsIMC(true);
         }
-
         setTituloAvaliacao(assessment.altTitle ? assessment.altTitle : assessment.title);
         setTipoAvaliacao(assessment.type);
-
-        console.log("iS IMC", isIMC)
-        console.log("is IMC STATE", isIMCState)
-
+        setAvaliacao(assessment);
     }, [identificador]);
 
     return (
@@ -133,7 +109,7 @@ export default function ListAvaliacao({ isIMC, identificador }: ListAvaliacaoPro
                             <Modal title='Tudo certo!' text={successAssessments} closeModal={clearSuccess} button={true} buttonText="Voltar ao menu" buttonClick={goToMenu} />
                         </div>
                     )}
-                    <FormWrapper header={tituloAvaliacao} handleSubmit={handleSubmit}>
+                    <FormWrapper header={tituloAvaliacao} handleSubmit={handleSubmit(avaliacao?.slug ? avaliacao?.slug : "fudeu")}>
                         <div className="flex items-center justify-center mb-4">
                             <label className="block text-gray-700 mr-2">Data:</label>
                             <input type="text" disabled readOnly className={styles.dateInput} value={currentDate} />
