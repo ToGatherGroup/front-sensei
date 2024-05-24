@@ -5,11 +5,12 @@ import styles from "./campeonatos.module.css";
 import { useForm } from "react-hook-form";
 import FormTitle from "@/components/Title/formTitle/index";
 import axios from "axios";
+import { useApiProvider } from "@/contexts";
 
 // Configuração da API
-const api = axios.create({
-  baseURL: "https://sensei.squareweb.app/",
-});
+// const api = axios.create({
+//   baseURL: "https://sensei.squareweb.app/",
+// });
 
 // Definição do tipo de dados do formulário
 type FormData = {
@@ -19,52 +20,47 @@ type FormData = {
   atletaModel: string | number;
 };
 
-// Função para enviar o formulário
-const submitForm = async (data: FormData) => {
-  try {
-    const response = await api.post(
-      "campeonato",
-      {
-        nome: data.name,
-        data: data.date,
-        posicaoPodium: data.position,
-        atletaModel: {
-          id: data.atletaModel,
-        },
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    if (response.status !== 200) {
-      throw new Error("Erro ao cadastrar campeonato");
-    }
-    console.log("Campeonato cadastrado com sucesso!");
-  } catch (error) {
-    console.error("Erro ao cadastrar campeonato Api:", error);
-    throw error;
-  }
-};
-
 // Página de cadastro de campeonatos do atleta
-const AtletaCampeonatos = (atletaId: number | string) => {
-  // ID estático do atleta
-  // const atletaId = "2";
+const AtletaCampeonatos = ({ id }: { id: number | string }) => {
+  // ID estático do atleta, para usá-lo remover o id acima que está como parâmetro
+  //const id = 2;
+  const { post } = useApiProvider();
 
   // Configuração do formulário
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<FormData>();
+
+  // Função para enviar o formulário
+  const submitForm = async (data: FormData) => {
+    try {
+      const response = await post("campeonato", {
+        nome: data.name,
+        data: data.date,
+        posicaoPodium: data.position,
+        atletaModel: {
+          id: data.atletaModel,
+        },
+      });
+      if (response?.status !== 200) {
+        throw new Error("Erro ao cadastrar campeonato");
+      }
+      console.log("Campeonato cadastrado com sucesso!");
+    } catch (error) {
+      console.error("Erro ao cadastrar campeonato Api:", error);
+      throw error;
+    }
+  };
 
   // Função para submeter o formulário
   const onSubmit = async (data: FormData) => {
     try {
-      data.atletaModel = atletaId; // Adiciona o ID do atleta ao dado do formulário
+      data.atletaModel = id; // Adiciona o ID do atleta ao dado do formulário
       await submitForm(data);
+      reset();
     } catch (error) {
       console.error("Erro ao cadastrar campeonato Submit:", error);
     }
@@ -131,12 +127,19 @@ const AtletaCampeonatos = (atletaId: number | string) => {
                 {...register("position", { required: true })}
                 className="bg-gray-200 w-72 px-4 py-2 rounded"
               >
+                <option value="" hidden>
+                  Escolha a posição
+                </option>
                 <option value="PRIMEIRO">Primeiro Colocado</option>
                 <option value="SEGUNDO">Segundo Colocado</option>
                 <option value="TERCEIRO">Terceiro Colocado</option>
                 <option value="PARTICIPACAO">Participação</option>
               </select>
-              {errors.position && <span>Este campo é obrigatório</span>}
+              {errors.position && (
+                <p className="text-center text-red-500 p-2">
+                  Este campo é obrigatório
+                </p>
+              )}
             </div>
             <div className="my-20">
               <Button label="cadastrar" type="submit" />
