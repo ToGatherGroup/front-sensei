@@ -10,28 +10,28 @@ export const AVALIACOES_FISICAS = [
       key: 1,
       itemTitle: 'Força Máxima',
       assessments: [
-        { title: '1RM Terra', slug: 'rmTerra', type: { key: "Kg", value: "number" }},
+        { title: '1RM Terra', slug: 'rm_terra', slugCamelCase: 'rmTerra' , type: { key: "Kg", value: "number" }},
       ],
     },
     {
       key: 2,
       itemTitle: 'Força Explosiva',
       assessments: [
-        { title: 'Impulsão Vertical', slug: 'impulsaoVertical', type: { key: "Cm", value: "number" }},
+        { title: 'Impulsão Vertical', slug: 'impulsao_vertical' , slugCamelCase: 'impulsaoVertical', type: { key: "Cm", value: "number" }},
       ],
     },
     {
       key: 3,
       itemTitle: 'Força Isométrica',
       assessments: [
-        { title: 'Força de prensão manual com quimono', slug: 'forcaIsometricaMaos', type: { key: "Tempo", value: "time" } },
+        { title: 'Força de prensão manual com quimono', slug: 'forca_isometrica_maos', slugCamelCase: 'forcaIsometricaMaos', type: { key: "Tempo", value: "time" } },
       ],
     },
     {
       key: 4,
       itemTitle: 'Mobilidade do Tornozelo',
       assessments: [
-        { title: 'Lunge', slug: 'testeDeLunge', type: { key: "Cm", value: "number" }},
+        { title: 'Lunge', slug: 'teste_de_lunge', slugCamelCase: 'testeDeLunge', type: { key: "Cm", value: "number" }},
       ],
     },
     {

@@ -25,7 +25,7 @@ type TimeValues = {
     [key: number]: { minutes: number, seconds: number };
 };
 
-export default function ListAvaliacao({ isIMC, identificador }: ListAvaliacaoProps) {
+export default function ListAvaliacao({ identificador }: ListAvaliacaoProps) {
     const { collectiveAssessment, success, error } = useAthleteProvider()
     const [formValues, setFormValues] = useState<FormValues>({});
     const [timeValues, setTimeValues] = useState<TimeValues>({});
@@ -50,21 +50,21 @@ export default function ListAvaliacao({ isIMC, identificador }: ListAvaliacaoPro
         return `PT${minutes}M${seconds}S`;
     };
 
-    const handleSubmit = (tipoValencia: string) => (event: React.FormEvent) => {
+    const handleSubmit = (nomeValencia: string) => (event: React.FormEvent) => {
         event.preventDefault();
         const payload = Object.entries(tipoAvaliacao.key === "Tempo" ? timeValues : formValues).map(([athleteId, value]) => {
             if (tipoAvaliacao.key === "Tempo") {
                 const { minutes, seconds } = value as { minutes: number, seconds: number };
                 return {
                     resultado: {
-                        [tipoValencia]: convertTime(minutes, seconds),
+                        [nomeValencia]: convertTime(minutes, seconds),
                     },
                     atletaId: parseInt(athleteId, 10)
                 };
             } else {
                 return {
                     resultado: {
-                        [tipoValencia]: parseFloat(value as string),
+                        [nomeValencia]: parseFloat(value as string),
                     },
                     atletaId: parseInt(athleteId, 10)
                 };
@@ -130,7 +130,7 @@ export default function ListAvaliacao({ isIMC, identificador }: ListAvaliacaoPro
                             <Modal title='Tudo certo!' text={successAssessments} closeModal={clearSuccess} button={true} buttonText="Voltar ao menu" buttonClick={goToMenu} />
                         </div>
                     )}
-                    <FormWrapper header={tituloAvaliacao} handleSubmit={handleSubmit(avaliacao?.slug ? avaliacao?.slug : "")}>
+                    <FormWrapper header={tituloAvaliacao} handleSubmit={handleSubmit(avaliacao?.slugCamelCase ?? avaliacao?.slug ?? '')}>
                         <div className="flex items-center justify-center mb-4">
                             <label className="block text-gray-700 mr-2">Data:</label>
                             <input type="text" disabled readOnly className={styles.dateInput} value={currentDate} />
