@@ -1,10 +1,7 @@
 "use client";
-import { NextPageContext } from "next";
 import Button from "@/components/button";
-import styles from "./campeonatos.module.css";
 import { useForm } from "react-hook-form";
 import FormTitle from "@/components/Title/formTitle/index";
-import axios from "axios";
 import { useApiProvider } from "@/contexts";
 
 // Definição do tipo de dados do formulário
@@ -16,7 +13,7 @@ type FormData = {
 };
 
 // Página de cadastro de campeonatos do atleta
-const AtletaCampeonatos = ({ id }: { id: number | string }) => {
+const AtletaCampeonatos = (id: number | string) => {
   // ID estático do atleta, para usá-lo remover o id acima que está como parâmetro
   //const id = 2;
   const { post } = useApiProvider();
