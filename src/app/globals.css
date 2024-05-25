@@ -37,11 +37,23 @@
 .form-container {
   background-color: #fff;
   max-width: 1440px;
-  min-height: 100vh;
+  min-height: calc(100vh - 110px);
   padding: 40px;
   margin: 40px auto;
   box-sizing: border-box;
   border-radius: 5px;
+}
+
+@media (max-width: 1440px) { 
+  .max-container {
+    @apply mx-auto max-w-full w-full px-3;
+  }
+}
+
+@media (max-width: 600px) {
+  .form-container {
+    margin: 40px 10px;
+  }
 }
 
 /* Dark shadow above the background */
@@ -69,7 +81,44 @@
   .btn_white {
     @apply bg-white py-[10px] px-[60px] rounded-md font-bold uppercase cursor-pointer block text-base text-center text-black;
   }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    border-radius: 100vh;
+    background: #f7f4ed;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgb(71, 71, 71);
+    border-radius: 100vh;
+    border: 3px solid #f7f4ed;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #c0a0b9;
+  }
+  
 }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fadeIn {
+  animation: fadeIn 1s ease-out;
+}
+
 
 /* Forms */
 
@@ -97,6 +146,12 @@ textarea {
 
 select {
   cursor: pointer;
+}
+
+input {
+  background-color: #eee;
+  border-radius: 5px;
+  padding: 5px 5px 5px 10px;
 }
 
 input[type="date"] {

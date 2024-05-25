@@ -2,106 +2,38 @@
 
 import styles from "./formAtleta.module.css";
 import Image from "next/image";
-
 import Loading from "@/components/loading/index";
 import FormTitle from "@/components/Title/formTitle";
-
 import { useForm } from "react-hook-form";
 import { useState } from "react";
-
+import { TAtleta } from "@/types/TAtleta";
+import { atletaToApiPost } from "@/api/middleware/atleta";
+import axios from "axios";
+import { atletaCreateSchema } from "@/schemas/athleteSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-
-//Config for file upload
-const MAX_FILE_SIZE = 2 * 1000 * 1000; //MB to KB
-const validFileExtensions: string[] = ["image/png"];
-
-const atletaSchema = yup.object().shape({
-  avatar: yup
-    .mixed<FileList>()
-    .test(
-      "is-valid-size",
-      `Arquivo muito grande. Peso máximo: ${MAX_FILE_SIZE / 1000 / 1000} MB`,
-      (value) => {
-        console.log(value);
-        console.log(value && value[0]);
-        console.log("Max_File_Size: " + MAX_FILE_SIZE);
-        if (value && value.length <= 0) return true;
-        return value && value[0].size <= MAX_FILE_SIZE;
-      }
-    )
-    .test("is-valid-format", "Formato inválido. Use .PNG", (value) => {
-      if (value && value.length <= 0) return true;
-      return value && validFileExtensions.includes(value[0].type);
-    }),
-  name: yup.string().required("Este campo é obrigatório."),
-  email: yup.string().optional().email("Insira um e-mail válido"),
-  birthdate: yup
-    .date()
-    .min(new Date(1900, 0, 1), "Essa pessoa não é tão velha assim.")
-    .max(new Date(), "Insira uma data válida.")
-    .typeError("Insira uma data válida."),
-  sex: yup
-    .string()
-    .oneOf(["male", "female", "other"] as const, "Selecione o sexo.")
-    .required("Este campo é obrigatório.")
-    .typeError("Selecione o sexo."),
-  weight: yup
-    .string()
-    .matches(/\d+\.{0,1}\d{1,3}$/gm, "Insira um peso válido.")
-    .required("Este campo é obrigatório.")
-    .typeError("Insira o peso em quilogramas."),
-  height: yup
-    .number()
-    .integer("Insira a altura em centímetros.")
-    .required("Este campo é obrigatório.")
-    .typeError("Insira a altura em centímetros."),
-  faixa: yup
-    .string()
-    .oneOf(
-      [
-        "branca",
-        "cinza",
-        "azulClaro",
-        "azulEscuro",
-        "amarela",
-        "laranja",
-        "verde",
-        "roxa",
-        "marrom",
-        "preta",
-        "coral",
-        "vermelha",
-      ],
-      "Selecione uma faixa."
-    )
-    .required("Este campo é obrigatório.")
-    .typeError("Selecione a faixa."),
-});
-
-type Atleta = {
-  avatar: string;
-  name: string;
-  email?: string;
-  birthdate: Date;
-  sex: string;
-  weight: number | string;
-  height: number;
-  faixa: string;
-};
+import { useRouter } from "next/navigation";
+import { useApiProvider } from "@/contexts";
 
 type Props = {
-  atleta?: Atleta;
+  atleta?: TAtleta;
 };
 
+const api = axios.create({
+  baseURL: "https://sensei.squareweb.app/atleta",
+});
+
 const FormAtleta = ({ atleta }: Props) => {
+  const { post } = useApiProvider();
   const [avatarBase64, setAvatarBase64] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [disableSubmitBtn, setDisableSubmitBtn] = useState<boolean>(false);
+  const [athlete, setAthlete] = useState<TAtleta[]>([]);
 
-  //Load avatar if it exists
-  if (atleta?.avatar && avatarBase64 === "") {
-    setAvatarBase64(atleta.avatar);
+  const router = useRouter();
+
+  //Carrega o Avatar
+  if (atleta?.photo && avatarBase64 === "") {
+    setAvatarBase64(atleta.photo);
   }
 
   const {
@@ -112,15 +44,20 @@ const FormAtleta = ({ atleta }: Props) => {
     reset,
   } = useForm({
     mode: "onBlur",
-    resolver: yupResolver(atletaSchema),
+    resolver: yupResolver(atletaCreateSchema),
   });
+
   const onSubmit = (data: any) => {
-    file2Base64(data.avatar[0])
+    file2Base64(data.photo[0])
       .then((avatarBase64) => {
         console.log("Submeter a API aqui:");
         data.avatarBase64 = avatarBase64;
-        alert(`Objeto gerado com sucesso!\n\n${JSON.stringify(data)}`);
+        //alert(`Objeto gerado com sucesso!\n\n${JSON.stringify(data)}`);
+        const atletaData = atletaToApiPost(data);
         console.log(data);
+        console.log(atletaData);
+        console.log(JSON.stringify(atletaData));
+        submitForm(data);
       })
       .catch((error) => {
         alert(
@@ -129,28 +66,9 @@ const FormAtleta = ({ atleta }: Props) => {
         console.log(error);
       });
     reset();
+    setAvatarBase64("");
+    //router.push("/atleta/perfil/0");
   };
-
-  /* // Data for validation test
-  const data: Atleta = {
-    name: "Bruno Amado",
-    email: "2225973@hotmail.com",
-    birthdate: new Date(1990, 0, 0),
-    sex: "male",
-    weight: "10.50",
-    height: 172,
-    faixa: "azulClaro",
-  };
-
-  // Perform validation test
-  atletaSchema
-    .validate(data)
-    .then((valid) => {
-      console.log("Validou: " + valid);
-    })
-    .catch((error) => {
-      console.log("Não validou: " + error);
-    }); */
 
   //  Treatment for date before fill input (from GET)
   function twoDigits(n: number) {
@@ -177,25 +95,13 @@ const FormAtleta = ({ atleta }: Props) => {
     });
   };
 
-  /*   const fileToBase64 = (file: File) => {
-    let reader = new FileReader();
-
-    reader.onloadstart = () => console.log("Carregando imagem...");
-    reader.onloadend = () => {
-      const base64 = reader.result as string;
-      setAvatar(base64);
-    };
-
-    reader.readAsDataURL(file);
-  }; */
-
   const uploadAvatar = (event: EventListener) => {
     console.log("Realizando upload...");
-    console.log(getValues("avatar"));
+    console.log(getValues("photo"));
     setDisableSubmitBtn(true);
     setLoading(true);
 
-    const avatarFile = getValues("avatar")![0];
+    const avatarFile = getValues("photo")![0];
     file2Base64(avatarFile)
       .then((avatarBase64) => {
         setAvatarBase64(avatarBase64);
@@ -205,6 +111,24 @@ const FormAtleta = ({ atleta }: Props) => {
         setDisableSubmitBtn(false);
         setLoading(false);
       });
+  };
+
+  const submitForm = async (data: TAtleta) => {
+    try {
+      const response = await api.post("", atletaToApiPost(data), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (response.status !== 201) {
+        throw new Error("Erro ao cadastrar atleta");
+      }
+      console.log("Atleta cadastrado com sucesso!");
+      setAthlete([...athlete, data]);
+    } catch (error) {
+      console.error("Erro ao cadastrar atleta:", error);
+      throw error;
+    }
   };
 
   return (
@@ -234,7 +158,7 @@ const FormAtleta = ({ atleta }: Props) => {
 
         <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
           <div className={`${styles.inputRow} ${styles.avatar}`}>
-            <label htmlFor="avatar">
+            <label htmlFor="photo">
               <p>Foto do atleta</p>
               <img
                 src={avatarBase64 ? avatarBase64 : "/formAtleta/avatar.png"}
@@ -242,17 +166,17 @@ const FormAtleta = ({ atleta }: Props) => {
               ></img>
             </label>
             <input
-              {...register("avatar", {
+              {...register("photo", {
                 onChange: (e) => {
                   uploadAvatar(e);
                 },
               })}
               type="file"
-              id="avatar"
+              id="photo"
               accept="image/png"
             />
-            {errors.avatar && (
-              <p className={styles.displayError}>{errors.avatar.message}</p>
+            {errors.photo && (
+              <p className={styles.displayError}>{errors.photo.message}</p>
             )}
           </div>
 
@@ -368,13 +292,13 @@ const FormAtleta = ({ atleta }: Props) => {
           )}
 
           <div className={styles.inputRow}>
-            <label htmlFor="faixa" className={styles.required}>
+            <label htmlFor="belt" className={styles.required}>
               Faixa
             </label>
             <select
-              {...register("faixa")}
-              id="faixa"
-              defaultValue={atleta ? atleta.faixa : ""}
+              {...register("belt")}
+              id="belt"
+              defaultValue={atleta ? atleta.belt : ""}
             >
               <option value="" disabled hidden>
                 Selecione
@@ -392,8 +316,8 @@ const FormAtleta = ({ atleta }: Props) => {
               <option value="coral">Coral</option>
               <option value="vermelha">Vermelha</option>
             </select>
-            {errors.faixa && (
-              <p className={styles.displayError}>{errors.faixa.message}</p>
+            {errors.belt && (
+              <p className={styles.displayError}>{errors.belt.message}</p>
             )}
           </div>
 

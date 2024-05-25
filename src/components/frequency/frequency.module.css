@@ -1,0 +1,61 @@
+.frequency {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: white;
+}
+
+.formContainer {
+  display: flex;
+  gap: 15px;
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.inputErrors {
+  display: flex;
+  gap: 15px;
+}
+
+.dates {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  /* padding: 10px; */
+  /* gap: 35px; */
+}
+
+.grafic {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+.grafic p {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+.grafic .chart-container {
+  width: 200px;
+  height: 200px;
+  position: relative;
+}
+.grafic .chart-container .percentage {
+  position: absolute;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.inputText {
+  color: black;
+}
+
+.errorText {
+  color: rgb(230, 9, 9);
+}

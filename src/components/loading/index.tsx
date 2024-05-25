@@ -5,7 +5,6 @@ type Props = {
 };
 
 const index = ({ msg }: Props) => {
-  console.log(msg);
   return (
     <div className={styles.loading}>
       <div className={styles.loader}></div>
