@@ -1,7 +1,7 @@
 "use client";
 import Button from "@/components/button";
 import { useForm } from "react-hook-form";
-import FormTitle from "@/components/titlee/formTitle/index";
+import FormTitle from "@/components/title/formTitle/index";
 import { useApiProvider } from "@/contexts";
 
 // Definição do tipo de dados do formulário

@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useState } from "react";
 import Button from "../../components/button/index";
-import Title from "../../components/titlee/index";
+import Title from "../../components/title/index";
 import Loading from "@/components/loading/index";
 import { useAuthProvider } from "@/contexts";
 
