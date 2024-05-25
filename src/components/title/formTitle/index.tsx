@@ -14,13 +14,7 @@ function formTitle({ title, iconSrc, className }: Props) {
     <div className={style}>
       <h2>
         {title}{" "}
-        <Image
-          priority={true}
-          src={iconSrc}
-          alt="Ícone do formulário"
-          width={24}
-          height={24}
-        />
+        <Image src={iconSrc} alt="Ícone do formulário" width={24} height={24} />
       </h2>
     </div>
   );

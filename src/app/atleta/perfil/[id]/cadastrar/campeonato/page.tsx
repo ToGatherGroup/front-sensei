@@ -1,7 +1,7 @@
 "use client";
 import Button from "@/components/button";
 import { useForm } from "react-hook-form";
-import FormTitle from "@/components/Title/formTitle/index";
+import FormTitle from "@/components/title/formTitle/index";
 import { useApiProvider } from "@/contexts";
 
 // Definição do tipo de dados do formulário
@@ -12,8 +12,17 @@ type FormData = {
   atletaModel: string | number;
 };
 
+
+type Params = {
+  id: number | string;
+};
+
+type Props = {
+  params: Params;
+};
+
 // Página de cadastro de campeonatos do atleta
-const AtletaCampeonatos = (id: number | string) => {
+const AtletaCampeonatos = ({params: {id}}: Props) => {
   // ID estático do atleta, para usá-lo remover o id acima que está como parâmetro
   //const id = 2;
   const { post } = useApiProvider();
