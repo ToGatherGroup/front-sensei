@@ -17,7 +17,7 @@ export const AVALIACOES_FISICAS = [
       key: 2,
       itemTitle: 'Força Explosiva',
       assessments: [
-        { title: 'Impulsão Vertical',slug: 'impulsao_vertical' , slugCamelCase: 'impulsaoVertical', type: { key: "Cm", value: "number" }},
+        { title: 'Impulsão Vertical', slug: 'impulsao_vertical' , slugCamelCase: 'impulsaoVertical', type: { key: "Cm", value: "number" }},
       ],
     },
     {
