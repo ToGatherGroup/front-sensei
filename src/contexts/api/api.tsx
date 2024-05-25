@@ -39,6 +39,9 @@ export const ApiProvider = ({ children }: {children: React.ReactNode}) => {
     }
 
     const patch = (endpoint: string, body: object | string) => {
+        console.log("Requisição PATCH para o endpoint completo:")
+        console.log(`${BASE_URL}${endpoint}`)
+
         return apiInstance.patch(endpoint, body);
     }
 

@@ -22,7 +22,6 @@ const RenderList = ({ items, isIMC }: { items: typeof AVALIACOES_FISICAS | typeo
                 id={key}
                 itemTitle={itemTitle}
                 subItem={hasMultipleAssessments(assessments) ? assessments.map(a => a.title) : undefined}
-                isIMC={isIMC}
             />
         ))}
     </ul>
