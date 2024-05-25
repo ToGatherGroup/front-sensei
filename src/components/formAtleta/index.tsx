@@ -1,9 +1,7 @@
 "use client";
-
 import styles from "./formAtleta.module.css";
-import Image from "next/image";
 import Loading from "@/components/loading/index";
-import FormTitle from "@/components/Title/formTitle";
+import FormTitle from "@/components/title/formTitle/index";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { TAtleta } from "@/types/TAtleta";

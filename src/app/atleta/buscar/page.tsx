@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { getAtletas, getAtletasByName } from "@/api/endpoints";
 
-import FormTitle from "@/components/title/formTitle";
+import FormTitle from "@/components/title/formTitle/index";
 import AvatarAtleta from "@/components/avatarAtleta/page";
 import { apiToAtletas } from "@/api/middleware/atletas";
 

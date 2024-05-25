@@ -7,7 +7,7 @@ import { ListAthletesProps } from "@/contexts/athlete/athlete.type";
 import { FormWrapper } from "../formWrapper";
 import { Assessment } from "@/types/Assessment";
 import TimeInput from "../timeInput";
-import Loading from '../../components/loading/index'
+import Loading from "@/components/loading/index";
 import Modal from "../modal";
 import { useRouter } from "next/navigation";
 
