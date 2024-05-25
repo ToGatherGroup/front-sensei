@@ -1,8 +1,7 @@
 "use client";
-
 import styles from "./formAtleta.module.css";
-import Image from "next/image";
 import Loading from "@/components/loading/index";
+import FormTitle from "@/components/title/formTitle/index";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { TAtleta } from "@/types/TAtleta";
@@ -135,13 +134,24 @@ const FormAtleta = ({ atleta }: Props) => {
       {loading && <Loading />}
       <div className={styles.content}>
         <div className={styles.title}>
-          {atleta ? <h1>Alterar Atleta</h1> : <h1>Cadastrar Atleta</h1>}
+          {atleta ? (
+            <FormTitle
+              title={"Alterar Atleta"}
+              iconSrc={"/icons/person_24x24.png"}
+            ></FormTitle>
+          ) : (
+            <FormTitle
+              title={"Cadastrar Atleta"}
+              iconSrc={"/icons/person_24x24.png"}
+            ></FormTitle>
+          )}
+          {/* {atleta ? <h1>Alterar Atleta</h1> : <h1>Cadastrar Atleta</h1>}
           <Image
             src="/icons/person_24x24.png"
             alt={atleta ? "Ícone de alteração" : "Ícone de cadastro"}
             width={24}
             height={24}
-          />
+          /> */}
         </div>
 
         <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
