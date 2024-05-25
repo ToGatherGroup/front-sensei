@@ -7,11 +7,6 @@ import FormTitle from "@/components/Title/formTitle/index";
 import axios from "axios";
 import { useApiProvider } from "@/contexts";
 
-// Configuração da API
-// const api = axios.create({
-//   baseURL: "https://sensei.squareweb.app/",
-// });
-
 // Definição do tipo de dados do formulário
 type FormData = {
   name: string;
@@ -105,13 +100,21 @@ const AtletaCampeonatos = ({ id }: { id: number | string }) => {
                 Data do Campeonato
               </label>
               <input
-                {...register("date", { required: true })}
+                {...register("date", {
+                  required: true,
+                  validate: {
+                    notInFuture: (value) => {
+                      const today = new Date().toISOString().split("T")[0];
+                      return value <= today || "A data não pode ser futura";
+                    },
+                  },
+                })}
                 type="date"
                 className="bg-gray-200 w-72 px-4 py-2 rounded"
               />
               {errors.date && (
                 <p className="text-center text-red-500 p-2">
-                  Este campo é obrigatório
+                  {errors.date.message || "Este campo é obrigatório"}
                 </p>
               )}
             </div>
