@@ -6,6 +6,7 @@ interface AssessmentTypeDetail {
 export interface Assessment {
   title: string;
   slug: string;
+  slugCamelCase?: string;
   altTitle?: string;
   type: AssessmentTypeDetail;
 }
