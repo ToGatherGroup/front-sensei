@@ -12,6 +12,7 @@ type AthleteState = {
     error: string;
     call: (ids: number[]) => void
     getInjuries: (id: number | string) => void
+    collectiveAssessment: (payload: any) => void
 }
 
 const initialState = {
@@ -21,13 +22,14 @@ const initialState = {
     success: '',
     error: '',
     call: () => {},
-    getInjuries: () => {}
+    getInjuries: () => {},
+    collectiveAssessment: () => {}
 }
 
 const AthleteContext = createContext<AthleteState>(initialState);
 
 export const AthleteProvider = ({ children }: {children: React.ReactNode}) => {
-    const { get, post } = useApiProvider();
+    const { get, post, patch } = useApiProvider();
     const [listAthletes, setListAthletes] = useState<ListAthletesProps | null>(null);
     const [success, setSuccess] = useState<string>('');
     const [error, setError] = useState<string>('');
@@ -77,7 +79,6 @@ export const AthleteProvider = ({ children }: {children: React.ReactNode}) => {
         setIsLoading(true)
         try {
             const response = await post('atleta/chamada', JSON.stringify(ids));
-            
             if (response?.status == 204) {
                 router.push('/menu');
             } else {
@@ -89,9 +90,28 @@ export const AthleteProvider = ({ children }: {children: React.ReactNode}) => {
             setIsLoading(false)
         }
     }
+
+    const collectiveAssessment = async (payload: any) => {
+        setIsLoading(true)
+        try {
+            const response = await patch(`exercicio_coletivo`, JSON.stringify(payload));
+            
+            if (response?.status == 204) {
+                console.log("Avaliação realizada com sucesso!")
+                setSuccess("Avaliação realizada com sucesso!")
+            } else {
+                console.log("Tivemos um problema ao realizar a avaliação, por favor, tente novamente mais tarde!")
+                setError("Tivemos um problema ao realizar a avaliação, por favor, tente novamente mais tarde!")
+            }
+        } catch (error) {
+            setError("Erro ao realizar a avaliação, por favor, tente novamente mais tarde!")
+        } finally {
+            setIsLoading(false)
+        }
+    }
         
     return (
-        <AthleteContext.Provider value={{isLoading, listAthletes, injuries, success, error, call, getInjuries}}>
+        <AthleteContext.Provider value={{isLoading, listAthletes, injuries, success, error, call, getInjuries, collectiveAssessment}}>
             {children}
         </AthleteContext.Provider>
     )

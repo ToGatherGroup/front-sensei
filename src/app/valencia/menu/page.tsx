@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import ListMenuItem from '../../../components/listItem/index'
-import Loading from '../../../components/loading/index'
+import ListMenuItem from '@/components/listItem/index'
+import Loading from '@/components/loading/index'
 import { Assessment} from '@/types/Assessment'
 import { AVALIACOES_FISICAS, INDICES_FISICOS } from '@/consts/const';
 import { useAssessmentsProvider } from '@/contexts';
@@ -22,7 +22,6 @@ const RenderList = ({ items, isIMC }: { items: typeof AVALIACOES_FISICAS | typeo
                 id={key}
                 itemTitle={itemTitle}
                 subItem={hasMultipleAssessments(assessments) ? assessments.map(a => a.title) : undefined}
-                isIMC={isIMC}
             />
         ))}
     </ul>

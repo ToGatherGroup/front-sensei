@@ -7,7 +7,6 @@ const CadastrarAtleta = (props: Props) => {
   //console.log(Atleta);
   return (
     <div>
-      {/* {<FormAtleta atleta={Atleta} />} */}
       {<FormAtleta />}
     </div>
   );
