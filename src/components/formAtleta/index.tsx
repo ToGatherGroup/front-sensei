@@ -7,7 +7,6 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { TAtleta } from "@/types/TAtleta";
 import { atletaToApiPost } from "@/api/middleware/atleta";
-import axios from "axios";
 import { atletaCreateSchema } from "@/schemas/athleteSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/navigation";
@@ -16,10 +15,6 @@ import { useApiProvider } from "@/contexts";
 type Props = {
   atleta?: TAtleta;
 };
-
-const api = axios.create({
-  baseURL: "https://sensei.squareweb.app/atleta",
-});
 
 const FormAtleta = ({ atleta }: Props) => {
   const { post } = useApiProvider();
@@ -114,12 +109,8 @@ const FormAtleta = ({ atleta }: Props) => {
 
   const submitForm = async (data: TAtleta) => {
     try {
-      const response = await api.post("", atletaToApiPost(data), {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      if (response.status !== 201) {
+      const response = await post("atleta", atletaToApiPost(data));
+      if (response?.status !== 201) {
         throw new Error("Erro ao cadastrar atleta");
       }
       console.log("Atleta cadastrado com sucesso!");
