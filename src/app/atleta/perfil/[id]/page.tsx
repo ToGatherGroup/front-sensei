@@ -25,7 +25,7 @@ const page = ({ params }: Props) => {
           size="big"
         />
       </div>
-      <Frequency />
+      <Frequency id={params.id} />
     </div>
   );
 };
