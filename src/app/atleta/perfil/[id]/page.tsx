@@ -7,6 +7,7 @@ import { axios } from "@/api/api";
 import { useEffect, useState, useCallback } from "react";
 import useScreenSize from "@/hooks/useScreenSize";
 import Injuries from "@/components/injuries";
+// import getInjuries from 
 import { ReviewsChart } from "@/components/reviewsChart";
 import Frequency from "@/components/frequency";
 import Link from "next/link";
@@ -149,7 +150,7 @@ const Page = ({ params }: Props) => {
               <img src="/icons/campeonato.png" alt="Ícone Postura" className="bg-white rounded-lg p-1 object-contain w-12 h-12 lg:w-16 lg:h-16" />
             </Link>
             <Link href="/aDecidir">
-              <img src="/icons/postura.png" alt="Ícone Postura" className="bg-white rounded-lg p-1 object-contain w-12 h-12 lg:w-16 lg:h-16" />
+              <img src="/icons/posture_icon.png" alt="Ícone Postura" className="bg-white rounded-lg p-1 object-contain w-12 h-12 lg:w-16 lg:h-16" />
             </Link>
           </div>
           <AvatarAtleta
@@ -161,14 +162,13 @@ const Page = ({ params }: Props) => {
           />
           <section>
             <div className="flex flex-col items-center space-y-2 lg:space-y-6">
-              {renderAthleteInfo()}
-              <div>
-                <div className="flex flex-row">
+              
+            <div className="flex flex-row">
                   <section className="hover:ring-2 hover:ring-amber-500 rounded-lg">
                     <img
                       src="/formAtleta/medals/medalhasCinza1.png"
-                      alt="Ícone Postura"
-                      className=" transition delay-100 duration-300 ease-in-out hover:skew-y-6 hover:invert rounded-lg p-1 object-contain w-12 h-12 lg:w-16 lg:h-16" />
+                      alt="Ícone Medalha Ouro"
+                      className=" transition delay-100 duration-300 ease-in-out hover:skew-y-6 hover:invert rounded-lg p-1 object-contain w-14 h-14 lg:w-20 lg:h-20" />
                     <div className="lg:text-xl text-white font-semibold text-center">
                       {medalhaOuro}
                     </div>
@@ -176,8 +176,8 @@ const Page = ({ params }: Props) => {
                   <section className="hover:ring-2 hover:ring-zinc-500 rounded-lg">
                     <img
                       src="/formAtleta/medals/medalhasCinza2.png"
-                      alt="Ícone Postura"
-                      className="transition delay-100 duration-300 ease-in-out hover:skew-y-6  hover:invert rounded-lg p-1 object-contain w-12 h-12 lg:w-16 lg:h-16" />
+                      alt="Ícone Medalha Prata"
+                      className="transition delay-100 duration-300 ease-in-out hover:skew-y-6  hover:invert rounded-lg p-1 object-contain w-14 h-14 lg:w-20 lg:h-20" />
                     <div className="lg:text-xl text-white font-semibold text-center">
                       {medalhaPrata}
                     </div>
@@ -185,13 +185,16 @@ const Page = ({ params }: Props) => {
                   <section className="hover:ring-2 hover:ring-copperMedal rounded-lg ">
                     <img
                       src="/formAtleta/medals/medalhasCinza3.png"
-                      alt="Ícone Postura"
-                      className=" transition delay-100 duration-300 ease-in-out hover:skew-y-6 hover:invert rounded-lg p-1 object-contain w-12 h-12 lg:w-16 lg:h-16" />
+                      alt="Ícone Medalha Bronze"
+                      className=" transition delay-100 duration-300 ease-in-out hover:skew-y-6 hover:invert rounded-lg p-1 object-contain w-14 h-14 lg:w-20 lg:h-20" />
                     <div className="lg:text-xl text-white font-semibold text-center">
                       {medalhaBronze}
                     </div>
                   </section>
                 </div>
+              {renderAthleteInfo()}
+              <div>
+
                 <div className="bottom-0 left-0 w-full flex justify-between">
                 </div>
               </div>
@@ -206,7 +209,9 @@ const Page = ({ params }: Props) => {
             {grafico && <div className="lg:mt-24"><ReviewsChart id={params.id} /></div>}
 
             {/* lesões está setada com valores difíceis de manipular, postergarei a implementação */}
-            {lesoes && <div className="w-12 h-12" >
+            {lesoes && <div className="w-12 h-12 flex flex-row" >
+              <Injuries injuries={[]} type="front" />
+              <Injuries injuries={[]} type="back" />
               {/* <Back injuries={[]}></Back> */}
               {/* <Front injuries={[]}></Front> */}
             </div>}

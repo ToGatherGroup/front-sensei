@@ -100,7 +100,7 @@ export const ReviewsChart = ({ id }: ReviewsChartProps) => {
 
   return (
     <>
-      <section>
+      <section className="mx-auto w-64 lg:w-full">
         <Radar data={chartData} options={options}></Radar>
       </section>
     </>
