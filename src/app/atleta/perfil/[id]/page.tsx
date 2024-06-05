@@ -11,6 +11,7 @@ import { ReviewsChart } from "@/components/reviewsChart";
 import Frequency from "@/components/frequency";
 import Link from "next/link";
 import { useAthleteProvider } from "@/contexts";
+import IconButton from "@/components/iconButton";
 
 type Params = {
   id: string;
@@ -21,9 +22,9 @@ type Props = {
 };
 
 const Page = ({ params }: Props) => {
-  const { getInjuries, injuries, success, error } = useAthleteProvider();
+  const { getInjuries, injuries } = useAthleteProvider();
   const [dadosAtleta, setDadosAtleta] = useState<any | null>(null);
-  const [lesoes, setLesoes] = useState<string[]>([]);
+  const [lesoes, setLesoes] = useState<string[] | null>([]);
   const [grafico, setGrafico] = useState<any | null>(null);
   const [qualitativos, setQualitativos] = useState<any | null>(null);
   const [frequencia, setFrequencia] = useState<any | null>(null);
@@ -32,7 +33,7 @@ const Page = ({ params }: Props) => {
   const [medalhaBronze, setMedalhaBronze] = useState<number>(0);
 
   const untoggleAll = () => {
-    setLesoes([]);
+    setLesoes(null);
     setGrafico(null);
     setFrequencia(null);
     setQualitativos(null);
@@ -137,15 +138,10 @@ const Page = ({ params }: Props) => {
       <section className="flex flex-col lg:flex-row lg:justify-around lg:w-full">
         <div>
           <div className="flex justify-center space-x-6 mb-4 mt-6 lg:space-x-10 lg:mt-8 lg:mb-8">
-            <Link href="/aDecidir">
-              <img src="/icons/avaliacao_fisica.png" alt="Ícone Postura" className="bg-white rounded-lg p-1 object-contain w-12 h-12 lg:w-16 lg:h-16" />
-            </Link>
-            <Link href="/aDecidir">
-              <img src="/icons/campeonato.png" alt="Ícone Postura" className="bg-white rounded-lg p-1 object-contain w-12 h-12 lg:w-16 lg:h-16" />
-            </Link>
-            <Link href="/aDecidir">
-              <img src="/icons/posture_icon.png" alt="Ícone Postura" className="bg-white rounded-lg p-1 object-contain w-12 h-12 lg:w-16 lg:h-16" />
-            </Link>
+            <IconButton href="/aDecidir" src="/icons/avaliacao_fisica.png" alt="Avaliação Física Individual" />
+            <IconButton href="/aDecidir" src="/icons/campeonato.png" alt="Campeonato" />
+            <IconButton href="/aDecidir" src="/icons/posture_icon.png" alt="Postura" />
+            <IconButton href="/aDecidir" src="/icons/ferramenta-lapis.png" alt="Edição" />         
           </div>
           <AvatarAtleta
             id={params.id}
@@ -197,15 +193,24 @@ const Page = ({ params }: Props) => {
         </div> {/* Seção lateral Fim */}
         <div> {/* Seção Botões Começo */}
           {renderButtons()}
-          <div className="max-w-full mt-2">
+          <div className="max-w-full">
             {qualitativos && <div></div>}
             {frequencia && <div className="lg:mt-36"><Frequency id={params.id} /></div>}
             {grafico && <div className="lg:mt-24"><ReviewsChart id={params.id} /></div>}
             {lesoes && (
+              <div>
               <div className="w-12 h-12 flex flex-row">
-                <Injuries injuries={lesoes} type="front" />
-                <Injuries injuries={lesoes} type="back" />
+                <div className="lg:mt-4 -mt-16">
+                <Injuries injuries={lesoes} type="front" width={screenSize.width > 1024 ? "248px" : "150px"}/>
+                </div>
+                <div className="lg:mt-12 -mt-9">
+                <Injuries injuries={lesoes} type="back" width={screenSize.width > 1024 ? "232px" : "134px"}/>
+                  </div>
               </div>
+              <div>
+                Aqui vai ficar o a descrição dos machucados
+                </div>
+                </div>
             )}
           </div>
         </div> {/* Seção Botões Fim */}
