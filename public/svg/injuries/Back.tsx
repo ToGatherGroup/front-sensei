@@ -3,9 +3,10 @@ import { useEffect } from "react";
 
 type BackProps = {
     injuries: string[];
+    width: string;
 };
   
-const Back = ({ injuries }: BackProps) => {
+const Back = ({ injuries, width }: BackProps) => {
    
     useEffect(() => {
 
@@ -29,8 +30,8 @@ const Back = ({ injuries }: BackProps) => {
         <svg 
             xmlns="http://www.w3.org/2000/svg" 
             xmlSpace="preserve" 
-            width="210mm" 
-            height="297mm" 
+            width={width ? width : "148mm"}
+            height="94mm"
             style={{
                 shapeRendering: "geometricPrecision",
                 textRendering: "geometricPrecision",
