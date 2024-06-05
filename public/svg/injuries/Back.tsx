@@ -3,10 +3,11 @@ import { useEffect } from "react";
 
 type BackProps = {
     injuries: string[];
-    width: string;
+    width?: string;
+    viewBoxSecondValue?: string;
 };
   
-const Back = ({ injuries, width }: BackProps) => {
+const Back = ({ injuries, width, viewBoxSecondValue }: BackProps) => {
    
     useEffect(() => {
 
@@ -27,7 +28,8 @@ const Back = ({ injuries, width }: BackProps) => {
     }, [injuries]);
 
     return (
-        <svg 
+        <div className="">
+<svg 
             xmlns="http://www.w3.org/2000/svg" 
             xmlSpace="preserve" 
             width={width ? width : "148mm"}
@@ -39,8 +41,8 @@ const Back = ({ injuries, width }: BackProps) => {
                 clipRule: "evenodd",
             }}
             version="1.1" 
-            viewBox="0 0 21000 29700"
-        >
+            // viewBox="1000 9000 21000 29700"
+            viewBox={`1000 ${viewBoxSecondValue} 21000 29700`}>
             <defs>
                 <style>
                     {
@@ -101,6 +103,7 @@ const Back = ({ injuries, width }: BackProps) => {
             <path className="fil1" d="M10948.39 5101.69c234.57,-159.57 191.25,-87.65 312.31,-161.45l-313.32 -221.09 1.01 382.54z"/>
             </g>
         </svg>
+        </div>
     )
 }
 

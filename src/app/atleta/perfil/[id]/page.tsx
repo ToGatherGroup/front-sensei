@@ -12,6 +12,7 @@ import Frequency from "@/components/frequency";
 import Link from "next/link";
 import { useAthleteProvider } from "@/contexts";
 import IconButton from "@/components/iconButton";
+import MedalSection from "@/components/medalSection";
 
 type Params = {
   id: string;
@@ -22,9 +23,9 @@ type Props = {
 };
 
 const Page = ({ params }: Props) => {
-  const { getInjuries, injuries } = useAthleteProvider();
+  const { getInjuries, injuries, injuriesDescription } = useAthleteProvider();
   const [dadosAtleta, setDadosAtleta] = useState<any | null>(null);
-  const [lesoes, setLesoes] = useState<string[] | null>([]);
+  const [lesoes, setLesoes] = useState<string[] | null>(null);
   const [grafico, setGrafico] = useState<any | null>(null);
   const [qualitativos, setQualitativos] = useState<any | null>(null);
   const [frequencia, setFrequencia] = useState<any | null>(null);
@@ -138,10 +139,10 @@ const Page = ({ params }: Props) => {
       <section className="flex flex-col lg:flex-row lg:justify-around lg:w-full">
         <div>
           <div className="flex justify-center space-x-6 mb-4 mt-6 lg:space-x-10 lg:mt-8 lg:mb-8">
-            <IconButton href="/aDecidir" src="/icons/avaliacao_fisica.png" alt="Avaliação Física Individual" />
-            <IconButton href="/aDecidir" src="/icons/campeonato.png" alt="Campeonato" />
-            <IconButton href="/aDecidir" src="/icons/posture_icon.png" alt="Postura" />
-            <IconButton href="/aDecidir" src="/icons/ferramenta-lapis.png" alt="Edição" />         
+            <IconButton href="/comparison" src="/icons/avaliacao_fisica.png" alt="Avaliação Física Individual" />
+            <IconButton href={`/atleta/perfil/${params.id}/cadastrar/campeonato`} src="/icons/campeonato.png" alt="Campeonato" />
+            <IconButton href={`/postura/${params.id}`} src="/icons/posture_icon.png" alt="Postura" />
+            <IconButton href="/comparison" src="/icons/ferramenta-lapis.png" alt="Edição" />
           </div>
           <AvatarAtleta
             id={params.id}
@@ -153,36 +154,24 @@ const Page = ({ params }: Props) => {
           <section>
             <div className="flex flex-col items-center space-y-2 lg:space-y-6">
               <div className="flex flex-row">
-                <section className="hover:ring-2 hover:ring-amber-500 rounded-lg">
-                  <img
-                    src="/formAtleta/medals/medalhasCinza1.png"
-                    alt="Ícone Medalha Ouro"
-                    className="transition delay-100 duration-300 ease-in-out hover:skew-y-6 hover:invert rounded-lg p-1 object-contain w-14 h-14 lg:w-20 lg:h-20"
-                  />
-                  <div className="lg:text-xl text-white font-semibold text-center">
-                    {medalhaOuro}
-                  </div>
-                </section>
-                <section className="hover:ring-2 hover:ring-zinc-500 rounded-lg">
-                  <img
-                    src="/formAtleta/medals/medalhasCinza2.png"
-                    alt="Ícone Medalha Prata"
-                    className="transition delay-100 duration-300 ease-in-out hover:skew-y-6 hover:invert rounded-lg p-1 object-contain w-14 h-14 lg:w-20 lg:h-20"
-                  />
-                  <div className="lg:text-xl text-white font-semibold text-center">
-                    {medalhaPrata}
-                  </div>
-                </section>
-                <section className="hover:ring-2 hover:ring-copperMedal rounded-lg ">
-                  <img
-                    src="/formAtleta/medals/medalhasCinza3.png"
-                    alt="Ícone Medalha Bronze"
-                    className=" transition delay-100 duration-300 ease-in-out hover:skew-y-6 hover:invert rounded-lg p-1 object-contain w-14 h-14 lg:w-20 lg:h-20"
-                  />
-                  <div className="lg:text-xl text-white font-semibold text-center">
-                    {medalhaBronze}
-                  </div>
-                </section>
+                <MedalSection
+                  imgSrc="/formAtleta/medals/medalhasCinza1.png"
+                  altText="Ícone Medalha Ouro"
+                  ringColor="amber-500"
+                  medalCount={medalhaOuro}
+                />
+                <MedalSection
+                  imgSrc="/formAtleta/medals/medalhasCinza2.png"
+                  altText="Ícone Medalha Prata"
+                  ringColor="zinc-500"
+                  medalCount={medalhaPrata}
+                />
+                <MedalSection
+                  imgSrc="/formAtleta/medals/medalhasCinza3.png"
+                  altText="Ícone Medalha Bronze"
+                  ringColor="copperMedal"
+                  medalCount={medalhaBronze}
+                />
               </div>
               {renderAthleteInfo()}
               <div>
@@ -199,18 +188,18 @@ const Page = ({ params }: Props) => {
             {grafico && <div className="lg:mt-24"><ReviewsChart id={params.id} /></div>}
             {lesoes && (
               <div>
-              <div className="w-12 h-12 flex flex-row">
-                <div className="lg:mt-4 -mt-16">
-                <Injuries injuries={lesoes} type="front" width={screenSize.width > 1024 ? "248px" : "150px"}/>
+                <div className="flex flex-row justify-center gap-6 -z-50">
+                  {/* <div className="lg:mt-4 -mt-16"> */}
+                    <Injuries injuries={lesoes} type="front" width={screenSize.width > 1024 ? "248px" : "150px"} viewBoxSecondValue={screenSize.width > 1024 ? "3000" : "12000"}/>
+                  {/* </div> */}
+                  {/* <div className="lg:mt-12 -mt-9 -ml-12 max-h-12"> */}
+                    <Injuries injuries={lesoes} type="back" width={screenSize.width > 1024 ? "232px" : "134px"} viewBoxSecondValue={screenSize.width > 1024 ? "0" : "9000"}/>
+                  {/* </div> */}
                 </div>
-                <div className="lg:mt-12 -mt-9">
-                <Injuries injuries={lesoes} type="back" width={screenSize.width > 1024 ? "232px" : "134px"}/>
-                  </div>
+                <div className="flex justify-center bg-white rounded-lg p-4  max-w-xs -mt-24 lg:mt-8 lg:min-w-fit lg:max-w-md ">
+                  <p className="leading-relaxed text-xs lg:text-sm text-wrap text-transform: capitalize">{injuriesDescription ? `${injuriesDescription} \n` : "Esse atleta não possui nenhuma lesão registrada"}</p>
+                </div>
               </div>
-              <div>
-                Aqui vai ficar o a descrição dos machucados
-                </div>
-                </div>
             )}
           </div>
         </div> {/* Seção Botões Fim */}

@@ -4,9 +4,10 @@ import { useEffect } from "react";
 type FrontProps = {
     injuries: string[];
     width?: string;
+    viewBoxSecondValue?: string;
 };
   
-const Front = ({ injuries, width}: FrontProps) => {
+const Front = ({ injuries, width, viewBoxSecondValue}: FrontProps) => {
    
     useEffect(() => {
         
@@ -38,7 +39,8 @@ const Front = ({ injuries, width}: FrontProps) => {
                 fillRule: "evenodd",
                 clipRule: "evenodd",
             }}
-            viewBox="0 0 21000 29700">
+            // viewBox="1000 12000 21000 29700">
+            viewBox={`1000 ${viewBoxSecondValue} 21000 29700`}>
             <defs>
                 <style>
                     {
