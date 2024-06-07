@@ -1,0 +1,223 @@
+"use client";
+import Button from "../button/index";
+import { AVALIACOES_FISICAS, INDICES_FISICOS } from "@/consts/const";
+import { useAssessmentsProvider, useAthleteProvider } from "@/contexts";
+import { useEffect, useState } from "react";
+import { ListAthletesProps } from "@/contexts/athlete/athlete.type";
+import { FormWrapper } from "../formWrapper";
+import { Assessment } from "@/types/Assessment";
+import TimeInput from "../timeInput";
+import Loading from "@/components/loading/index";
+import Modal from "../modal";
+import { useRouter } from "next/navigation";
+
+type ListAvaliacaoProps = {
+  identificador: number | string;
+  isIMC?: boolean;
+  identificadorSubItem?: number;
+};
+
+type FormValues = {
+  [key: number]: string;
+};
+
+type TimeValues = {
+  [key: number]: { minutes: number; seconds: number };
+};
+
+function ListAvaliacaoOld({ identificador }: ListAvaliacaoProps) {
+  const { collectiveAssessment, success, error } = useAthleteProvider();
+  const [formValues, setFormValues] = useState<FormValues>({});
+  const [timeValues, setTimeValues] = useState<TimeValues>({});
+  const { isLoading, incompleteAssessments } = useAssessmentsProvider();
+  const [currentDate, setCurrentDate] = useState<string>("");
+  const [tituloAvaliacao, setTituloAvaliacao] = useState<string>("Avaliação");
+  const [tipoAvaliacao, setTipoAvaliacao] = useState<{
+    key: string;
+    value: string;
+  }>({ key: "", value: "" });
+  const [avaliacao, setAvaliacao] = useState<Assessment | null>(null);
+
+  const router = useRouter();
+
+  const handleInputChange = (athleteId: number, value: string) => {
+    let filteredValue = value.replace(/[^0-9.,]/g, "");
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      [athleteId]: filteredValue,
+    }));
+  };
+
+  const handleTimeChange = (
+    athleteId: number,
+    minutes: number,
+    seconds: number
+  ) => {
+    setTimeValues((prevValues) => ({
+      ...prevValues,
+      [athleteId]: { minutes, seconds },
+    }));
+  };
+
+  const convertTime = (minutes: number, seconds: number) => {
+    return `PT${minutes}M${seconds}S`;
+  };
+
+  const handleSubmit = (nomeValencia: string) => (event: React.FormEvent) => {
+    event.preventDefault();
+    const payload = Object.entries(
+      tipoAvaliacao.key === "Tempo" ? timeValues : formValues
+    ).map(([athleteId, value]) => {
+      if (tipoAvaliacao.key === "Tempo") {
+        const { minutes, seconds } = value as {
+          minutes: number;
+          seconds: number;
+        };
+        return {
+          resultado: {
+            [nomeValencia]: convertTime(minutes, seconds),
+          },
+          atletaId: parseInt(athleteId, 10),
+        };
+      } else {
+        return {
+          resultado: {
+            [nomeValencia]: parseFloat(value as string),
+          },
+          atletaId: parseInt(athleteId, 10),
+        };
+      }
+    });
+    console.log("Payload para API:", JSON.stringify(payload));
+    collectiveAssessment(payload);
+  };
+
+  const getDate = () => {
+    const today = new Date();
+    const formatter = new Intl.DateTimeFormat("pt-BR", {
+      month: "long",
+      year: "numeric",
+    });
+    const formattedDate = formatter.format(today);
+    return formattedDate.replace(" de ", "/");
+  };
+
+  const goToMenu = () => {
+    router.push("/valencia/menu");
+  };
+
+  useEffect(() => {
+    setCurrentDate(getDate());
+
+    const identificadorStr = String(identificador);
+    const regex = /^(.+)-(.+)$/;
+    const match = identificadorStr.match(regex);
+    let identificadorSubItem = 0;
+    let newIdentificador = identificador;
+
+    if (match) {
+      newIdentificador = Number(match[1]);
+      identificadorSubItem = Number(match[2]);
+    }
+
+    let assessmentIndex =
+      identificadorSubItem && identificadorSubItem <= 1
+        ? identificadorSubItem
+        : 0;
+    let assessment: Assessment | null = null;
+
+    if (Number(newIdentificador) < Number(8)) {
+      assessment =
+        AVALIACOES_FISICAS[Number(newIdentificador)].assessments[
+          assessmentIndex
+        ];
+      getIncompleteAssessments(
+        AVALIACOES_FISICAS[Number(newIdentificador)].assessments[
+          assessmentIndex
+        ].slug
+      );
+    } else {
+      assessment = INDICES_FISICOS[0].assessments[assessmentIndex];
+      getIncompleteAssessments(
+        INDICES_FISICOS[0].assessments[assessmentIndex].slug
+      );
+    }
+    setTituloAvaliacao(
+      assessment.altTitle ? assessment.altTitle : assessment.title
+    );
+    setTipoAvaliacao(assessment.type);
+    setAvaliacao(assessment);
+  }, [identificador]);
+
+  return (
+    <div className="min-h-screen w-full flex items-center justify-center">
+      <FormWrapper
+        header={tituloAvaliacao}
+        handleSubmit={handleSubmit(
+          avaliacao?.slugCamelCase ?? avaliacao?.slug ?? ""
+        )}
+      >
+        <div className="flex items-center justify-center mb-4">
+          <label className="block text-gray-700 mr-2">Data:</label>
+          <input
+            type="text"
+            disabled
+            readOnly
+            className={styles.dateInput}
+            value={currentDate}
+          />
+        </div>
+
+        <ul className="w-full xl:mb-10 md:mb-7 sm:mb-5 mb-5">
+          {listAthletes?.data?.map((athlete) => (
+            <li key={athlete.id} className={styles.listItem}>
+              <span className={styles.athleteNameSpan}>{athlete?.nome}</span>
+              <div className="flex flex-row space-x-2">
+                {tipoAvaliacao.key == "Tempo" && (
+                  <TimeInput
+                    onTimeChange={(minutes, seconds) =>
+                      handleTimeChange(athlete.id, minutes, seconds)
+                    }
+                  />
+                )}
+                {tipoAvaliacao.key != "Tempo" && (
+                  <input
+                    id="idAthlete"
+                    placeholder={tipoAvaliacao.key}
+                    type={tipoAvaliacao.value}
+                    value={formValues[athlete.id] || ""}
+                    onChange={(e) =>
+                      handleInputChange(athlete.id, e.target.value)
+                    }
+                    className={`${styles.input} ${
+                      tipoAvaliacao.key == "Repeticao" ? "w-24" : ""
+                    }`}
+                  ></input>
+                )}
+              </div>
+            </li>
+          ))}
+        </ul>
+        <Button label="Finalizar Exercício" type="submit" />
+        {success && <p className={styles.feedbackParagraph}>{success}</p>}
+        {error && <p className={styles.feedbackParagraph}>{error}</p>}
+      </FormWrapper>
+    </div>
+  );
+}
+
+//TODO: extrair para um arquivo de estilos, sugestão alternativa de organização -?-
+const styles = {
+  inputHeader:
+    "w-20 h-6 block text-gray-700 xl:text-base md:text-sm sm:text-xs text-xs",
+  input:
+    "w-20 h-6 rounded-md focus:ring-blue-500 dark:focus:ring-blue-600 focus:ring-2 placeholder:italic placeholder:text-slate-400 placeholder:text-xs",
+  feedbackParagraph:
+    "xl:text-base md:text-sm sm:text-xs text-xs text-center text-orange-700 xl:mt-10 md:mt-7 sm:mt-5 mt-5 font-bold",
+  athleteNameSpan:
+    "uppercase xl:text-base md:text-sm sm:text-xs text-xs truncate",
+  dateInput:
+    "italic text-slate-400 block w-fit border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50 text-center",
+  listItem:
+    "flex items-center justify-between xl:gap-4 lg:gap-4 md:gap-4 sm:gap-4 gap-4 xl:mb-6 lg:mb-4 md:mb-4 sm:mb-2 mb-4 max-h-[24px]",
+};
