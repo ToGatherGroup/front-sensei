@@ -12,7 +12,7 @@ const config: Config = {
       colors: {
         defaultGray: '#D9D9D9',
         winePattern: '#410606',
-        winePatternLight: '#673838',
+        winePatternLight: '#7b1818',
         winePatternDark: '#340505',
         inputColor: '#EEEEEE',
       },
