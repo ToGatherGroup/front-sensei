@@ -3,9 +3,11 @@ import { useEffect } from "react";
 
 type FrontProps = {
     injuries: string[];
+    width?: string;
+    viewBoxSecondValue?: string;
 };
   
-const Front = ({ injuries }: FrontProps) => {
+const Front = ({ injuries, width, viewBoxSecondValue}: FrontProps) => {
    
     useEffect(() => {
         
@@ -29,15 +31,16 @@ const Front = ({ injuries }: FrontProps) => {
         <svg 
             xmlns="http://www.w3.org/2000/svg"
             xmlSpace="preserve"
-            width="210mm"
-            height="297mm"
+            width={width ? width : "148mm"}
+            height="105mm"
             style={{
                 shapeRendering: "geometricPrecision",
                 textRendering: "geometricPrecision",
                 fillRule: "evenodd",
                 clipRule: "evenodd",
             }}
-            viewBox="0 0 21000 29700">
+            // viewBox="1000 12000 21000 29700">
+            viewBox={`1000 ${viewBoxSecondValue} 21000 29700`}>
             <defs>
                 <style>
                     {

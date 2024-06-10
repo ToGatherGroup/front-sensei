@@ -14,6 +14,7 @@ const config: Config = {
         winePattern: '#410606',
         winePatternLight: '#7b1818',
         winePatternDark: '#340505',
+        copperMedal: '#B87333',
         inputColor: '#EEEEEE',
       },
       backgroundImage: {

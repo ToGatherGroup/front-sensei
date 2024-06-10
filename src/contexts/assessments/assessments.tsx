@@ -13,6 +13,7 @@ type AssessmentsState = {
     createAssessments: () => void;
     getIncompleteAssessments: (param: string) => void;
     getAllIncompleteAssessments: () => void;
+    collectiveAssessment: (payload: any) => void;
     closeModal: () => void;
     clearError: () => void;
     clearSuccess: () => void;
@@ -28,6 +29,7 @@ const initialState = {
     createAssessments: () => { },
     getIncompleteAssessments: () => { },
     getAllIncompleteAssessments: () => { },
+    collectiveAssessment: () => { },
     closeModal: () => { },
     clearError: () => { },
     clearSuccess: () => { },
@@ -36,7 +38,7 @@ const initialState = {
 const AssessmentsContext = createContext<AssessmentsState>(initialState);
 
 export const AssessmentsProvider = ({ children }: { children: React.ReactNode }) => {
-    const { get, post } = useApiProvider();
+    const { get, post, patch } = useApiProvider();
     const [success, setSuccess] = useState<string>('');
     const [error, setError] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -117,6 +119,25 @@ export const AssessmentsProvider = ({ children }: { children: React.ReactNode })
         }
     };
 
+    const collectiveAssessment = async (payload: any) => {
+        setIsLoading(true)
+        try {
+            const response = await patch(`exercicio_coletivo`, JSON.stringify(payload));
+            
+            if (response?.status == 204) {
+                console.log("Avaliação realizada com sucesso!")
+                setSuccess("Avaliação realizada com sucesso!")
+            } else {
+                console.log("Tivemos um problema ao realizar a avaliação, por favor, tente novamente mais tarde!")
+                setError("Tivemos um problema ao realizar a avaliação, por favor, tente novamente mais tarde!")
+            }
+        } catch (error) {
+            setError("Erro ao realizar a avaliação, por favor, tente novamente mais tarde!")
+        } finally {
+            setIsLoading(false)
+        }
+    }
+
     const closeModal = () => {
         setModalVisible(false)
     }
@@ -136,7 +157,7 @@ export const AssessmentsProvider = ({ children }: { children: React.ReactNode })
     }
 
     return (
-        <AssessmentsContext.Provider value={{ isLoading, success, error, allAssessmentsComplete, modalVisible, listAthletes, createAssessments, closeModal, clearError, clearSuccess, getAllIncompleteAssessments, getIncompleteAssessments }}>
+        <AssessmentsContext.Provider value={{ isLoading, success, error, allAssessmentsComplete, modalVisible, listAthletes, createAssessments, closeModal, clearError, clearSuccess, getAllIncompleteAssessments, getIncompleteAssessments, collectiveAssessment }}>
             {children}
         </AssessmentsContext.Provider>
     )
