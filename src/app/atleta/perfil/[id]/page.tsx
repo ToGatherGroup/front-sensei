@@ -185,21 +185,18 @@ const Page = ({ params }: Props) => {
             {frequencia && <div className="mt-4 lg:mt-32"><Frequency id={params.id} /></div>}
             {grafico && <div className="lg:mt-24"><ReviewsChart id={params.id} /></div>}
             {lesoes && (
-              <div >
+              <div>
                 <div className="flex flex-row items-stretch justify-center lg:mt-12 lg:gap-6 -z-50">
-                  {/* <div className="lg:mt-4 -mt-16"> */}
-                    <Injuries injuries={lesoes} type="front" width={screenSize.width > 1024 ? "248px" : "150px"} viewBoxSecondValue={screenSize.width > 1024 ? "3000" : "12000"}/>
-                  {/* </div> */}
-                  {/* <div className="lg:mt-12 -mt-9 -ml-12 max-h-12"> */}
-                    <Injuries injuries={lesoes} type="back" width={screenSize.width > 1024 ? "232px" : "134px"} viewBoxSecondValue={screenSize.width > 1024 ? "0" : "9000"}/>
-                  {/* </div> */}
+                  <Injuries injuries={lesoes} type="front" width={screenSize.width > 1024 ? "248px" : "150px"} viewBoxSecondValue={screenSize.width > 1024 ? "3000" : "12000"} />
+                  <Injuries injuries={lesoes} type="back" width={screenSize.width > 1024 ? "232px" : "134px"} viewBoxSecondValue={screenSize.width > 1024 ? "0" : "9000"} />
                 </div>
                 <div className="flex flex-col-reverse custom-scrollbar mx-auto max-h-24 lg:max-h-40 scroll-auto overflow-y-auto justify-center bg-white rounded-lg p-4 -mt-40 lg:-mt-4 max-w-xs lg:min-w-fit lg:max-w-md ">
                   {(injuriesDescription.length <= 0) && <h3 className="text-sm lg:text-lg font-semibold">Esse atleta não possui nenhuma lesão registrada</h3>}
                   {
-                  injuriesDescription.map(injury => (
-                    <p className="leading-relaxed text-xs lg:text-sm text-wrap text-transform: capitalize">{`${injury} \n`}</p>
-                  ))}
+                    injuriesDescription.map((injury, index) => (
+                      <p key={index} className="leading-relaxed text-xs lg:text-sm text-wrap text-transform: capitalize">{`${injury} \n`}</p>
+                    ))
+                  }
                 </div>
               </div>
             )}
