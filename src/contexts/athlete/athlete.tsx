@@ -8,7 +8,7 @@ type AthleteState = {
     listAthletes: ListAthletesProps | null;
     isLoading: boolean;
     injuries: string[];
-    injuriesDescription: string;
+    injuriesDescription: string[];
     success: string;
     error: string;
     call: (ids: number[]) => void
@@ -19,7 +19,7 @@ const initialState = {
     listAthletes: null,
     isLoading: false,
     injuries: [],
-    injuriesDescription: '',
+    injuriesDescription: [],
     success: '',
     error: '',
     call: () => {},
@@ -34,7 +34,7 @@ export const AthleteProvider = ({ children }: {children: React.ReactNode}) => {
     const [success, setSuccess] = useState<string>('');
     const [error, setError] = useState<string>('');
     const [injuries, setInjuries] = useState<string[]>([]);
-    const [injuriesDescription, setInjuriesDescription] = useState<string>('');
+    const [injuriesDescription, setInjuriesDescription] = useState<string[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const router = useRouter()
 
@@ -68,7 +68,7 @@ export const AthleteProvider = ({ children }: {children: React.ReactNode}) => {
                 // })
 
                 setInjuries(response.data.map((injury:any) => injury.regiaoLesao));
-                setInjuriesDescription(response.data.map((injury:any) => ` ${injury.descricao}`));
+                setInjuriesDescription(response.data.map((injury:any) => `${injury.data}: ${injury.descricao}`));
             } else {
                 setError("Erro ao carregar lesões!")
             }
