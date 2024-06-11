@@ -11,6 +11,8 @@ const config: Config = {
     extend: {
       colors: {
         defaultGray: '#D9D9D9',
+        container: '#fff',
+        input: '#eee',
         winePattern: '#410606',
         winePatternLight: '#7b1818',
         winePatternDark: '#340505',
