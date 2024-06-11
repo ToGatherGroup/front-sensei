@@ -57,7 +57,7 @@ const Input = ({
   inputClassName: outerInputClassName,
   labelClassName: outerLabelClassName,
 }: Props) => {
-  const inputClassName = `h-8 bg-input placeholder:bg-[#9ca3af] mx-1 rounded p-1.5 ${SIZES[size]} ${outerInputClassName}`;
+  const inputClassName = `h-8 bg-input placeholder:bg-input placeholder:text-center md:placeholder:text-left mx-1 rounded p-1.5 ${SIZES[size]} ${outerInputClassName}`;
 
   const labelClassName = `w-full text-center md:w-56 md:min-w-56 p-1 ${
     required &&
