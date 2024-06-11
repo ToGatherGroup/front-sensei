@@ -102,7 +102,7 @@ const Input = ({
     );
 
   return (
-    <div className="flex flex-col my-5 items-center justify-center md:flex-row md:justify-start">
+    <div className="flex flex-col my-5 items-center justify-center md:flex-row md:justify-start w-fit m-auto">
       {label && (
         <label htmlFor={name} className={labelClassName}>
           {label}
