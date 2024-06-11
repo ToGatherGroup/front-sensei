@@ -28,8 +28,12 @@ type Props = {
   label?: string | undefined;
   required?: boolean | undefined;
   size: "tiny" | "small" | "normal" | "fit" | "full";
+  value?: string | undefined;
   errorMessage?: string | undefined;
   defaultValue?: string | undefined;
+  onChange?: (value: any) => void | undefined;
+  onBlur?: () => void | undefined;
+  forwardRef?: React.Ref<HTMLInputElement>;
   options?: {
     value: string;
     label: string;
@@ -52,6 +56,10 @@ const Input = ({
   placeHolder,
   label,
   required,
+  onChange,
+  onBlur,
+  value,
+  forwardRef,
   size,
   errorMessage,
   options, // Only for Select type
@@ -109,21 +117,33 @@ const Input = ({
     );
 
   return (
-    <div className="flex flex-col my-5 items-center justify-center md:flex-row md:justify-start w-fit m-auto">
+    <div
+      className={`flex flex-col my-5 items-center justify-center md:flex-row md:justify-start w-fit m-auto ${
+        errorMessage && errorMessage != "undefined" && "mb-10"
+      }`}
+    >
       {label && (
         <label htmlFor={name} className={labelClassName}>
           {label}
         </label>
       )}
-      <div className="flex flex-col justify-center items-center md:justify-start md:items-start">
+      <div
+        className={`flex flex-col justify-center items-center md:justify-start md:items-start `}
+      >
         <input
           name={name}
           type={type}
           placeholder={placeHolder}
+          value={value}
+          onChange={onChange}
+          onBlur={onBlur}
+          ref={forwardRef}
           className={`focus:outline focus:outline-2 focus:outline-winePatternLight ${inputClassName}`}
         />
         {errorMessage && errorMessage != "undefined" && (
-          <p className="p-1 text-red-600">{errorMessage}</p>
+          <p className="absolute p-1 text-red-600 translate-y-8">
+            {errorMessage}
+          </p>
         )}
       </div>
     </div>
