@@ -28,6 +28,7 @@ type Props = {
   label?: string | undefined;
   required?: boolean | undefined;
   size: "tiny" | "small" | "normal" | "fit" | "full";
+  errorMessage?: string | undefined;
   defaultValue?: string | undefined;
   options?: {
     value: string;
@@ -52,6 +53,7 @@ const Input = ({
   label,
   required,
   size,
+  errorMessage,
   options, // Only for Select type
   defaultValue, // Only for Select type
   inputClassName: outerInputClassName,
@@ -82,22 +84,27 @@ const Input = ({
             {label}
           </label>
         )}
-        <select
-          name={name}
-          defaultValue={placeHolder ? "" : defaultValue}
-          className={inputClassName}
-        >
-          {placeHolder && (
-            <option value="" disabled hidden>
-              {placeHolder}
-            </option>
+        <div className="flex flex-col justify-center items-center md:justify-start md:items-start">
+          <select
+            name={name}
+            defaultValue={placeHolder ? "" : defaultValue}
+            className={inputClassName}
+          >
+            {placeHolder && (
+              <option value="" disabled hidden>
+                {placeHolder}
+              </option>
+            )}
+            {options?.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+          {errorMessage && errorMessage != "undefined" && (
+            <p className="p-1 text-red-600">{errorMessage}</p>
           )}
-          {options?.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
+        </div>
       </div>
     );
 
@@ -108,12 +115,17 @@ const Input = ({
           {label}
         </label>
       )}
-      <input
-        name={name}
-        type={type}
-        placeholder={placeHolder}
-        className={`focus:outline focus:outline-2 focus:outline-winePatternLight ${inputClassName}`}
-      />
+      <div className="flex flex-col justify-center items-center md:justify-start md:items-start">
+        <input
+          name={name}
+          type={type}
+          placeholder={placeHolder}
+          className={`focus:outline focus:outline-2 focus:outline-winePatternLight ${inputClassName}`}
+        />
+        {errorMessage && errorMessage != "undefined" && (
+          <p className="p-1 text-red-600">{errorMessage}</p>
+        )}
+      </div>
     </div>
   );
 };
