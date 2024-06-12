@@ -1,15 +1,12 @@
 "use client";
 
 import AvatarAtleta from "@/components/avatarAtleta/page";
-import { Atletas } from "@/mock/atletas";
-import { TAtleta } from "@/types/TAtleta";
 import { axios } from "@/api/api";
 import { useEffect, useState, useCallback } from "react";
 import useScreenSize from "@/hooks/useScreenSize";
 import Injuries from "@/components/injuries";
 import { ReviewsChart } from "@/components/reviewsChart";
 import Frequency from "@/components/frequency";
-import Link from "next/link";
 import { useAthleteProvider } from "@/contexts";
 import IconButton from "@/components/iconButton";
 import MedalSection from "@/components/medalSection";
@@ -70,10 +67,10 @@ const Page = ({ params }: Props) => {
   ];
 
   const buttons = [
+    { label: 'Gráfico', onClick: handleGraficoClick },
     { label: 'Lesões', onClick: handleLesoesClick },
     { label: 'Frequência', onClick: handleFrequenciaClick },
     { label: 'Qualitativos', onClick: handleQualitativoClick },
-    { label: 'Gráfico', onClick: handleGraficoClick }
   ];
 
   const getDadosAtleta = useCallback(async () => {
@@ -106,6 +103,7 @@ const Page = ({ params }: Props) => {
 
   useEffect(() => {
     getDadosAtleta();
+    setGrafico(true);
   }, [getDadosAtleta]);
 
   const renderButtons = () => (
@@ -133,7 +131,7 @@ const Page = ({ params }: Props) => {
   );
 
   return (
-    <div className="flex justify-center h-screen m-auto max-w-screen-xl">
+    <div className="flex justify-center mx-auto min-h-dvh max-h-max max-w-screen-xl">
       <section className="flex flex-col lg:flex-row lg:justify-around lg:w-full">
         <div>
           <div className="flex justify-center space-x-6 mb-4 mt-6 lg:space-x-10 lg:mt-8 lg:mb-8">
