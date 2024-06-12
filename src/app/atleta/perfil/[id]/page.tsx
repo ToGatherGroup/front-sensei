@@ -182,7 +182,7 @@ const Page = ({ params }: Props) => {
           {renderButtons()}
           <div className="max-w-full">
             {qualitativos && <div></div>}
-            {frequencia && <div className="mt-4 lg:mt-32"><Frequency id={params.id} /></div>}
+            {frequencia && <div className="mt-4 lg:mt-32"><Frequency height={screenSize.width > 1024 ? 200 : 100} width={screenSize.width > 1024 ? 200 : 100} id={params.id} /></div>}
             {grafico && <div className="lg:mt-24"><ReviewsChart height={screenSize.width > 1024 ? 524 : 256} width={screenSize.width > 1024 ? 524 : 256} id={params.id} /></div>}
             {lesoes && (
               <div>

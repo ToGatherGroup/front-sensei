@@ -32,9 +32,7 @@
 .grafic {
   display: flex;
   flex-direction: column;
-  text-align: center;
   align-items: center;
-  justify-content: center;
 }
 .grafic p {
   font-size: 2rem;
@@ -46,12 +44,7 @@
   height: 200px;
   position: relative;
 }
-.grafic .chart-container .percentage {
-  position: absolute;
-  bottom: 60px;
-  left: 50%;
-  transform: translateX(-50%);
-}
+
 .inputText {
   color: black;
 }

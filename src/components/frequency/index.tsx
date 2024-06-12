@@ -10,6 +10,8 @@ import { useApiProvider } from "@/contexts";
 
 type FrequencyProps = {
   id: number | string;
+  width?: number;
+  height?: number;
 };
 
 const frequencyDatesSchema = yup.object().shape({
@@ -17,23 +19,16 @@ const frequencyDatesSchema = yup.object().shape({
   endDate: yup
     .date()
     .typeError("Insira uma data final.")
-    .min(
-      yup.ref("startDate"),
-      "A data final deve ser maior que a data inicial."
-    ),
+    .min(yup.ref("startDate"), "A data final deve ser maior que a data inicial."),
 });
 
-type Props = {
-  id: number | string;
-};
-
-const Frequency = ({ id }: Props) => {
-  console.log(id);
+const Frequency = ({ id, height, width }: FrequencyProps) => {
   const [frequencyData, setFrequencyData] = useState([
     { label: "Presença", value: 1 },
     { label: "Faltas", value: 0 },
   ]);
   const [porcentagemPresenca, setPorcentagemPresenca] = useState(0);
+  const [chartKey, setChartKey] = useState(`${width}-${height}`);
 
   const {
     formState: { errors },
@@ -44,7 +39,6 @@ const Frequency = ({ id }: Props) => {
     resolver: yupResolver(frequencyDatesSchema),
   });
 
-  //const id = 2;
   const watchStartDate = watch("startDate");
   const watchEndDate = watch("endDate");
   const { get } = useApiProvider();
@@ -57,8 +51,7 @@ const Frequency = ({ id }: Props) => {
           const response = await get(
             `atleta/presenca/${id}/data_inicio/${watchStartDate}/data_fim/${watchEndDate}`
           );
-          const { totalPresenca, totalAusencia, porcentagemPresenca } =
-            response?.data;
+          const { totalPresenca, totalAusencia, porcentagemPresenca } = response?.data;
 
           setFrequencyData([
             { label: "Presença", value: totalPresenca },
@@ -73,6 +66,10 @@ const Frequency = ({ id }: Props) => {
       fetchData();
     }
   }, [watchStartDate, watchEndDate, get, id]);
+
+  useEffect(() => {
+    setChartKey(`${width}-${height}`);
+  }, [width, height]);
 
   return (
     <main className={styles.frequency}>
@@ -110,9 +107,9 @@ const Frequency = ({ id }: Props) => {
 
       <section className={styles.grafic}>
         <div className={styles["chart-container"]}>
+          <div className="m-auto size-32 lg:size-48">
           <Doughnut
             data={{
-              //labels: frequencyData.map((data) => data.label),
               datasets: [
                 {
                   data: frequencyData.map((data) => data.value),
@@ -123,8 +120,17 @@ const Frequency = ({ id }: Props) => {
                 },
               ],
             }}
+            key={chartKey}
+            height={height}
+            width={width}
           />
-          <p className={styles.percentage}>{porcentagemPresenca}</p>
+          <p className={"text-center w-auto -mt-16 lg:-mt-24 text-xs"}>{porcentagemPresenca}</p>
+          {/*   
+              position: absolute;
+              bottom: 60px;
+              left: 50%;
+              transform: translateX(-50%); */}
+          </div>
         </div>
       </section>
     </main>
