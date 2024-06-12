@@ -8,6 +8,8 @@ Chart.register(...registerables);
 
 type ReviewsChartProps = {
   id: number | string;
+  width?: number;
+  height?: number;
 };
 
 interface IApiData {
@@ -15,7 +17,7 @@ interface IApiData {
   values: number[];
 }
 
-export const ReviewsChart = ({ id }: ReviewsChartProps) => {
+export const ReviewsChart = ({ id, height, width }: ReviewsChartProps) => {
   const [apiData, setApiData] = useState<IApiData | null>(null);
   const { get } = useApiProvider();
 
@@ -101,7 +103,7 @@ export const ReviewsChart = ({ id }: ReviewsChartProps) => {
   return (
     <>
       <section className="mx-auto w-64 lg:w-full">
-        <Radar data={chartData} options={options}></Radar>
+      <Radar key={`${width}-${height}`} height={height} width={width} data={chartData} options={options}></Radar>
       </section>
     </>
   );

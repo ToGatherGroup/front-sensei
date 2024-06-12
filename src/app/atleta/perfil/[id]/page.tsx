@@ -183,7 +183,7 @@ const Page = ({ params }: Props) => {
           <div className="max-w-full">
             {qualitativos && <div></div>}
             {frequencia && <div className="mt-4 lg:mt-32"><Frequency id={params.id} /></div>}
-            {grafico && <div className="lg:mt-24"><ReviewsChart id={params.id} /></div>}
+            {grafico && <div className="lg:mt-24"><ReviewsChart height={screenSize.width > 1024 ? 524 : 256} width={screenSize.width > 1024 ? 524 : 256} id={params.id} /></div>}
             {lesoes && (
               <div>
                 <div className="flex flex-row items-stretch justify-center lg:mt-12 lg:gap-6 -z-50">
