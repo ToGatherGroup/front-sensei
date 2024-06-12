@@ -23,12 +23,13 @@ const Page = ({ params }: Props) => {
   const { getInjuries, injuries, injuriesDescription } = useAthleteProvider();
   const [dadosAtleta, setDadosAtleta] = useState<any | null>(null);
   const [lesoes, setLesoes] = useState<string[] | null>(null);
-  const [grafico, setGrafico] = useState<any | null>(null);
+  const [grafico, setGrafico] = useState<any | null>(true);
   const [qualitativos, setQualitativos] = useState<any | null>(null);
   const [frequencia, setFrequencia] = useState<any | null>(null);
   const [medalhaOuro, setMedalhaOuro] = useState<number>(0);
   const [medalhaPrata, setMedalhaPrata] = useState<number>(0);
   const [medalhaBronze, setMedalhaBronze] = useState<number>(0);
+  const [activeButton, setActiveButton] = useState('Gráfico');
 
   const untoggleAll = () => {
     setLesoes(null);
@@ -43,21 +44,25 @@ const Page = ({ params }: Props) => {
       await getInjuries(parseInt(params.id));
       setLesoes(injuries);
     }
+    setActiveButton('Lesões');
   }, [getInjuries, injuries, lesoes, params.id]);
 
   const handleGraficoClick = () => {
     untoggleAll();
     setGrafico(true);
+    setActiveButton('Gráfico');
   };
 
   const handleFrequenciaClick = () => {
     untoggleAll();
     setFrequencia(true);
+    setActiveButton('Frequência');
   };
 
   const handleQualitativoClick = () => {
     untoggleAll();
     setQualitativos(true);
+    setActiveButton('Qualitativos');
   };
 
   const athleteInfo = [
@@ -103,7 +108,6 @@ const Page = ({ params }: Props) => {
 
   useEffect(() => {
     getDadosAtleta();
-    setGrafico(true);
   }, [getDadosAtleta]);
 
   const renderButtons = () => (
@@ -112,7 +116,11 @@ const Page = ({ params }: Props) => {
         <button
           key={index}
           onClick={button.onClick}
-          className="lg:mt-2 lg:px-4 lg:py-2 lg:text-lg text-xs bg-gray-300 hover:bg-blue-500 text-black font-semibold py-2 px-2 rounded-md transition delay-100 duration-300 ease-in-out"
+          className={`lg:mt-2 lg:px-4 lg:py-2 lg:text-lg text-xs py-2 px-2 rounded-md transition delay-100 duration-300 ease-in-out ${
+            activeButton === button.label
+              ? 'bg-blue-500 font-semibold'
+              : 'bg-gray-300 hover:bg-blue-500 text-black font-semibold'
+          }`}
         >
           {button.label}
         </button>
