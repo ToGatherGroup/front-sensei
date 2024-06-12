@@ -14,12 +14,20 @@ type FrequencyProps = {
   height?: number;
 };
 
+// Adjust the schema to validate string dates
 const frequencyDatesSchema = yup.object().shape({
-  startDate: yup.date().typeError("Insira a data inicial."),
+  startDate: yup
+    .string()
+    .required("Data inicial é obrigatória.")
+    .matches(/^\d{4}-\d{2}-\d{2}$/, "Data inicial deve estar no formato yyyy-mm-dd."),
   endDate: yup
-    .date()
-    .typeError("Insira uma data final.")
-    .min(yup.ref("startDate"), "A data final deve ser maior que a data inicial."),
+    .string()
+    .required("Data final é obrigatória.")
+    .matches(/^\d{4}-\d{2}-\d{2}$/, "Data final deve estar no formato yyyy-mm-dd.")
+    .test("is-greater", "A data final deve ser maior que a data inicial.", function (value) {
+      const { startDate } = this.parent;
+      return !startDate || !value || new Date(value) > new Date(startDate);
+    }),
 });
 
 const Frequency = ({ id, height, width }: FrequencyProps) => {
@@ -30,6 +38,16 @@ const Frequency = ({ id, height, width }: FrequencyProps) => {
   const [porcentagemPresenca, setPorcentagemPresenca] = useState(0);
   const [chartKey, setChartKey] = useState(`${width}-${height}`);
 
+  // Calculate the default start and end dates
+  const today = new Date();
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(today.getDate() - 30);
+
+  const defaultValues = {
+    startDate: thirtyDaysAgo.toISOString().substring(0, 10),
+    endDate: today.toISOString().substring(0, 10),
+  };
+
   const {
     formState: { errors },
     register,
@@ -37,6 +55,7 @@ const Frequency = ({ id, height, width }: FrequencyProps) => {
   } = useForm({
     mode: "onBlur",
     resolver: yupResolver(frequencyDatesSchema),
+    defaultValues,
   });
 
   const watchStartDate = watch("startDate");
@@ -108,28 +127,23 @@ const Frequency = ({ id, height, width }: FrequencyProps) => {
       <section className={styles.grafic}>
         <div className={styles["chart-container"]}>
           <div className="m-auto size-32 lg:size-48">
-          <Doughnut
-            data={{
-              datasets: [
-                {
-                  data: frequencyData.map((data) => data.value),
-                  backgroundColor: [
-                    "rgba(43, 63, 229, 0.8)",
-                    "rgba(253,192,19,0)",
-                  ],
-                },
-              ],
-            }}
-            key={chartKey}
-            height={height}
-            width={width}
-          />
-          <p className={"text-center w-auto -mt-16 lg:-mt-24 text-xs"}>{porcentagemPresenca}</p>
-          {/*   
-              position: absolute;
-              bottom: 60px;
-              left: 50%;
-              transform: translateX(-50%); */}
+            <Doughnut
+              data={{
+                datasets: [
+                  {
+                    data: frequencyData.map((data) => data.value),
+                    backgroundColor: [
+                      "rgba(43, 63, 229, 0.8)",
+                      "rgba(253,192,19,0)",
+                    ],
+                  },
+                ],
+              }}
+              key={chartKey}
+              height={height}
+              width={width}
+            />
+            <p className={"text-center w-auto -mt-16 lg:-mt-24 text-xs"}>{porcentagemPresenca}</p>
           </div>
         </div>
       </section>
