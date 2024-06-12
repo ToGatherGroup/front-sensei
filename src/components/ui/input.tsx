@@ -13,6 +13,8 @@
 
 */
 
+import React from "react";
+
 type Props = {
   name?: string | undefined;
   type:
@@ -59,7 +61,7 @@ const Input = ({
   onChange,
   onBlur,
   value,
-  forwardRef,
+  forwardRef: innerRef,
   size,
   errorMessage,
   options, // Only for Select type
@@ -137,11 +139,11 @@ const Input = ({
           value={value}
           onChange={onChange}
           onBlur={onBlur}
-          ref={forwardRef}
+          ref={innerRef}
           className={`focus:outline focus:outline-2 focus:outline-winePatternLight ${inputClassName}`}
         />
         {errorMessage && errorMessage != "undefined" && (
-          <p className="absolute p-1 text-red-600 translate-y-8">
+          <p className={`absolute p-1 text-red-600 translate-y-8 max-w-60`}>
             {errorMessage}
           </p>
         )}
@@ -150,3 +152,10 @@ const Input = ({
   );
 };
 export default Input;
+
+// This component is to be used with <InputMask>
+export const InputFunctional = React.forwardRef<HTMLInputElement, Props>(
+  (props, ref) => {
+    return <Input forwardRef={ref} {...props} />;
+  }
+);
