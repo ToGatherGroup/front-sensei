@@ -126,7 +126,7 @@ const Frequency = ({ id, height, width }: FrequencyProps) => {
 
       <section className={styles.grafic}>
         <div className={styles["chart-container"]}>
-          <div className="m-auto size-32 lg:size-48">
+          <div className="m-auto size-36 lg:size-52">
             <Doughnut
               data={{
                 datasets: [
@@ -143,7 +143,7 @@ const Frequency = ({ id, height, width }: FrequencyProps) => {
               height={height}
               width={width}
             />
-            <p className={"text-center w-auto -mt-16 lg:-mt-24 text-xs"}>{porcentagemPresenca}</p>
+            <p className={"text-center w-auto -mt-20 lg:-mt-28 text-xl"}>{porcentagemPresenca}</p>
           </div>
         </div>
       </section>
