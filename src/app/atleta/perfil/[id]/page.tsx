@@ -10,6 +10,7 @@ import Frequency from "@/components/frequency";
 import { useAthleteProvider } from "@/contexts";
 import IconButton from "@/components/iconButton";
 import MedalSection from "@/components/medalSection";
+import Button from "@/components/ui/button";
 
 type Params = {
   id: string;
@@ -31,6 +32,12 @@ const Page = ({ params }: Props) => {
   const [medalhaBronze, setMedalhaBronze] = useState<number>(0);
   const [activeButton, setActiveButton] = useState('Gráfico');
 
+  const handleButtonClick = (buttonLabel: string, onClick: () => void) => {
+    untoggleAll();
+    setActiveButton(buttonLabel);
+    onClick();
+  };
+
   const untoggleAll = () => {
     setLesoes(null);
     setGrafico(null);
@@ -39,30 +46,22 @@ const Page = ({ params }: Props) => {
   };
 
   const handleLesoesClick = useCallback(async () => {
-    untoggleAll();
     if (!lesoes) {
       getInjuries(parseInt(params.id));
       setLesoes(injuries);
     }
-    setActiveButton('Lesões');
   }, [getInjuries, injuries, lesoes, params.id]);
 
   const handleGraficoClick = () => {
-    untoggleAll();
     setGrafico(true);
-    setActiveButton('Gráfico');
   };
 
   const handleFrequenciaClick = () => {
-    untoggleAll();
     setFrequencia(true);
-    setActiveButton('Frequência');
   };
 
   const handleQualitativoClick = () => {
-    untoggleAll();
     setQualitativos(true);
-    setActiveButton('Qualitativos');
   };
 
   const athleteInfo = [
@@ -113,17 +112,18 @@ const Page = ({ params }: Props) => {
   const renderButtons = () => (
     <section className="flex mt-6 space-x-2 lg:space-x-6 justify-center">
       {buttons.map((button, index) => (
-        <button
+        <Button
           key={index}
-          onClick={button.onClick}
+          text={button.label}
+          type="button"
+          onClick={() => handleButtonClick(button.label, button.onClick)}
+          active={activeButton === button.label}
           className={`lg:mt-2 lg:px-4 lg:py-2 lg:text-lg text-xs py-2 px-2 rounded-md transition delay-100 duration-300 ease-in-out ${
             activeButton === button.label
-              ? 'bg-blue-500 font-semibold'
-              : 'bg-gray-300 hover:bg-blue-500 text-black font-semibold'
+              ? 'bg-white text-winePattern font-semibold'
+              : ''
           }`}
-        >
-          {button.label}
-        </button>
+        />
       ))}
     </section>
   );
@@ -196,6 +196,14 @@ const Page = ({ params }: Props) => {
                   <Injuries injuries={injuries} type="front" width={screenSize.width > 1024 ? "248px" : "150px"} viewBoxSecondValue={screenSize.width > 1024 ? "3000" : "12000"} />
                   <Injuries injuries={injuries} type="back" width={screenSize.width > 1024 ? "232px" : "134px"} viewBoxSecondValue={screenSize.width > 1024 ? "0" : "9000"} />
                 </div>
+                  <div className="flex mb-2">
+                  <Button
+                      text={"Adicionar lesão"}
+                      type={"button"}
+                      onClick={() => console.log("Adicionar lesão")}
+                      className="mx-auto"
+                      ></Button>
+                  </div>
                 <div className="flex flex-col-reverse custom-scrollbar mx-auto max-h-24 lg:max-h-40 scroll-auto overflow-y-auto justify-center bg-white rounded-lg p-4 -mt-40 lg:-mt-4 max-w-xs lg:min-w-fit lg:max-w-md ">
                   {(!isLoading && injuriesDescription.length <= 0) && <h3 className="text-sm lg:text-lg font-semibold">Esse atleta não possui nenhuma lesão registrada</h3>}
                   {
