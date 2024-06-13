@@ -20,7 +20,7 @@ type Props = {
 };
 
 const Page = ({ params }: Props) => {
-  const { getInjuries, injuries, injuriesDescription } = useAthleteProvider();
+  const { getInjuries, injuries, injuriesDescription, isLoading }  = useAthleteProvider();
   const [dadosAtleta, setDadosAtleta] = useState<any | null>(null);
   const [lesoes, setLesoes] = useState<string[] | null>(null);
   const [grafico, setGrafico] = useState<any | null>(true);
@@ -41,7 +41,7 @@ const Page = ({ params }: Props) => {
   const handleLesoesClick = useCallback(async () => {
     untoggleAll();
     if (!lesoes) {
-      await getInjuries(parseInt(params.id));
+      getInjuries(parseInt(params.id));
       setLesoes(injuries);
     }
     setActiveButton('Lesões');
@@ -193,11 +193,11 @@ const Page = ({ params }: Props) => {
             {lesoes && (
               <div>
                 <div className="flex flex-row items-stretch justify-center lg:mt-12 lg:gap-6 -z-50">
-                  <Injuries injuries={lesoes} type="front" width={screenSize.width > 1024 ? "248px" : "150px"} viewBoxSecondValue={screenSize.width > 1024 ? "3000" : "12000"} />
-                  <Injuries injuries={lesoes} type="back" width={screenSize.width > 1024 ? "232px" : "134px"} viewBoxSecondValue={screenSize.width > 1024 ? "0" : "9000"} />
+                  <Injuries injuries={injuries} type="front" width={screenSize.width > 1024 ? "248px" : "150px"} viewBoxSecondValue={screenSize.width > 1024 ? "3000" : "12000"} />
+                  <Injuries injuries={injuries} type="back" width={screenSize.width > 1024 ? "232px" : "134px"} viewBoxSecondValue={screenSize.width > 1024 ? "0" : "9000"} />
                 </div>
                 <div className="flex flex-col-reverse custom-scrollbar mx-auto max-h-24 lg:max-h-40 scroll-auto overflow-y-auto justify-center bg-white rounded-lg p-4 -mt-40 lg:-mt-4 max-w-xs lg:min-w-fit lg:max-w-md ">
-                  {(injuriesDescription.length <= 0) && <h3 className="text-sm lg:text-lg font-semibold">Esse atleta não possui nenhuma lesão registrada</h3>}
+                  {(!isLoading && injuriesDescription.length <= 0) && <h3 className="text-sm lg:text-lg font-semibold">Esse atleta não possui nenhuma lesão registrada</h3>}
                   {
                     injuriesDescription.map((injury, index) => (
                       <p key={index} className="leading-relaxed text-xs lg:text-sm text-wrap text-transform: capitalize">{`${injury} \n`}</p>

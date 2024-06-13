@@ -1,5 +1,5 @@
 'use client'
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 type FrontProps = {
     injuries: string[];
@@ -7,25 +7,29 @@ type FrontProps = {
     viewBoxSecondValue?: string;
 };
   
-const Front = ({ injuries, width, viewBoxSecondValue}: FrontProps) => {
-   
+const Front = ({ injuries, width, viewBoxSecondValue }: FrontProps) => {
+    const [isReady, setIsReady] = useState(false);
+
     useEffect(() => {
-        
-        if(injuries) {
+        if (injuries) {
             const injuredAreas = document.querySelectorAll("path");
-            
+
             injuredAreas.forEach((area) => {
                 const dataId = area.getAttribute("data-id");
-                
+
                 if (dataId !== null && injuries.includes(dataId)) {
                     area.style.fill = "red";
                 } else {
                     area.style.fill = "#90a2a2";
                 }
             });
+            setIsReady(true);
         }
-
     }, [injuries]);
+
+    if (!isReady) {
+        return null;
+    }
 
     return (
         <svg 
