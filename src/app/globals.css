@@ -74,11 +74,11 @@
     @apply h-8 bg-input placeholder:bg-input text-center placeholder:text-center md:text-left md:placeholder:text-left mx-1 rounded p-1.5 focus:outline focus:outline-2 focus:outline-winePatternLight;
   }
 
-  button {
+  button[type="submit"] {
     @apply box-border capitalize min-h-10 rounded-md py-2 px-6 text-center duration-300 bg-winePattern outline outline-1 outline-winePatternLight text-white tracking-wide hover:bg-white hover:text-winePattern font-semibold disabled:pointer-events-none disabled:bg-gray-400 disabled:text-gray-600 disabled:outline-gray-500;
   }
   label {
-    @apply aria-required:after:content-['*'] aria-required:after:text-red-600 aria-required:after:ml-0.5 aria-required:after:font-extrabold
+    @apply aria-required:after:content-['*'] aria-required:after:text-red-600 aria-required:after:ml-0.5 aria-required:after:font-extrabold;
   }
 }
 
