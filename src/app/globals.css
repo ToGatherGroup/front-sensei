@@ -44,7 +44,7 @@
   border-radius: 5px;
 }
 
-@media (max-width: 1440px) { 
+@media (max-width: 1440px) {
   .max-container {
     @apply mx-auto max-w-full w-full px-3;
   }
@@ -67,6 +67,19 @@
   background-position: right;
   /* Prevents the margin of child to explode the parent (this) */
   overflow: auto;
+}
+
+@layer base {
+  input {
+    @apply h-8 bg-input placeholder:bg-input text-center placeholder:text-center md:text-left md:placeholder:text-left mx-1 rounded p-1.5 focus:outline focus:outline-2 focus:outline-winePatternLight;
+  }
+
+  button {
+    @apply box-border capitalize min-h-10 rounded-md py-2 px-6 text-center duration-300 bg-winePattern outline outline-1 outline-winePatternLight text-white tracking-wide hover:bg-white hover:text-winePattern font-semibold disabled:pointer-events-none disabled:bg-gray-400 disabled:text-gray-600 disabled:outline-gray-500;
+  }
+  label {
+    @apply aria-required:after:content-['*'] aria-required:after:text-red-600 aria-required:after:ml-0.5 aria-required:after:font-extrabold
+  }
 }
 
 @layer utilities {
@@ -101,7 +114,6 @@
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: #c0a0b9;
   }
-  
 }
 
 @keyframes fadeIn {
@@ -118,7 +130,6 @@
 .fadeIn {
   animation: fadeIn 1s ease-out;
 }
-
 
 /* Forms */
 
@@ -142,18 +153,4 @@
 
 textarea {
   height: 10em;
-}
-
-select {
-  cursor: pointer;
-}
-
-input {
-  background-color: #eee;
-  border-radius: 5px;
-  padding: 5px 5px 5px 10px;
-}
-
-input[type="date"] {
-  cursor: pointer;
 }
