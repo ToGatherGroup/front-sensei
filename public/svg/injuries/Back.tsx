@@ -1,36 +1,44 @@
 'use client'
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 type BackProps = {
     injuries: string[];
+    width?: string;
+    viewBoxSecondValue?: string;
 };
   
-const Back = ({ injuries }: BackProps) => {
-   
-    useEffect(() => {
+const Back = ({ injuries, width, viewBoxSecondValue }: BackProps) => {
+    const [isReady, setIsReady] = useState(false);
 
-        if(injuries) {
+    useEffect(() => {
+        if (injuries) {
             const injuredAreas = document.querySelectorAll("path");
-            
+
             injuredAreas.forEach((area) => {
                 const dataId = area.getAttribute("data-id");
-                
+
                 if (dataId !== null && injuries.includes(dataId)) {
                     area.style.fill = "red";
+
                 } else {
                     area.style.fill = "#90a2a2";
                 }
             });
+            setIsReady(true);
         }
-
     }, [injuries]);
 
+    if (!isReady) {
+        return null;
+    }
+
     return (
-        <svg 
+        <div className="">
+<svg 
             xmlns="http://www.w3.org/2000/svg" 
             xmlSpace="preserve" 
-            width="210mm" 
-            height="297mm" 
+            width={width ? width : "148mm"}
+            height="94mm"
             style={{
                 shapeRendering: "geometricPrecision",
                 textRendering: "geometricPrecision",
@@ -38,8 +46,8 @@ const Back = ({ injuries }: BackProps) => {
                 clipRule: "evenodd",
             }}
             version="1.1" 
-            viewBox="0 0 21000 29700"
-        >
+            // viewBox="1000 9000 21000 29700"
+            viewBox={`1000 ${viewBoxSecondValue} 21000 29700`}>
             <defs>
                 <style>
                     {
@@ -100,6 +108,7 @@ const Back = ({ injuries }: BackProps) => {
             <path className="fil1" d="M10948.39 5101.69c234.57,-159.57 191.25,-87.65 312.31,-161.45l-313.32 -221.09 1.01 382.54z"/>
             </g>
         </svg>
+        </div>
     )
 }
 

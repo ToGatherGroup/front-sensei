@@ -24,7 +24,7 @@ export default function RootLayout({
                 </Link>
               </nav>
             </header>
-            <main className="bg-[url('/background_1920_1080.jpg')] bg-cover bg-right-top bg-no-repeat w-full h-full">
+            <main className="bg-gradient-to-t from-gray-800 from-0% via-black via-50% to-gray-800 to-100% w-full h-full">
               {children}
             </main>
 

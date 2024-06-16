@@ -1,43 +1,50 @@
 'use client'
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 type FrontProps = {
     injuries: string[];
+    width?: string;
+    viewBoxSecondValue?: string;
 };
   
-const Front = ({ injuries }: FrontProps) => {
-   
+const Front = ({ injuries, width, viewBoxSecondValue }: FrontProps) => {
+    const [isReady, setIsReady] = useState(false);
+
     useEffect(() => {
-        
-        if(injuries) {
+        if (injuries) {
             const injuredAreas = document.querySelectorAll("path");
-            
+
             injuredAreas.forEach((area) => {
                 const dataId = area.getAttribute("data-id");
-                
+
                 if (dataId !== null && injuries.includes(dataId)) {
                     area.style.fill = "red";
                 } else {
                     area.style.fill = "#90a2a2";
                 }
             });
+            setIsReady(true);
         }
-
     }, [injuries]);
+
+    if (!isReady) {
+        return null;
+    }
 
     return (
         <svg 
             xmlns="http://www.w3.org/2000/svg"
             xmlSpace="preserve"
-            width="210mm"
-            height="297mm"
+            width={width ? width : "148mm"}
+            height="105mm"
             style={{
                 shapeRendering: "geometricPrecision",
                 textRendering: "geometricPrecision",
                 fillRule: "evenodd",
                 clipRule: "evenodd",
             }}
-            viewBox="0 0 21000 29700">
+            // viewBox="1000 12000 21000 29700">
+            viewBox={`1000 ${viewBoxSecondValue} 21000 29700`}>
             <defs>
                 <style>
                     {

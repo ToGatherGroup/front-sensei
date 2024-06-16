@@ -26,7 +26,7 @@ type TimeValues = {
 };
 
 export default function ListAvaliacao({ identificador }: ListAvaliacaoProps) {
-    const { collectiveAssessment, success, error } = useAthleteProvider()
+    const { collectiveAssessment, success, error } = useAssessmentsProvider()
     const [formValues, setFormValues] = useState<FormValues>({});
     const [timeValues, setTimeValues] = useState<TimeValues>({});
     const {isLoading, error: errorAssessments, listAthletes, success: successAssessments, clearError, clearSuccess, getIncompleteAssessments} = useAssessmentsProvider();

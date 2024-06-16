@@ -10,6 +10,7 @@ import { atletaCreateSchema } from "@/schemas/athleteSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/navigation";
 import { useApiProvider } from "@/contexts";
+import Button from "../ui/button";
 
 type Props = {
   atleta?: TAtleta;
@@ -125,17 +126,11 @@ const FormAtleta = ({ atleta }: Props) => {
       {loading && <Loading />}
       <div className={styles.content}>
         <div className={styles.title}>
-          {atleta ? (
-            <FormTitle
-              title={"Alterar Atleta"}
-              iconSrc={"/icons/person_24x24.png"}
-            ></FormTitle>
-          ) : (
-            <FormTitle
-              title={"Cadastrar Atleta"}
-              iconSrc={"/icons/person_24x24.png"}
-            ></FormTitle>
-          )}
+          <FormTitle
+            title={atleta ? "Alterar Atleta" : "Cadastrar Atleta"}
+            iconSrc={"/icons/person_24x24_wine.png"}
+          ></FormTitle>
+
           {/* {atleta ? <h1>Alterar Atleta</h1> : <h1>Cadastrar Atleta</h1>}
           <Image
             src="/icons/person_24x24.png"
@@ -310,11 +305,12 @@ const FormAtleta = ({ atleta }: Props) => {
             )}
           </div>
 
-          <input
+          <Button
+            text={atleta ? "Alterar" : "Cadastrar"}
             type="submit"
-            value={atleta ? "Alterar" : "Cadastrar"}
-            className="btnSubmit"
             disabled={disableSubmitBtn}
+            className="mt-12"
+            isLoading={false}
           />
         </form>
       </div>

@@ -8,32 +8,33 @@ type AthleteState = {
     listAthletes: ListAthletesProps | null;
     isLoading: boolean;
     injuries: string[];
+    injuriesDescription: string[];
     success: string;
     error: string;
     call: (ids: number[]) => void
     getInjuries: (id: number | string) => void
-    collectiveAssessment: (payload: any) => void
 }
 
 const initialState = {
     listAthletes: null,
     isLoading: false,
     injuries: [],
+    injuriesDescription: [],
     success: '',
     error: '',
     call: () => {},
-    getInjuries: () => {},
-    collectiveAssessment: () => {}
+    getInjuries: () => {}
 }
 
 const AthleteContext = createContext<AthleteState>(initialState);
 
 export const AthleteProvider = ({ children }: {children: React.ReactNode}) => {
-    const { get, post, patch } = useApiProvider();
+    const { get, post } = useApiProvider();
     const [listAthletes, setListAthletes] = useState<ListAthletesProps | null>(null);
     const [success, setSuccess] = useState<string>('');
     const [error, setError] = useState<string>('');
     const [injuries, setInjuries] = useState<string[]>([]);
+    const [injuriesDescription, setInjuriesDescription] = useState<string[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const router = useRouter()
 
@@ -58,20 +59,20 @@ export const AthleteProvider = ({ children }: {children: React.ReactNode}) => {
     };
 
     const getInjuries = async (id: number | string) => {
+        setIsLoading(true)
         try {
             const response = await get(`lesao/${id}`);
 
             if (response) { 
-                response?.data.map((injurie:any) => {
-                    return injurie.regiaoLesao; 
-                })
-
-                setInjuries(response.data.map((injurie:any) => injurie.regiaoLesao));
+                setInjuries(response.data.map((injury:any) => injury.regiaoLesao));
+                setInjuriesDescription(response.data.map((injury:any) => `${injury.data}: ${injury.descricao}`));
             } else {
                 setError("Erro ao carregar lesões!")
             }
         } catch (error) {
             setError("Erro ao carregar lesões!")
+        } finally {
+            setIsLoading(false)
         }
     }
     
@@ -90,28 +91,9 @@ export const AthleteProvider = ({ children }: {children: React.ReactNode}) => {
             setIsLoading(false)
         }
     }
-
-    const collectiveAssessment = async (payload: any) => {
-        setIsLoading(true)
-        try {
-            const response = await patch(`exercicio_coletivo`, JSON.stringify(payload));
-            
-            if (response?.status == 204) {
-                console.log("Avaliação realizada com sucesso!")
-                setSuccess("Avaliação realizada com sucesso!")
-            } else {
-                console.log("Tivemos um problema ao realizar a avaliação, por favor, tente novamente mais tarde!")
-                setError("Tivemos um problema ao realizar a avaliação, por favor, tente novamente mais tarde!")
-            }
-        } catch (error) {
-            setError("Erro ao realizar a avaliação, por favor, tente novamente mais tarde!")
-        } finally {
-            setIsLoading(false)
-        }
-    }
         
     return (
-        <AthleteContext.Provider value={{isLoading, listAthletes, injuries, success, error, call, getInjuries, collectiveAssessment}}>
+        <AthleteContext.Provider value={{isLoading, listAthletes, injuries, injuriesDescription, success, error, call, getInjuries}}>
             {children}
         </AthleteContext.Provider>
     )

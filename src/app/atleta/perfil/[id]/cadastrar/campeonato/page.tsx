@@ -1,8 +1,8 @@
 "use client";
-import Button from "@/components/button";
 import { useForm } from "react-hook-form";
 import FormTitle from "@/components/title/formTitle/index";
 import { useApiProvider } from "@/contexts";
+import Button from "@/components/ui/button";
 
 // Definição do tipo de dados do formulário
 type FormData = {
@@ -11,7 +11,6 @@ type FormData = {
   position: string;
   atletaModel: string | number;
 };
-
 
 type Params = {
   id: number | string;
@@ -22,7 +21,7 @@ type Props = {
 };
 
 // Página de cadastro de campeonatos do atleta
-const AtletaCampeonatos = ({params: {id}}: Props) => {
+const AtletaCampeonatos = ({ params: { id } }: Props) => {
   // ID estático do atleta, para usá-lo remover o id acima que está como parâmetro
   //const id = 2;
   const { post } = useApiProvider();
@@ -72,8 +71,8 @@ const AtletaCampeonatos = ({params: {id}}: Props) => {
       <div className="form-container">
         <div className="flex justify-center items-center">
           <FormTitle
-            title="Cadastrar Campeonatos"
-            iconSrc="/icons/trophy_24x24.png"
+            title="Cadastrar Campeonato"
+            iconSrc="/icons/trophy_24x24_wine.png"
           />
         </div>
         <div className="flex justify-center my-40">
@@ -150,9 +149,11 @@ const AtletaCampeonatos = ({params: {id}}: Props) => {
                 </p>
               )}
             </div>
-            <div className="my-20">
-              <Button label="cadastrar" type="submit" />
-            </div>
+            <Button
+              text="cadastrar Campeonato"
+              type="submit"
+              className="block mt-20 mx-auto"
+            />
           </form>
         </div>
       </div>
