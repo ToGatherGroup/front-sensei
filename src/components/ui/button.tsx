@@ -3,7 +3,7 @@
 type Props = {
   text: string;
   type: "submit" | "button";
-  onClick?: () => void | undefined;
+  onClick?: () => any | undefined;
   font?:
     | "light"
     | "normal"
@@ -43,7 +43,10 @@ const Button = ({
     <button
       type={type}
       onClick={handleClick}
-      className={`${className} ${isLoading && "!pointer-events-none"}`}
+      className={`${className} ${
+        (isLoading || disabled) &&
+        "!pointer-events-none !bg-gray-400 !text-gray-600 !outline-gray-500"
+      }`}
       disabled={disabled || isLoading}
     >
       {isLoading ? "Carregando ..." : text}

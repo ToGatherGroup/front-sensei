@@ -3,15 +3,21 @@ import Image from "next/image";
 type Props = {
   title: string;
   iconSrc?: string | undefined;
+  captlize?: boolean | undefined;
   className?: string;
 };
-function Title({ title, iconSrc, className: outerClassName }: Props) {
+function Title({
+  title,
+  iconSrc,
+  captlize = true,
+  className: outerClassName,
+}: Props) {
   return (
     <div className={"flex justify-center items-center gap-4"}>
       <h2
-        className={`font-extrabold capitalize h-fit text-lg md:text-xl lg:text-2xl text-winePatternLight ${
+        className={`font-extrabold h-fit text-center text-lg md:text-xl lg:text-2xl text-winePatternLight ${
           outerClassName ?? ""
-        }`}
+        } ${captlize && "capitalize"}`}
       >
         {title}
       </h2>
