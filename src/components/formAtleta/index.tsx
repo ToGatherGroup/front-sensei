@@ -11,6 +11,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/navigation";
 import { useApiProvider } from "@/contexts";
 import Button from "../ui/button";
+import Input from "../ui/input";
 
 type Props = {
   atleta?: TAtleta;
@@ -304,6 +305,13 @@ const FormAtleta = ({ atleta }: Props) => {
               <p className={styles.displayError}>{errors.belt.message}</p>
             )}
           </div>
+
+          <Input
+            inputSize="normal"
+            type="text"
+            label="Nome completo"
+            placeHolder="Insira seu nome"
+          />
 
           <Button
             text={atleta ? "Alterar" : "Cadastrar"}

@@ -1,166 +1,179 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import { useApiProvider } from "../api/api";
+import {
+  Dispatch,
+  SetStateAction,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { useRouter } from "next/navigation";
-import { ListAthletesProps } from "./assessments.type";
+import {
+  IncompleteAssessmentsAPI,
+  ResponseIncompleteAssessmentAPI,
+} from "@/types/Assessment";
+import dayjs, { Dayjs } from "dayjs";
+import { useApiProvider } from "../api";
+import Modal from "@/components/modal";
+import toast from "react-hot-toast";
 
-type AssessmentsState = {
-    isLoading: boolean;
-    success: string;
-    error: string;
-    allAssessmentsComplete: boolean;
-    modalVisible: boolean;
-    listAthletes: ListAthletesProps | null;
-    createAssessments: () => void;
-    getIncompleteAssessments: (param: string) => void;
-    getAllIncompleteAssessments: () => void;
-    collectiveAssessment: (payload: any) => void;
-    closeModal: () => void;
-    clearError: () => void;
-    clearSuccess: () => void;
-}
+type AssessmentContext = {
+  assessmentData: Dayjs | null | undefined;
+  assessment: IncompleteAssessmentsAPI[] | undefined;
+  isLoading: boolean;
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  modalVisible: boolean;
+  createAssessments: () => void;
+  cancelModal: () => void;
+  confirmModal: () => void;
+  send: (data: any) => Promise<void>;
+};
 
-const initialState = {
-    isLoading: false,
-    success: '',
-    error: '',
-    allAssessmentsComplete: false,
-    modalVisible: false,
-    listAthletes: null,
-    createAssessments: () => { },
-    getIncompleteAssessments: () => { },
-    getAllIncompleteAssessments: () => { },
-    collectiveAssessment: () => { },
-    closeModal: () => { },
-    clearError: () => { },
-    clearSuccess: () => { },
-}
+const initialContextState = {
+  assessmentData: undefined,
+  assessment: undefined,
+  isLoading: false,
+  modalVisible: true,
+  createAssessments: () => {},
+  cancelModal: () => {},
+  confirmModal: () => {},
+  setIsLoading: () => {},
+  send: () => Promise.resolve(),
+};
 
-const AssessmentsContext = createContext<AssessmentsState>(initialState);
+const AssessmentsContext =
+  createContext<AssessmentContext>(initialContextState);
 
-export const AssessmentsProvider = ({ children }: { children: React.ReactNode }) => {
-    const { get, post, patch } = useApiProvider();
-    const [success, setSuccess] = useState<string>('');
-    const [error, setError] = useState<string>('');
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [allAssessmentsComplete, setAllAssessmentsComplete] = useState<boolean>(false);
-    const [modalVisible, setModalVisible] = useState<boolean>(false);
-    const [listAthletes, setListAthletes] = useState<ListAthletesProps | null>(null);
+type Props = {
+  children: React.ReactNode;
+};
 
-    const router = useRouter()
+export const AssessmentsProvider = ({ children }: Props) => {
+  const { get, post, patch } = useApiProvider();
+  const [isLoading, setIsLoading] = useState(false);
+  const [modalVisible, setModalVisible] = useState(true);
 
-    useEffect(() => {
-        setError("")
-        setSuccess("")
-        setModalVisible(false)
-    }, []);
+  const [assessmentData, setAssessmentData] = useState<
+    Dayjs | null | undefined
+  >(undefined);
+  const [assessment, setAssessment] = useState<
+    IncompleteAssessmentsAPI[] | undefined
+  >(undefined);
 
-    const getAllIncompleteAssessments = async () => {
-        setIsLoading(true)
-        try {
-            const response = await get('/avaliacoes_incompletas/verificar');
-            // Este endpoint retorna se há avaliações incompletas (True ou false)
-            // A negação feita abaixo para saber se aparece ou não o modal de criação de nova avaliação;
-            if (response) {
-                setModalVisible(!response?.data);
-                setAllAssessmentsComplete(!response?.data);
-            }
-        } catch (error) {
-            setError("Erro ao carregar a lista de avaliações incompletas");
-        } finally {
-            setIsLoading(false)
+  const router = useRouter();
+
+  const updateAssesment = (response: ResponseIncompleteAssessmentAPI) => {
+    setAssessmentData(dayjs(response.data));
+    setAssessment(response.avaliacoesIncompletas);
+    console.log("setted Assessment:", response.avaliacoesIncompletas);
+  };
+
+  const updateExercise = (data: Array<any>) => {
+    if (!assessment) return;
+
+    let newAssessment: any[] = [];
+
+    assessment.forEach((atleta) => {
+      data.forEach((incommingExercise) => {
+        if (atleta.atletaId === incommingExercise.atletaId) {
+          let atletaUpdatedExercises = {
+            ...atleta.exercicios,
+            ...incommingExercise.resultado,
+          };
+          newAssessment.push({
+            atletaId: atleta.atletaId,
+            atletaNome: atleta.atletaNome,
+            exercicios: atletaUpdatedExercises,
+          });
         }
-    };
+      });
+    });
 
-    const getIncompleteAssessments = async (slug: string) => {
-        setIsLoading(true)
-        clearStates();
-        if (slug == '') return;
-        try {
-            const response = await get(`/avaliacoes_incompletas/${slug}`);
+    setAssessment(newAssessment);
+  };
 
-            if (response?.data.length > 0) {
-                response?.data.sort((a: any, b: any) => {
-                    const nomeA = a.nome.toLowerCase();
-                    const nomeB = b.nome.toLowerCase();
-
-                    if (nomeA < nomeB) {
-                        return -1;
-                    }
-                    if (nomeA > nomeB) {
-                        return 1;
-                    }
-                    return 0;
-                });
-
-                setListAthletes(response)
-            } else {
-                setSuccess(`Todas as avaliações dessa valência física foram feitas.`)
-            }
-        } catch (error) {
-            setError("Erro ao carregar a lista de avaliações incompletas");
-        } finally {
-            setIsLoading(false)
-        }
-    };
-
-    const createAssessments = async () => {
-        setIsLoading(true)
-        clearStates();
-        try {
-            const response = await post('/avaliacaocoletiva', {});
-
-            if (response?.status == 204 || response?.status == 200) {
-                router.push('/valencia/menu')
-            }
-        } catch (error) {
-            setError("Erro criar avaliações");
-        } finally {
-            setIsLoading(false)
-        }
-    };
-
-    const collectiveAssessment = async (payload: any) => {
-        setIsLoading(true)
-        try {
-            const response = await patch(`exercicio_coletivo`, JSON.stringify(payload));
-            
-            if (response?.status == 204) {
-                console.log("Avaliação realizada com sucesso!")
-                setSuccess("Avaliação realizada com sucesso!")
-            } else {
-                console.log("Tivemos um problema ao realizar a avaliação, por favor, tente novamente mais tarde!")
-                setError("Tivemos um problema ao realizar a avaliação, por favor, tente novamente mais tarde!")
-            }
-        } catch (error) {
-            setError("Erro ao realizar a avaliação, por favor, tente novamente mais tarde!")
-        } finally {
-            setIsLoading(false)
-        }
+  const getIncompleteAssessments = async () => {
+    setIsLoading(true);
+    try {
+      const response = await get("/avaliacoes_incompletas");
+      updateAssesment(response?.data);
+      setModalVisible(true);
+    } catch (error) {
+      router.push("/menu");
+    } finally {
+      setIsLoading(false);
     }
+  };
 
-    const closeModal = () => {
-        setModalVisible(false)
+  const createAssessments = async () => {
+    setIsLoading(true);
+    try {
+      const response = await post("/avaliacaocoletiva", {});
+      updateAssesment(response?.data);
+    } catch (error) {
+      router.push("/menu");
+    } finally {
+      setIsLoading(false);
     }
+  };
 
-    const clearError = () => {
-        setError('')
+  const cancelModal = () => {
+    setModalVisible(false);
+    router.push("/menu");
+  };
+
+  const confirmModal = async () => {
+    if (assessment && assessment?.length <= 0) await createAssessments();
+    setModalVisible(false);
+  };
+
+  const send = async (data: any) => {
+    const request = await patch("/exercicio_coletivo", data);
+    if (request?.status == 204) {
+      updateExercise(data);
+      toast.success("As informações foram salvas.");
+      router.push("/valencia/menu");
     }
+  };
 
-    const clearSuccess = () => {
-        setSuccess('')
-    }
+  useEffect(() => {
+    getIncompleteAssessments();
+  }, []);
 
-    const clearStates = () => {
-        setError("")
-        setSuccess("")
-        setModalVisible(false)
-    }
+  return (
+    <AssessmentsContext.Provider
+      value={{
+        assessmentData,
+        assessment,
+        isLoading,
+        modalVisible,
+        cancelModal,
+        confirmModal,
+        createAssessments,
+        setIsLoading,
+        send,
+      }}
+    >
+      {modalVisible && !!assessment ? (
+        <Modal
+          title={
+            assessment && assessment?.length > 0
+              ? "Existe uma avaliação em andamento...\nDeseja continuar?"
+              : "Deseja criar uma nova avaliação?"
+          }
+          closeModalFunction={cancelModal}
+          confirmButtonFunction={confirmModal}
+          cancelButtonFunction={cancelModal}
+          confirmButtonText={
+            assessment && assessment?.length > 0
+              ? "Retomar avaliação"
+              : "Iniciar nova avaliação"
+          }
+        />
+      ) : (
+        children
+      )}
+    </AssessmentsContext.Provider>
+  );
+};
 
-    return (
-        <AssessmentsContext.Provider value={{ isLoading, success, error, allAssessmentsComplete, modalVisible, listAthletes, createAssessments, closeModal, clearError, clearSuccess, getAllIncompleteAssessments, getIncompleteAssessments, collectiveAssessment }}>
-            {children}
-        </AssessmentsContext.Provider>
-    )
-}
-
-export const useAssessmentsProvider = () => useContext(AssessmentsContext)
+export const useAssessmentsProvider = () => useContext(AssessmentsContext);
