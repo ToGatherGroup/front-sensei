@@ -3,7 +3,7 @@
 type Props = {
   text: string;
   type: "submit" | "button";
-  onClick?: () => void | undefined;
+  onClick?: () => any | undefined;
   font?:
     | "light"
     | "normal"

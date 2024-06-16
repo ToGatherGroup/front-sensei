@@ -21,8 +21,14 @@ type FormRowProps = {
   label: React.ReactElement;
   input: React.ReactElement;
   errorMessage?: string | undefined;
+  className?: string | undefined;
 };
-const FormRow = ({ label, input, errorMessage }: FormRowProps) => {
+const FormRow = ({
+  label,
+  input,
+  errorMessage,
+  className: outerClassName,
+}: FormRowProps) => {
   const className = {
     labelChildren:
       "[&_label]:w-full [&_label]:max-w-full [&_label]:sm:w-72 [&_label]:text-center",
@@ -33,7 +39,7 @@ const FormRow = ({ label, input, errorMessage }: FormRowProps) => {
   };
   return (
     <div
-      className={`flex flex-col sm:flex-row gap-1 items-center justify-center mt-6 ${className.labelChildren} ${className.inputChildren}`}
+      className={`flex flex-col sm:flex-row gap-1 items-center justify-center mt-6 ${className.labelChildren} ${className.inputChildren} ${outerClassName}`}
     >
       {label}
       <div className="flex flex-col justify-center items-center md:justify-start md:items-start">
