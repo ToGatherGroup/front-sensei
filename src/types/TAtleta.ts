@@ -12,3 +12,16 @@ export type TAtleta = {
   photo: string;
   category?: string;
 };
+
+export type Atleta = {
+  id: string;
+  nome: string;
+  email: string;
+  nascimento: string;
+  sexo: "male" | "female";
+  peso: number;
+  altura: number;
+  faixa: (typeof Faixas)[number];
+  foto: string;
+  categoria?: string;
+};

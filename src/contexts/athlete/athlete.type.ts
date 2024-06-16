@@ -1,3 +1,5 @@
+import { Faixas } from "@/enums/faixas"
+
 export type AthleteProps = {
     id: number,
     nome: string,
@@ -18,4 +20,20 @@ type AthleteListProps = {
 
 export type ListAthletesProps = {
     data: AthleteListProps[] | [],
+}
+
+export type AthleteProfileProps = {
+    nome: string,
+    idade: number,
+    categoria: string,
+    faixa: (typeof Faixas)[number],
+    foto: string,
+    medalhaDTO: MedalProps[];
+}
+
+export type MedalsProps = MedalProps[];
+
+type MedalProps = {
+    posicao: string,
+    quantidade: number,
 }

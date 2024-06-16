@@ -3,8 +3,8 @@ import styles from "./formAtleta.module.css";
 import Loading from "@/components/loading/index";
 import FormTitle from "@/components/title/formTitle/index";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
-import { TAtleta } from "@/types/TAtleta";
+import { useEffect, useState } from "react";
+import { Atleta, TAtleta } from "@/types/TAtleta";
 import { atletaToApiPost } from "@/api/middleware/atleta";
 import { atletaCreateSchema } from "@/schemas/athleteSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -13,7 +13,7 @@ import { useApiProvider } from "@/contexts";
 import Button from "../ui/button";
 
 type Props = {
-  atleta?: TAtleta;
+  atleta?: Atleta | null;
 };
 
 const FormAtleta = ({ atleta }: Props) => {
@@ -26,10 +26,14 @@ const FormAtleta = ({ atleta }: Props) => {
   const router = useRouter();
 
   //Carrega o Avatar
-  if (atleta?.photo && avatarBase64 === "") {
-    setAvatarBase64(atleta.photo);
+  if (atleta?.foto && avatarBase64 === "") {
+    setAvatarBase64(atleta.foto);
   }
 
+  useEffect(() => {
+   console.log(atleta)
+  }, [atleta])
+  
   const {
     register,
     getValues,
@@ -72,10 +76,11 @@ const FormAtleta = ({ atleta }: Props) => {
     return n.toString();
   }
 
-  function dateForInput(date: Date) {
-    const year = date.getFullYear();
-    const month = twoDigits(date.getMonth() + 1); // Yeah... This shit.. Need to be increased by 1, since the index starts on zero. (0 = January)
-    const day = twoDigits(date.getDate());
+  function dateForInput(date: string) {
+    const birthday = new Date(date);
+    const year = birthday.getFullYear();
+    const month = twoDigits(birthday.getMonth() + 1); // Yeah... This shit.. Need to be increased by 1, since the index starts on zero. (0 = January)
+    const day = twoDigits(birthday.getDate() + 1);
     const dateFormat = `${year}-${month}-${day}`;
     return dateFormat;
   }
@@ -173,7 +178,7 @@ const FormAtleta = ({ atleta }: Props) => {
               type="text"
               id="name"
               placeholder="Insira seu nome"
-              value={atleta && atleta.name}
+              value={atleta?.nome}
             />
             {errors.name && (
               <p className={styles.displayError}>{errors.name.message}</p>
@@ -187,7 +192,7 @@ const FormAtleta = ({ atleta }: Props) => {
               type="email"
               id="email"
               placeholder="Insira seu e-mail"
-              value={atleta && atleta.email}
+              value={atleta?.email}
             />
             {errors.email && (
               <p className={styles.displayError}>{errors.email.message}</p>
@@ -202,7 +207,7 @@ const FormAtleta = ({ atleta }: Props) => {
               {...register("birthdate")}
               type="date"
               id="birthdate"
-              value={atleta && dateForInput(atleta.birthdate)}
+              value={atleta?.nascimento ? dateForInput(atleta?.nascimento) : ''}
             />
             {errors.birthdate && (
               <p className={styles.displayError}>{errors.birthdate.message}</p>
@@ -216,7 +221,7 @@ const FormAtleta = ({ atleta }: Props) => {
             <select
               {...register("sex")}
               id="sex"
-              defaultValue={atleta ? atleta.sex : ""}
+              defaultValue={atleta?.sexo}
             >
               <option value="" disabled hidden>
                 Selecione
@@ -241,7 +246,7 @@ const FormAtleta = ({ atleta }: Props) => {
                 id="weight"
                 placeholder={"0,0"}
                 step={0.01}
-                value={atleta && atleta.weight}
+                value={atleta?.peso}
               />
             </div>
 
@@ -255,7 +260,7 @@ const FormAtleta = ({ atleta }: Props) => {
                 id="height"
                 placeholder={"0"}
                 step={1}
-                value={atleta && atleta.height}
+                value={atleta?.altura}
               />
             </div>
           </div>
@@ -282,7 +287,7 @@ const FormAtleta = ({ atleta }: Props) => {
             <select
               {...register("belt")}
               id="belt"
-              defaultValue={atleta ? atleta.belt : ""}
+              defaultValue={atleta?.faixa}
             >
               <option value="" disabled hidden>
                 Selecione

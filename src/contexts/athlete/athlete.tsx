@@ -1,7 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useApiProvider } from "../api/api";
-import { ListAthletesProps } from "./athlete.type";
+import { AthleteProfileProps, ListAthletesProps, MedalsProps } from "./athlete.type";
 import { useRouter } from "next/navigation";
+import { Atleta } from "@/types/TAtleta";
 
 
 type AthleteState = {
@@ -9,10 +10,15 @@ type AthleteState = {
     isLoading: boolean;
     injuries: string[];
     injuriesDescription: string[];
+    athleteProfile: AthleteProfileProps | null;
+    athlete: Atleta | null;
+    medals: MedalsProps;
     success: string;
     error: string;
-    call: (ids: number[]) => void
-    getInjuries: (id: number | string) => void
+    call: (ids: number[]) => void;
+    getProfile: (id: number | string) => void;
+    getAthlete: (id: number | string) => void;
+    getInjuries: (id: number | string) => void;
 }
 
 const initialState = {
@@ -20,10 +26,15 @@ const initialState = {
     isLoading: false,
     injuries: [],
     injuriesDescription: [],
+    athleteProfile: null,
+    athlete: null,
+    medals: [],
     success: '',
     error: '',
     call: () => {},
-    getInjuries: () => {}
+    getInjuries: () => {},
+    getAthlete: () => {},
+    getProfile: () => {}
 }
 
 const AthleteContext = createContext<AthleteState>(initialState);
@@ -34,6 +45,9 @@ export const AthleteProvider = ({ children }: {children: React.ReactNode}) => {
     const [success, setSuccess] = useState<string>('');
     const [error, setError] = useState<string>('');
     const [injuries, setInjuries] = useState<string[]>([]);
+    const [athleteProfile, setathleteProfile] = useState<AthleteProfileProps | null>(null);
+    const [athlete, setAthlete] = useState<Atleta | null>(null);
+    const [medals, setMedals] = useState<MedalsProps>([]);
     const [injuriesDescription, setInjuriesDescription] = useState<string[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const router = useRouter()
@@ -57,6 +71,33 @@ export const AthleteProvider = ({ children }: {children: React.ReactNode}) => {
             setIsLoading(false)
         }
     };
+
+    const getProfile = async (id: number | string) => {
+        setIsLoading(true)
+        try {
+            const response = await get(`/atleta/ficha/${id}`);
+            setathleteProfile(response?.data);
+            setMedals(response?.data?.medalhaDTO);
+           
+        } catch (error) {
+            console.error("Erro ao obter dados do perfil atleta", error);
+        } finally {
+            setIsLoading(false)
+        }
+      };
+
+    const getAthlete = async (id: number | string) => {
+        setIsLoading(true)
+        try {
+            const response = await get(`/atleta/${id}`);
+            setAthlete(response?.data);
+            console.log(response)
+        } catch (error) {
+            console.error("Erro ao obter dados do atleta", error);
+        } finally {
+            setIsLoading(false)
+        }
+     };
 
     const getInjuries = async (id: number | string) => {
         try {
@@ -94,7 +135,7 @@ export const AthleteProvider = ({ children }: {children: React.ReactNode}) => {
     }
         
     return (
-        <AthleteContext.Provider value={{isLoading, listAthletes, injuries, injuriesDescription, success, error, call, getInjuries}}>
+        <AthleteContext.Provider value={{isLoading, listAthletes, injuries, injuriesDescription, athlete, athleteProfile, medals, success, error, call, getInjuries, getProfile, getAthlete}}>
             {children}
         </AthleteContext.Provider>
     )
