@@ -1,4 +1,3 @@
-import Actions from "@/enums/AssesmentReducerActions";
 import { Dayjs } from "dayjs";
 
 interface AssessmentTypeDetail {
@@ -136,7 +135,3 @@ export type IncompleteAssessmentsAPI = {
         weight: number | null | undefined;
       }[];
   };
-
-  export type AssessmentReducerAction = {
-    type: typeof Actions[keyof typeof Actions]
-  }
