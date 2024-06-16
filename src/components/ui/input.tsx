@@ -29,7 +29,7 @@ type Props = {
   placeHolder?: string | undefined;
   label?: string | undefined;
   required?: boolean | undefined;
-  size: "tiny" | "small" | "normal" | "fit" | "full";
+  inputSize: "tiny" | "small" | "normal" | "fit" | "full";
   value?: string | undefined;
   errorMessage?: string | undefined;
   defaultValue?: string | undefined;
@@ -62,14 +62,14 @@ const Input = ({
   onBlur,
   value,
   forwardRef: innerRef,
-  size,
+  inputSize,
   errorMessage,
   options, // Only for Select type
   defaultValue, // Only for Select type
   inputClassName: outerInputClassName,
   labelClassName: outerLabelClassName,
 }: Props) => {
-  const inputClassName = `h-8 bg-input placeholder:bg-input placeholder:text-center md:placeholder:text-left mx-1 rounded p-1.5 ${SIZES[size]} ${outerInputClassName}`;
+  const inputClassName = `h-8 bg-input placeholder:bg-input placeholder:text-center md:placeholder:text-left mx-1 rounded p-1.5 ${SIZES[inputSize]} ${outerInputClassName}`;
 
   const labelClassName = `w-full text-center md:w-56 md:min-w-56 p-1 ${
     required &&
