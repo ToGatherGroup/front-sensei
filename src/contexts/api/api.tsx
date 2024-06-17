@@ -7,20 +7,33 @@ import Loading from "@/components/loading/index";
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 type ApiState = {
-  get: (endpoint: string) => Promise<AxiosResponse> | null;
+  get: (
+    endpoint: string,
+    displayOptions?: DisplayOptions | undefined
+  ) => Promise<AxiosResponse> | null;
   post: (
     endpoint: string,
-    body: object | string
+    body: object | string,
+    displayOptions?: DisplayOptions | undefined
   ) => Promise<AxiosResponse> | null;
   patch: (
     endpoint: string,
-    body: object | string
+    body: object | string,
+    displayOptions?: DisplayOptions | undefined
   ) => Promise<AxiosResponse> | null;
   remove: (
     endpoint: string,
-    body: object | string
+    displayOptions?: DisplayOptions | undefined
   ) => Promise<AxiosResponse> | null;
   isLoadingAPI: boolean | undefined;
+};
+
+type DisplayOptions = {
+  showLoading?: boolean | undefined;
+  toastSuccess?: boolean | undefined;
+  toastSuccessMessage?: string | undefined;
+  toastError?: boolean | undefined;
+  toastErrorMessage?: string | undefined;
 };
 
 const initialState = {
@@ -34,7 +47,6 @@ const initialState = {
 const ApiContext = createContext<ApiState>(initialState);
 
 export const ApiProvider = ({ children }: { children: React.ReactNode }) => {
-  /* const axios = require("axios"); */ //Removido pois desta forma não trás a tipagem do axios
   const [isLoadingAPI, setIsLoadingAPI] = useState(false);
 
   const apiInstance = axios.create({
@@ -45,102 +57,106 @@ export const ApiProvider = ({ children }: { children: React.ReactNode }) => {
     },
   });
 
-  const get = (endpoint: string) => {
-    setIsLoadingAPI(true);
+  function monitorRequest(
+    request: Promise<any>,
+    displayOptions?: DisplayOptions
+  ) {
+    console.log("toastOptions:", displayOptions);
+
+    // Monitora o sucesso
+    displayOptions?.toastSuccess &&
+      request.then((data: any) => {
+        toast.success(
+          displayOptions.toastSuccessMessage ??
+            `Informações carregadas com sucesso!`
+        );
+        return data;
+      });
+
+    // Monitora o erro
+    displayOptions?.toastError != false &&
+      request.catch(({ request: error }) => {
+        if (error.response) {
+          toast.error(
+            `${
+              displayOptions?.toastErrorMessage ??
+              "Não foi possível carregar as informações do servidor"
+            }\n${error.status && `Cód: ${error.status}`}`
+          );
+        } else {
+          toast.error(
+            "Não foi possível se conectar ao servidor\nTente novamente em alguns instantes."
+          );
+        }
+        return error;
+      });
+  }
+
+  const get = (
+    endpoint: string,
+    displayOptions?: DisplayOptions | undefined
+  ) => {
+    (displayOptions?.showLoading == undefined ||
+      displayOptions?.showLoading == true) &&
+      setIsLoadingAPI(true);
+
     const request = apiInstance.get(endpoint);
-    request.catch(({ request: error }) => {
-      console.log("error:", error);
+    monitorRequest(request, displayOptions);
 
-      if (error.response) {
-        toast.error(
-          `Não foi possível carregar as informações do servidor\n${
-            error.status && `Cód: ${error.status}`
-          }`
-        );
-      } else {
-        toast.error(
-          "Não foi possível se conectar ao servidor\nTente novamente em alguns instantes."
-        );
-      }
-      return error;
-    });
-    request.finally(() => setIsLoadingAPI(false));
+    (displayOptions?.showLoading == undefined ||
+      displayOptions?.showLoading == true) &&
+      request.finally(() => setIsLoadingAPI(false));
     return request;
   };
 
-  /* const post = (endpoint: string, body: object | string) => {
-    return apiInstance.post(endpoint, body);
-  }; */
-
-  const post = (endpoint: string, body: object | string) => {
-    setIsLoadingAPI(true);
+  const post = (
+    endpoint: string,
+    body: object | string,
+    displayOptions?: DisplayOptions | undefined
+  ) => {
+    (displayOptions?.showLoading == undefined ||
+      displayOptions?.showLoading == true) &&
+      setIsLoadingAPI(true);
     const request = apiInstance.post(endpoint, body);
-    request.catch(({ request: error }) => {
-      console.log("error:", error);
+    monitorRequest(request, displayOptions);
 
-      if (error.response) {
-        toast.error(
-          `Não foi possível enviar as informações para o servidor\n${
-            error.status && `Cód: ${error.status}`
-          }`
-        );
-      } else {
-        toast.error(
-          "Não foi possível se conectar ao servidor\nTente novamente em alguns instantes."
-        );
-      }
-      return error;
-    });
-    request.finally(() => setIsLoadingAPI(false));
+    (displayOptions?.showLoading == undefined ||
+      displayOptions?.showLoading == true) &&
+      request.finally(() => setIsLoadingAPI(false));
     return request;
   };
 
-  const patch = (endpoint: string, body: object | string) => {
-    setIsLoadingAPI(true);
-    console.log("Requisição PATCH para o endpoint completo:");
-    console.log(`${BASE_URL}${endpoint}`);
+  const patch = (
+    endpoint: string,
+    body: object | string,
+    displayOptions?: DisplayOptions | undefined
+  ) => {
+    (displayOptions?.showLoading == undefined ||
+      displayOptions?.showLoading == true) &&
+      setIsLoadingAPI(true);
 
     const request = apiInstance.patch(endpoint, body);
-    request.catch(({ request: error }) => {
-      console.log("error:", error);
+    monitorRequest(request, displayOptions);
 
-      if (error.response) {
-        toast.error(
-          `Não foi possível enviar as informações para o servidor\n${
-            error.status && `Cód: ${error.status}`
-          }`
-        );
-      } else {
-        toast.error(
-          "Não foi possível se conectar ao servidor\nTente novamente em alguns instantes."
-        );
-      }
-      return error;
-    });
-    request.finally(() => setIsLoadingAPI(false));
+    (displayOptions?.showLoading == undefined ||
+      displayOptions?.showLoading == true) &&
+      request.finally(() => setIsLoadingAPI(false));
     return request;
   };
 
-  const remove = (endpoint: string) => {
-    setIsLoadingAPI(true);
+  const remove = (
+    endpoint: string,
+    displayOptions?: DisplayOptions | undefined
+  ) => {
+    (displayOptions?.showLoading == undefined ||
+      displayOptions?.showLoading == true) &&
+      setIsLoadingAPI(true);
     const request = apiInstance.delete(endpoint);
-    request.catch(({ request: error }) => {
-      console.log("error:", error);
+    monitorRequest(request, displayOptions);
 
-      if (error.response) {
-        toast.error(
-          `Não foi possível enviar as informações para o servidor\n${
-            error.status && `Cód: ${error.status}`
-          }`
-        );
-      } else {
-        toast.error(
-          "Não foi possível se conectar ao servidor\nTente novamente em alguns instantes."
-        );
-      }
-      return error;
-    });
-    request.finally(() => setIsLoadingAPI(false));
+    (displayOptions?.showLoading == undefined ||
+      displayOptions?.showLoading == true) &&
+      request.finally(() => setIsLoadingAPI(false));
     return request;
   };
 
