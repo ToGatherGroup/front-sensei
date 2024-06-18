@@ -3,14 +3,13 @@
 import { useEffect, useState } from "react";
 import { getAtletas, getAtletasByName } from "@/api/endpoints";
 
-import FormTitle from "@/components/title/formTitle/index";
 import AvatarAtleta from "@/components/avatarAtleta/page";
 import { apiToAtletas } from "@/api/middleware/atletas";
 
 import { TAtletas } from "@/types/TAtletas";
 
-import styles from "./selecionar.module.css";
 import { useDebounce } from "@/hooks/useDebounce";
+import Title from "@/components/ui/title";
 
 let height = 1500; // A secure large height definition, in case window is not defined
 
@@ -91,24 +90,26 @@ const AtletaSelecionar = () => {
   }, [debouncedValue]);
 
   return (
-    <div className={styles.container}>
-      <div className={`form-container ${styles.content}`}>
-        <FormTitle
-          title="Buscar atleta"
-          iconSrc="/icons/person_24x24.png"
-          className={styles.title}
-        />
+    <div className="flex min-w-52">
+      <div
+        className={`form-container my-10 mx-auto flex flex-col items-center`}
+      >
+        <Title title="Buscar atleta" iconSrc="/icons/person_24x24_wine.png" />
 
         <input
           onChange={(e) => setRequestName(e.target.value)}
           value={requestName}
-          className={styles.inputName}
+          className={"text-center my-6 mx-auto"}
           type="text"
           placeholder="Insira o nome do atleta"
           autoComplete="off"
         />
 
-        <ul className={styles.listAtletas}>
+        <ul
+          className={
+            "flex flex-wrap max-w-[600px] gap-[10px] my-0 mx-auto min-[600px]:gap-5 justify-center"
+          }
+        >
           {listAtleta.map((atleta, i) => (
             <li key={i}>
               <AvatarAtleta
@@ -120,15 +121,19 @@ const AtletaSelecionar = () => {
             </li>
           ))}
           <li className="lastElement" />
-          {loading && <div className={styles.loader} />}
+          {loading && (
+            <div className="my-5 mx-auto border-solid border-[10px] border-white border-t-[10px] border-t-winePattern rounded-full w-[60px] h-[60px] animate-spin animate-duration-2000" />
+          )}
         </ul>
 
         {!loading && listAtleta.length <= 0 && lastPage && (
-          <p className={styles.notFound}>Nenhum atleta encontrado.</p>
+          <p className={"text-center text-winePatternLight text-xl"}>
+            Nenhum atleta encontrado.
+          </p>
         )}
 
         {requestError && (
-          <p className={styles.requestError}>
+          <p className={"max-w-[250px] p-[5px] rounded text-white bg-red-600"}>
             Houve um erro ao tentar carregar os atletas. Tente atualizar a
             página.
           </p>
