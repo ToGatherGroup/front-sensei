@@ -92,14 +92,14 @@ const AtletaSelecionar = () => {
   return (
     <div className="flex min-w-52">
       <div
-        className={`form-container my-10 mx-auto flex flex-col items-center`}
+        className={`form-container !px-1 my-10 mx-auto flex flex-col items-center !w-[600px]`}
       >
         <Title title="Buscar atleta" iconSrc="/icons/person_24x24_wine.png" />
 
         <input
           onChange={(e) => setRequestName(e.target.value)}
           value={requestName}
-          className={"text-center my-6 mx-auto"}
+          className={"text-center my-6 w-72 placeholder:text-center"}
           type="text"
           placeholder="Insira o nome do atleta"
           autoComplete="off"
