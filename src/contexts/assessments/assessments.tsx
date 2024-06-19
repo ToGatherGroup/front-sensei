@@ -23,6 +23,7 @@ type AssessmentContext = {
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   modalVisible: boolean;
   createAssessments: () => void;
+  exerciseIsComplete: (exerciseName: string) => boolean;
   cancelModal: () => void;
   confirmModal: () => void;
   send: (data: any) => Promise<void>;
@@ -37,6 +38,7 @@ const initialContextState = {
   cancelModal: () => {},
   confirmModal: () => {},
   setIsLoading: () => {},
+  exerciseIsComplete: () => false,
   send: () => Promise.resolve(),
 };
 
@@ -116,6 +118,41 @@ export const AssessmentsProvider = ({ children }: Props) => {
     }
   };
 
+  const exerciseIsComplete = (exerciseName: string) => {
+    if (assessment && assessment[0]?.exercicios?.[exerciseName] === undefined) {
+      throw new Error(`exerciseName "${exerciseName}" incorreto.`);
+    }
+
+    const some = assessment?.some((exercise) => {
+      const resultado =
+        exercise.exercicios?.[exerciseName] !== undefined &&
+        exercise.exercicios?.[exerciseName] === null;
+
+      console.log(
+        "exercise.exercicios?.[exerciseName]",
+        exercise.exercicios?.[exerciseName]
+      );
+
+      console.log(
+        "exercise.exercicios?.[exerciseName] != undefined",
+        exercise.exercicios?.[exerciseName] != undefined
+      );
+
+      console.log(
+        "exercise.exercicios?.[exerciseName] === null",
+        exercise.exercicios?.[exerciseName] === null
+      );
+
+      console.log("resultado dentro do some:", resultado);
+
+      return resultado;
+    });
+
+    console.log("some:", some);
+    console.log("some retornado:", !some);
+    return !some;
+  };
+
   const cancelModal = () => {
     setModalVisible(false);
     router.push("/menu");
@@ -151,6 +188,7 @@ export const AssessmentsProvider = ({ children }: Props) => {
         createAssessments,
         setIsLoading,
         send,
+        exerciseIsComplete,
       }}
     >
       {modalVisible && !!assessment ? (
