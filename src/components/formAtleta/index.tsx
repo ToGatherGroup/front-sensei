@@ -306,13 +306,6 @@ const FormAtleta = ({ atleta }: Props) => {
             )}
           </div>
 
-          <Input
-            inputSize="normal"
-            type="text"
-            label="Nome completo"
-            placeHolder="Insira seu nome"
-          />
-
           <Button
             text={atleta ? "Alterar" : "Cadastrar"}
             type="submit"
