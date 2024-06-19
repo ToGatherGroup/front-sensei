@@ -3,87 +3,79 @@ import styles from "./formAtleta.module.css";
 import Loading from "@/components/loading/index";
 import FormTitle from "@/components/title/formTitle/index";
 import { useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
-import { Atleta, TAtleta } from "@/types/TAtleta";
-import { atletaToApiPost } from "@/api/middleware/atleta";
+import { useState, useEffect } from "react";
+import { Atleta } from "@/types/TAtleta";
 import { atletaCreateSchema } from "@/schemas/athleteSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/navigation";
-import { useApiProvider } from "@/contexts";
+import { useAthleteProvider } from "@/contexts";
 import Button from "../ui/button";
 
 type Props = {
   atleta?: Atleta | null;
+  method: 'POST' | 'PATCH';
 };
 
-const FormAtleta = ({ atleta }: Props) => {
-  const { post } = useApiProvider();
+const FormAtleta = ({ atleta, method }: Props) => {
   const [avatarBase64, setAvatarBase64] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [disableSubmitBtn, setDisableSubmitBtn] = useState<boolean>(false);
-  const [athlete, setAthlete] = useState<TAtleta[]>([]);
+  const { registerAthlete, updateAthlete } = useAthleteProvider();
 
   const router = useRouter();
 
-  //Carrega o Avatar
-  if (atleta?.foto && avatarBase64 === "") {
-    setAvatarBase64(atleta.foto);
-  }
-
   useEffect(() => {
-   console.log(atleta)
-  }, [atleta])
-  
+    if (atleta?.foto && avatarBase64 == "") {
+      setAvatarBase64(atleta.foto);
+    }
+    console.log(atleta)
+  }, [atleta, setAvatarBase64]);
+
   const {
     register,
+    handleSubmit,
     getValues,
-    handleSubmit: handleSubmit,
-    formState: { errors },
     reset,
+    formState: { errors },
   } = useForm({
+    defaultValues: {
+      id: atleta?.id,
+      nome: atleta?.nome ?? "",
+      email: atleta?.email ?? "",
+      nascimento: atleta?.nascimento ?? "",
+      sexo: atleta?.sexo ?? "",
+      peso: atleta?.peso ? atleta?.peso : 0,
+      altura: atleta?.altura ? atleta?.altura : 0,
+      faixa: atleta?.faixa,
+      isAtivo: (atleta && !atleta?.isAtivo) ? 0 : 1,
+    },
     mode: "onBlur",
-    resolver: yupResolver(atletaCreateSchema),
+    resolver: yupResolver(atletaCreateSchema),  // Certifique-se de que o schema de validação está sendo aplicado corretamente
   });
 
   const onSubmit = (data: any) => {
-    file2Base64(data.photo[0])
-      .then((avatarBase64) => {
-        console.log("Submeter a API aqui:");
-        data.avatarBase64 = avatarBase64;
-        //alert(`Objeto gerado com sucesso!\n\n${JSON.stringify(data)}`);
-        const atletaData = atletaToApiPost(data);
-        console.log(data);
-        console.log(atletaData);
-        console.log(JSON.stringify(atletaData));
-        submitForm(data);
-      })
-      .catch((error) => {
-        alert(
-          "Houve um erro ao carregar a imagem de avatar. Tente usar uma outra imagem!"
-        );
-        console.log(error);
-      });
+    switch(method) {
+      case 'PATCH': 
+        updateAthlete(data);
+        break;
+      default:
+        file2Base64(data.foto[0])
+        .then((avatarBase64) => {
+          const preparedData = data;
+          preparedData.foto = avatarBase64;
+          registerAthlete(preparedData);
+        })
+        .catch((error) => {
+          alert(
+            "Houve um erro ao carregar a imagem de avatar. Tente usar uma outra imagem!"
+          );
+          console.log(error);
+        });
+    }
+
     reset();
     setAvatarBase64("");
-    //router.push("/atleta/perfil/0");
   };
-
-  //  Treatment for date before fill input (from GET)
-  function twoDigits(n: number) {
-    if (n < 10) {
-      return `0${n}`;
-    }
-    return n.toString();
-  }
-
-  function dateForInput(date: string) {
-    const birthday = new Date(date);
-    const year = birthday.getFullYear();
-    const month = twoDigits(birthday.getMonth() + 1); // Yeah... This shit.. Need to be increased by 1, since the index starts on zero. (0 = January)
-    const day = twoDigits(birthday.getDate() + 1);
-    const dateFormat = `${year}-${month}-${day}`;
-    return dateFormat;
-  }
 
   const file2Base64 = (file: File): Promise<string> => {
     return new Promise<string>((resolve, reject) => {
@@ -95,12 +87,10 @@ const FormAtleta = ({ atleta }: Props) => {
   };
 
   const uploadAvatar = (event: EventListener) => {
-    console.log("Realizando upload...");
-    console.log(getValues("photo"));
     setDisableSubmitBtn(true);
     setLoading(true);
 
-    const avatarFile = getValues("photo")![0];
+    const avatarFile = getValues("foto")![0];
     file2Base64(avatarFile)
       .then((avatarBase64) => {
         setAvatarBase64(avatarBase64);
@@ -110,20 +100,6 @@ const FormAtleta = ({ atleta }: Props) => {
         setDisableSubmitBtn(false);
         setLoading(false);
       });
-  };
-
-  const submitForm = async (data: TAtleta) => {
-    try {
-      const response = await post("atleta", atletaToApiPost(data));
-      if (response?.status !== 201) {
-        throw new Error("Erro ao cadastrar atleta");
-      }
-      console.log("Atleta cadastrado com sucesso!");
-      setAthlete([...athlete, data]);
-    } catch (error) {
-      console.error("Erro ao cadastrar atleta:", error);
-      throw error;
-    }
   };
 
   return (
@@ -155,7 +131,7 @@ const FormAtleta = ({ atleta }: Props) => {
               ></img>
             </label>
             <input
-              {...register("photo", {
+              {...register("foto", {
                 onChange: (e) => {
                   uploadAvatar(e);
                 },
@@ -164,24 +140,23 @@ const FormAtleta = ({ atleta }: Props) => {
               id="photo"
               accept="image/png"
             />
-            {errors.photo && (
-              <p className={styles.displayError}>{errors.photo.message}</p>
+            {errors.foto && (
+              <p className={styles.displayError}>{errors.foto.message}</p>
             )}
           </div>
 
           <div className={styles.inputRow}>
-            <label htmlFor="name" className={styles.required}>
+            <label htmlFor="nome" className={styles.required}>
               Nome
             </label>
             <input
-              {...register("name")}
+              {...register("nome")}
               type="text"
-              id="name"
+              id="nome"
               placeholder="Insira seu nome"
-              value={atleta?.nome}
             />
-            {errors.name && (
-              <p className={styles.displayError}>{errors.name.message}</p>
+            {errors.nome && (
+              <p className={styles.displayError}>{errors.nome.message}</p>
             )}
           </div>
 
@@ -192,7 +167,6 @@ const FormAtleta = ({ atleta }: Props) => {
               type="email"
               id="email"
               placeholder="Insira seu e-mail"
-              value={atleta?.email}
             />
             {errors.email && (
               <p className={styles.displayError}>{errors.email.message}</p>
@@ -200,94 +174,87 @@ const FormAtleta = ({ atleta }: Props) => {
           </div>
 
           <div className={styles.inputRow}>
-            <label htmlFor="birthdate" className={styles.required}>
+            <label htmlFor="nascimento" className={styles.required}>
               Data de nascimento
             </label>
             <input
-              {...register("birthdate")}
+              {...register("nascimento")}
               type="date"
-              id="birthdate"
-              value={atleta?.nascimento ? dateForInput(atleta?.nascimento) : ''}
+              id="nascimento"
             />
-            {errors.birthdate && (
-              <p className={styles.displayError}>{errors.birthdate.message}</p>
+            {errors.nascimento && (
+              <p className={styles.displayError}>{errors.nascimento.message}</p>
             )}
           </div>
 
           <div className={styles.inputRow}>
-            <label htmlFor="sex" className={styles.required}>
+            <label htmlFor="sexo" className={styles.required}>
               Sexo
             </label>
             <select
-              {...register("sex")}
-              id="sex"
-              defaultValue={atleta?.sexo}
+              {...register("sexo")}
+              id="sexo"
             >
-              <option value="" disabled hidden>
-                Selecione
-              </option>
-              <option value="male">Masculino</option>
-              <option value="female">Feminino</option>
-              <option value="other">Outro</option>
+              <option value="">Selecione</option>
+              <option value="M">Masculino</option>
+              <option value="F">Feminino</option>
+              <option value="O">Outro</option>
             </select>
-            {errors.sex && (
-              <p className={styles.displayError}>{errors.sex.message}</p>
+            {errors.sexo && (
+              <p className={styles.displayError}>{errors.sexo.message}</p>
             )}
           </div>
 
           <div className={styles.weightHeight}>
             <div className={styles.inputRow}>
-              <label htmlFor="weight" className={styles.required}>
+              <label htmlFor="peso" className={styles.required}>
                 Peso (kg)
               </label>
               <input
-                {...register("weight")}
+                {...register("peso")}
                 type="number"
-                id="weight"
+                id="peso"
                 placeholder={"0,0"}
                 step={0.01}
-                value={atleta?.peso}
               />
             </div>
 
             <div className={styles.inputRow}>
-              <label htmlFor="height" className={styles.required}>
+              <label htmlFor="altura" className={styles.required}>
                 Altura (cm)
               </label>
               <input
-                {...register("height")}
+                {...register("altura")}
                 type="number"
-                id="height"
+                id="altura"
                 placeholder={"0"}
                 step={1}
-                value={atleta?.altura}
               />
             </div>
           </div>
 
-          {errors.weight && (
+          {errors.peso && (
             <p
               className={`${styles.displayError} ${styles.displayErrorWidthHeight}`}
             >
-              {errors.weight.message}
+              {errors.peso.message}
             </p>
           )}
-          {errors.height && (
+          {errors.altura && (
             <p
               className={`${styles.displayError} ${styles.displayErrorWidthHeight}`}
             >
-              {errors.height.message}
+              {errors.altura.message}
             </p>
           )}
 
           <div className={styles.inputRow}>
-            <label htmlFor="belt" className={styles.required}>
+            <label htmlFor="faixa" className={styles.required}>
               Faixa
             </label>
             <select
-              {...register("belt")}
-              id="belt"
-              defaultValue={atleta?.faixa}
+              {...register("faixa")}
+              id="faixa"
             >
               <option value="" disabled hidden>
                 Selecione
@@ -305,8 +272,27 @@ const FormAtleta = ({ atleta }: Props) => {
               <option value="coral">Coral</option>
               <option value="vermelha">Vermelha</option>
             </select>
-            {errors.belt && (
-              <p className={styles.displayError}>{errors.belt.message}</p>
+            {errors.faixa && (
+              <p className={styles.displayError}>{errors.faixa.message}</p>
+            )}
+          </div>
+
+          <div className={styles.inputRow}>
+            <label htmlFor="isAtivo" className={styles.required}>
+              Atleta ativo
+            </label>
+            <select
+              {...register("isAtivo")}
+              id="isAtivo"
+            >
+              <option value="">
+                Selecione
+              </option>
+              <option value={1}>Ativo</option>
+              <option value={0}>Inativo</option>
+            </select>
+            {errors.isAtivo && (
+              <p className={styles.displayError}>{errors.isAtivo.message}</p>
             )}
           </div>
 

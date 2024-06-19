@@ -19,6 +19,8 @@ type AthleteState = {
     getProfile: (id: number | string) => void;
     getAthlete: (id: number | string) => void;
     getInjuries: (id: number | string) => void;
+    registerAthlete: (athlete: Atleta) => void;
+    updateAthlete: (athlete: Atleta) => void;
 }
 
 const initialState = {
@@ -34,13 +36,15 @@ const initialState = {
     call: () => {},
     getInjuries: () => {},
     getAthlete: () => {},
-    getProfile: () => {}
+    getProfile: () => {},
+    registerAthlete: () => {},
+    updateAthlete: () => {}
 }
 
 const AthleteContext = createContext<AthleteState>(initialState);
 
 export const AthleteProvider = ({ children }: {children: React.ReactNode}) => {
-    const { get, post } = useApiProvider();
+    const { get, post, put } = useApiProvider();
     const [listAthletes, setListAthletes] = useState<ListAthletesProps | null>(null);
     const [success, setSuccess] = useState<string>('');
     const [error, setError] = useState<string>('');
@@ -91,13 +95,45 @@ export const AthleteProvider = ({ children }: {children: React.ReactNode}) => {
         try {
             const response = await get(`/atleta/${id}`);
             setAthlete(response?.data);
-            console.log(response)
         } catch (error) {
             console.error("Erro ao obter dados do atleta", error);
         } finally {
             setIsLoading(false)
         }
      };
+
+    const updateAthlete = async (athleteData: Atleta) => {
+        setIsLoading(true)
+        try {            
+            const preparedAthlete = {... athleteData, isAtivo: !!athleteData.isAtivo, foto: athlete?.foto}
+            const response = await put('atleta', preparedAthlete);
+           
+            if (response) {
+                router.push('/atleta/buscar')
+            }
+            
+        } catch (error) {
+            console.error("Erro ao atualizar dados do atleta", error);
+        } finally {
+            setIsLoading(false)
+        }
+    };
+
+    const registerAthlete = async (athleteData: Atleta) => {
+        setIsLoading(true)
+        try {
+            const preparedAthlete = {... athleteData, isAtivo: !!athleteData.isAtivo}
+            const response = await post('atleta', preparedAthlete);
+
+            if (response) {
+                router.push('/atleta/buscar')
+            }
+        } catch (error) {
+            console.error("Erro ao cadastrar dados do atleta", error);
+        } finally {
+            setIsLoading(false)
+        }
+    };
 
     const getInjuries = async (id: number | string) => {
         try {
@@ -135,7 +171,7 @@ export const AthleteProvider = ({ children }: {children: React.ReactNode}) => {
     }
         
     return (
-        <AthleteContext.Provider value={{isLoading, listAthletes, injuries, injuriesDescription, athlete, athleteProfile, medals, success, error, call, getInjuries, getProfile, getAthlete}}>
+        <AthleteContext.Provider value={{isLoading, listAthletes, injuries, injuriesDescription, athlete, athleteProfile, medals, success, error, call, getInjuries, getProfile, getAthlete, registerAthlete, updateAthlete}}>
             {children}
         </AthleteContext.Provider>
     )

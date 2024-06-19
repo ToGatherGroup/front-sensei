@@ -4,14 +4,14 @@ import { AxiosResponse } from "../../../node_modules/axios/index";
 type ApiState = {
     get: (endpoint: string) => Promise<AxiosResponse> | null;
     post: (endpoint: string, body: object | string) => Promise<AxiosResponse> | null;
-    patch: (endpoint: string, body: object | string) => Promise<AxiosResponse> | null;
+    put: (endpoint: string, body: object | string) => Promise<AxiosResponse> | null;
     remove: (endpoint: string, body: object | string) => Promise<AxiosResponse> | null;
 }
 
 const initialState = {
     get: () => null,
     post: () => null,
-    patch: () => null,
+    put: () => null,
     remove: () => null,
 }
 
@@ -38,11 +38,11 @@ export const ApiProvider = ({ children }: {children: React.ReactNode}) => {
         return apiInstance.post(endpoint, body);
     }
 
-    const patch = (endpoint: string, body: object | string) => {
+    const put = (endpoint: string, body: object | string) => {
         console.log("Requisição PATCH para o endpoint completo:")
         console.log(`${BASE_URL}${endpoint}`)
 
-        return apiInstance.patch(endpoint, body);
+        return apiInstance.put(endpoint, body);
     }
 
     const remove = (endpoint: string, body: object | string) => {
@@ -50,7 +50,7 @@ export const ApiProvider = ({ children }: {children: React.ReactNode}) => {
     }
 
     return (
-        <ApiContext.Provider value={{ get, post, patch, remove }}>
+        <ApiContext.Provider value={{ get, post, put, remove }}>
             {children}
         </ApiContext.Provider>
     )

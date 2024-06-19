@@ -1,9 +1,9 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useAthleteProvider } from "@/contexts";
 import FormAtleta from "../../../../components/formAtleta/index";
-import { useEffect } from "react";
-
+import Loading from "@/components/loading/index";
 //import { Atleta } from "@/mock/atleta";
 
 type Params = {
@@ -18,14 +18,19 @@ const EditarAtleta = ({ params }: Props) => {
   const { athlete, getAthlete } = useAthleteProvider();
 
   useEffect(() => {
-    if(params.id) {
+    if(params.id && athlete == null) {
       getAthlete(parseInt(params.id))
     }
-  }, [])
+  }, [athlete, getAthlete])
 
   return (
     <div>
-      {<FormAtleta atleta={athlete} />}
+      {athlete ? (
+        <FormAtleta atleta={athlete} method="PATCH"/>
+      )
+       : (
+        <Loading />
+       )}
     </div>
   );
 };
