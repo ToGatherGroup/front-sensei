@@ -1,5 +1,5 @@
 'use client'
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 type BackProps = {
     injuries: string[];
@@ -8,24 +8,29 @@ type BackProps = {
 };
   
 const Back = ({ injuries, width, viewBoxSecondValue }: BackProps) => {
-   
-    useEffect(() => {
+    const [isReady, setIsReady] = useState(false);
 
-        if(injuries) {
+    useEffect(() => {
+        if (injuries) {
             const injuredAreas = document.querySelectorAll("path");
-            
+
             injuredAreas.forEach((area) => {
                 const dataId = area.getAttribute("data-id");
-                
+
                 if (dataId !== null && injuries.includes(dataId)) {
                     area.style.fill = "red";
+
                 } else {
                     area.style.fill = "#90a2a2";
                 }
             });
+            setIsReady(true);
         }
-
     }, [injuries]);
+
+    if (!isReady) {
+        return null;
+    }
 
     return (
         <div className="">

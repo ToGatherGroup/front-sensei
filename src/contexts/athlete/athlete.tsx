@@ -136,14 +136,11 @@ export const AthleteProvider = ({ children }: {children: React.ReactNode}) => {
     };
 
     const getInjuries = async (id: number | string) => {
+        setIsLoading(true)
         try {
             const response = await get(`lesao/${id}`);
 
             if (response) { 
-                // response?.data.map((injurie:any) => {
-                //     return injurie.regiaoLesao; 
-                // })
-
                 setInjuries(response.data.map((injury:any) => injury.regiaoLesao));
                 setInjuriesDescription(response.data.map((injury:any) => `${injury.data}: ${injury.descricao}`));
             } else {
@@ -151,6 +148,8 @@ export const AthleteProvider = ({ children }: {children: React.ReactNode}) => {
             }
         } catch (error) {
             setError("Erro ao carregar lesões!")
+        } finally {
+            setIsLoading(false)
         }
     }
     

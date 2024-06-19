@@ -1,6 +1,7 @@
 "use client";
 
 import AvatarAtleta from "@/components/avatarAtleta/page";
+
 import { useEffect, useState, useCallback } from "react";
 import useScreenSize from "@/hooks/useScreenSize";
 import Injuries from "@/components/injuries";
@@ -9,6 +10,7 @@ import Frequency from "@/components/frequency";
 import { useAthleteProvider } from "@/contexts";
 import IconButton from "@/components/iconButton";
 import MedalSection from "@/components/medalSection";
+import Button from "@/components/ui/button";
 
 type Params = {
   id: string;
@@ -20,13 +22,21 @@ type Props = {
 
 const Page = ({ params }: Props) => {
   const { getInjuries, injuries, injuriesDescription, medals, athleteProfile, getProfile } = useAthleteProvider();
+
   const [lesoes, setLesoes] = useState<string[] | null>(null);
-  const [grafico, setGrafico] = useState<any | null>(null);
+  const [grafico, setGrafico] = useState<any | null>(true);
   const [qualitativos, setQualitativos] = useState<any | null>(null);
   const [frequencia, setFrequencia] = useState<any | null>(null);
   const [medalhaOuro, setMedalhaOuro] = useState<number>(0);
   const [medalhaPrata, setMedalhaPrata] = useState<number>(0);
   const [medalhaBronze, setMedalhaBronze] = useState<number>(0);
+  const [activeButton, setActiveButton] = useState('Gráfico');
+
+  const handleButtonClick = (buttonLabel: string, onClick: () => void) => {
+    untoggleAll();
+    setActiveButton(buttonLabel);
+    onClick();
+  };
 
   const untoggleAll = () => {
     setLesoes(null);
@@ -36,25 +46,21 @@ const Page = ({ params }: Props) => {
   };
 
   const handleLesoesClick = useCallback(async () => {
-    untoggleAll();
     if (!lesoes) {
-      await getInjuries(parseInt(params.id));
+      getInjuries(parseInt(params.id));
       setLesoes(injuries);
     }
   }, [getInjuries, injuries, lesoes, params.id]);
 
   const handleGraficoClick = () => {
-    untoggleAll();
     setGrafico(true);
   };
 
   const handleFrequenciaClick = () => {
-    untoggleAll();
     setFrequencia(true);
   };
 
   const handleQualitativoClick = () => {
-    untoggleAll();
     setQualitativos(true);
   };
 
@@ -71,10 +77,10 @@ const Page = ({ params }: Props) => {
   ];
 
   const buttons = [
+    { label: 'Gráfico', onClick: handleGraficoClick },
     { label: 'Lesões', onClick: handleLesoesClick },
     { label: 'Frequência', onClick: handleFrequenciaClick },
     { label: 'Qualitativos', onClick: handleQualitativoClick },
-    { label: 'Gráfico', onClick: handleGraficoClick }
   ];
 
   const screenSize = useScreenSize();
@@ -100,13 +106,18 @@ const Page = ({ params }: Props) => {
   const renderButtons = () => (
     <section className="flex mt-6 space-x-2 lg:space-x-6 justify-center">
       {buttons.map((button, index) => (
-        <button
+        <Button
           key={index}
-          onClick={button.onClick}
-          className="lg:mt-2 lg:px-4 lg:py-2 lg:text-lg text-xs bg-gray-300 hover:bg-blue-500 text-black font-semibold py-2 px-2 rounded-md transition delay-100 duration-300 ease-in-out"
-        >
-          {button.label}
-        </button>
+          text={button.label}
+          type="button"
+          onClick={() => handleButtonClick(button.label, button.onClick)}
+          active={activeButton === button.label}
+          className={`lg:mt-2 lg:px-4 lg:py-2 lg:text-lg text-xs py-2 px-2 rounded-md transition delay-100 duration-300 ease-in-out ${
+            activeButton === button.label
+              ? 'bg-white text-winePattern font-semibold'
+              : ''
+          }`}
+        />
       ))}
     </section>
   );
@@ -122,7 +133,7 @@ const Page = ({ params }: Props) => {
   );
 
   return (
-    <div className="flex justify-center h-screen m-auto max-w-screen-xl">
+    <div className="flex justify-center mx-auto min-h-dvh max-h-max max-w-screen-xl">
       <section className="flex flex-col lg:flex-row lg:justify-around lg:w-full">
         <div>
           <div className="flex justify-center space-x-6 mb-4 mt-6 lg:space-x-10 lg:mt-8 lg:mb-8">
@@ -130,6 +141,9 @@ const Page = ({ params }: Props) => {
             <IconButton href={`/atleta/perfil/${params.id}/cadastrar/campeonato`} src="/icons/campeonato.png" alt="Campeonato" />
             <IconButton href={`/postura/${params.id}`} src="/icons/posture_icon.png" alt="Postura" />
             <IconButton href={`/atleta/editar/${params.id}`} src="/icons/ferramenta-lapis.png" alt="Edição" />
+            <IconButton href={`${params.id}/cadastrar/campeonato`} src="/icons/campeonato.png" alt="Campeonato" />
+            <IconButton href={`${params.id}/postura`} src="/icons/posture_icon.png" alt="Postura" />
+            <IconButton href={`${params.id}/cadastrar/avaliacaoFisica`} src="/icons/ferramenta-lapis.png" alt="Edição" />
           </div>
           <AvatarAtleta
             id={params.id}
@@ -171,16 +185,24 @@ const Page = ({ params }: Props) => {
           {renderButtons()}
           <div className="max-w-full">
             {qualitativos && <div></div>}
-            {frequencia && <div className="mt-4 lg:mt-32"><Frequency id={params.id} /></div>}
-            {grafico && <div className="lg:mt-24"><ReviewsChart id={params.id} /></div>}
+            {frequencia && <div className="mt-4 lg:mt-32"><Frequency height={screenSize.width > 1024 ? 200 : 100} width={screenSize.width > 1024 ? 200 : 100} id={params.id} /></div>}
+            {grafico && <div className="lg:mt-24"><ReviewsChart height={screenSize.width > 1024 ? 524 : 256} width={screenSize.width > 1024 ? 524 : 256} id={params.id} /></div>}
             {lesoes && (
               <div>
                 <div className="flex flex-row items-stretch justify-center lg:mt-12 lg:gap-6 -z-50">
-                  <Injuries injuries={lesoes} type="front" width={screenSize.width > 1024 ? "248px" : "150px"} viewBoxSecondValue={screenSize.width > 1024 ? "3000" : "12000"} />
-                  <Injuries injuries={lesoes} type="back" width={screenSize.width > 1024 ? "232px" : "134px"} viewBoxSecondValue={screenSize.width > 1024 ? "0" : "9000"} />
+                  <Injuries injuries={injuries} type="front" width={screenSize.width > 1024 ? "248px" : "150px"} viewBoxSecondValue={screenSize.width > 1024 ? "3000" : "12000"} />
+                  <Injuries injuries={injuries} type="back" width={screenSize.width > 1024 ? "232px" : "134px"} viewBoxSecondValue={screenSize.width > 1024 ? "0" : "9000"} />
                 </div>
+                  <div className="flex mb-2">
+                  <Button
+                      text={"Adicionar lesão"}
+                      type={"button"}
+                      onClick={() => console.log("Adicionar lesão")}
+                      className="mx-auto"
+                      ></Button>
+                  </div>
                 <div className="flex flex-col-reverse custom-scrollbar mx-auto max-h-24 lg:max-h-40 scroll-auto overflow-y-auto justify-center bg-white rounded-lg p-4 -mt-40 lg:-mt-4 max-w-xs lg:min-w-fit lg:max-w-md ">
-                  {(injuriesDescription.length <= 0) && <h3 className="text-sm lg:text-lg font-semibold">Esse atleta não possui nenhuma lesão registrada</h3>}
+                  {(!isLoading && injuriesDescription.length <= 0) && <h3 className="text-sm lg:text-lg font-semibold">Esse atleta não possui nenhuma lesão registrada</h3>}
                   {
                     injuriesDescription.map((injury, index) => (
                       <p key={index} className="leading-relaxed text-xs lg:text-sm text-wrap text-transform: capitalize">{`${injury} \n`}</p>

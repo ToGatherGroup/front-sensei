@@ -10,6 +10,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/navigation";
 import { useAthleteProvider } from "@/contexts";
 import Button from "../ui/button";
+import Input from "../ui/input";
 
 type Props = {
   atleta?: Atleta | null;

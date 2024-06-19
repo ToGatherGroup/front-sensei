@@ -1,183 +1,158 @@
-'use client'
-import Button from "../button/index";
-import { AVALIACOES_FISICAS, INDICES_FISICOS } from "@/consts/const";
-import { useAssessmentsProvider, useAthleteProvider } from "@/contexts";
-import { useEffect, useState } from "react";
-import { ListAthletesProps } from "@/contexts/athlete/athlete.type";
-import { FormWrapper } from "../formWrapper";
-import { Assessment } from "@/types/Assessment";
-import TimeInput from "../timeInput";
-import Loading from "@/components/loading/index";
-import Modal from "../modal";
+import { useAssessmentsProvider } from "@/contexts/assessments/assessments";
 import { useRouter } from "next/navigation";
 
-type ListAvaliacaoProps = {
-    identificador: number | string;
-    isIMC?: boolean;
-    identificadorSubItem?: number;
+enum CATEGORIAS_ENUM {
+  VALENCIAS_FISCIAS,
+  INDICES,
 }
 
-type FormValues = {
-    [key: number]: string;
+const CATEGORIAS = [
+  { enum: CATEGORIAS_ENUM.VALENCIAS_FISCIAS, title: "Valências Físicas" },
+  { enum: CATEGORIAS_ENUM.INDICES, title: "Indíces" },
+];
+
+const EXERCICIOS = {
+  [CATEGORIAS_ENUM.VALENCIAS_FISCIAS]: [
+    {
+      title: "Core",
+      exercisePath: "avaliacao/core",
+      nestedExercise: null,
+    },
+    {
+      title: "Força Máxima",
+      exercisePath: "avaliacao/forca_maxima",
+      nestedExercise: null,
+    },
+    {
+      title: "Força Explosiva",
+      exercisePath: "avaliacao/forca_explosiva",
+      nestedExercise: null,
+    },
+    {
+      title: "Força Isométrica",
+      exercisePath: "avaliacao/forca_isometrica",
+      nestedExercise: null,
+    },
+    {
+      title: "Mobilidade do Tornozelo",
+      exercisePath: "avaliacao/mobilidade_tornozelo",
+      nestedExercise: null,
+    },
+    {
+      title: "Abdominal",
+      exercisePath: "avaliacao/resistencia_localizada/abdominal",
+      nestedExercise: {
+        nestedCategory: "Resistência muscular localizada",
+        title: "MMSS",
+        exercisePath: "avaliacao/resistencia_localizada/mmss",
+      },
+    },
+    {
+      title: "Resistencia Anaerobica",
+      exercisePath: "avaliacao/resistencia_anaerobica",
+      nestedExercise: null,
+    },
+    {
+      title: "Resistencia Aerobica",
+      exercisePath: "avaliacao/resistencia_aerobica",
+      nestedExercise: null,
+    },
+  ],
+  [CATEGORIAS_ENUM.INDICES]: [
+    {
+      title: "IMC",
+      exercisePath: "avaliacao/imc",
+      nestedExercise: null,
+    },
+  ],
 };
 
-type TimeValues = {
-    [key: number]: { minutes: number, seconds: number };
-};
+export default function ListAvaliacao() {
+  const router = useRouter();
+  const assessment = useAssessmentsProvider();
 
-export default function ListAvaliacao({ identificador }: ListAvaliacaoProps) {
-    const { collectiveAssessment, success, error } = useAssessmentsProvider()
-    const [formValues, setFormValues] = useState<FormValues>({});
-    const [timeValues, setTimeValues] = useState<TimeValues>({});
-    const {isLoading, error: errorAssessments, listAthletes, success: successAssessments, clearError, clearSuccess, getIncompleteAssessments} = useAssessmentsProvider();
-    const [currentDate, setCurrentDate] = useState<string>('');
-    const [tituloAvaliacao, setTituloAvaliacao] = useState<string>('Avaliação');
-    const [tipoAvaliacao, setTipoAvaliacao] = useState<{key: string, value: string}>({key: '', value: ''});
-    const [avaliacao, setAvaliacao] = useState<Assessment | null>(null);
+  function handleClick(path: string) {
+    router.push(path);
+  }
 
-    const router = useRouter()
-
-    const handleInputChange = (athleteId: number, value: string) => {
-        let filteredValue = value.replace(/[^0-9.,]/g, '');
-        setFormValues(prevValues => ({ ...prevValues, [athleteId]: filteredValue }));
-    };
-
-    const handleTimeChange = (athleteId: number, minutes: number, seconds: number) => {
-        setTimeValues(prevValues => ({ ...prevValues, [athleteId]: { minutes, seconds } }));
-    };
-
-    const convertTime = (minutes: number, seconds: number) => {
-        return `PT${minutes}M${seconds}S`;
-    };
-
-    const handleSubmit = (nomeValencia: string) => (event: React.FormEvent) => {
-        event.preventDefault();
-        const payload = Object.entries(tipoAvaliacao.key === "Tempo" ? timeValues : formValues).map(([athleteId, value]) => {
-            if (tipoAvaliacao.key === "Tempo") {
-                const { minutes, seconds } = value as { minutes: number, seconds: number };
-                return {
-                    resultado: {
-                        [nomeValencia]: convertTime(minutes, seconds),
-                    },
-                    atletaId: parseInt(athleteId, 10)
-                };
-            } else {
-                return {
-                    resultado: {
-                        [nomeValencia]: parseFloat(value as string),
-                    },
-                    atletaId: parseInt(athleteId, 10)
-                };
-            }
-        });
-        console.log("Payload para API:", JSON.stringify(payload));
-       collectiveAssessment(payload);
-    };
-
-    const getDate = () => {
-        const today = new Date();
-        const formatter = new Intl.DateTimeFormat('pt-BR', { month: 'long', year: 'numeric' });
-        const formattedDate = formatter.format(today);
-        return formattedDate.replace(' de ', '/');
-    };
-
-    const goToMenu = () => {
-        router.push('/valencia/menu')
-    }
-
-    useEffect(() => {
-        setCurrentDate(getDate());
-
-        const identificadorStr = String(identificador);
-        const regex = /^(.+)-(.+)$/;
-        const match = identificadorStr.match(regex);
-        let identificadorSubItem = 0;
-        let newIdentificador = identificador;
-
-        if (match) {
-            newIdentificador = Number(match[1]);
-            identificadorSubItem = Number(match[2]);
-        }
-
-        let assessmentIndex = identificadorSubItem && identificadorSubItem <= 1 ? identificadorSubItem : 0;
-        let assessment: Assessment | null = null;
-
-        if (Number(newIdentificador) < Number(8)) {
-            assessment = AVALIACOES_FISICAS[Number(newIdentificador)].assessments[assessmentIndex];
-            getIncompleteAssessments(AVALIACOES_FISICAS[Number(newIdentificador)].assessments[assessmentIndex].slug);
-        } else {
-            assessment = INDICES_FISICOS[0].assessments[assessmentIndex];
-            getIncompleteAssessments(INDICES_FISICOS[0].assessments[assessmentIndex].slug);
-        }
-        setTituloAvaliacao(assessment.altTitle ? assessment.altTitle : assessment.title);
-        setTipoAvaliacao(assessment.type);
-        setAvaliacao(assessment);
-    }, [identificador]);
-
-    return (
-        <div className='min-h-screen w-full flex items-center justify-center'>
-            {isLoading ? (
-                <Loading />
-            ) : (
-                <div className='min-h-screen w-full flex items-center justify-center'>
-                    {error != '' && (
-                        <div className='absolute min-h-screen w-full flex items-center justify-center bg-black/40 z-50 px-3.5'>
-                            <Modal title='Ops! Tivemos um problema...' text={errorAssessments} closeModal={clearError} />
-                        </div>
-                    )}
-                    {successAssessments != '' && (
-                        <div className='absolute min-h-screen w-full flex items-center justify-center bg-black/40 z-50 px-3.5'>
-                            <Modal title='Tudo certo!' text={successAssessments} closeModal={clearSuccess} button={true} buttonText="Voltar ao menu" buttonClick={goToMenu} />
-                        </div>
-                    )}
-                    <FormWrapper header={tituloAvaliacao} handleSubmit={handleSubmit(avaliacao?.slugCamelCase ?? avaliacao?.slug ?? '')}>
-                        <div className="flex items-center justify-center mb-4">
-                            <label className="block text-gray-700 mr-2">Data:</label>
-                            <input type="text" disabled readOnly className={styles.dateInput} value={currentDate} />
-                        </div>
-
-                        <ul className="w-full xl:mb-10 md:mb-7 sm:mb-5 mb-5">
-                            {listAthletes?.data?.map((athlete) => (
-                                <li key={athlete.id} className={styles.listItem}>
-                                    <span className={styles.athleteNameSpan}>{athlete?.nome}</span>
-                                    <div className="flex flex-row space-x-2">
-                                        {tipoAvaliacao.key == "Tempo" &&
-                                            <TimeInput onTimeChange={(minutes, seconds) => handleTimeChange(athlete.id, minutes, seconds)} />
-                                        }
-                                        {tipoAvaliacao.key != "Tempo" &&
-                                            <input
-                                                id="idAthlete"
-                                                placeholder={tipoAvaliacao.key}
-                                                type={tipoAvaliacao.value}
-                                                value={formValues[athlete.id] || ''}
-                                                onChange={(e) => handleInputChange(athlete.id, e.target.value)}
-                                                className={`${styles.input} ${tipoAvaliacao.key == "Repeticao" ? "w-24" : ""}`}>
-                                            </input>
-                                        }
-                                    </div>
-                                </li>
-                            ))}
-                        </ul>
-                        <Button label="Finalizar Exercício" type="submit" />
-                        {success && (
-                            <p className={styles.feedbackParagraph}>{success}</p>
-                        )}
-                        {error && (
-                            <p className={styles.feedbackParagraph}>{error}</p>
-                        )}
-                    </FormWrapper>
-                </div>
-            )}
-        </div>      
-    )
+  return (
+    <div className="w-full max-w-96">
+      {assessment.assessmentData && (
+        <div className="flex flex-col gap-1 bg-winePattern items-center justify-center w-fit m-auto px-4 py-2 rounded text-white font-semibold">
+          <p>Avaliação iniciada</p>
+          <p>{assessment.assessmentData.format("DD/MM/YYYY")}</p>
+        </div>
+      )}
+      {CATEGORIAS.map((categoria) => (
+        <div key={categoria.enum}>
+          <Category title={categoria.title} />
+          <div className="flex flex-1 flex-col gap-y-3">
+            {EXERCICIOS[categoria.enum].map((exercicio) => (
+              <div key={exercicio.exercisePath}>
+                {exercicio.nestedExercise ? (
+                  <details className="">
+                    <summary className="box-border bg-auto w-full rounded-md font-semibold bg-white py-3 px-2 text-left transition duration-400 hover:ease-in hover:border-winePattern z-1 hover:z-0 hover:scale-y-125 hover:scale-x-110 cursor-pointer">
+                      {exercicio.nestedExercise.nestedCategory}
+                    </summary>
+                    <Exercise
+                      title={exercicio.title}
+                      onClick={() => handleClick(exercicio.exercisePath)}
+                      className="my-1 !bg-gray-300 animate-fade-down animate-ease-linear animate-duration-100"
+                    />
+                    <Exercise
+                      title={exercicio.nestedExercise.title}
+                      onClick={() =>
+                        handleClick(exercicio.nestedExercise.exercisePath)
+                      }
+                      className="!bg-gray-300 animate-fade-down animate-ease-linear animate-duration-100"
+                    />
+                  </details>
+                ) : (
+                  <Exercise
+                    key={exercicio.exercisePath}
+                    title={exercicio.title}
+                    onClick={() => handleClick(exercicio.exercisePath)}
+                  />
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
 }
 
-//TODO: extrair para um arquivo de estilos, sugestão alternativa de organização -?-
-const styles = {
-    inputHeader: "w-20 h-6 block text-gray-700 xl:text-base md:text-sm sm:text-xs text-xs",
-    input: "w-20 h-6 rounded-md focus:ring-blue-500 dark:focus:ring-blue-600 focus:ring-2 placeholder:italic placeholder:text-slate-400 placeholder:text-xs",
-    feedbackParagraph: "xl:text-base md:text-sm sm:text-xs text-xs text-center text-orange-700 xl:mt-10 md:mt-7 sm:mt-5 mt-5 font-bold",
-    athleteNameSpan: "uppercase xl:text-base md:text-sm sm:text-xs text-xs truncate",
-    dateInput: "italic text-slate-400 block w-fit border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50 text-center",
-    listItem: "flex items-center justify-between xl:gap-4 lg:gap-4 md:gap-4 sm:gap-4 gap-4 xl:mb-6 lg:mb-4 md:mb-4 sm:mb-2 mb-4 max-h-[24px]",
+type CategoryProps = {
+  title: string;
+};
+function Category({ title }: CategoryProps) {
+  return (
+    <h2 className="text-white font-extrabold text-xl pl-0 pt-5 mb-0">
+      {title}
+    </h2>
+  );
+}
+
+type ExerciseProps = {
+  title: string;
+  className?: string;
+  onClick: () => void;
+};
+
+function Exercise({
+  title,
+  onClick: onClickFunction,
+  className: outerClass,
+}: ExerciseProps) {
+  return (
+    <button
+      className={`box-border bg-auto w-full font-semibold rounded-md bg-white py-3 px-2 text-left transition duration-400 hover:ease-in hover:border-winePattern z-1 hover:z-0 hover:scale-y-125 hover:scale-x-110 ${
+        outerClass ?? ""
+      }`}
+      onClick={onClickFunction}
+    >
+      {title}
+    </button>
+  );
 }
