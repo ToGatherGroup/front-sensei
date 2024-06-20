@@ -77,8 +77,6 @@ const EXERCICIOS = {
   ],
 };
 
-const completedBg = "bg-white";
-
 export default function ListAvaliacao() {
   const router = useRouter();
   const assessment = useAssessmentsProvider();
@@ -92,7 +90,7 @@ export default function ListAvaliacao() {
   return (
     <div className="w-full max-w-96">
       {assessment.assessmentData && (
-        <div className="flex flex-col gap-1 bg-winePattern items-center justify-center w-fit m-auto px-4 py-2 rounded text-white font-semibold">
+        <div className="flex flex-col gap-1 bg-winePattern items-center justify-center w-fit m-auto px-4 py-2 rounded text-white font-semibold outline outline-1">
           <p>Avaliação iniciada</p>
           <p>{assessment.assessmentData.format("DD/MM/YYYY")}</p>
         </div>
