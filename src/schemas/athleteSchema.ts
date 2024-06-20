@@ -5,15 +5,12 @@ const MAX_FILE_SIZE = 2 * 1000 * 1000; //MB to KB
 const validFileExtensions: string[] = ["image/png"];
 
 export const atletaCreateSchema = yup.object().shape({
-  photo: yup
+  foto: yup
     .mixed<FileList>()
     .test(
       "is-valid-size",
       `Arquivo muito grande. Peso máximo: ${MAX_FILE_SIZE / 1000 / 1000} MB`,
       (value) => {
-        console.log(value);
-        console.log(value && value[0]);
-        console.log("Max_File_Size: " + MAX_FILE_SIZE);
         if (value && value.length <= 0) return true;
         return value && value[0].size <= MAX_FILE_SIZE;
       }
@@ -22,29 +19,29 @@ export const atletaCreateSchema = yup.object().shape({
       if (value && value.length <= 0) return true;
       return value && validFileExtensions.includes(value[0].type);
     }),
-  name: yup.string().required("Este campo é obrigatório."),
+    id: yup.number().optional(),
+  nome: yup.string().required("Este campo é obrigatório."),
   email: yup.string().optional().email("Insira um e-mail válido"),
-  birthdate: yup
-    .date()
-    .min(new Date(1900, 0, 1), "Essa pessoa não é tão velha assim.")
-    .max(new Date(), "Insira uma data válida.")
-    .typeError("Insira uma data válida."),
-  sex: yup
+  nascimento: yup
     .string()
-    .oneOf(["male", "female", "other"] as const, "Selecione o sexo.")
+    .required('Data de nascimento é obrigatória')
+    .matches(/^\d{4}-\d{2}-\d{2}$/, 'Data inválida, use o formato YYYY-MM-DD')
+    .typeError('Insira uma data válida'),
+  sexo: yup
+    .string()
+    .oneOf(["M", "F", "O", ""] as const, "Selecione o sexo.")
     .required("Este campo é obrigatório.")
     .typeError("Selecione o sexo."),
-  weight: yup
-    .string()
-    .matches(/\d+\.{0,1}\d{1,3}$/gm, "Insira um peso válido.")
+  peso: yup
+    .number()
     .required("Este campo é obrigatório.")
     .typeError("Insira o peso em quilogramas."),
-  height: yup
+  altura: yup
     .number()
     .integer("Insira a altura em centímetros.")
     .required("Este campo é obrigatório.")
     .typeError("Insira a altura em centímetros."),
-  belt: yup
+  faixa: yup
     .string()
     .oneOf(
       [
@@ -65,4 +62,16 @@ export const atletaCreateSchema = yup.object().shape({
     )
     .required("Este campo é obrigatório.")
     .typeError("Selecione a faixa."),
+
+
+    isAtivo: yup.number().required().default(1)
+
+  // isAtivo: yup.lazy((value) =>
+  //   typeof value !== 'boolean'
+  //     ? yup.boolean().transform((_, val) => {
+  //       console.log('val', !!val);
+  //       return !!val
+  //     }).required('Required field').default(true)
+  //     : yup.number().transform((val, rawValue) => console.log("val number:", val, "rawValue number:", rawValue))
+  // ),
 });

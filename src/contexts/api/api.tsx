@@ -16,6 +16,11 @@ type ApiState = {
     body: object | string,
     displayOptions?: DisplayOptions | undefined
   ) => Promise<AxiosResponse> | null;
+  put: (
+    endpoint: string,
+    body: object | string,
+    displayOptions?: DisplayOptions | undefined
+  ) => Promise<AxiosResponse> | null;
   patch: (
     endpoint: string,
     body: object | string,
@@ -39,6 +44,7 @@ type DisplayOptions = {
 const initialState = {
   get: () => null,
   post: () => null,
+  put: () => null,
   patch: () => null,
   remove: () => null,
   isLoadingAPI: undefined,
@@ -126,6 +132,24 @@ export const ApiProvider = ({ children }: { children: React.ReactNode }) => {
     return request;
   };
 
+  const put = (
+    endpoint: string,
+    body: object | string,
+    displayOptions?: DisplayOptions | undefined
+  ) => {
+    (displayOptions?.showLoading == undefined ||
+      displayOptions?.showLoading == true) &&
+      setIsLoadingAPI(true);
+
+    const request = apiInstance.put(endpoint, body);
+    monitorRequest(request, displayOptions);
+
+    (displayOptions?.showLoading == undefined ||
+      displayOptions?.showLoading == true) &&
+      request.finally(() => setIsLoadingAPI(false));
+    return request;
+  };
+
   const patch = (
     endpoint: string,
     body: object | string,
@@ -161,7 +185,7 @@ export const ApiProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <ApiContext.Provider value={{ get, post, patch, remove, isLoadingAPI }}>
+    <ApiContext.Provider value={{ get, post, put, patch, remove, isLoadingAPI }}>
       {isLoadingAPI && <Loading />}
       {children}
     </ApiContext.Provider>

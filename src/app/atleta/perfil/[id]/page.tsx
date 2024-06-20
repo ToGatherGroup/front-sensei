@@ -1,7 +1,7 @@
 "use client";
 
 import AvatarAtleta from "@/components/avatarAtleta/page";
-import { axios } from "@/api/api";
+
 import { useEffect, useState, useCallback } from "react";
 import useScreenSize from "@/hooks/useScreenSize";
 import Injuries from "@/components/injuries";
@@ -21,8 +21,8 @@ type Props = {
 };
 
 const Page = ({ params }: Props) => {
-  const { getInjuries, injuries, injuriesDescription, isLoading }  = useAthleteProvider();
-  const [dadosAtleta, setDadosAtleta] = useState<any | null>(null);
+  const { getInjuries, injuries, injuriesDescription, medals, athleteProfile, getProfile, isLoading } = useAthleteProvider();
+
   const [lesoes, setLesoes] = useState<string[] | null>(null);
   const [grafico, setGrafico] = useState<any | null>(true);
   const [qualitativos, setQualitativos] = useState<any | null>(null);
@@ -64,10 +64,16 @@ const Page = ({ params }: Props) => {
     setQualitativos(true);
   };
 
+  useEffect(() => {
+    if(params.id) {
+      getProfile(parseInt(params.id))
+    }
+  }, [])
+  
   const athleteInfo = [
-    { label: dadosAtleta?.faixa },
-    { label: `${dadosAtleta?.idade} anos` },
-    { label: dadosAtleta?.categoria ? dadosAtleta?.categoria : "Sem categoria" },
+    { label: athleteProfile?.faixa },
+    { label: `${athleteProfile?.idade} anos` },
+    { label: athleteProfile?.categoria ? athleteProfile?.categoria : "Sem categoria" },
   ];
 
   const buttons = [
@@ -77,37 +83,25 @@ const Page = ({ params }: Props) => {
     { label: 'Qualitativos', onClick: handleQualitativoClick },
   ];
 
-  const getDadosAtleta = useCallback(async () => {
-    try {
-      const response = await axios.get(`/atleta/ficha/${params.id}`);
-      setDadosAtleta(response.data);
-      const medalhaDTO = response.data.medalhaDTO;
-
-      medalhaDTO.forEach((medalha: { posicao: string; quantidade: number }) => {
-        switch (medalha.posicao) {
-          case 'Medalha de ouro':
-            setMedalhaOuro(medalha.quantidade);
-            break;
-          case 'Medalha de prata':
-            setMedalhaPrata(medalha.quantidade);
-            break;
-          case 'Medalha de bronze':
-            setMedalhaBronze(medalha.quantidade);
-            break;
-          default:
-            break;
-        }
-      });
-    } catch (error) {
-      console.error("Erro ao obter dados do atleta", error);
-    }
-  }, [params.id]);
-
   const screenSize = useScreenSize();
 
   useEffect(() => {
-    getDadosAtleta();
-  }, [getDadosAtleta]);
+    medals?.forEach((medalha: { posicao: string; quantidade: number }) => {
+        switch (medalha.posicao) {
+          case 'Medalha de ouro':
+              setMedalhaOuro(medalha.quantidade);
+              break;
+          case 'Medalha de prata':
+              setMedalhaPrata(medalha.quantidade);
+              break;
+          case 'Medalha de bronze':
+              setMedalhaBronze(medalha.quantidade);
+              break;
+          default:
+              break;
+          }
+    });
+  }, [medals]);
 
   const renderButtons = () => (
     <section className="flex mt-6 space-x-2 lg:space-x-6 justify-center">
@@ -144,15 +138,18 @@ const Page = ({ params }: Props) => {
         <div>
           <div className="flex justify-center space-x-6 mb-4 mt-6 lg:space-x-10 lg:mt-8 lg:mb-8">
             <IconButton href="/comparison" src="/icons/avaliacao_fisica.png" alt="Avaliação Física Individual" />
+            <IconButton href={`/atleta/perfil/${params.id}/cadastrar/campeonato`} src="/icons/campeonato.png" alt="Campeonato" />
+            <IconButton href={`/postura/${params.id}`} src="/icons/posture_icon.png" alt="Postura" />
+            <IconButton href={`/atleta/editar/${params.id}`} src="/icons/ferramenta-lapis.png" alt="Edição" />
             <IconButton href={`${params.id}/cadastrar/campeonato`} src="/icons/campeonato.png" alt="Campeonato" />
             <IconButton href={`${params.id}/postura`} src="/icons/posture_icon.png" alt="Postura" />
             <IconButton href={`${params.id}/cadastrar/avaliacaoFisica`} src="/icons/ferramenta-lapis.png" alt="Edição" />
           </div>
           <AvatarAtleta
             id={params.id}
-            name={dadosAtleta?.nome}
-            belt={dadosAtleta?.faixa}
-            photo={dadosAtleta?.foto}
+            name={athleteProfile?.nome}
+            belt={athleteProfile?.faixa}
+            photo={athleteProfile?.foto}
             size={screenSize.width > 1024 ? "big" : "small"}
           />
           <section>
