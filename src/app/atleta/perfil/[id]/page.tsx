@@ -65,10 +65,10 @@ const Page = ({ params }: Props) => {
   };
 
   useEffect(() => {
-    if(params.id) {
-      getProfile(parseInt(params.id))
+    if (athleteProfile == null) {
+      getProfile(parseInt(params.id));
     }
-  }, [])
+  }, []);
   
   const athleteInfo = [
     { label: athleteProfile?.faixa },
@@ -138,8 +138,8 @@ const Page = ({ params }: Props) => {
         <div>
           <div className="flex justify-center space-x-6 mb-4 mt-6 lg:space-x-10 lg:mt-8 lg:mb-8">
             <IconButton href="/comparison" src="/icons/avaliacao_fisica.png" alt="Avaliação Física Individual" />
-            <IconButton href={`/atleta/perfil/${params.id}/cadastrar/campeonato`} src="/icons/campeonato.png" alt="Campeonato" />
-            <IconButton href={`/postura/${params.id}`} src="/icons/posture_icon.png" alt="Postura" />
+            {/* <IconButton href={`/atleta/perfil/${params.id}/cadastrar/campeonato`} src="/icons/campeonato.png" alt="Campeonato" /> */}
+            {/* <IconButton href={`/postura/${params.id}`} src="/icons/posture_icon.png" alt="Postura" /> */}
             <IconButton href={`/atleta/editar/${params.id}`} src="/icons/ferramenta-lapis.png" alt="Edição" />
             <IconButton href={`${params.id}/cadastrar/campeonato`} src="/icons/campeonato.png" alt="Campeonato" />
             <IconButton href={`${params.id}/postura`} src="/icons/posture_icon.png" alt="Postura" />

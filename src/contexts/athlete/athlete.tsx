@@ -49,7 +49,7 @@ export const AthleteProvider = ({ children }: {children: React.ReactNode}) => {
     const [success, setSuccess] = useState<string>('');
     const [error, setError] = useState<string>('');
     const [injuries, setInjuries] = useState<string[]>([]);
-    const [athleteProfile, setathleteProfile] = useState<AthleteProfileProps | null>(null);
+    const [athleteProfile, setAthleteProfile] = useState<AthleteProfileProps | null>(null);
     const [athlete, setAthlete] = useState<Atleta | null>(null);
     const [medals, setMedals] = useState<MedalsProps>([]);
     const [injuriesDescription, setInjuriesDescription] = useState<string[]>([]);
@@ -80,7 +80,7 @@ export const AthleteProvider = ({ children }: {children: React.ReactNode}) => {
         setIsLoading(true)
         try {
             const response = await get(`/atleta/ficha/${id}`);
-            setathleteProfile(response?.data);
+            setAthleteProfile(response?.data);
             setMedals(response?.data?.medalhaDTO);
            
         } catch (error) {
