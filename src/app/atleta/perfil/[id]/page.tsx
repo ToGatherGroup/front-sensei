@@ -21,7 +21,7 @@ type Props = {
 };
 
 const Page = ({ params }: Props) => {
-  const { getInjuries, injuries, injuriesDescription, medals, athleteProfile, getProfile } = useAthleteProvider();
+  const { getInjuries, injuries, injuriesDescription, medals, athleteProfile, getProfile, isLoading } = useAthleteProvider();
 
   const [lesoes, setLesoes] = useState<string[] | null>(null);
   const [grafico, setGrafico] = useState<any | null>(true);
