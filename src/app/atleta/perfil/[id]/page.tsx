@@ -31,6 +31,7 @@ const Page = ({ params }: Props) => {
   const [medalhaPrata, setMedalhaPrata] = useState<number>(0);
   const [medalhaBronze, setMedalhaBronze] = useState<number>(0);
   const [activeButton, setActiveButton] = useState('Gráfico');
+  const [id, setId] = useState<number | null>(null)
 
   const handleButtonClick = (buttonLabel: string, onClick: () => void) => {
     untoggleAll();
@@ -65,10 +66,11 @@ const Page = ({ params }: Props) => {
   };
 
   useEffect(() => {
-    if (athleteProfile == null) {
-      getProfile(parseInt(params.id));
-    }
-  }, []);
+    if(params.id && id == null)  {
+      setId(parseInt(params.id))
+      getProfile(params.id)
+    }        
+  }, [params.id])
   
   const athleteInfo = [
     { label: athleteProfile?.faixa },
@@ -137,13 +139,13 @@ const Page = ({ params }: Props) => {
       <section className="flex flex-col lg:flex-row lg:justify-around lg:w-full">
         <div>
           <div className="flex justify-center space-x-6 mb-4 mt-6 lg:space-x-10 lg:mt-8 lg:mb-8">
-            <IconButton href="/comparison" src="/icons/avaliacao_fisica.png" alt="Avaliação Física Individual" />
-            {/* <IconButton href={`/atleta/perfil/${params.id}/cadastrar/campeonato`} src="/icons/campeonato.png" alt="Campeonato" /> */}
-            {/* <IconButton href={`/postura/${params.id}`} src="/icons/posture_icon.png" alt="Postura" /> */}
-            <IconButton href={`/atleta/editar/${params.id}`} src="/icons/ferramenta-lapis.png" alt="Edição" />
+            {/* <IconButton href="/comparison" src="/icons/avaliacao_fisica.png" alt="Avaliação Física Individual" /> */}
+            <IconButton href={`${params.id}/cadastrar/avaliacaoFisica`} src="/icons/avaliacao_fisica.png" alt="Edição" />
             <IconButton href={`${params.id}/cadastrar/campeonato`} src="/icons/campeonato.png" alt="Campeonato" />
             <IconButton href={`${params.id}/postura`} src="/icons/posture_icon.png" alt="Postura" />
-            <IconButton href={`${params.id}/cadastrar/avaliacaoFisica`} src="/icons/ferramenta-lapis.png" alt="Edição" />
+            <IconButton href={`/atleta/editar/${params.id}`} src="/icons/ferramenta-lapis.png" alt="Edição" />
+            {/* <IconButton href={`/atleta/perfil/${params.id}/cadastrar/campeonato`} src="/icons/campeonato.png" alt="Campeonato" /> */}
+            {/* <IconButton href={`/postura/${params.id}`} src="/icons/posture_icon.png" alt="Postura" /> */}
           </div>
           <AvatarAtleta
             id={params.id}
