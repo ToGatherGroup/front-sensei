@@ -79,7 +79,7 @@ const Core = () => {
                 render={({ field: { onChange, onBlur, ref } }) => (
                   <IMaskInput
                     type="text" // iMask doesn't supports 'number' type
-                    mask={"00:00"}
+                    mask={["\\00{:}00", "00{:}00"]}
                     inputRef={ref}
                     onAccept={onChange}
                     onBlur={onBlur}
