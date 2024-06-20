@@ -79,7 +79,10 @@ const MobilidadeTornozelo = () => {
                 name={`testeDeLunge.${index}.value` as const}
                 render={({ field: { onChange, onBlur, ref } }) => (
                   <IMaskInput
-                    mask={"000"}
+                    mask={Number}
+                    min={0}
+                    max={12}
+                    scale={0}
                     inputRef={ref}
                     onAccept={onChange}
                     onBlur={onBlur}
