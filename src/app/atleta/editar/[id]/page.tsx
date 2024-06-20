@@ -16,13 +16,18 @@ type Props = {
 
 const EditarAtleta = ({ params }: Props) => {
   const { athlete, getAthlete } = useAthleteProvider();
+  const [id, setId] = useState<number | null>(null)
 
   useEffect(() => {
-    if(params.id && athlete == null) {
-      getAthlete(parseInt(params.id))
+    if(params.id && id == null)  {
+      setId(parseInt(params.id))
     }
-  }, [athlete, getAthlete])
 
+    if(id) {
+      getAthlete(id)
+    }
+  }, [params.id, id])
+  
   return (
     <div>
       {athlete ? (
