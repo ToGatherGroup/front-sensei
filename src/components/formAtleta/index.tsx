@@ -109,7 +109,7 @@ const FormAtleta = ({ atleta, method }: Props) => {
       <div className={styles.content}>
         <div className={styles.title}>
           <FormTitle
-            title={atleta ? "Alterar Atleta" : "Cadastrar Atleta"}
+            title={atleta ? "Editar Atleta" : "Cadastrar Atleta"}
             iconSrc={"/icons/person_24x24_wine.png"}
           ></FormTitle>
 

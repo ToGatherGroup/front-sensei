@@ -68,12 +68,9 @@ const Page = ({ params }: Props) => {
   useEffect(() => {
     if(params.id && id == null)  {
       setId(parseInt(params.id))
-    }
-    
-    if(id) {
-      getProfile(id)
-    }
-  }, [params.id, id])
+      getProfile(params.id)
+    }        
+  }, [params.id])
   
   const athleteInfo = [
     { label: athleteProfile?.faixa },

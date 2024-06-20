@@ -4,29 +4,25 @@ import { useEffect, useState } from "react";
 import { useAthleteProvider } from "@/contexts";
 import FormAtleta from "../../../../components/formAtleta/index";
 import Loading from "@/components/loading/index";
+import { useParams } from "next/navigation";
 //import { Atleta } from "@/mock/atleta";
 
-type Params = {
-  id: string;
-};
 
-type Props = {
-  params: Params;
-};
-
-const EditarAtleta = ({ params }: Props) => {
+const EditarAtleta = () => {
   const { athlete, getAthlete } = useAthleteProvider();
-  const [id, setId] = useState<number | null>(null)
+  const params = useParams()
 
   useEffect(() => {
-    if(params.id && id == null)  {
-      setId(parseInt(params.id))
+    let id = params.id;
+  
+    if (Array.isArray(id)) {
+      id = id[0];
     }
-
-    if(id) {
+  
+    if (id) {
       getAthlete(id)
     }
-  }, [params.id, id])
+  }, [params.id])
   
   return (
     <div>
