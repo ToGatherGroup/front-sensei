@@ -108,12 +108,6 @@ export const forcaIsometricaSchema = yup.object().shape({
 });
 export type forcaIsometricaSchemaType = typeof forcaIsometricaSchema.__outputType;
 
-export const mobilidadeTornozeloSchema = yup.object().shape({
-    testeDeLunge: yup.array()
-    .of(numberValidation)
-});
-export type mobilidadeTornozeloSchemaType = typeof mobilidadeTornozeloSchema.__outputType;
-
 export const abdominalSchema = yup.object().shape({
     abdominais: yup.array()
     .of(numberValidation)
@@ -137,6 +131,19 @@ export const resistenciaAaerobicaSchema = yup.object().shape({
     .of(numberValidation)
 });
 export type resistenciaAaerobicaSchemaType = typeof resistenciaAaerobicaSchema.__outputType;
+
+export const mobilidadeTornozeloSchema = yup.object().shape({
+    testeDeLunge: yup.array()
+    .of(yup.object().shape({
+        atletaId: yup.number(),
+        atletaNome: yup.string(),
+        value: yup.number().transform((_, val) => {
+            if (val == "" || val == undefined) return null
+            return Number(val);
+        }).min(0, 'Não são permitidos valores negativos.').max(12, 'Valor máximo permitido: 12').nullable()
+    }))
+});
+export type mobilidadeTornozeloSchemaType = typeof mobilidadeTornozeloSchema.__outputType;
 
 export const ImcSchema = yup.object().shape({
     imc: yup.array()
