@@ -19,7 +19,7 @@ export const atletaCreateSchema = yup.object().shape({
       if (value && value.length <= 0) return true;
       return value && validFileExtensions.includes(value[0].type);
     }),
-    id: yup.number().optional(),
+  id: yup.number().optional(),
   nome: yup.string().required("Este campo é obrigatório."),
   email: yup.string().optional().email("Insira um e-mail válido"),
   nascimento: yup
@@ -64,7 +64,8 @@ export const atletaCreateSchema = yup.object().shape({
     .typeError("Selecione a faixa."),
 
 
-    isAtivo: yup.number().required().default(1)
+  isAtivo: yup.boolean().required().default(true)
+  //isAtivo: yup.number().required().default(1)
 
   // isAtivo: yup.lazy((value) =>
   //   typeof value !== 'boolean'

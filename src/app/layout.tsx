@@ -34,7 +34,7 @@ export default function RootLayout({
                 </Link>
               </nav>
             </header>
-            <main className="bg-gradient-to-t from-gray-800 from-0% via-black via-50% to-gray-800 to-100% w-full h-full">
+            <main className="bg-gradient-to-t from-gray-800 from-0% via-black via-50% to-gray-800 to-100% w-full h-full py-[50px]">
               {children}
             </main>
 
