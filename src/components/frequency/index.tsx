@@ -88,7 +88,7 @@ const Frequency = ({ id, height, width }: FrequencyProps) => {
 
       fetchData();
     }
-  }, [watchStartDate, watchEndDate, get, id]);
+  }, [watchStartDate, watchEndDate, id]);
 
   useEffect(() => {
     setChartKey(`${width}-${height}`);
