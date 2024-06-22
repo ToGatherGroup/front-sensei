@@ -27,7 +27,7 @@ const EditarAtleta = () => {
   return (
     <div>
       {athlete ? (
-        <FormAtleta atleta={athlete} method="PATCH"/>
+        <FormAtleta atleta={athlete} method="PUT"/>
       )
        : (
         <Loading />

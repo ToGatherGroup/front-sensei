@@ -7,14 +7,13 @@ import { useState, useEffect } from "react";
 import { Atleta } from "@/types/TAtleta";
 import { atletaCreateSchema } from "@/schemas/athleteSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useRouter } from "next/navigation";
 import { useAthleteProvider } from "@/contexts";
 import Button from "../ui/button";
-import Input from "../ui/input";
+import ReactSwitch from "react-switch";
 
 type Props = {
   atleta?: Atleta | null;
-  method: 'POST' | 'PATCH';
+  method: 'POST' | 'PUT';
 };
 
 const FormAtleta = ({ atleta, method }: Props) => {
@@ -22,14 +21,16 @@ const FormAtleta = ({ atleta, method }: Props) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [disableSubmitBtn, setDisableSubmitBtn] = useState<boolean>(false);
   const { registerAthlete, updateAthlete } = useAthleteProvider();
+  const [checked, setChecked] = useState<boolean>(atleta?.isAtivo ? atleta?.isAtivo : true);
 
-  const router = useRouter();
+  const handleChange = (nextChecked: boolean) => {
+    setChecked(nextChecked);
+  };
 
   useEffect(() => {
     if (atleta?.foto && avatarBase64 == "") {
       setAvatarBase64(atleta.foto);
     }
-    console.log(atleta)
   }, [atleta, setAvatarBase64]);
 
   const {
@@ -48,7 +49,7 @@ const FormAtleta = ({ atleta, method }: Props) => {
       peso: atleta?.peso ? atleta?.peso : 0,
       altura: atleta?.altura ? atleta?.altura : 0,
       faixa: atleta?.faixa,
-      isAtivo: (atleta && !atleta?.isAtivo) ? 0 : 1,
+      isAtivo: atleta?.isAtivo ? atleta?.isAtivo : true,
     },
     mode: "onBlur",
     resolver: yupResolver(atletaCreateSchema),  // Certifique-se de que o schema de validação está sendo aplicado corretamente
@@ -56,14 +57,30 @@ const FormAtleta = ({ atleta, method }: Props) => {
 
   const onSubmit = (data: any) => {
     switch(method) {
-      case 'PATCH': 
-        updateAthlete(data);
+      case 'PUT': 
+        const preparedData = data;
+       
+        if(avatarBase64) {
+          preparedData.foto = avatarBase64;
+        } else {
+          preparedData.foto = atleta?.foto;
+        }
+
+        preparedData.isAtivo = checked;
+
+        updateAthlete(preparedData);
+        
         break;
       default:
         file2Base64(data.foto[0])
         .then((avatarBase64) => {
+          
           const preparedData = data;
+
           preparedData.foto = avatarBase64;
+
+          preparedData.isAtivo = checked;
+         
           registerAthlete(preparedData);
         })
         .catch((error) => {
@@ -278,20 +295,24 @@ const FormAtleta = ({ atleta, method }: Props) => {
             )}
           </div>
 
-          <div className={styles.inputRow}>
+          <div className={styles.isAtivo}>
             <label htmlFor="isAtivo" className={styles.required}>
               Atleta ativo
             </label>
-            <select
+            
+            <ReactSwitch
               {...register("isAtivo")}
-              id="isAtivo"
-            >
-              <option value="">
-                Selecione
-              </option>
-              <option value={1}>Ativo</option>
-              <option value={0}>Inativo</option>
-            </select>
+              onChange={handleChange}
+              checked={checked}
+              offColor="#888"
+              onColor="#0f0"
+              uncheckedIcon={false}
+              checkedIcon={false}
+              handleDiameter={20}
+              height={20}
+              width={40}
+            />
+           
             {errors.isAtivo && (
               <p className={styles.displayError}>{errors.isAtivo.message}</p>
             )}

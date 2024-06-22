@@ -105,8 +105,7 @@ export const AthleteProvider = ({ children }: {children: React.ReactNode}) => {
     const updateAthlete = async (athleteData: Atleta) => {
         setIsLoading(true)
         try {            
-            const preparedAthlete = {... athleteData, isAtivo: !!athleteData.isAtivo, foto: athlete?.foto}
-            const response = await put('atleta', preparedAthlete);
+            const response = await put('atleta', athleteData);
            
             if (response) {
                 router.push('/atleta/buscar')
@@ -122,8 +121,7 @@ export const AthleteProvider = ({ children }: {children: React.ReactNode}) => {
     const registerAthlete = async (athleteData: Atleta) => {
         setIsLoading(true)
         try {
-            const preparedAthlete = {... athleteData, isAtivo: !!athleteData.isAtivo}
-            const response = await post('atleta', preparedAthlete);
+            const response = await post('atleta', athleteData);
 
             if (response) {
                 router.push('/atleta/buscar')
