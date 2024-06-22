@@ -214,7 +214,7 @@ function Exercise({
       onClick={onClickFunction}
     >
       <div className="box-border max-w-full flex items-center justify-start">
-        <p className="overflow-auto">{title}</p>
+        <p className="">{title}</p>
         {!completed && (
           <span className="ml-auto px-2.5 py-1 text-white rounded-full bg-winePattern">
             !
