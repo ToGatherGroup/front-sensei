@@ -79,7 +79,7 @@ const ResistenciaAerobica = () => {
                 name={`cooper.${index}.value` as const}
                 render={({ field: { onChange, onBlur, ref } }) => (
                   <IMaskInput
-                    mask={"000"}
+                    mask={"0000"}
                     inputRef={ref}
                     onAccept={onChange}
                     onBlur={onBlur}
