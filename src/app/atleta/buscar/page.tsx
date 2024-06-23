@@ -17,6 +17,7 @@ if (typeof window !== "undefined") {
   height = window.innerHeight;
 }
 
+const MINIMUM_ELEMENTS_PER_PAGE = 16;
 const ELEMENTS_PER_PAGE = Math.ceil(((height - 250) * 4) / 130);
 
 function Observer({ selector, callback }: any) {
@@ -59,8 +60,19 @@ const AtletaSelecionar = () => {
 
       setLoading(true);
       const response = requestName
-        ? await getAtletasByName(requestName, page, ELEMENTS_PER_PAGE)
-        : await getAtletas(page, ELEMENTS_PER_PAGE);
+        ? await getAtletasByName(
+            requestName,
+            page,
+            ELEMENTS_PER_PAGE > MINIMUM_ELEMENTS_PER_PAGE
+              ? ELEMENTS_PER_PAGE
+              : MINIMUM_ELEMENTS_PER_PAGE
+          )
+        : await getAtletas(
+            page,
+            ELEMENTS_PER_PAGE > MINIMUM_ELEMENTS_PER_PAGE
+              ? ELEMENTS_PER_PAGE
+              : MINIMUM_ELEMENTS_PER_PAGE
+          );
       const atletas = apiToAtletas(response.data.content);
       setLastPage(response.data.last);
       setListAtleta((currentAtletas) => [...currentAtletas, ...atletas]);
@@ -121,9 +133,9 @@ const AtletaSelecionar = () => {
             </li>
           ))}
           <li className="lastElement" />
-          {loading && (
+          {/* {loading && (
             <div className="my-5 mx-auto border-solid border-[10px] border-white border-t-[10px] border-t-winePattern rounded-full w-[60px] h-[60px] animate-spin animate-duration-2000" />
-          )}
+          )} */}
         </ul>
 
         {!loading && listAtleta.length <= 0 && lastPage && (
@@ -137,6 +149,9 @@ const AtletaSelecionar = () => {
             Houve um erro ao tentar carregar os atletas. Tente atualizar a
             página.
           </p>
+        )}
+        {loading && (
+          <div className="my-5 mx-auto border-solid border-[10px] border-white border-t-[10px] border-t-winePattern rounded-full w-[60px] h-[60px] animate-spin animate-duration-2000" />
         )}
       </div>
       <Observer
