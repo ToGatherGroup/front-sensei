@@ -104,7 +104,7 @@ const AtletaSelecionar = () => {
   return (
     <div className="flex min-w-52">
       <div
-        className={`form-container !px-1 my-10 mx-auto flex flex-col items-center !w-[600px]`}
+        className={`form-container !px-1 mx-auto flex flex-col items-center !w-[600px]`}
       >
         <Title title="Buscar atleta" iconSrc="/icons/person_24x24_wine.png" />
 
