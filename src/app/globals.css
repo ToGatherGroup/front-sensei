@@ -39,7 +39,6 @@
   max-width: 1440px;
   min-height: calc(100vh - 110px);
   padding: 40px;
-  margin: 40px auto;
   box-sizing: border-box;
   border-radius: 5px;
 }
@@ -47,12 +46,6 @@
 @media (max-width: 1440px) {
   .max-container {
     @apply mx-auto max-w-full w-full px-3;
-  }
-}
-
-@media (max-width: 600px) {
-  .form-container {
-    margin: 40px 10px;
   }
 }
 
