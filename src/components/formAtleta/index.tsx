@@ -27,7 +27,6 @@ const FormAtleta = ({ atleta, method }: Props) => {
     if (atleta?.foto && avatarBase64 == "") {
       setAvatarBase64(atleta.foto);
     }
-    console.log("atleta:", atleta);
   }, [atleta, setAvatarBase64]);
 
   const {
@@ -60,7 +59,6 @@ const FormAtleta = ({ atleta, method }: Props) => {
           preparedData.foto = atleta?.foto;
         }
         preparedData.isAtivo = getValues("isAtivo");
-        console.log("preparedData:", preparedData);
         updateAthlete(preparedData);
 
         break;
@@ -97,7 +95,6 @@ const FormAtleta = ({ atleta, method }: Props) => {
     file2Base64(avatarFile)
       .then((avatarBase64) => {
         setAvatarBase64(avatarBase64);
-        console.log(avatarBase64);
       })
       .finally(() => {
         setDisableSubmitBtn(false);
@@ -116,10 +113,7 @@ const FormAtleta = ({ atleta, method }: Props) => {
           ></FormTitle>
         </div>
 
-        <form
-          className={styles.form}
-          onSubmit={handleSubmit(onSubmit, (error) => console.log(error))}
-        >
+        <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
           <div className={`${styles.inputRow} ${styles.avatar}`}>
             <label htmlFor="photo">
               <p>Foto do atleta</p>
