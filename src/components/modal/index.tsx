@@ -22,13 +22,8 @@ const Modal = ({
   showCloseIcon = true,
 }: ModalProps) => {
   return (
-    <div className="absolute min-h-screen w-full flex items-center justify-center bg-black/40 px-3.5">
-      <div
-        onClick={closeModalFunction}
-        className="z-0 absolute min-h-screen w-full flex items-center justify-center bg-black/40 px-3.5"
-      ></div>
-
-      <div className="m-2 absolute z-1 lg:max-w-[650px] md:max-w-[500px] sm:max-w-[350px] max-w-[350px] flex items-center justify-center bg-white rounded-md xl:p-10 lg:p-8 md:p-5 p-5">
+    <div className="relative w-scren min-h-screen flex items-center justify-center">
+      <div className="absolute m-auto mx-auto z-20 lg:max-w-[650px] md:max-w-[500px] sm:max-w-[350px] max-w-[350px] flex items-center justify-center bg-white rounded-md xl:p-10 lg:p-8 md:p-5 p-5">
         <div>
           {showCloseIcon && (
             <button
@@ -68,6 +63,10 @@ const Modal = ({
           </div>
         </div>
       </div>
+      <div
+        className="absolute z-10 top-0 bottom-0 left-0 right-0 w-scren min-h-screen"
+        onClick={closeModalFunction}
+      ></div>
     </div>
   );
 };
