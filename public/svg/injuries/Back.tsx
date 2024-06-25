@@ -4,10 +4,11 @@ import { useEffect, useState } from "react";
 type BackProps = {
     injuries: string[];
     width?: string;
-    viewBoxSecondValue?: string;
+    height?: string;
+    viewBoxValue?: string;
 };
   
-const Back = ({ injuries, width, viewBoxSecondValue }: BackProps) => {
+const Back = ({ injuries, width, height, viewBoxValue }: BackProps) => {
     const [isReady, setIsReady] = useState(false);
 
     useEffect(() => {
@@ -38,7 +39,7 @@ const Back = ({ injuries, width, viewBoxSecondValue }: BackProps) => {
             xmlns="http://www.w3.org/2000/svg" 
             xmlSpace="preserve" 
             width={width ? width : "148mm"}
-            height="94mm"
+            height={height ? height : "94mm"}
             style={{
                 shapeRendering: "geometricPrecision",
                 textRendering: "geometricPrecision",
@@ -47,7 +48,8 @@ const Back = ({ injuries, width, viewBoxSecondValue }: BackProps) => {
             }}
             version="1.1" 
             // viewBox="1000 9000 21000 29700"
-            viewBox={`1000 ${viewBoxSecondValue} 21000 29700`}>
+            // viewBox={`1000 12000 20000 27000`}> //front
+            viewBox={viewBoxValue}>
             <defs>
                 <style>
                     {
