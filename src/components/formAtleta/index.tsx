@@ -42,7 +42,7 @@ const FormAtleta = ({ atleta, method }: Props) => {
       nascimento: atleta?.nascimento ?? "",
       sexo: atleta?.sexo ?? "",
       faixa: atleta?.faixa,
-      isAtivo: !!atleta?.isAtivo && true,
+      isAtivo: !!atleta?.isAtivo,
     },
     mode: "onBlur",
     resolver: yupResolver(atletaCreateSchema), // Certifique-se de que o schema de validação está sendo aplicado corretamente
