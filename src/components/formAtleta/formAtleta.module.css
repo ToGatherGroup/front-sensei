@@ -4,6 +4,7 @@
   margin: auto 0;
   align-items: center;
   justify-content: center;
+  @apply m-auto w-auto max-w-[650px] min-h-fit bg-container rounded;
 }
 
 .content {
@@ -92,7 +93,9 @@
 
 .isAtivo {
   display: flex;
-  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
   gap: 10px;
   max-width: 100%;
   width: 100%;

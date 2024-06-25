@@ -29,18 +29,9 @@ export const atletaCreateSchema = yup.object().shape({
     .typeError('Insira uma data válida'),
   sexo: yup
     .string()
-    .oneOf(["M", "F", "O", ""] as const, "Selecione o sexo.")
+    .oneOf(["M", "F", ""] as const, "Selecione o sexo.")
     .required("Este campo é obrigatório.")
     .typeError("Selecione o sexo."),
-  peso: yup
-    .number()
-    .required("Este campo é obrigatório.")
-    .typeError("Insira o peso em quilogramas."),
-  altura: yup
-    .number()
-    .integer("Insira a altura em centímetros.")
-    .required("Este campo é obrigatório.")
-    .typeError("Insira a altura em centímetros."),
   faixa: yup
     .string()
     .oneOf(
