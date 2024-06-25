@@ -6,17 +6,19 @@ type InjuriesProps = {
   injuries: string[];
   type: 'back' | 'front';
   width?: string;
+  height?: string;
   viewBoxSecondValue?: string;
+  viewBoxValue?: string;
 }
 
-const Injuries = ({ injuries, type, width, viewBoxSecondValue }: InjuriesProps) => {
+const Injuries = ({ injuries, type, width, height, viewBoxValue }: InjuriesProps) => {
 
   return (
-    <div>
+    <div className="max-h-52 lg:max-h-fit">
       {type === 'back' ? (
-        <Back injuries={injuries} width={width} viewBoxSecondValue={viewBoxSecondValue} />
+        <Back injuries={injuries} width={width} height={height} viewBoxValue={viewBoxValue} />
       ) : (
-        <Front injuries={injuries} width={width} viewBoxSecondValue={viewBoxSecondValue} />
+        <Front injuries={injuries} width={width} height={height} viewBoxValue={viewBoxValue} />
       )}
     </div>
   )

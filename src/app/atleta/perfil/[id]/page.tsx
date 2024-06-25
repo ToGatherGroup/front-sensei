@@ -114,7 +114,7 @@ const Page = ({ params }: Props) => {
           type="button"
           onClick={() => handleButtonClick(button.label, button.onClick)}
           active={activeButton === button.label}
-          className={`lg:mt-2 lg:px-4 lg:py-2 lg:text-lg text-xs py-2 px-2 rounded-md transition delay-100 duration-300 ease-in-out ${
+          className={`lg:mt-2 lg:px-4 lg:py-2 lg:text-lg text-xs py-2 px-[12px] rounded-md transition delay-100 duration-300 ease-in-out ${
             activeButton === button.label
               ? 'bg-white text-winePattern font-semibold'
               : ''
@@ -191,20 +191,20 @@ const Page = ({ params }: Props) => {
             {grafico && <div className="lg:mt-24"><ReviewsChart height={screenSize.width > 1024 ? 524 : 256} width={screenSize.width > 1024 ? 524 : 256} id={params.id} /></div>}
             {lesoes && (
               <div>
-                <div className="flex flex-row items-stretch justify-center lg:mt-12 lg:gap-6 -z-50">
-                  <Injuries injuries={injuries} type="front" width={screenSize.width > 1024 ? "248px" : "150px"} viewBoxSecondValue={screenSize.width > 1024 ? "3000" : "12000"} />
-                  <Injuries injuries={injuries} type="back" width={screenSize.width > 1024 ? "232px" : "134px"} viewBoxSecondValue={screenSize.width > 1024 ? "0" : "9000"} />
+                <div className="flex flex-row items-stretch justify-center mt-4 lg:mt-12 lg:gap-6 -z-50">
+                  <Injuries injuries={injuries} type="front" width={screenSize.width > 1024 ? "248px" : "150px"} height={screenSize.width > 1024 ? "400px" : "200px"} viewBoxValue={screenSize.width > 1024 ? "1000 15400 19000 5000" : "1000 12000 19000 5000"} />
+                  <Injuries injuries={injuries} type="back" width={screenSize.width > 1024 ? "232px" : "134px"} viewBoxValue={screenSize.width > 1024 ? "1000 2000 20000 27000" : "1000 12000 20000 27000"} />
                 </div>
                   <div className="flex mb-2">
                   <Button
                       text={"Adicionar lesão"}
                       type={"button"}
                       onClick={() => console.log("Adicionar lesão")}
-                      className="mx-auto"
+                      className="mx-auto mt-8 mb-2 lg:mt-2 lg:mb-6"
                       ></Button>
                   </div>
-                <div className="flex flex-col-reverse custom-scrollbar mx-auto max-h-24 lg:max-h-40 scroll-auto overflow-y-auto justify-center bg-white rounded-lg p-4 -mt-40 lg:-mt-4 max-w-xs lg:min-w-fit lg:max-w-md ">
-                  {(!isLoading && injuriesDescription.length <= 0) && <h3 className="text-sm lg:text-lg font-semibold">Esse atleta não possui nenhuma lesão registrada</h3>}
+                <div className="flex flex-col-reverse custom-scrollbar mx-auto max-h-24 lg:max-h-40 scroll-auto overflow-y-auto justify-center bg-white rounded-lg p-4 lg:-mt-4 max-w-xs lg:min-w-fit lg:max-w-md ">
+                  {(!isLoading && injuriesDescription.length <= 0) && <h3 className="text-sm lg:text-lg font-semibold">O atleta não possui lesão registrada</h3>}
                   {
                     injuriesDescription.map((injury, index) => (
                       <p key={index} className="leading-relaxed text-xs lg:text-sm text-wrap text-transform: capitalize">{`${injury} \n`}</p>

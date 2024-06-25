@@ -4,10 +4,11 @@ import { useEffect, useState } from "react";
 type FrontProps = {
     injuries: string[];
     width?: string;
-    viewBoxSecondValue?: string;
+    height?: string;
+    viewBoxValue?: string;
 };
   
-const Front = ({ injuries, width, viewBoxSecondValue }: FrontProps) => {
+const Front = ({ injuries, width, height, viewBoxValue }: FrontProps) => {
     const [isReady, setIsReady] = useState(false);
 
     useEffect(() => {
@@ -36,15 +37,15 @@ const Front = ({ injuries, width, viewBoxSecondValue }: FrontProps) => {
             xmlns="http://www.w3.org/2000/svg"
             xmlSpace="preserve"
             width={width ? width : "148mm"}
-            height="105mm"
+            height={height ? height : "210mm"}
             style={{
                 shapeRendering: "geometricPrecision",
                 textRendering: "geometricPrecision",
                 fillRule: "evenodd",
                 clipRule: "evenodd",
             }}
-            // viewBox="1000 12000 21000 29700">
-            viewBox={`1000 ${viewBoxSecondValue} 21000 29700`}>
+            // viewBox="1000 12000 19000 5000"> mobile
+            viewBox={viewBoxValue}>
             <defs>
                 <style>
                     {
