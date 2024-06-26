@@ -6,9 +6,16 @@ type BackProps = {
   width?: string;
   height?: string;
   viewBoxValue?: string;
+  onClick?: (clickedBodyPart: string) => any;
 };
 
-const Back = ({ injuries, width, height, viewBoxValue }: BackProps) => {
+const Back = ({
+  injuries,
+  width,
+  height,
+  viewBoxValue,
+  onClick,
+}: BackProps) => {
   useEffect(() => {
     if (injuries) {
       const injuredAreas = document.querySelectorAll("path");
@@ -24,6 +31,17 @@ const Back = ({ injuries, width, height, viewBoxValue }: BackProps) => {
       });
     }
   }, [injuries]);
+
+  // Attach onClick at every path
+  useEffect(() => {
+    const injuredAreas = document.querySelectorAll("path");
+
+    injuredAreas.forEach((bodyPart) => {
+      const areaName = bodyPart.getAttribute("data-id");
+      if (!areaName) return;
+      bodyPart.onclick = () => onClick && onClick(areaName);
+    });
+  }, []);
 
   return (
     <div className="">
@@ -64,7 +82,7 @@ const Back = ({ injuries, width, height, viewBoxValue }: BackProps) => {
           />
           <path
             className="fil0"
-            data-id="POSTERIOR_CABECA"
+            data-id="ANTERIOR_CABECA"
             d="M9880.38 3424.75c762.97,-1171.8 1237.41,-1105.28 1930.53,-40.78 182.49,-262.05 292.38,-329.01 306.73,-728.55 8.71,-242.13 -68.16,-206.79 -68.6,-443.97 -1.39,-796.47 -130.26,-1563.48 -1222.87,-1435.34 -1077.83,126.4 -1182.15,466.54 -1183.97,1476.07 -0.44,258.59 -213.44,610.47 129.44,1011.93l108.74 160.64z"
           />
           <path

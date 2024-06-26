@@ -1,19 +1,24 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 type FrontProps = {
   injuries: string[];
   width?: string;
   height?: string;
   viewBoxValue?: string;
+  onClick?: (clickedBodyPart: string) => any;
 };
 
-const Front = ({ injuries, width, height, viewBoxValue }: FrontProps) => {
-
+const Front = ({
+  injuries,
+  width,
+  height,
+  viewBoxValue,
+  onClick,
+}: FrontProps) => {
   useEffect(() => {
     if (injuries) {
       const injuredAreas = document.querySelectorAll("path");
-      console.log("injuredAreas:", injuredAreas);
 
       injuredAreas.forEach((area) => {
         const dataId = area.getAttribute("data-id");
@@ -25,8 +30,18 @@ const Front = ({ injuries, width, height, viewBoxValue }: FrontProps) => {
         }
       });
     }
-    console.log("inside injuried:", injuries);
   }, [injuries]);
+
+  // Attach onClick at every path
+  useEffect(() => {
+    const injuredAreas = document.querySelectorAll("path");
+
+    injuredAreas.forEach((bodyPart) => {
+      const areaName = bodyPart.getAttribute("data-id");
+      if (!areaName) return;
+      bodyPart.onclick = () => onClick && onClick(areaName);
+    });
+  }, []);
 
   return (
     <svg
@@ -69,6 +84,7 @@ const Front = ({ injuries, width, height, viewBoxValue }: FrontProps) => {
             d="M9850.75 9390.13c836.87,220.87 742.42,408.46 1024.89,374.9 74.33,-8.82 375.65,-35.8 438.74,-66.19 107.84,-51.93 232.27,-291.77 304.33,-410.62 43.71,-72.08 56.45,-87.59 92.24,-159.47 107.85,-216.69 191.29,-450.56 322.64,-643.35 -327.33,-480.08 -495.21,-1040.09 -608.87,-1188.38 -454.12,-1.31 -1217.87,-7.44 -1364.07,467.22l-208.6 686.61c-25.98,257.46 -0.85,665.17 -1.3,939.28z"
           />
           <path
+            data-id="ANTERIOR_PELVICA"
             className="fil0"
             d="M8861.24 12603.17c-124.11,85.22 -39.72,-5.49 -78.3,91.88l666.97 2668.06c43.47,221.12 86.42,212.86 150.97,366.77l355.58 -10.04c205.92,-455.29 98.63,-126.08 222.94,-713.04 108.87,-513.94 221.93,-1089.99 371.19,-1562.44 71.63,-226.69 189.89,-492.98 223.83,-749.31 -38.58,-97.37 45.8,-6.66 -78.3,-91.88 -490.47,21.22 -744.59,-311.42 -917.44,-310.97 -175.98,0.44 -425.8,332.23 -917.44,310.97z"
           />
@@ -114,9 +130,11 @@ const Front = ({ injuries, width, height, viewBoxValue }: FrontProps) => {
           />
           <path
             className="fil0"
+            data-id="ANTERIOR_PELVICA"
             d="M7733.16 13530.02c692.02,508.95 1057.83,1017.61 1572.32,1720.69 -59.32,-453.77 -337.84,-1569.68 -478.8,-2019.72l-195.09 -590.88c-46.01,-56.37 -123.82,-58.7 -210.12,-77.08 -123.66,-26.33 -132.2,-26.37 -233.24,-89.38 -136.61,-85.18 -246.45,-167.15 -364.9,-253.94l-90.17 1310.31z"
           />
           <path
+            data-id="ANTERIOR_PELVICA"
             className="fil0"
             d="M10251.88 15250.71c514.49,-703.08 880.3,-1211.74 1560.62,-1719.88l-80.42 -1310.97c-783.73,583.65 -774.16,211.35 -830.35,511.11l-211.98 638.72c-147.46,515.74 -371.39,1372.4 -437.87,1881.02z"
           />
