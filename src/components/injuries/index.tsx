@@ -9,6 +9,7 @@ type InjuriesProps = {
   height?: string;
   viewBoxSecondValue?: string;
   viewBoxValue?: string;
+  onClick?: (clickedBodyPart: string) => any;
 };
 
 const Injuries = ({
@@ -17,6 +18,7 @@ const Injuries = ({
   width,
   height,
   viewBoxValue,
+  onClick,
 }: InjuriesProps) => {
   return (
     <div>
@@ -26,6 +28,7 @@ const Injuries = ({
           width={width}
           height={height}
           viewBoxValue={viewBoxValue}
+          onClick={onClick}
         />
       ) : (
         <Front
@@ -33,6 +36,7 @@ const Injuries = ({
           width={width}
           height={height}
           viewBoxValue={viewBoxValue}
+          onClick={onClick}
         />
       )}
     </div>
