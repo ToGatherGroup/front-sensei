@@ -1,5 +1,4 @@
 "use client";
-
 import React from "react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
@@ -34,11 +33,13 @@ const PosturaPage = () => {
 
   return (
     <div className="mx-auto min-h-screen flex flex-col justify-center">
-      <IconButton
-        href={`/atleta/perfil/${parametros.id}/cadastrar/avaliacaoPostural`}
-        src="/icons/add_ava_post.png"
-        alt="Cadastrar Avalição"
-      />
+      <div className="mx-auto pb-6">
+        <IconButton
+          href={`/atleta/perfil/${parametros.id}/cadastrar/avaliacaoPostural`}
+          src="/icons/add_ava_post.png"
+          alt="Cadastrar Avalição"
+        />
+      </div>
       <style jsx>{cssGrid}</style>
       <div className="flex justify-center items-center space-x-2 mb-4 mx-4">
         <PosturaCard
