@@ -198,92 +198,95 @@ const PosturalEvaluation = ({ params: { id } }: Props) => {
   };
 
   return (
-    <section className="flex justify-center items-center">
+    <section className="flex flex-col justify-center items-center min-h-screen">
       {currentPage === "choose-img" && (
-        <div className="form-container">
-          <div className="flex-col justify-center items-center mb-6">
-            <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="form-container flex flex-col justify-between items-center h-full">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="w-full flex flex-col justify-between"
+          >
+            <div className="flex justify-center items-end pb-16">
               <FormTitle
                 title="Avaliação Postural"
-                iconSrc="/icons/posture_icon.png"
+                iconSrc="/icons/ava_post2.png"
               />
-              <div>
-                <Swiper
-                  slidesPerView={1}
-                  pagination={{ clickable: true }}
-                  navigation
-                  onSlideChange={(swiper) => handleSlideChange(swiper)}
-                  initialSlide={currentSlide}
-                  className="flex w-72 h-80 z-0"
-                >
-                  <SwiperSlide className="flex w-80 h-80 items-center justify-center">
-                    <label htmlFor="front">
-                      <Image
-                        src={selectedImages.front || front}
-                        alt="imagem do atleta"
-                        width={288}
-                        height={288}
-                        className="block m-auto object-contain max-w-72 max-h-72"
-                      />
-                    </label>
-                    <input
-                      type="file"
-                      id="front"
-                      accept="image/png"
-                      className="hidden"
-                      {...register("front")}
-                      onChange={handleImageChange}
+            </div>
+            <div className="flex flex-col justify-between items-center">
+              <Swiper
+                slidesPerView={1}
+                pagination={{ clickable: true }}
+                navigation
+                onSlideChange={(swiper) => handleSlideChange(swiper)}
+                initialSlide={currentSlide}
+                className="flex w-72 h-80 z-0 mb-6"
+              >
+                <SwiperSlide className="flex w-80 h-80 items-center justify-center">
+                  <label htmlFor="front">
+                    <Image
+                      src={selectedImages.front || front}
+                      alt="imagem do atleta"
+                      width={288}
+                      height={288}
+                      className="block m-auto object-contain max-w-72 max-h-72"
                     />
-                  </SwiperSlide>
-                  <SwiperSlide className="flex w-80 h-80 items-center justify-center">
-                    <label htmlFor="back">
-                      <Image
-                        src={selectedImages.back || back}
-                        alt="imagem do atleta"
-                        width={288}
-                        height={288}
-                        className="block m-auto object-contain max-w-72 max-h-72"
-                      />
-                    </label>
-                    <input
-                      type="file"
-                      id="back"
-                      accept="image/png"
-                      className="hidden"
-                      {...register("back")}
-                      onChange={handleImageChange}
+                  </label>
+                  <input
+                    type="file"
+                    id="front"
+                    accept="image/png"
+                    className="hidden"
+                    {...register("front")}
+                    onChange={handleImageChange}
+                  />
+                </SwiperSlide>
+                <SwiperSlide className="flex w-80 h-80 items-center justify-center">
+                  <label htmlFor="back">
+                    <Image
+                      src={selectedImages.back || back}
+                      alt="imagem do atleta"
+                      width={288}
+                      height={288}
+                      className="block m-auto object-contain max-w-72 max-h-72"
                     />
-                  </SwiperSlide>
-                  <SwiperSlide className="flex w-80 h-80 items-center justify-center">
-                    <label htmlFor="profile">
-                      <Image
-                        src={selectedImages.profile || profile}
-                        alt="imagem do atleta"
-                        width={288}
-                        height={288}
-                        className="block m-auto object-contain max-w-72 max-h-72"
-                      />
-                    </label>
-                    <input
-                      type="file"
-                      id="profile"
-                      accept="image/png"
-                      className="hidden"
-                      {...register("profile")}
-                      onChange={handleImageChange}
+                  </label>
+                  <input
+                    type="file"
+                    id="back"
+                    accept="image/png"
+                    className="hidden"
+                    {...register("back")}
+                    onChange={handleImageChange}
+                  />
+                </SwiperSlide>
+                <SwiperSlide className="flex w-80 h-80 items-center justify-center">
+                  <label htmlFor="profile">
+                    <Image
+                      src={selectedImages.profile || profile}
+                      alt="imagem do atleta"
+                      width={288}
+                      height={288}
+                      className="block m-auto object-contain max-w-72 max-h-72"
                     />
-                  </SwiperSlide>
-                </Swiper>
-              </div>
-              <div>
-                {imageErrors && (
-                  <p className="text-center text-red-500 py-1">{imageErrors}</p>
-                )}
-              </div>
-              <div className="flex mx-auto my-6 box-border items-center">
+                  </label>
+                  <input
+                    type="file"
+                    id="profile"
+                    accept="image/png"
+                    className="hidden"
+                    {...register("profile")}
+                    onChange={handleImageChange}
+                  />
+                </SwiperSlide>
+              </Swiper>
+
+              {imageErrors && (
+                <p className="text-center text-red-500 py-1">{imageErrors}</p>
+              )}
+
+              <div className="flex mt-6 mb-2 pb-9">
                 <label
                   htmlFor="date"
-                  className="inline-block w-28 text-center text-base font-semibold ps-10"
+                  className="inline-block w-14 text-center text-base font-semibold"
                 >
                   Data
                 </label>
@@ -302,20 +305,20 @@ const PosturalEvaluation = ({ params: { id } }: Props) => {
                   className="bg-gray-200 w-42 px-4 py-1 rounded"
                 />
               </div>
-              <div>
-                {errors.date && (
-                  <p className="text-center text-red-500 py-1">
-                    {errors.date.message}
-                  </p>
-                )}
-              </div>
-              <Button
-                text="Cadastrar"
-                type="submit"
-                className="block mt-5 mx-auto px-6"
-              />
-            </form>
-          </div>
+
+              {errors.date && (
+                <p className="text-center text-red-500 py-1">
+                  {errors.date.message}
+                </p>
+              )}
+            </div>
+
+            <Button
+              text="Cadastrar"
+              type="submit"
+              className="mt-4 mb-2 mx-auto px-6"
+            />
+          </form>
         </div>
       )}
       {currentPage === "crop-img" && imageToCrop && (

@@ -1,12 +1,11 @@
 "use client";
-
 import React from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { useParams } from "next/navigation";
 import { getAvaliacaoPosturalDatas } from "@/api/endpoints";
 import { useEffect, useState } from "react";
 import PosturaCard from "@/components/posturaCard";
+import IconButton from "@/components/iconButton";
 
 const PosturaPage = () => {
   const [datasAvaliacaoArray, setDatasAvaliacaoArray] = useState<string[]>([]); //useState([])
@@ -34,14 +33,13 @@ const PosturaPage = () => {
 
   return (
     <div className="mx-auto min-h-screen flex flex-col justify-center">
-      <Link
-        href={`/atleta/perfil/${parametros.id}/cadastrar/avaliacaoPostural`}
-      >
-        <button className=" mx-auto justify-center mx-2 px-2 mb-4 w-fit h-8 bg-stone-200 rounded flex justify-center items-center text-black font-bold">
-          {" "}
-          + avaliação
-        </button>
-      </Link>
+      <div className="mx-auto py-8">
+        <IconButton
+          href={`/atleta/perfil/${parametros.id}/cadastrar/avaliacaoPostural`}
+          src="/icons/add_ava_post.png"
+          alt="Cadastrar Avalição"
+        />
+      </div>
       <style jsx>{cssGrid}</style>
       <div className="flex justify-center items-center space-x-2 mb-4 mx-4">
         <PosturaCard
