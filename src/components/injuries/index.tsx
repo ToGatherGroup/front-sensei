@@ -1,28 +1,46 @@
-import React from 'react'
-import Back from '../../../public/svg/injuries/Back';
-import Front from '../../../public/svg/injuries/Front';
+import React from "react";
+import Back from "../../../public/svg/injuries/Back";
+import Front from "../../../public/svg/injuries/Front";
 
 type InjuriesProps = {
   injuries: string[];
-  type: 'back' | 'front';
+  type: "back" | "front";
   width?: string;
   height?: string;
   viewBoxSecondValue?: string;
   viewBoxValue?: string;
-}
+  onClick?: (clickedBodyPart: string) => any;
+};
 
-const Injuries = ({ injuries, type, width, height, viewBoxValue }: InjuriesProps) => {
-
+const Injuries = ({
+  injuries,
+  type,
+  width,
+  height,
+  viewBoxValue,
+  onClick,
+}: InjuriesProps) => {
   return (
-    <div className="max-h-52 lg:max-h-fit">
-      {type === 'back' ? (
-        <Back injuries={injuries} width={width} height={height} viewBoxValue={viewBoxValue} />
+    <div>
+      {type === "back" ? (
+        <Back
+          injuries={injuries}
+          width={width}
+          height={height}
+          viewBoxValue={viewBoxValue}
+          onClick={onClick}
+        />
       ) : (
-        <Front injuries={injuries} width={width} height={height} viewBoxValue={viewBoxValue} />
+        <Front
+          injuries={injuries}
+          width={width}
+          height={height}
+          viewBoxValue={viewBoxValue}
+          onClick={onClick}
+        />
       )}
     </div>
-  )
+  );
+};
 
-}
-
-export default Injuries
+export default Injuries;

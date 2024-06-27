@@ -11,6 +11,7 @@ import { useAthleteProvider } from "@/contexts";
 import IconButton from "@/components/iconButton";
 import MedalSection from "@/components/medalSection";
 import Button from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 type Params = {
   id: string;
@@ -23,6 +24,7 @@ type Props = {
 const Page = ({ params }: Props) => {
   const { getInjuries, injuries, injuriesDescription, medals, athleteProfile, getProfile, isLoading } = useAthleteProvider();
 
+  const router = useRouter();
   const [lesoes, setLesoes] = useState<string[] | null>(null);
   const [grafico, setGrafico] = useState<any | null>(true);
   const [qualitativos, setQualitativos] = useState<any | null>(null);
@@ -69,9 +71,9 @@ const Page = ({ params }: Props) => {
     if(params.id && id == null)  {
       setId(parseInt(params.id))
       getProfile(params.id)
-    }        
+    }
   }, [params.id])
-  
+
   const athleteInfo = [
     { label: athleteProfile?.faixa },
     { label: `${athleteProfile?.idade} anos` },
@@ -89,19 +91,19 @@ const Page = ({ params }: Props) => {
 
   useEffect(() => {
     medals?.forEach((medalha: { posicao: string; quantidade: number }) => {
-        switch (medalha.posicao) {
+      switch (medalha.posicao) {
           case 'Medalha de ouro':
-              setMedalhaOuro(medalha.quantidade);
-              break;
+          setMedalhaOuro(medalha.quantidade);
+          break;
           case 'Medalha de prata':
-              setMedalhaPrata(medalha.quantidade);
-              break;
+          setMedalhaPrata(medalha.quantidade);
+          break;
           case 'Medalha de bronze':
-              setMedalhaBronze(medalha.quantidade);
-              break;
-          default:
-              break;
-          }
+          setMedalhaBronze(medalha.quantidade);
+          break;
+        default:
+          break;
+      }
     });
   }, [medals]);
 
@@ -193,16 +195,18 @@ const Page = ({ params }: Props) => {
               <div>
                 <div className="flex flex-row items-stretch justify-center mt-4 lg:mt-12 lg:gap-6 -z-50">
                   <Injuries injuries={injuries} type="front" width={screenSize.width > 1024 ? "248px" : "150px"} height={screenSize.width > 1024 ? "400px" : "200px"} viewBoxValue={screenSize.width > 1024 ? "1000 15400 19000 5000" : "1000 12000 19000 5000"} />
-                  <Injuries injuries={injuries} type="back" width={screenSize.width > 1024 ? "232px" : "134px"} viewBoxValue={screenSize.width > 1024 ? "1000 2000 20000 27000" : "1000 12000 20000 27000"} />
+                  <Injuries injuries={injuries} type="back" width={screenSize.width > 1024 ? "232px" : "134px"} height={screenSize.width > 1024 ? "400px" : "200px"} viewBoxValue={screenSize.width > 1024 ? "1000 4000 20000 27000" : "1000 0 20000 27000"} />
                 </div>
-                  <div className="flex mb-2">
+                <div className="flex mb-2">
                   <Button
-                      text={"Adicionar lesão"}
-                      type={"button"}
-                      onClick={() => console.log("Adicionar lesão")}
-                      className="mx-auto mt-8 mb-2 lg:mt-2 lg:mb-6"
-                      ></Button>
-                  </div>
+                    text={"Adicionar lesão"}
+                    type={"button"}
+                    onClick={() =>
+                      router.push(`/atleta/perfil/${params.id}/cadastrar/lesao`)
+                    }
+                    className="mx-auto mt-8 mb-2 lg:mt-2 lg:mb-6"
+                  ></Button>
+                </div>
                 <div className="flex flex-col-reverse custom-scrollbar mx-auto max-h-24 lg:max-h-40 scroll-auto overflow-y-auto justify-center bg-white rounded-lg p-4 lg:-mt-4 max-w-xs lg:min-w-fit lg:max-w-md ">
                   {(!isLoading && injuriesDescription.length <= 0) && <h3 className="text-sm lg:text-lg font-semibold">O atleta não possui lesão registrada</h3>}
                   {
