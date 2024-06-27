@@ -39,7 +39,7 @@ export const ReviewsChart = ({ id, height, width }: ReviewsChartProps) => {
       }
     };
     fetchData();
-  }, [get, id]);
+  }, [id]);
 
   const chartData = {
     labels: apiData ? apiData.labels : [],

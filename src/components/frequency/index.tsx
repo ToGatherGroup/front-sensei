@@ -30,6 +30,10 @@ const frequencyDatesSchema = yup.object().shape({
     }),
 });
 
+type Props = {
+  id: number | string;
+};
+
 const Frequency = ({ id, height, width }: FrequencyProps) => {
   const [frequencyData, setFrequencyData] = useState([
     { label: "Presença", value: 1 },
@@ -84,7 +88,7 @@ const Frequency = ({ id, height, width }: FrequencyProps) => {
 
       fetchData();
     }
-  }, [watchStartDate, watchEndDate, get, id]);
+  }, [watchStartDate, watchEndDate, id]);
 
   useEffect(() => {
     setChartKey(`${width}-${height}`);

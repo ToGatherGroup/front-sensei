@@ -9,8 +9,8 @@ import styles from "./avatarAtleta.module.css";
 
 type Props = {
   id: string;
-  name: string;
-  photo: string;
+  name?: string;
+  photo?: string;
   size: "small" | "big";
   belt?: (typeof Faixas)[number];
 };
@@ -107,7 +107,9 @@ const AvatarAtleta = ({ id, name, photo, belt, size }: Props) => {
             borderColor: `${beltsColor[belt].backgroundBorder}`,
           }}
         ></div>
-        <img className={styles.photoBig} src={photo} alt={`Foto de ${name}`} />
+        {photo && (
+          <img className={styles.photoBig} src={photo} alt={`Foto de ${name}`} />
+        )}
         <div
           className={styles.nameContainerBig}
           style={{

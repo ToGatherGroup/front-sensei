@@ -1,7 +1,7 @@
 "use client";
 
 import AvatarAtleta from "@/components/avatarAtleta/page";
-import { axios } from "@/api/api";
+
 import { useEffect, useState, useCallback } from "react";
 import useScreenSize from "@/hooks/useScreenSize";
 import Injuries from "@/components/injuries";
@@ -21,8 +21,8 @@ type Props = {
 };
 
 const Page = ({ params }: Props) => {
-  const { getInjuries, injuries, injuriesDescription, isLoading }  = useAthleteProvider();
-  const [dadosAtleta, setDadosAtleta] = useState<any | null>(null);
+  const { getInjuries, injuries, injuriesDescription, medals, athleteProfile, getProfile, isLoading } = useAthleteProvider();
+
   const [lesoes, setLesoes] = useState<string[] | null>(null);
   const [grafico, setGrafico] = useState<any | null>(true);
   const [qualitativos, setQualitativos] = useState<any | null>(null);
@@ -31,6 +31,7 @@ const Page = ({ params }: Props) => {
   const [medalhaPrata, setMedalhaPrata] = useState<number>(0);
   const [medalhaBronze, setMedalhaBronze] = useState<number>(0);
   const [activeButton, setActiveButton] = useState('Gráfico');
+  const [id, setId] = useState<number | null>(null)
 
   const handleButtonClick = (buttonLabel: string, onClick: () => void) => {
     untoggleAll();
@@ -64,10 +65,17 @@ const Page = ({ params }: Props) => {
     setQualitativos(true);
   };
 
+  useEffect(() => {
+    if(params.id && id == null)  {
+      setId(parseInt(params.id))
+      getProfile(params.id)
+    }        
+  }, [params.id])
+  
   const athleteInfo = [
-    { label: dadosAtleta?.faixa },
-    { label: `${dadosAtleta?.idade} anos` },
-    { label: dadosAtleta?.categoria ? dadosAtleta?.categoria : "Sem categoria" },
+    { label: athleteProfile?.faixa },
+    { label: `${athleteProfile?.idade} anos` },
+    { label: athleteProfile?.categoria ? athleteProfile?.categoria : "Sem categoria" },
   ];
 
   const buttons = [
@@ -77,37 +85,25 @@ const Page = ({ params }: Props) => {
     { label: 'Qualitativos', onClick: handleQualitativoClick },
   ];
 
-  const getDadosAtleta = useCallback(async () => {
-    try {
-      const response = await axios.get(`/atleta/ficha/${params.id}`);
-      setDadosAtleta(response.data);
-      const medalhaDTO = response.data.medalhaDTO;
-
-      medalhaDTO.forEach((medalha: { posicao: string; quantidade: number }) => {
-        switch (medalha.posicao) {
-          case 'Medalha de ouro':
-            setMedalhaOuro(medalha.quantidade);
-            break;
-          case 'Medalha de prata':
-            setMedalhaPrata(medalha.quantidade);
-            break;
-          case 'Medalha de bronze':
-            setMedalhaBronze(medalha.quantidade);
-            break;
-          default:
-            break;
-        }
-      });
-    } catch (error) {
-      console.error("Erro ao obter dados do atleta", error);
-    }
-  }, [params.id]);
-
   const screenSize = useScreenSize();
 
   useEffect(() => {
-    getDadosAtleta();
-  }, [getDadosAtleta]);
+    medals?.forEach((medalha: { posicao: string; quantidade: number }) => {
+        switch (medalha.posicao) {
+          case 'Medalha de ouro':
+              setMedalhaOuro(medalha.quantidade);
+              break;
+          case 'Medalha de prata':
+              setMedalhaPrata(medalha.quantidade);
+              break;
+          case 'Medalha de bronze':
+              setMedalhaBronze(medalha.quantidade);
+              break;
+          default:
+              break;
+          }
+    });
+  }, [medals]);
 
   const renderButtons = () => (
     <section className="flex mt-6 space-x-2 lg:space-x-6 justify-center">
@@ -118,7 +114,7 @@ const Page = ({ params }: Props) => {
           type="button"
           onClick={() => handleButtonClick(button.label, button.onClick)}
           active={activeButton === button.label}
-          className={`lg:mt-2 lg:px-4 lg:py-2 lg:text-lg text-xs py-2 px-2 rounded-md transition delay-100 duration-300 ease-in-out ${
+          className={`lg:mt-2 lg:px-4 lg:py-2 lg:text-lg text-xs py-2 px-[12px] rounded-md transition delay-100 duration-300 ease-in-out ${
             activeButton === button.label
               ? 'bg-white text-winePattern font-semibold'
               : ''
@@ -143,16 +139,19 @@ const Page = ({ params }: Props) => {
       <section className="flex flex-col lg:flex-row lg:justify-around lg:w-full">
         <div>
           <div className="flex justify-center space-x-6 mb-4 mt-6 lg:space-x-10 lg:mt-8 lg:mb-8">
-            <IconButton href="/comparison" src="/icons/avaliacao_fisica.png" alt="Avaliação Física Individual" />
+            {/* <IconButton href="/comparison" src="/icons/avaliacao_fisica.png" alt="Avaliação Física Individual" /> */}
+            <IconButton href={`${params.id}/cadastrar/avaliacaoFisica`} src="/icons/avaliacao_fisica.png" alt="Edição" />
             <IconButton href={`${params.id}/cadastrar/campeonato`} src="/icons/campeonato.png" alt="Campeonato" />
             <IconButton href={`${params.id}/postura`} src="/icons/posture_icon.png" alt="Postura" />
-            <IconButton href={`${params.id}/cadastrar/avaliacaoFisica`} src="/icons/ferramenta-lapis.png" alt="Edição" />
+            <IconButton href={`/atleta/editar/${params.id}`} src="/icons/ferramenta-lapis.png" alt="Edição" />
+            {/* <IconButton href={`/atleta/perfil/${params.id}/cadastrar/campeonato`} src="/icons/campeonato.png" alt="Campeonato" /> */}
+            {/* <IconButton href={`/postura/${params.id}`} src="/icons/posture_icon.png" alt="Postura" /> */}
           </div>
           <AvatarAtleta
             id={params.id}
-            name={dadosAtleta?.nome}
-            belt={dadosAtleta?.faixa}
-            photo={dadosAtleta?.foto}
+            name={athleteProfile?.nome}
+            belt={athleteProfile?.faixa}
+            photo={athleteProfile?.foto}
             size={screenSize.width > 1024 ? "big" : "small"}
           />
           <section>
@@ -192,20 +191,20 @@ const Page = ({ params }: Props) => {
             {grafico && <div className="lg:mt-24"><ReviewsChart height={screenSize.width > 1024 ? 524 : 256} width={screenSize.width > 1024 ? 524 : 256} id={params.id} /></div>}
             {lesoes && (
               <div>
-                <div className="flex flex-row items-stretch justify-center lg:mt-12 lg:gap-6 -z-50">
-                  <Injuries injuries={injuries} type="front" width={screenSize.width > 1024 ? "248px" : "150px"} viewBoxSecondValue={screenSize.width > 1024 ? "3000" : "12000"} />
-                  <Injuries injuries={injuries} type="back" width={screenSize.width > 1024 ? "232px" : "134px"} viewBoxSecondValue={screenSize.width > 1024 ? "0" : "9000"} />
+                <div className="flex flex-row items-stretch justify-center mt-4 lg:mt-12 lg:gap-6 -z-50">
+                  <Injuries injuries={injuries} type="front" width={screenSize.width > 1024 ? "248px" : "150px"} height={screenSize.width > 1024 ? "400px" : "200px"} viewBoxValue={screenSize.width > 1024 ? "1000 15400 19000 5000" : "1000 12000 19000 5000"} />
+                  <Injuries injuries={injuries} type="back" width={screenSize.width > 1024 ? "232px" : "134px"} viewBoxValue={screenSize.width > 1024 ? "1000 2000 20000 27000" : "1000 12000 20000 27000"} />
                 </div>
                   <div className="flex mb-2">
                   <Button
                       text={"Adicionar lesão"}
                       type={"button"}
                       onClick={() => console.log("Adicionar lesão")}
-                      className="mx-auto"
+                      className="mx-auto mt-8 mb-2 lg:mt-2 lg:mb-6"
                       ></Button>
                   </div>
-                <div className="flex flex-col-reverse custom-scrollbar mx-auto max-h-24 lg:max-h-40 scroll-auto overflow-y-auto justify-center bg-white rounded-lg p-4 -mt-40 lg:-mt-4 max-w-xs lg:min-w-fit lg:max-w-md ">
-                  {(!isLoading && injuriesDescription.length <= 0) && <h3 className="text-sm lg:text-lg font-semibold">Esse atleta não possui nenhuma lesão registrada</h3>}
+                <div className="flex flex-col-reverse custom-scrollbar mx-auto max-h-24 lg:max-h-40 scroll-auto overflow-y-auto justify-center bg-white rounded-lg p-4 lg:-mt-4 max-w-xs lg:min-w-fit lg:max-w-md ">
+                  {(!isLoading && injuriesDescription.length <= 0) && <h3 className="text-sm lg:text-lg font-semibold">O atleta não possui lesão registrada</h3>}
                   {
                     injuriesDescription.map((injury, index) => (
                       <p key={index} className="leading-relaxed text-xs lg:text-sm text-wrap text-transform: capitalize">{`${injury} \n`}</p>

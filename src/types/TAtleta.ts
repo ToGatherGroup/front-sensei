@@ -1,14 +1,13 @@
 import { Faixas } from "@/enums/faixas";
 
-export type TAtleta = {
-  id: string;
-  name: string;
+export type Atleta = {
+  id?: number;
+  nome: string;
   email: string;
-  birthdate: Date;
-  sex: "male" | "female";
-  weight: number;
-  height: number;
-  belt: (typeof Faixas)[number];
-  photo: string;
-  category?: string;
+  nascimento: string;
+  foto: string;
+  categoria?: string;
+  faixa: (typeof Faixas)[number];
+  sexo: "M" | "F";
+  isAtivo?: boolean;
 };

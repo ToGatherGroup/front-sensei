@@ -12,9 +12,14 @@ const PosturaPage = () => {
   const [viewSide, setViewSide] = useState<number>(0);
   const parametros = useParams<{ id: string }>();
   const rotateIcon = "/icons/axis_z_rotate_counterclockwise_icon.png";
+  const parametros = useParams<{ id: string }>();
+  const rotateIcon = "/icons/axis_z_rotate_counterclockwise_icon.png";
 
   useEffect(() => {
     const fetchData = async () => {
+      const datasAvaliacao = await getAvaliacaoPosturalDatas(
+        Number(parametros.id)
+      );
       const datasAvaliacao = await getAvaliacaoPosturalDatas(
         Number(parametros.id)
       );
@@ -29,6 +34,7 @@ const PosturaPage = () => {
     } else {
       setViewSide(viewSide + 1);
     }
+  };
   };
 
   return (
