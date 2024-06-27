@@ -1,4 +1,5 @@
 "use client";
+
 import React from "react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
@@ -12,14 +13,9 @@ const PosturaPage = () => {
   const [viewSide, setViewSide] = useState<number>(0);
   const parametros = useParams<{ id: string }>();
   const rotateIcon = "/icons/axis_z_rotate_counterclockwise_icon.png";
-  const parametros = useParams<{ id: string }>();
-  const rotateIcon = "/icons/axis_z_rotate_counterclockwise_icon.png";
 
   useEffect(() => {
     const fetchData = async () => {
-      const datasAvaliacao = await getAvaliacaoPosturalDatas(
-        Number(parametros.id)
-      );
       const datasAvaliacao = await getAvaliacaoPosturalDatas(
         Number(parametros.id)
       );
@@ -35,17 +31,14 @@ const PosturaPage = () => {
       setViewSide(viewSide + 1);
     }
   };
-  };
 
   return (
     <div className="mx-auto min-h-screen flex flex-col justify-center">
-      <div className="mx-auto py-8">
-        <IconButton
-          href={`/atleta/perfil/${parametros.id}/cadastrar/avaliacaoPostural`}
-          src="/icons/add_ava_post.png"
-          alt="Cadastrar Avalição"
-        />
-      </div>
+      <IconButton
+        href={`/atleta/perfil/${parametros.id}/cadastrar/avaliacaoPostural`}
+        src="/icons/add_ava_post.png"
+        alt="Cadastrar Avalição"
+      />
       <style jsx>{cssGrid}</style>
       <div className="flex justify-center items-center space-x-2 mb-4 mx-4">
         <PosturaCard
