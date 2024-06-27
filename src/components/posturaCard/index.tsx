@@ -18,7 +18,7 @@ const PosturaCard = ({
   viewSide,
 }: PosturaCardProps) => {
   const dropdownHeader = "Selecione uma data";
-  const defaultImage = "/postura/placeholderpostura.png";
+  const defaultImage = "/postura/place_holder_postura.png";
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const [selectedOption, setSelectedOption] = useState<string | null>(
     datasAvaliacaoArray[0]
