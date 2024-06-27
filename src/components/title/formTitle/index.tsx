@@ -19,8 +19,8 @@ function formTitle({ title, iconSrc, className: outerClassName }: Props) {
         className="inline m-auto"
         src={iconSrc}
         alt="Ícone do formulário"
-        width={20}
-        height={20}
+        width={24}
+        height={24}
       />
     </div>
   );
