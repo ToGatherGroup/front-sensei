@@ -67,8 +67,6 @@ export const ApiProvider = ({ children }: { children: React.ReactNode }) => {
     request: Promise<any>,
     displayOptions?: DisplayOptions
   ) {
-    console.log("toastOptions:", displayOptions);
-
     // Monitora o sucesso
     displayOptions?.toastSuccess &&
       request.then((data: any) => {
@@ -185,7 +183,9 @@ export const ApiProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <ApiContext.Provider value={{ get, post, put, patch, remove, isLoadingAPI }}>
+    <ApiContext.Provider
+      value={{ get, post, put, patch, remove, isLoadingAPI }}
+    >
       {isLoadingAPI && <Loading />}
       {children}
     </ApiContext.Provider>
