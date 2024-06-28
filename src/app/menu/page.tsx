@@ -1,7 +1,5 @@
 import Link from "next/link";
 
-type Props = {};
-
 import styles from "./menu.module.css";
 
 import Card from "../../components/card/index";

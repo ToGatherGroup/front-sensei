@@ -6,12 +6,18 @@ import { Radar } from "react-chartjs-2";
 
 Chart.register(...registerables);
 
+type ReviewsChartProps = {
+  id: number | string;
+  width?: number;
+  height?: number;
+};
+
 interface IApiData {
   labels: string[];
   values: number[];
 }
 
-export const ReviewsChart = (id: number | string) => {
+export const ReviewsChart = ({ id, height, width }: ReviewsChartProps) => {
   const [apiData, setApiData] = useState<IApiData | null>(null);
   const { get } = useApiProvider();
 
@@ -33,7 +39,7 @@ export const ReviewsChart = (id: number | string) => {
       }
     };
     fetchData();
-  }, [get, id]);
+  }, [id]);
 
   const chartData = {
     labels: apiData ? apiData.labels : [],
@@ -96,8 +102,8 @@ export const ReviewsChart = (id: number | string) => {
 
   return (
     <>
-      <section>
-        <Radar data={chartData} options={options}></Radar>
+      <section className="mx-auto w-64 lg:w-full">
+      <Radar key={`${width}-${height}`} height={height} width={width} data={chartData} options={options}></Radar>
       </section>
     </>
   );

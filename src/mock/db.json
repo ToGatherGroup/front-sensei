@@ -1,0 +1,28 @@
+
+
+{
+    "core": [
+        {"id":1,"nome":"Rafaella Bertolinie"},
+        {"id":2,"nome":"Rafaella Bertolinie 2"},
+        {"id":3,"nome":"Rafaella Bertolinie 3"},
+        {"id":4,"nome":"Rafaella Bertolinie 4"},
+        {"id":5,"nome":"Rafaella Bertolinie 5"},
+        {"id":6,"nome":"Rafaella Bertolinie 6"},
+        {"id":7,"nome":"Rafaella Bertolinie 7"},
+        {"id":8,"nome":"Rafaella Bertolinie 8"},
+        {"id":9,"nome":"Rafaella Bertolinie 9"},
+        {"id":10,"nome":"Rafaella Bertolinie 10"}
+    ],
+    "forca_isometrica_maos": [
+        {"id":1,"nome":"Rafaella Bertolinie"},
+        {"id":2,"nome":"Rafaella Bertolinie 2"},
+        {"id":3,"nome":"Rafaella Bertolinie 3"},
+        {"id":4,"nome":"Rafaella Bertolinie 4"},
+        {"id":5,"nome":"Rafaella Bertolinie 5"},
+        {"id":6,"nome":"Rafaella Bertolinie 6"},
+        {"id":7,"nome":"Rafaella Bertolinie 7"},
+        {"id":8,"nome":"Rafaella Bertolinie 8"},
+        {"id":9,"nome":"Rafaella Bertolinie 9"},
+        {"id":10,"nome":"Rafaella Bertolinie 10"}
+    ]
+  }

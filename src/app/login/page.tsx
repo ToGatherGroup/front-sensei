@@ -1,20 +1,21 @@
-'use client'
+"use client";
 import React, { useEffect, useState } from "react";
-import Button from "../../components/button/index";
 import Title from "../../components/title/index";
+
 import Loading from "@/components/loading/index";
 import { useAuthProvider } from "@/contexts";
+import Button from "@/components/ui/button";
 
 export default function LoginPage() {
-  const [login, setLogin] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+  const [login, setLogin] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const { authentication, isLoading, error } = useAuthProvider();
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     authentication(login, password);
   };
- 
+
   return (
     <div className="flex items-center justify-center w-full min-h-dvh">
       {isLoading && <Loading />}
@@ -38,11 +39,10 @@ export default function LoginPage() {
             placeholder="Senha"
             className="p-2 w-full rounded-md bg-[#929292] text-white placeholder-text-white"
           />
-          {error && (<p>{error}</p>)}
-          <Button label="Entrar" type="submit" style="btn_default" />
+          {error && <p>{error}</p>}
+          <Button text="Entrar" type="submit" className="w-40" />
         </form>
       </div>
     </div>
   );
 }
-

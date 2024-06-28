@@ -7,7 +7,7 @@ const CadastrarAtleta = (props: Props) => {
   //console.log(Atleta);
   return (
     <div>
-      {<FormAtleta />}
+      {<FormAtleta method="POST" />}
     </div>
   );
 };
