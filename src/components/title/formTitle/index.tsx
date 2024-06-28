@@ -16,7 +16,7 @@ function formTitle({ title, iconSrc, className: outerClassName }: Props) {
         {title}
       </h2>
       <Image
-        className="inline m-auto "
+        className="inline m-auto"
         src={iconSrc}
         alt="Ícone do formulário"
         width={24}
