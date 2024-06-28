@@ -3,7 +3,6 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
   position: relative;
   padding-top: 10px;
 }
@@ -61,10 +60,11 @@
 }
 
 .photoBgBig {
-  width: 200px;
-  height: 200px;
+  transform: translateY(20px);
+  width: 190px;
+  height: 190px;
   background-color: #5f0404;
-  border: 2px solid #fff;
+  border: 2px solid #350202;
   border-radius: 50%;
 }
 
@@ -94,7 +94,7 @@
   background-color: #5f0404;
   box-sizing: border-box;
   border-radius: 10px;
-  border: 2px solid;
+  border: 2px solid #350202;
   text-align: center;
   z-index: 2;
   overflow: scroll;

@@ -13,9 +13,10 @@ type Props = {
   photo?: string;
   size: "small" | "big";
   belt?: (typeof Faixas)[number];
+  className?: string | undefined;
 };
 
-const AvatarAtleta = ({ id, name, photo, belt, size }: Props) => {
+const AvatarAtleta = ({ id, name, photo, belt, size, className }: Props) => {
   const router = useRouter();
 
   const beltsColor = {
@@ -94,42 +95,62 @@ const AvatarAtleta = ({ id, name, photo, belt, size }: Props) => {
     },
   };
 
-  if (size === "big" && belt) {
-    return (
-      <div
-        className={styles.container}
-        onClick={() => alert(`Você clicou no ${name}`)}
-      >
+  if (size === "big") {
+    if (belt) {
+      return (
         <div
-          className={styles.photoBgBig}
-          style={{
-            background: `${beltsColor[belt].background}`,
-            borderColor: `${beltsColor[belt].backgroundBorder}`,
-          }}
-        ></div>
-        {photo && (
-          <img className={styles.photoBig} src={photo} alt={`Foto de ${name}`} />
-        )}
-        <div
-          className={styles.nameContainerBig}
-          style={{
-            background: `${beltsColor[belt].background}`,
-            borderColor: `${beltsColor[belt].nameBorder}`,
-          }}
+          className={styles.container}
+          onClick={() => alert(`Você clicou no ${name}`)}
         >
-          <p style={{ color: `${beltsColor[belt].name}` }}>{name}</p>
+          <div
+            className={styles.photoBgBig}
+            style={{
+              background: `${beltsColor[belt].background}`,
+              borderColor: `${beltsColor[belt].backgroundBorder}`,
+            }}
+          ></div>
+          {photo && (
+            <img
+              className={styles.photoBig}
+              src={photo}
+              alt={`Foto de ${name}`}
+            />
+          )}
+          <div
+            className={styles.nameContainerBig}
+            style={{
+              background: `${beltsColor[belt].background}`,
+              borderColor: `${beltsColor[belt].nameBorder}`,
+            }}
+          >
+            <p style={{ color: `${beltsColor[belt].name}` }}>{name}</p>
+          </div>
         </div>
-      </div>
-    );
+      );
+    } else {
+      return (
+        <div className={`${styles.container} ${className}`}>
+          <div className={styles.photoBgBig}></div>
+          <img
+            className={styles.photoBig}
+            src={photo}
+            alt={`Foto de ${name}`}
+          />
+          <div className={styles.nameContainerBig}>
+            <p>{name}</p>
+          </div>
+        </div>
+      );
+    }
   } else if (size === "small") {
     return (
       <div
         className={styles.container}
+        style={{ cursor: "pointer" }}
         onClick={() => router.push(`/atleta/perfil/${id}`)}
       >
         <div className={styles.photoBg}></div>
         <img className={styles.photo} src={photo} alt={`Foto de ${name}`} />
-        {/* <Image className={styles.photo} src={photo} alt={`Foto de ${name}`} height={200} width={200}/> */}
         <div className={styles.nameContainer}>
           <p>{name}</p>
         </div>
