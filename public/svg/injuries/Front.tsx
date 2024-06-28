@@ -1,5 +1,5 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 type FrontProps = {
   injuries: string[];
@@ -16,6 +16,7 @@ const Front = ({
   viewBoxValue,
   onClick,
 }: FrontProps) => {
+  const [hover, setHover] = useState<string | undefined>(undefined);
   useEffect(() => {
     if (injuries) {
       const injuredAreas = document.querySelectorAll("path");
@@ -32,7 +33,7 @@ const Front = ({
     }
   }, [injuries]);
 
-  // Attach onClick at every path
+  // Attach onClick / Cursor Pointer / Hover at every clickable path
   useEffect(() => {
     const injuredAreas = document.querySelectorAll("path");
 
@@ -40,8 +41,32 @@ const Front = ({
       const areaName = bodyPart.getAttribute("data-id");
       if (!areaName) return;
       bodyPart.onclick = () => onClick && onClick(areaName);
+
+      if (!!!onClick) return;
+      bodyPart.style.cursor = "pointer";
+      bodyPart.onmouseenter = () => {
+        setHover(areaName);
+      };
+      bodyPart.onmouseleave = () => {
+        setHover(undefined);
+      };
     });
   }, []);
+
+  useEffect(() => {
+    const bodyParts = document.querySelectorAll("path");
+
+    bodyParts.forEach((bodyPart) => {
+      const dataId = bodyPart.getAttribute("data-id");
+
+      if (dataId !== null && hover == dataId && bodyPart.style.fill != "red") {
+        bodyPart.style.fill = "yellow";
+      } else {
+        if (bodyPart.style.fill == "red") return;
+        bodyPart.style.fill = "#90a2a2";
+      }
+    });
+  }, [hover]);
 
   return (
     <svg
