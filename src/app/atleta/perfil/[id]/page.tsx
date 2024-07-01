@@ -210,7 +210,7 @@ const Page = ({ params }: Props) => {
                     className="mx-auto mt-8 mb-2 lg:mt-2 lg:mb-6"
                   ></Button>
                 </div>
-                <div className="flex flex-col-reverse custom-scrollbar mx-auto max-h-26 lg:max-h-40 scroll-auto overflow-y-auto justify-center bg-white rounded-lg p-4 pt-2 lg:-mt-4 max-w-xs lg:min-w-fit lg:max-w-md ">
+                <div className="flex flex-col-reverse custom-scrollbar mx-auto max-h-26 lg:max-h-40 scroll-auto overflow-y-auto justify-center bg-white rounded-lg p-4 pt-2 lg:-mt-4 max-w-xs lg:min-w-fit lg:max-w-sm ">
                   {(!isLoading && injuriesInfo.length <= 0) && <h3 className="text-sm lg:text-lg font-semibold">O atleta não possui lesão registrada</h3>}
                   {
         injuriesInfo.map((injuryInfo, index) => (
