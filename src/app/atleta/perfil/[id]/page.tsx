@@ -12,6 +12,9 @@ import IconButton from "@/components/iconButton";
 import MedalSection from "@/components/medalSection";
 import Button from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import dayjs from "dayjs";
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
 
 type Params = {
   id: string;
@@ -22,7 +25,7 @@ type Props = {
 };
 
 const Page = ({ params }: Props) => {
-  const { getInjuries, injuries, injuriesDescription, medals, athleteProfile, getProfile, isLoading } = useAthleteProvider();
+  const { getInjuries, injuries, injuriesInfo, medals, athleteProfile, getProfile, isLoading } = useAthleteProvider();
 
   const router = useRouter();
   const [lesoes, setLesoes] = useState<string[] | null>(null);
@@ -207,13 +210,19 @@ const Page = ({ params }: Props) => {
                     className="mx-auto mt-8 mb-2 lg:mt-2 lg:mb-6"
                   ></Button>
                 </div>
-                <div className="flex flex-col-reverse custom-scrollbar mx-auto max-h-24 lg:max-h-40 scroll-auto overflow-y-auto justify-center bg-white rounded-lg p-4 lg:-mt-4 max-w-xs lg:min-w-fit lg:max-w-md ">
-                  {(!isLoading && injuriesDescription.length <= 0) && <h3 className="text-sm lg:text-lg font-semibold">O atleta não possui lesão registrada</h3>}
+                <div className="flex flex-col-reverse custom-scrollbar mx-auto max-h-26 lg:max-h-40 scroll-auto overflow-y-auto justify-center bg-white rounded-lg p-4 pt-2 lg:-mt-4 max-w-xs lg:min-w-fit lg:max-w-sm ">
+                  {(!isLoading && injuriesInfo.length <= 0) && <h3 className="text-sm lg:text-lg font-semibold">O atleta não possui lesão registrada</h3>}
                   {
-                    injuriesDescription.map((injury, index) => (
-                      <p key={index} className="leading-relaxed text-xs lg:text-sm text-wrap text-transform: capitalize">{`${injury} \n`}</p>
-                    ))
-                  }
+        injuriesInfo.map((injuryInfo, index) => (
+          <p key={index} className="flex leading-7 justify-between inline-block align-text-bottom text-xs lg:text-sm text-wrap text-transform: capitalize">
+            <span className="font-bold">{dayjs(injuryInfo.date).format('DD/MM/YYYY')}</span>
+            <span className="italic "> {injuryInfo.regiaoLesao}</span>
+            <Tippy hideOnClick={true} content={injuryInfo.description}>
+              <span className="cursor-pointer lg:text-base text-lg"> ℹ️</span>
+            </Tippy>
+          </p>
+        ))
+      }
                 </div>
               </div>
             )}
