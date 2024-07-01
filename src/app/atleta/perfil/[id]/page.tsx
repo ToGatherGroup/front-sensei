@@ -71,7 +71,7 @@ const Page = ({ params }: Props) => {
   };
 
   useEffect(() => {
-    if(params.id && id == null)  {
+    if (params.id && id == null) {
       setId(parseInt(params.id))
       getProfile(params.id)
     }
@@ -95,13 +95,13 @@ const Page = ({ params }: Props) => {
   useEffect(() => {
     medals?.forEach((medalha: { posicao: string; quantidade: number }) => {
       switch (medalha.posicao) {
-          case 'Medalha de ouro':
+        case 'Medalha de ouro':
           setMedalhaOuro(medalha.quantidade);
           break;
-          case 'Medalha de prata':
+        case 'Medalha de prata':
           setMedalhaPrata(medalha.quantidade);
           break;
-          case 'Medalha de bronze':
+        case 'Medalha de bronze':
           setMedalhaBronze(medalha.quantidade);
           break;
         default:
@@ -119,11 +119,10 @@ const Page = ({ params }: Props) => {
           type="button"
           onClick={() => handleButtonClick(button.label, button.onClick)}
           active={activeButton === button.label}
-          className={`lg:mt-2 lg:px-4 lg:py-2 lg:text-lg text-xs py-2 px-[12px] rounded-md transition delay-100 duration-300 ease-in-out ${
-            activeButton === button.label
-              ? 'bg-white text-winePattern font-semibold'
-              : ''
-          }`}
+          className={`lg:mt-2 lg:px-4 lg:py-2 lg:text-lg text-xs py-2 px-[12px] rounded-md transition delay-100 duration-300 ease-in-out ${activeButton === button.label
+            ? 'bg-white text-winePattern font-semibold'
+            : ''
+            }`}
         />
       ))}
     </section>
@@ -213,16 +212,16 @@ const Page = ({ params }: Props) => {
                 <div className="flex flex-col-reverse custom-scrollbar mx-auto max-h-26 lg:max-h-40 scroll-auto overflow-y-auto justify-center bg-white rounded-lg p-4 pt-2 lg:-mt-4 max-w-xs lg:min-w-fit lg:max-w-sm ">
                   {(!isLoading && injuriesInfo.length <= 0) && <h3 className="text-sm lg:text-lg font-semibold">O atleta não possui lesão registrada</h3>}
                   {
-        injuriesInfo.map((injuryInfo, index) => (
-          <p key={index} className="flex leading-7 justify-between inline-block align-text-bottom text-xs lg:text-sm text-wrap text-transform: capitalize">
-            <span className="font-bold">{dayjs(injuryInfo.date).format('DD/MM/YYYY')}</span>
-            <span className="italic "> {injuryInfo.regiaoLesao}</span>
-            <Tippy hideOnClick={true} content={injuryInfo.description}>
-              <span className="cursor-pointer lg:text-base text-lg"> ℹ️</span>
-            </Tippy>
-          </p>
-        ))
-      }
+                    injuriesInfo.map((injuryInfo, index) => (
+                      <p key={index} className="flex leading-7 justify-between inline-block align-text-bottom text-xs lg:text-sm text-wrap text-transform: capitalize">
+                        <span className="font-bold">{dayjs(injuryInfo.date).format('DD/MM/YYYY')}</span>
+                        <span className="italic "> {injuryInfo.regiaoLesao}</span>
+                        <Tippy hideOnClick={true} content={injuryInfo.description}>
+                          <span className="cursor-pointer lg:text-base text-lg"> ℹ️</span>
+                        </Tippy>
+                      </p>
+                    ))
+                  }
                 </div>
               </div>
             )}
