@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
+import Qualitativos from "@/components/qualitativos/index";
 
 type Params = {
   id: string;
@@ -216,7 +217,11 @@ const Page = ({ params }: Props) => {
           {/* Seção Botões Começo */}
           {renderButtons()}
           <div className="max-w-full">
-            {qualitativos && <div></div>}
+            {qualitativos && (
+              <div>
+                <Qualitativos />
+              </div>
+            )}
             {frequencia && (
               <div className="mt-4 lg:mt-32">
                 <Frequency
