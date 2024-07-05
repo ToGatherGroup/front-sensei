@@ -1,26 +1,14 @@
 "use client";
 import FormTitle from "@/components/title/formTitle/index";
-import { SubmitHandler, useForm } from "react-hook-form";
 import Button from "@/components/button";
-import TimeInput from "@/components/timeInput";
-import { useState } from "react";
+import { useEffect } from "react";
 import { useApiProvider } from "@/contexts";
-
-type FormData = {
-  date: string;
-  rmEarth: number;
-  verticalThrust: number;
-  board: string;
-  forceIsometricHands: string;
-  abs: number;
-  lungeTest: number;
-  pushUps: number;
-  burpees: number;
-  cooper: number;
-  height: number;
-  weight: number;
-  atletaModel: number | string;
-};
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm, Controller } from "react-hook-form";
+import { formSchema, FormData, IApiPostData } from "@/schemas/formSchema";
+import { IMaskInput } from "react-imask";
+import Container from "@/components/ui/container";
+import FormRow from "@/components/ui/formRow";
 
 type Params = {
   id: number | string;
@@ -30,30 +18,9 @@ type Props = {
   params: Params;
 };
 
-interface IApiPostData {
-  data: string;
-  impulsaoVertical: number;
-  rmTerra: number;
-  prancha: string;
-  forcaIsometricaMaos: string;
-  abdominais: number;
-  testeDeLunge: number;
-  flexoes: number;
-  burpees: number;
-  cooper: number;
-  altura: number;
-  peso: number;
-  avaliacaoModelId: {
-    atletaModel: {
-      id: number | string;
-    };
-    data: string;
-  };
-}
-
 const avaliationToApiPost = (data: FormData): IApiPostData => {
   return {
-    data: data.date,
+    data: data.date.toISOString(),
     impulsaoVertical: data.verticalThrust,
     rmTerra: data.rmEarth,
     prancha: data.board,
@@ -69,347 +36,349 @@ const avaliationToApiPost = (data: FormData): IApiPostData => {
       atletaModel: {
         id: data.atletaModel,
       },
-      data: data.date,
+      data: data.date.toISOString(),
     },
   };
 };
 
 const PhysicalEvaluation = ({ params: { id } }: Props) => {
-  const [boardMinutes, setBoardMinutes] = useState<number | string>("");
-  const [boardSeconds, setBoardSeconds] = useState<number | string>("");
-  const [forceIsometricHandsMinutes, setForceIsometricHandsMinutes] = useState<
-    number | string
-  >("");
-  const [forceIsometricHandsSeconds, setForceIsometricHandsSeconds] = useState<
-    number | string
-  >("");
+  const { post } = useApiProvider();
+
   const {
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors },
-  } = useForm<FormData>();
-  const { post } = useApiProvider();
-  //const [message, setMessage] = useState<string>("");
+  } = useForm<FormData>({
+    mode: "onBlur",
+    resolver: yupResolver(formSchema),
+  });
 
-  const onSubmit: SubmitHandler<FormData> = async (data) => {
+  const onSubmit = async (data: FormData) => {
     console.log("Form submitted with data:", data); // Verificação
     try {
-      const boardValue = `PT${boardMinutes}M${boardSeconds}S`;
-      const forcaIsometricaMaosValue = `PT${forceIsometricHandsMinutes}M${forceIsometricHandsSeconds}S`;
-      data.board = boardValue;
-      data.forceIsometricHands = forcaIsometricaMaosValue;
-      data.atletaModel = id;
+      data.atletaModel = Number(id);
 
       const response = await post("avaliacao", avaliationToApiPost(data));
       if (response?.status !== 201) {
         throw new Error("Erro ao cadastrar avaliação");
       }
-      //setMessage("Avaliação cadastrada com sucesso!");
       console.log("Avaliação Cadastrada com sucesso");
       reset();
     } catch (error) {
       console.error("Erro ao cadastrar avaliação:", error);
-      //setMessage("Erro ao cadastrar avaliação. Por favor, tente novamente.");
     }
   };
 
-  const handleTimeChangeBoard = (minutes: number, seconds: number) => {
-    setBoardMinutes(minutes.toString());
-    setBoardSeconds(seconds.toString());
-  };
-
-  const handleTimeChangeForceIsometricHands = (
-    minutes: number,
-    seconds: number
-  ) => {
-    setForceIsometricHandsMinutes(minutes.toString());
-    setForceIsometricHandsSeconds(seconds.toString());
-  };
+  useEffect(() => {
+    console.log("Component mounted");
+  }, []);
 
   return (
-    <>
-      <div className="flex justify-center items-center">
-        <div className="form-container">
-          <div className="flex justify-center items-center mb-6">
-            <FormTitle
-              title="Cadastrar Avaliação"
-              iconSrc="/icons/assessment.png"
+    <Container >
+      <FormTitle className="mx-auto" title="Cadastrar Avaliação" iconSrc="/icons/assessment.png" inlineImage={false} />
+      <form onSubmit={handleSubmit(onSubmit)} className="mt-12 flex-col ">
+        <FormRow
+          label={<label>Data</label>}
+          input={
+            <input
+              {...register("date")}
+              type="date"
+              className="bg-gray-200 w-42 px-4 py-2 rounded"
             />
-          </div>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            {/* Data */}
-            <div className="flex mx-auto my-6 box-border items-center">
-              <label
-                htmlFor="date"
-                className="inline-block w-28 text-center text-base font-semibold ps-10"
-              >
-                Data
-              </label>
-              <input
-                {...register("date", {
-                  required: "Este campo é obrigatório",
-                  validate: {
-                    notInFuture: (value) => {
-                      const today = new Date().toISOString().split("T")[0];
-                      return value <= today || "A data não pode ser futura";
-                    },
-                  },
-                })}
-                type="date"
-                className="bg-gray-200 w-42 px-4 py-2 rounded"
-              />
-            </div>
-            <div>
-              {errors.date && (
-                <p className="text-center text-red-500 ">
-                  {errors.date.message}
-                </p>
+          }
+          errorMessage={errors.date?.message as string}
+        />
+        <FormRow
+          label={<label>RM Levantamento Terra</label>}
+          input={
+            <Controller
+              control={control}
+              name="rmEarth"
+              render={({ field }) => (
+                <IMaskInput
+                  {...field}
+                  mask="000"
+                  radix="."
+                  inputMode="decimal"
+                  placeholder="Kg"
+                  className="bg-gray-200 w-24 px-4 py-2 rounded"
+                  value={field.value ? String(field.value) : ""}
+                  onChange={(event) => {
+                    if (event.target instanceof HTMLInputElement) {
+                      field.onChange(event.target.value);
+                    }
+                  }}
+                />
               )}
-            </div>
-            {/* RM Levantamento Terra */}
-            <div className="flex mx-auto my-6 box-border items-center">
-              <label
-                htmlFor="rmEarth"
-                className="inline-block w-48 text-center text-base font-semibold"
-              >
-                RM Levantamento Terra
-              </label>
-              <input
-                {...register("rmEarth", {
-                  required: "Este campo é obrigatório",
-                })}
-                type="number"
-                className="bg-gray-200 w-24 px-4 py-2 rounded"
-              />
-            </div>
-            <div>
-              {errors.rmEarth && (
-                <p className="text-center text-red-500 ">
-                  {errors.rmEarth.message}
-                </p>
+            />
+          }
+          errorMessage={errors.rmEarth?.message as string}
+        />
+        <FormRow
+          label={<label>Impulsão Vertical</label>}
+          input={
+            <Controller
+              control={control}
+              name="verticalThrust"
+              render={({ field }) => (
+                <IMaskInput
+                  {...field}
+                  mask="000"
+                  min={0}
+                  max={999}
+                  placeholder="Cm"
+                  pattern="\d*" // Enables numeric keyboard at mobile devices
+                  inputMode="numeric" // Enables numeric keyboard at mobile devices
+                  className="bg-gray-200 w-24 px-4 py-2 rounded"
+                  value={field.value ? String(field.value) : ""}
+                  onChange={(event) => {
+                    if (event.target instanceof HTMLInputElement) {
+                      field.onChange(event.target.value);
+                    }
+                  }}
+                />
               )}
-            </div>
-            {/* Impulsão Vertical */}
-            <div className="flex mx-auto my-6 box-border items-center">
-              <label
-                htmlFor="verticalThrust"
-                className="inline-block w-48 text-center text-base font-semibold"
-              >
-                Impulsão Vertical
-              </label>
-              <input
-                {...register("verticalThrust", {
-                  required: "Este campo é obrigatório",
-                })}
-                type="number"
-                className="bg-gray-200 w-24 px-4 py-2 rounded"
-              />
-            </div>
-            <div>
-              {errors.verticalThrust && (
-                <p className="text-center text-red-500 ">
-                  {errors.verticalThrust.message}
-                </p>
+            />
+          }
+          errorMessage={errors.verticalThrust?.message as string}
+        />
+        <FormRow
+          label={<label>Prancha</label>}
+          input={
+            <Controller
+              control={control}
+              name="board"
+              render={({ field }) => (
+                <IMaskInput
+                  {...field}
+                  type="text" // iMask doesn't supports 'number' type
+                  mask={["\\00{:}00", "00{:}00"]}
+                  placeholder="Min  :  Seg"
+                  inputMode="numeric" // Enables numeric keyboard at mobile devices
+                  className="bg-gray-200 w-24 px-4 py-2 rounded"
+                  value={field.value ? String(field.value) : ""}
+                  onChange={(event) => {
+                    if (event.target instanceof HTMLInputElement) {
+                      field.onChange(event.target.value);
+                    }
+                  }}
+                />
               )}
-            </div>
-            {/* Prancha */}
-            <div className="flex mx-auto my-6 box-border items-center">
-              <label
-                htmlFor="board"
-                className="inline-block w-48 text-center text-base font-semibold"
-              >
-                Prancha
-              </label>
-              <TimeInput onTimeChange={handleTimeChangeBoard} />
-              {errors.board && (
-                <p className="text-center text-red-500">
-                  {errors.board.message}
-                </p>
+            />
+          }
+        />
+        <FormRow
+          label={<label>Força de Preensão</label>}
+          input={
+            <Controller
+              control={control}
+              name="forceIsometricHands"
+              render={({ field }) => (
+                <IMaskInput
+                  {...field}
+                  type="text" // iMask doesn't supports 'number' type
+                  mask={["\\00{:}00", "00{:}00"]}
+                  placeholder="Min  :  Seg"
+                  inputMode="numeric" // Enables numeric keyboard at mobile devices
+                  className="bg-gray-200 w-24 px-4 py-2 rounded"
+                  value={field.value ? String(field.value) : ""}
+                  onChange={(event) => {
+                    if (event.target instanceof HTMLInputElement) {
+                      field.onChange(event.target.value);
+                    }
+                  }}
+                />
               )}
-            </div>
-            {/* Força de Preensão */}
-            <div className="flex mx-auto my-6 box-border items-center">
-              <label
-                htmlFor="forceIsometricHands"
-                className="inline-block w-48 text-center text-base font-semibold"
-              >
-                Força de Preensão
-              </label>
-              <TimeInput onTimeChange={handleTimeChangeForceIsometricHands} />
-              {errors.forceIsometricHands && (
-                <p className="text-center text-red-500">
-                  {errors.forceIsometricHands.message}
-                </p>
+            />
+          }
+          errorMessage={errors.forceIsometricHands?.message as string}
+        />
+        <FormRow
+          label={<label>Abdominais</label>}
+          input={
+            <Controller
+              control={control}
+              name="abs"
+              render={({ field }) => (
+                <IMaskInput
+                  {...field}
+                  mask="000"
+                  radix="."
+                  inputMode="decimal"
+                  placeholder="Repetições"
+                  className="bg-gray-200 w-24 px-4 py-2 rounded"
+                  value={field.value ? String(field.value) : ""}
+                  onChange={(event) => {
+                    if (event.target instanceof HTMLInputElement) {
+                      field.onChange(event.target.value);
+                    }
+                  }}
+                />
               )}
-            </div>
-            {/* Abdominais */}
-            <div className="flex mx-auto my-6 box-border items-center">
-              <label
-                htmlFor="abs"
-                className="inline-block w-48 text-center text-base font-semibold"
-              >
-                Abdominais
-              </label>
-              <input
-                {...register("abs", {
-                  required: "Este campo é obrigatório",
-                })}
-                type="number"
-                className="bg-gray-200 w-24 px-4 py-2 rounded"
-              />
-            </div>
-            <div>
-              {errors.abs && (
-                <p className="text-center text-red-500 ">
-                  {errors.abs.message}
-                </p>
+            />
+          }
+          errorMessage={errors.abs?.message as string}
+        />
+        <FormRow
+          label={<label>Teste de Lunge</label>}
+          input={
+            <Controller
+              control={control}
+              name="lungeTest"
+              render={({ field }) => (
+                <IMaskInput
+                  {...field}
+                  mask="000"
+                  inputMode="numeric"
+                  placeholder="Kg"
+                  pattern="\d*"
+                  className="bg-gray-200 w-24 px-4 py-2 rounded"
+                  value={field.value ? String(field.value) : ""}
+                  onChange={(event) => {
+                    if (event.target instanceof HTMLInputElement) {
+                      field.onChange(event.target.value);
+                    }
+                  }}
+                />
               )}
-            </div>
-            {/* Teste de Lunge */}
-            <div className="flex mx-auto my-6 box-border items-center">
-              <label
-                htmlFor="lungeTest"
-                className="inline-block w-48 text-center text-base font-semibold"
-              >
-                Teste de Lunge
-              </label>
-              <input
-                {...register("lungeTest", {
-                  required: "Este campo é obrigatório",
-                })}
-                type="number"
-                className="bg-gray-200 w-24 px-4 py-2 rounded"
-              />
-            </div>
-            <div>
-              {errors.lungeTest && (
-                <p className="text-center text-red-500 ">
-                  {errors.lungeTest.message}
-                </p>
+            />
+          }
+          errorMessage={errors.lungeTest?.message as string}
+        />
+        <FormRow
+          label={<label>Flexões</label>}
+          input={
+            <Controller
+              control={control}
+              name="pushUps"
+              render={({ field }) => (
+                <IMaskInput
+                  {...field}
+                  mask="000"
+                  inputMode="numeric"
+                  placeholder="Repetições"
+                  pattern="\d*"
+                  className="bg-gray-200 w-24 px-4 py-2 rounded"
+                  value={field.value ? String(field.value) : ""}
+                  onChange={(event) => {
+                    if (event.target instanceof HTMLInputElement) {
+                      field.onChange(event.target.value);
+                    }
+                  }}
+                />
               )}
-            </div>
-            {/* Flexões */}
-            <div className="flex mx-auto my-6 box-border items-center">
-              <label
-                htmlFor="pushUps"
-                className="inline-block w-48 text-center text-base font-semibold"
-              >
-                Flexões
-              </label>
-              <input
-                {...register("pushUps", {
-                  required: "Este campo é obrigatório",
-                })}
-                type="number"
-                className="bg-gray-200 w-24 px-4 py-2 rounded"
-              />
-            </div>
-            <div>
-              {errors.pushUps && (
-                <p className="text-center text-red-500 ">
-                  {errors.pushUps.message}
-                </p>
+            />
+          }
+          errorMessage={errors.pushUps?.message as string}
+        />
+        <FormRow
+          label={<label>Burpees</label>}
+          input={
+            <Controller
+              control={control}
+              name="burpees"
+              render={({ field }) => (
+                <IMaskInput
+                  {...field}
+                  mask="000"
+                  inputMode="numeric"
+                  placeholder="Repetições"
+                  pattern="\d*"
+                  className="bg-gray-200 w-24 px-4 py-2 rounded"
+                  value={field.value ? String(field.value) : ""}
+                  onChange={(event) => {
+                    if (event.target instanceof HTMLInputElement) {
+                      field.onChange(event.target.value);
+                    }
+                  }}
+                />
               )}
-            </div>
-            {/* Burpees */}
-            <div className="flex mx-auto my-6 box-border items-center">
-              <label
-                htmlFor="burpees"
-                className="inline-block w-48 text-center text-base font-semibold"
-              >
-                Burpees
-              </label>
-              <input
-                {...register("burpees", {
-                  required: "Este campo é obrigatório",
-                })}
-                type="number"
-                className="bg-gray-200 w-24 px-4 py-2 rounded"
-              />
-            </div>
-            <div>
-              {errors.burpees && (
-                <p className="text-center text-red-500">
-                  {errors.burpees.message}
-                </p>
+            />
+          }
+          errorMessage={errors.burpees?.message as string}
+        />
+        <FormRow
+          label={<label>Teste de Cooper</label>}
+          input={
+            <Controller
+              control={control}
+              name="cooper"
+              render={({ field }) => (
+                <IMaskInput
+                  {...field}
+                  mask="0000"
+                  inputMode="decimal"
+                  placeholder="Metros"
+                  className="bg-gray-200 w-24 px-4 py-2 rounded"
+                  value={field.value ? String(field.value) : ""}
+                  onChange={(event) => {
+                    if (event.target instanceof HTMLInputElement) {
+                      field.onChange(event.target.value);
+                    }
+                  }}
+                />
               )}
-            </div>
-            {/* Teste de Cooper */}
-            <div className="flex mx-auto my-6 box-border items-center">
-              <label
-                htmlFor="cooper"
-                className="inline-block w-48 text-center text-base font-semibold"
-              >
-                Teste de Cooper
-              </label>
-              <input
-                {...register("cooper", {
-                  required: "Este campo é obrigatório",
-                })}
-                type="number"
-                className="bg-gray-200 w-24 px-4 py-2 rounded"
-              />
-            </div>
-            <div>
-              {errors.cooper && (
-                <p className="text-center text-red-500">
-                  {errors.cooper.message}
-                </p>
+            />
+          }
+          errorMessage={errors.cooper?.message as string}
+        />
+        <FormRow
+          label={<label>Altura</label>}
+          input={
+            <Controller
+              control={control}
+              name="height"
+              render={({ field }) => (
+                <IMaskInput
+                  {...field}
+                  mask="000"
+                  inputMode="decimal"
+                  placeholder="Cm"
+                  className="bg-gray-200 w-24 px-4 py-2 rounded"
+                  value={field.value ? String(field.value) : ""}
+                  onChange={(event) => {
+                    if (event.target instanceof HTMLInputElement) {
+                      field.onChange(event.target.value);
+                    }
+                  }}
+                />
               )}
-            </div>
-            {/* Altura */}
-            <div className="flex mx-auto my-6 box-border items-center">
-              <label
-                htmlFor="height"
-                className="inline-block w-48 text-center text-base font-semibold"
-              >
-                Altura
-              </label>
-              <input
-                {...register("height", {
-                  required: "Este campo é obrigatório",
-                })}
-                type="number"
-                className="bg-gray-200 w-24 px-4 py-2 rounded"
-              />
-            </div>
-            <div>
-              {errors.height && (
-                <p className="text-center text-red-500">
-                  {errors.height.message}
-                </p>
+            />
+          }
+          errorMessage={errors.height?.message as string}
+        />
+        <FormRow
+          label={<label>Peso</label>}
+          input={
+            <Controller
+              control={control}
+              name="weight"
+              render={({ field }) => (
+                <IMaskInput
+                  {...field}
+                  mask="000"
+                  inputMode="decimal"
+                  placeholder="Kg"
+                  className="bg-gray-200 w-24 px-4 py-2 rounded"
+                  value={field.value ? String(field.value) : ""}
+                  onChange={(event) => {
+                    if (event.target instanceof HTMLInputElement) {
+                      field.onChange(event.target.value);
+                    }
+                  }}
+                />
               )}
-            </div>
-            {/* Peso */}
-            <div className="flex mx-auto my-6 box-border items-center">
-              <label
-                htmlFor="weight"
-                className="inline-block w-48 text-center text-base font-semibold"
-              >
-                Peso
-              </label>
-              <input
-                {...register("weight", {
-                  required: "Este campo é obrigatório",
-                })}
-                type="number"
-                className="bg-gray-200 w-24 px-4 py-2 rounded"
-              />
-            </div>
-            <div>
-              {errors.weight && (
-                <p className="text-center text-red-500 py-2 ">
-                  {errors.weight.message}
-                </p>
-              )}
-            </div>
-            <Button type="submit" label="Cadastrar" />
-          </form>
-          {/* {message && <p className="text-center mt-4">{message}</p>} */}
-        </div>
-      </div>
-    </>
+            />
+          }
+          errorMessage={errors.weight?.message as string}
+        />
+        <button type="submit" className="block m-auto mt-20 mb-10">
+          Cadastrar
+        </button>
+      </form>
+    </Container>
   );
 };
 

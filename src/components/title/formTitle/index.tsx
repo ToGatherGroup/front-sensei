@@ -4,8 +4,9 @@ type Props = {
   title: string;
   iconSrc: string;
   className?: string;
+  inlineImage?: boolean;
 };
-function formTitle({ title, iconSrc, className: outerClassName }: Props) {
+function formTitle({ title, iconSrc, className: outerClassName, inlineImage }: Props) {
   return (
     <div
       className={`flex justify-center items-center gap-4 ${
@@ -16,7 +17,7 @@ function formTitle({ title, iconSrc, className: outerClassName }: Props) {
         {title}
       </h2>
       <Image
-        className="inline m-auto"
+        className={inlineImage ? "inline m-auto" : ""} 
         src={iconSrc}
         alt="Ícone do formulário"
         width={24}
