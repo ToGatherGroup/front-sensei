@@ -8,6 +8,7 @@ import FormTitle from "@/components/title/formTitle";
 import Image from "next/image";
 import { useForm, Controller } from "react-hook-form";
 import { useApiProvider } from "@/contexts";
+import Link from "next/link";
 
 type Props = {};
 
@@ -114,13 +115,13 @@ const RelatorioAvaliacao = (props: Props) => {
 
         {selectedDate ? (
           <div className="flex-col items-center justify-center pb-8 pt-8">
-            <ul>
+            <ul className="flex-col">
               {reportData.map((athlete, id) => (
                 <li
                   key={id}
-                  className="flex items-center justify-center gap-2 py-2"
+                  className="flex items-center justify-start gap-2 py-2 ml-8 md:ml-12 lg:ml-16 xl:ml-32 2xl:ml-24 mr-3"
                 >
-                  <h5>{athlete.nome}</h5>
+                  <h5 className="text-justify">{athlete.nome}</h5>
                   <div className="flex gap-2">
                     <button>
                       <Image
@@ -152,8 +153,10 @@ const RelatorioAvaliacao = (props: Props) => {
           </div>
         )}
       </div>
-      <div className="flex justify-center items-center ">
-        <Button text={"Voltar"} type={"button"} className="mx-auto" />
+      <div className="flex justify-center items-center pb-10">
+        <Link href="/menu">
+          <Button text={"Voltar"} type={"button"} className="mx-auto" />
+        </Link>
       </div>
     </section>
   );
