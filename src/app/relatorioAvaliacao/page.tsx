@@ -11,13 +11,20 @@ import { useApiProvider } from "@/contexts";
 
 type Props = {};
 
+// Interface dados do relatório
+interface IReportData {
+  id: number;
+  nome: string;
+}
+
 const RelatorioAvaliacao = (props: Props) => {
   const { get } = useApiProvider();
   const { control } = useForm();
   const [dates, setDates] = useState<string[]>([]);
   const [selectedDate, setSelectedDate] = useState<string>("");
-  const [reportData, setReportData] = useState<any[]>([]);
+  const [reportData, setReportData] = useState<IReportData[]>([]);
 
+  //buscar as Datas dos Relatórios
   useEffect(() => {
     const fetchDates = async () => {
       try {
@@ -33,11 +40,13 @@ const RelatorioAvaliacao = (props: Props) => {
     fetchDates();
   }, [get]);
 
+  //converter a(s) data(s) recebida(s) para o formato do Brasilsilsil
   const formatDate = (dateString: string) => {
     const [year, month, day] = dateString.split("-");
     return `${day}/${month}/${year}`;
   };
 
+  //obter os atletas que foram avaliados na data selecionada
   useEffect(() => {
     if (selectedDate) {
       const fetchReports = async () => {
@@ -50,7 +59,6 @@ const RelatorioAvaliacao = (props: Props) => {
           console.error("Erro ao buscar dados da API:", error);
         }
       };
-
       fetchReports();
     }
   }, [get, selectedDate]);
@@ -107,20 +115,33 @@ const RelatorioAvaliacao = (props: Props) => {
         {selectedDate ? (
           <div className="flex-col items-center justify-center pb-8 pt-8">
             <ul>
-              <li className="flex items-center justify-center gap-2 py-2">
-                <h5>Roberto Galvão</h5>
-                <div className="flex gap-2">
-                  <button>
-                    <Image src={download} alt="" className="w-5" />
-                  </button>
-                  <button>
-                    <Image src={edt} alt="" className="w-5" />
-                  </button>
-                  <button>
-                    <Image src={mail} alt="" className="w-5" />
-                  </button>
-                </div>
-              </li>
+              {reportData.map((athlete, id) => (
+                <li
+                  key={id}
+                  className="flex items-center justify-center gap-2 py-2"
+                >
+                  <h5>{athlete.nome}</h5>
+                  <div className="flex gap-2">
+                    <button>
+                      <Image
+                        src={download}
+                        alt="download relatorio"
+                        className="w-5"
+                      />
+                    </button>
+                    <button>
+                      <Image src={edt} alt="edição relatorio" className="w-5" />
+                    </button>
+                    <button>
+                      <Image
+                        src={mail}
+                        alt="enviar email do relatorio"
+                        className="w-5"
+                      />
+                    </button>
+                  </div>
+                </li>
+              ))}
             </ul>
           </div>
         ) : (
