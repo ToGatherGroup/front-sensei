@@ -52,10 +52,10 @@ console.log("resultados:", resultados);
 console.log("imc:", imc);
 
 type Props = {};
-function Qualitativos({}: Props) {
+const Qualitativos = ({}: Props) => {
   const screenSize = useScreenSize();
   return (
-    <div className="p-2 mt-8 animate-jump-in">
+    <div className="p-2 mt-8">
       <p
         className={`decoration-white scale-75 lg:scale-100 underline font-extrabold text-center mb-14`}
       >
@@ -116,7 +116,7 @@ function Qualitativos({}: Props) {
       </div>
     </div>
   );
-}
+};
 export default Qualitativos;
 
 function resultToDisplay(result: string) {
