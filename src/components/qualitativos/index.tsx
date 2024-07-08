@@ -117,8 +117,7 @@ function Qualitativos({ id }: Props) {
       </div>
     </div>
   );
-}
-
+};
 export default Qualitativos;
 
 function resultToDisplay(result: string) {
