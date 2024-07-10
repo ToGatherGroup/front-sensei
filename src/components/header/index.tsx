@@ -70,35 +70,77 @@ export default function Header() {
           {true ? (
             // Header menu icons (Desktop)
             <>
-              <div className="flex">
+              <div className="flex absolute flex-col top-0 right-0 bg-winePatternDark rounded-tl-md rounded-bl-md px-5 py-10 lg:static lg:flex-row lg:bg-transparent lg:rounded-none lg:p-0">
                 {MENU_ITEMS.map((item) => (
                   <Link
                     key={item.title}
                     href={item.linkSrc}
-                    className="flex justify-center items-center hover:bg-winePatternDark hover:rounded hover:outline hover:outline-1 hover:outline-white py-3 px-5"
+                    className="flex justify-center items-center hover:bg-winePatternLight lg:hover:bg-winePatternDark hover:rounded hover:outline hover:outline-1 hover:outline-white py-3 px-5"
                   >
                     <div className="flex items-center justify-center gap-2">
-                      <Image
-                        src={item.imgSrc}
-                        width={item.imgW}
-                        height={item.imgH}
-                        alt={item.title}
-                      />
-                      <span className="text-white h-fit">{item.title}</span>
+                      <div className="min-w-fit">
+                        <Image
+                          src={item.imgSrc}
+                          width={item.imgW}
+                          height={item.imgH}
+                          alt={item.title}
+                          className="m-auto"
+                        />
+                      </div>
+                      <span className="text-white h-fit w-28 text-center lg:w-fit lg:text-start">
+                        {item.title}
+                      </span>
                     </div>
                   </Link>
                 ))}
+                <div className="lg:hidden text-[#962e2e] text-base mr-4 flex flex-col gap-2 ml-auto p-2 whitespace-nowrap max-w-48 mt-6">
+                  <p className="truncate">Olá, {USERNAME}</p>
+                  <Link href="#" className="m-auto">
+                    Sair
+                  </Link>
+                </div>
               </div>
-              <div className="text-[#962e2e] text-base mr-4 flex flex-col gap-2 ml-auto p-2 whitespace-nowrap min-w-[120px]">
+              <div className="text-[#962e2e] text-base mr-4 flex flex-col gap-2 ml-auto p-2 whitespace-nowrap max-w-48 mt-6 lg:max-w-none lg:mt-0 lg:min-w-[120px]">
                 <p className="truncate">Olá, {USERNAME}</p>
                 <Link href="#" className="ml-auto">
-                  Logout
+                  Sair
                 </Link>
               </div>
             </>
           ) : (
             // sanduiche
-            <div className="size-4 bg-gray-400 ml-auto" />
+            <>
+              <div className="absolute flex-col top-0 right-0 bg-winePatternDark rounded-tl-md rounded-bl-md px-5 py-10">
+                {MENU_ITEMS.map((item) => (
+                  <Link
+                    key={item.title}
+                    href={item.linkSrc}
+                    className="flex justify-center items-center hover:bg-winePatternLight hover:rounded hover:outline hover:outline-1 hover:outline-white py-3 px-5"
+                  >
+                    <div className="flex items-center justify-center gap-2">
+                      <div className="w-[30px]">
+                        <Image
+                          src={item.imgSrc}
+                          width={item.imgW}
+                          height={item.imgH}
+                          alt={item.title}
+                          className="m-auto"
+                        />
+                      </div>
+                      <span className="text-white h-fit w-28 text-center">
+                        {item.title}
+                      </span>
+                    </div>
+                  </Link>
+                ))}
+                <div className="text-[#962e2e] text-base mr-4 flex flex-col gap-2 ml-auto p-2 whitespace-nowrap max-w-48 mt-6">
+                  <p className="truncate">Olá, {USERNAME}</p>
+                  <Link href="#" className="m-auto">
+                    Logout
+                  </Link>
+                </div>
+              </div>
+            </>
           )}
         </nav>
       </header>
