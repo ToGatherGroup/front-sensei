@@ -87,7 +87,7 @@ export default function Header() {
                   </Link>
                 ))}
               </div>
-              <div className="text-[#962e2e] mr-4 flex flex-col gap-2 ml-auto p-2 pl-5 whitespace-nowrap min-w-[120px]">
+              <div className="text-[#962e2e] text-base mr-4 flex flex-col gap-2 ml-auto p-2 pl-5 whitespace-nowrap min-w-[120px]">
                 <p className="truncate">Olá, {USERNAME}</p>
                 <Link href="#" className="ml-auto">
                   Logout
