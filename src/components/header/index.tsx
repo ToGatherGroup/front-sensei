@@ -46,7 +46,7 @@ const MENU_ITEMS = [
   },
 ];
 
-const USERNAME = "Bruno Amado Silva Santos";
+const USERNAME = "Michel Espada Machado";
 
 export default function Header() {
   return (
@@ -54,8 +54,8 @@ export default function Header() {
       <header className="w-screen box-border h-20 block bg-winePattern">
         <nav className="flex items-center justify-start">
           <Link
-            href=""
-            className="h-20 w-fit inline-block ml-2 mr-10 cursor-default flex-shrink-0"
+            href="/"
+            className="h-20 w-fit inline-block ml-2 mr-10 flex-shrink-0"
           >
             <Image
               width={90}
