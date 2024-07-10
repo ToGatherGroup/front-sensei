@@ -68,12 +68,12 @@ export default function Header() {
           {true ? (
             // Header menu icons (Desktop)
             <>
-              <div className="flex gap-6">
+              <div className="flex">
                 {MENU_ITEMS.map((item) => (
                   <Link
                     key={item.title}
                     href={item.linkSrc}
-                    className="flex justify-center items-center hover:bg-winePatternDark hover:rounded hover:outline hover:outline-1 hover:outline-white p-3"
+                    className="flex justify-center items-center hover:bg-winePatternDark hover:rounded hover:outline hover:outline-1 hover:outline-white py-3 px-6"
                   >
                     <div className="flex items-center justify-center gap-2">
                       <Image
