@@ -51,7 +51,7 @@ const USERNAME = "Michel Espada Machado";
 export default function Header() {
   return (
     <>
-      <header className="w-screen box-border h-20 block bg-winePattern">
+      <header className="min-w-screen box-border h-20 block bg-winePattern">
         <nav className="flex items-center justify-start">
           <Link
             href="/"
