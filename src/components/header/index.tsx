@@ -1,3 +1,4 @@
+import useScreenSize from "@/hooks/useScreenSize";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -49,6 +50,7 @@ const MENU_ITEMS = [
 const USERNAME = "Michel Espada Machado";
 
 export default function Header() {
+  //const screenSize = useScreenSize();
   return (
     <>
       <header className="min-w-screen box-border h-20 block bg-winePattern">
@@ -73,7 +75,7 @@ export default function Header() {
                   <Link
                     key={item.title}
                     href={item.linkSrc}
-                    className="flex justify-center items-center hover:bg-winePatternDark hover:rounded hover:outline hover:outline-1 hover:outline-white py-3 px-6"
+                    className="flex justify-center items-center hover:bg-winePatternDark hover:rounded hover:outline hover:outline-1 hover:outline-white py-3 px-5"
                   >
                     <div className="flex items-center justify-center gap-2">
                       <Image
@@ -87,7 +89,7 @@ export default function Header() {
                   </Link>
                 ))}
               </div>
-              <div className="text-[#962e2e] text-base mr-4 flex flex-col gap-2 ml-auto p-2 pl-5 whitespace-nowrap min-w-[120px]">
+              <div className="text-[#962e2e] text-base mr-4 flex flex-col gap-2 ml-auto p-2 whitespace-nowrap min-w-[120px]">
                 <p className="truncate">Olá, {USERNAME}</p>
                 <Link href="#" className="ml-auto">
                   Logout
