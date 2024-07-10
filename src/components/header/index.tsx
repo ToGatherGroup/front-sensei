@@ -41,8 +41,8 @@ const MENU_ITEMS = [
     title: "Comparativo",
     linkSrc: "/comparison",
     imgSrc: "/header_icons/versus.png",
-    imgW: 35,
-    imgH: 30,
+    imgW: 30,
+    imgH: 25,
   },
 ];
 
