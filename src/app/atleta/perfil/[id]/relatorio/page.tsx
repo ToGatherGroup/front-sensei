@@ -1,12 +1,25 @@
+"use client";
+import React from "react";
+import { useSearchParams } from "next/navigation";
 import FormTitle from "@/components/title/formTitle";
 import Button from "@/components/ui/button";
+import Link from "next/link";
 
-type Props = {};
+const Relatorio = () => {
+  //obeter os dados na url e renderizar
+  const searchParams = useSearchParams();
+  const data = searchParams.get("data");
+  const nome = searchParams.get("nome");
 
-const Relatorio = (props: Props) => {
+  //função para converter a data
+  const formatDate = (dateString: string) => {
+    const [year, month, day] = dateString.split("-");
+    return `${day}/${month}/${year}`;
+  };
+
   return (
-    <section className="min-h-screen flex-col  justify-center mx-auto my-0 w-auto max-w-[650px] bg-container rounded">
-      <form action="" className="flex-col ">
+    <section className="min-h-screen flex-col justify-center mx-auto my-0 w-auto max-w-[650px] bg-container rounded">
+      <div className="flex-col">
         <div className="flex justify-center items-end pb-16 pt-16">
           <FormTitle title="Relatório do Atleta" iconSrc="/icons/report.png" />
         </div>
@@ -17,46 +30,29 @@ const Relatorio = (props: Props) => {
           >
             Data
           </label>
-          <input type="date" />
+          {/* renderização da data e verificação se ela é nula */}
+          <h3>{data && formatDate(data)}</h3>
         </div>
         <div className="flex items-center justify-center gap-2">
-          <label htmlFor="">Atleta</label>
-          <h3>Nome do Atleta</h3>
+          <label
+            htmlFor="nome"
+            className="inline-block w-14 text-center text-base font-semibold"
+          >
+            Atleta
+          </label>
+          <h3>{nome}</h3>
         </div>
 
         <div className="flex-col items-center justify-center pb-8 pt-8">
-          {/* <p>Nenhuma data Selecionada</p>
-          <p>Não existe avaliações para essa data</p> */}
-          <ul>
-            <li className="flex items-center justify-center gap-2 py-2">
-              <h5>Roberto Galvão</h5>
-              <div className="flex gap-2">
-                <button>2</button>
-                <button>2</button>
-                <button>2</button>
-              </div>
-            </li>
-            <li className="flex items-center justify-center gap-2 py-2">
-              <h5>Roberto Galvão</h5>
-              <div className="flex gap-2">
-                <button>2</button>
-                <button>2</button>
-                <button>2</button>
-              </div>
-            </li>
-            <li className="flex items-center justify-center gap-2 py-2">
-              <h5>Roberto Galvão</h5>
-              <div className="flex gap-2">
-                <button>2</button>
-                <button>2</button>
-                <button>2</button>
-              </div>
-            </li>
-          </ul>
+          <div className="flex items-center justify-center gap-2">
+            <h1>Em construção</h1>
+          </div>
         </div>
-      </form>
-      <div className="flex justify-center items-center ">
-        <Button text={"Voltar"} type={"button"} className="mx-auto" />
+      </div>
+      <div className="flex justify-center items-center pb-10">
+        <Link href="/relatorioAvaliacao">
+          <Button text={"Voltar"} type={"button"} className="mx-auto" />
+        </Link>
       </div>
     </section>
   );

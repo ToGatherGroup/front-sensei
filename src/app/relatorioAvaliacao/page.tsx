@@ -1,31 +1,27 @@
 "use client";
-import Button from "@/components/ui/button";
 import React, { useEffect, useState } from "react";
+import { useForm, Controller } from "react-hook-form";
+import Link from "next/link";
+import Image from "next/image";
+import { useApiProvider } from "@/contexts";
+import Button from "@/components/ui/button";
+import FormTitle from "@/components/title/formTitle";
 import download from "../../../public/icons/download.png";
 import edt from "../../../public/icons/edt.png";
 import mail from "../../../public/icons/mails 8.png";
-import FormTitle from "@/components/title/formTitle";
-import Image from "next/image";
-import { useForm, Controller } from "react-hook-form";
-import { useApiProvider } from "@/contexts";
-import Link from "next/link";
 
-type Props = {};
-
-// Interface dados do relatório
 interface IReportData {
   id: number;
   nome: string;
 }
 
-const RelatorioAvaliacao = (props: Props) => {
+const RelatorioAvaliacao = () => {
   const { get } = useApiProvider();
   const { control } = useForm();
   const [dates, setDates] = useState<string[]>([]);
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [reportData, setReportData] = useState<IReportData[]>([]);
 
-  //buscar as Datas dos Relatórios
   useEffect(() => {
     const fetchDates = async () => {
       try {
@@ -41,13 +37,6 @@ const RelatorioAvaliacao = (props: Props) => {
     fetchDates();
   }, [get]);
 
-  //converter a(s) data(s) recebida(s) para o formato do Brasilsilsil
-  const formatDate = (dateString: string) => {
-    const [year, month, day] = dateString.split("-");
-    return `${day}/${month}/${year}`;
-  };
-
-  //obter os atletas que foram avaliados na data selecionada
   useEffect(() => {
     if (selectedDate) {
       const fetchReports = async () => {
@@ -63,6 +52,11 @@ const RelatorioAvaliacao = (props: Props) => {
       fetchReports();
     }
   }, [get, selectedDate]);
+
+  const formatDate = (dateString: string) => {
+    const [year, month, day] = dateString.split("-");
+    return `${day}/${month}/${year}`;
+  };
 
   return (
     <section className="min-h-screen flex-col justify-center mx-auto my-0 w-auto max-w-[650px] bg-container rounded">
@@ -116,13 +110,13 @@ const RelatorioAvaliacao = (props: Props) => {
         {selectedDate ? (
           <div className="flex-col items-center justify-center pb-8 pt-8">
             <ul className="flex-col">
-              {reportData.map((athlete, id) => (
+              {reportData.map((athlete) => (
                 <li
-                  key={id}
-                  className="flex items-center justify-start gap-2 py-2 ml-8 md:ml-12 lg:ml-16 xl:ml-32 2xl:ml-24 mr-3"
+                  key={athlete.id}
+                  className="flex items-center justify-start gap-2 py-2 ml-8 md:ml-32 lg:ml-32 xl:ml-40 2xl:ml-32 mr-3"
                 >
                   <h5 className="text-justify">{athlete.nome}</h5>
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 items-center justify-center">
                     <button>
                       <Image
                         src={download}
@@ -130,9 +124,21 @@ const RelatorioAvaliacao = (props: Props) => {
                         className="w-5"
                       />
                     </button>
-                    <button>
-                      <Image src={edt} alt="edição relatorio" className="w-5" />
-                    </button>
+                    <Link
+                      href={{
+                        pathname: `/atleta/perfil/${athlete.id}/relatorio`,
+                        query: { data: selectedDate, nome: athlete.nome },
+                      }}
+                      passHref
+                    >
+                      <button>
+                        <Image
+                          src={edt}
+                          alt="edição relatorio"
+                          className="w-5"
+                        />
+                      </button>
+                    </Link>
                     <button>
                       <Image
                         src={mail}
