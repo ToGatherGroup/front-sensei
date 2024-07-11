@@ -35,7 +35,7 @@ const RelatorioAvaliacao = () => {
     };
 
     fetchDates();
-  }, [get]);
+  }, []);
 
   useEffect(() => {
     if (selectedDate) {
@@ -43,7 +43,10 @@ const RelatorioAvaliacao = () => {
         try {
           const response = await get(`atleta/avaliacao/${selectedDate}`);
           if (response) {
-            setReportData(response.data);
+            const sortedData = response.data.sort(
+              (a: IReportData, b: IReportData) => a.nome.localeCompare(b.nome)
+            );
+            setReportData(sortedData);
           }
         } catch (error) {
           console.error("Erro ao buscar dados da API:", error);
@@ -51,7 +54,7 @@ const RelatorioAvaliacao = () => {
       };
       fetchReports();
     }
-  }, [get, selectedDate]);
+  }, [selectedDate]);
 
   const formatDate = (dateString: string) => {
     const [year, month, day] = dateString.split("-");
@@ -113,10 +116,12 @@ const RelatorioAvaliacao = () => {
               {reportData.map((athlete) => (
                 <li
                   key={athlete.id}
-                  className="flex items-center justify-start gap-2 py-2 ml-8 md:ml-32 lg:ml-32 xl:ml-40 2xl:ml-32 mr-3"
+                  className="flex items-center justify-between gap-2 py-2 px-8 lg:px-36"
                 >
-                  <h5 className="text-justify">{athlete.nome}</h5>
-                  <div className="flex gap-2 items-center justify-center">
+                  <div>
+                    <h5 className="text-left">{athlete.nome}</h5>
+                  </div>
+                  <div className="flex gap-2">
                     <button>
                       <Image
                         src={download}
