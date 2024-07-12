@@ -169,7 +169,7 @@ export const AthleteProvider = ({
     try {
       const response = await post("atleta/chamada", JSON.stringify(ids));
       if (response?.status == 204) {
-        router.push("/menu");
+        router.push("/");
       } else {
         setError(
           "Tivemos um problema ao realizar a chamada, por favor, tente novamente mais tarde!"

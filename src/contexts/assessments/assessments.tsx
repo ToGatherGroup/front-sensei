@@ -100,7 +100,7 @@ export const AssessmentsProvider = ({ children }: Props) => {
       updateAssesment(response?.data);
       setModalVisible(true);
     } catch (error) {
-      router.push("/menu");
+      router.push("/");
     } finally {
       setIsLoading(false);
     }
@@ -112,7 +112,7 @@ export const AssessmentsProvider = ({ children }: Props) => {
       const response = await post("/avaliacaocoletiva", {});
       updateAssesment(response?.data);
     } catch (error) {
-      router.push("/menu");
+      router.push("/");
     } finally {
       setIsLoading(false);
     }
@@ -155,7 +155,7 @@ export const AssessmentsProvider = ({ children }: Props) => {
 
   const cancelModal = () => {
     setModalVisible(false);
-    router.push("/menu");
+    router.push("/");
   };
 
   const confirmModal = async () => {
@@ -172,13 +172,13 @@ export const AssessmentsProvider = ({ children }: Props) => {
           "A avaliação foi finalizada!\nAs informações foram salvas.",
           { duration: 8000 }
         );
-        router.push("/menu");
+        router.push("/");
         return;
       }
 
       toast.success("As informações foram salvas.");
       updateExercise(data);
-      router.push("/valencia/menu");
+      router.push("/valencia/");
     });
   };
 
