@@ -56,7 +56,7 @@ export default function Header() {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   return (
     <>
-      <header className="w-screen h-20 block bg-winePattern">
+      <header className="w-screen h-20 block bg-winePattern font-sans text-lg">
         <nav className="flex items-center justify-start">
           <Link
             href="/"
@@ -82,7 +82,7 @@ export default function Header() {
               showMobileMenu
                 ? "right-0 animate-fade-left"
                 : "animate-fade-right left-full"
-            } fixed z-[99999] flex flex-col top-0 lg:right-0 bg-winePatternDark min-h-screen rounded-bl-md px-5 py-10  lg:min-h-0 lg:h-fit lg:static lg:flex-row lg:bg-transparent lg:rounded-none lg:p-0`}
+            } animate-duration-75 fixed z-[99999] flex flex-col top-0 lg:right-0 bg-winePatternDark min-h-screen rounded-bl-md px-5 py-10  lg:min-h-0 lg:h-fit lg:static lg:flex-row lg:bg-transparent lg:rounded-none lg:p-0`}
           >
             {MENU_ITEMS.map((item) => (
               <Link
@@ -111,23 +111,17 @@ export default function Header() {
             {/* Mobile return menu */}
             <div
               onClick={() => setShowMobileMenu((oldValue) => !oldValue)}
-              className={`lg:hidden h-14 w-20 ${
-                showMobileMenu ? "bg-winePatternDark" : "bg-transparent"
-              } absolute top-3.5 right-[248px] flex cursor-pointer rounded-tl-md rounded-bl-md`}
+              className={`lg:hidden h-14 w-20 bg-transparent absolute top-3.5 right-[248px] flex ${
+                !showMobileMenu && "cursor-pointer"
+              } rounded-tl-md rounded-bl-md`}
             >
               <Image
-                src={
-                  showMobileMenu
-                    ? "/icons/right_arrow.png"
-                    : "/icons/sanduiche.png"
-                }
+                src="/icons/sanduiche.png"
                 width={40}
                 height={40}
                 alt="Fechar menu"
-                className={`m-auto outline ${
-                  showMobileMenu
-                    ? ""
-                    : "outline-2 outline-winePattern rounded-lg bg-winePattern"
+                className={`m-auto outline outline-2 outline-winePattern rounded-lg bg-winePattern ${
+                  showMobileMenu && "hidden"
                 }`}
               />
             </div>
