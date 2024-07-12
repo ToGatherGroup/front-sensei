@@ -92,7 +92,7 @@ export default function Header() {
                 onClick={() => setShowMobileMenu(false)}
               >
                 <div className="flex items-center justify-center gap-2">
-                  <div className="min-w-fit">
+                  <div className="w-[30px] h-[30px] flex justify-center items-center">
                     <Image
                       src={item.imgSrc}
                       width={item.imgW}
