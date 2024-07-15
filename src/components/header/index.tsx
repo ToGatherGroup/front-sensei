@@ -56,7 +56,7 @@ export default function Header() {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   return (
     <>
-      <header className="w-screen h-20 block bg-winePattern font-sans text-lg">
+      <header className="fixed w-screen h-20 block bg-winePattern font-sans text-lg">
         <nav className="flex items-center justify-start">
           <Link
             href="/"
@@ -119,7 +119,7 @@ export default function Header() {
                 src="/icons/sanduiche.png"
                 width={40}
                 height={40}
-                alt="Fechar menu"
+                alt="Abrir menu"
                 className={`m-auto outline outline-2 outline-winePattern rounded-lg bg-winePattern ${
                   showMobileMenu && "hidden"
                 }`}
