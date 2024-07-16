@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from "react";
 import axios, { AxiosResponse } from "../../../node_modules/axios/index";
 import toast from "react-hot-toast";
-import Loading from "@/components/loading/index";
+import Loader from "@/components/loading/index";
 
 // URL FOR ALL REQUESTS:
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
@@ -186,7 +186,7 @@ export const ApiProvider = ({ children }: { children: React.ReactNode }) => {
     <ApiContext.Provider
       value={{ get, post, put, patch, remove, isLoadingAPI }}
     >
-      {isLoadingAPI && <Loading />}
+      {isLoadingAPI && <Loader />}
       {children}
     </ApiContext.Provider>
   );
