@@ -219,7 +219,7 @@ const Page = ({ params }: Props) => {
           <div className="max-w-full">
             {qualitativos && (
               <div>
-                <Qualitativos />
+                <Qualitativos id={params.id}/>
               </div>
             )}
             {frequencia && (

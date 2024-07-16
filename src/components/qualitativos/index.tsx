@@ -1,60 +1,61 @@
+import { useApiProvider } from "@/contexts";
 import useScreenSize from "@/hooks/useScreenSize";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import Loader from "../loading";
 
 const RESULT_TEXT_COLOR = "text-[#599BD6]";
 const IMC_CORES: { [key: string]: string } = {
-  "baixo peso": "text-orange-600",
-  normal: "text-green-600",
-  sobrepeso: "text-orange-600",
-  obesidade: "text-red-600",
-  "obesidade grau 1": "text-red-600",
-  "obesidade grau 2": "text-red-600",
-  "obesidade grau 3": "text-red-600",
+  "Baixo Peso": "text-orange-600",
+  "Peso Normal": "text-green-600",
+  Sobrepeso: "text-orange-600",
+  Obesidade: "text-red-600",
+  "Obesidade grau 1": "text-red-600",
+  "Obesidade grau 2": "text-red-600",
+  "Obesidade grau 3": "text-red-600",
 };
-
-const MOCK: any = [
-  {
-    label: "Vo2",
-    resultado: "acimaMedia",
-  },
-  {
-    label: "Flexoes",
-    resultado: "fraco",
-  },
-  {
-    label: "IMC",
-    resultado: "obesidade grau 3",
-  },
-];
 
 type Resultados = {
   [key: string]:
-    | "muitoFraco"
-    | "fraco"
-    | "media"
-    | "acimaMedia"
-    | "excelente"
-    | "superior";
+    | "M. Fraco"
+    | "Fraco"
+    | "Regular"
+    | "Bom"
+    | "Excelente"
+    | "Superior"
+    | "Não Aplicável";
 };
-let resultados: Resultados = {};
-let imc = "";
 
-MOCK.forEach((item: any) => {
-  if (item.label == "IMC") {
-    imc = item.resultado;
-    return;
-  }
-  resultados[item.label] = item.resultado;
-});
-
-console.log("resultados:", resultados);
-console.log("imc:", imc);
-
-type Props = {};
-function Qualitativos({}: Props) {
+type Props = {
+  id: string;
+};
+function Qualitativos({ id }: Props) {
   const screenSize = useScreenSize();
-  return (
+  const api = useApiProvider();
+  const [imc, setImc] = useState("");
+  const [resultados, setResultados] = useState<Resultados | undefined>(
+    undefined
+  );
+
+  useEffect(() => {
+    api
+      .get(`/dados_qualitativos/${id}`, { showLoading: false })
+      ?.then(({ data: response }: any) => {
+        let loopResultados: Resultados = {};
+        response.dados.forEach((item: any) => {
+          if (item.label == "Classificação IMC") {
+            setImc(item.result);
+            return;
+          }
+          loopResultados[item.label] = item.result;
+        });
+
+        setResultados(loopResultados);
+      });
+  }, []);
+  return !resultados ? (
+    <div className="animate-spin size-10 bg-white relative top-52 left-40 lg:left-56"></div>
+  ) : (
     <div className="p-2 mt-8 animate-jump-in">
       <p
         className={`decoration-white scale-75 lg:scale-100 underline font-extrabold text-center mb-14`}
@@ -67,7 +68,7 @@ function Qualitativos({}: Props) {
 
       <div className="m-auto w-fit relative [&>label]:text-white [&>label]:uppercase [&>label]:text-xs [&>label]:lg:text-sm [&>label]:font-extrabold [&>label]:text-center [&>label]:absolute [&>label]:z-10 [&>label]:lg:font-extrabold">
         <ResultBar
-          result={resultados["Vo2"]}
+          result={resultados["Classificação Flexões"]}
           className="scale-90 lg:scale-100 absolute z-20 -top-4 left-7 lg:-top-5 lg:left-16"
         />
         <label
@@ -80,7 +81,7 @@ function Qualitativos({}: Props) {
         </label>
 
         <ResultBar
-          result="acimaMedia"
+          result={resultados["Resultado VO2"]}
           className="box-border absolute z-20 top-1.5 right-7 scale-90 lg:scale-100 lg:top-4 lg:right-[70px]"
         />
         <label htmlFor="vo2" className="right-6 top-9 lg:top-14 lg:right-12">
@@ -88,7 +89,7 @@ function Qualitativos({}: Props) {
         </label>
 
         <ResultBar
-          result="media"
+          result={resultados["Classificação Abdominal"]}
           className="absolute z-20 bottom-[143px] right-5 scale-90 lg:scale-100 lg:bottom-[222px] lg:right-[58px]"
         />
         <label
@@ -100,7 +101,7 @@ function Qualitativos({}: Props) {
         </label>
 
         <ResultBar
-          result="superior"
+          result={resultados["Cooper"]}
           className="absolute z-20 bottom-3 left-6 scale-90 lg:scale-100 lg:bottom-5 lg:left-[70px]"
         />
         <label htmlFor="cooper" className="left-7 -bottom-3 lg:left-14">
@@ -117,33 +118,37 @@ function Qualitativos({}: Props) {
     </div>
   );
 }
+
 export default Qualitativos;
 
 function resultToDisplay(result: string) {
   switch (result) {
-    case "muitoFraco":
+    case "M. Fraco":
       return "Muito Fraco";
-    case "fraco":
+    case "Fraco":
       return "fraco";
-    case "media":
+    case "Regular":
       return "Na média";
-    case "acimaMedia":
+    case "Bom":
       return "Acima da Média";
-    case "excelente":
+    case "Excelente":
       return "Excelente";
-    case "superior":
+    case "Superior":
       return "Superior";
+    case "Não Aplicável":
+      return "Não se aplica";
   }
 }
 
 type ResultBar = {
   result:
-    | "muitoFraco"
-    | "fraco"
-    | "media"
-    | "acimaMedia"
-    | "excelente"
-    | "superior";
+    | "M. Fraco"
+    | "Fraco"
+    | "Regular"
+    | "Bom"
+    | "Excelente"
+    | "Superior"
+    | "Não Aplicável";
   className: string;
 };
 const ResultBar = ({ result, className }: ResultBar) => {
@@ -153,29 +158,33 @@ const ResultBar = ({ result, className }: ResultBar) => {
   );
 
   const bars = {
-    muitoFraco: {
+    "M. Fraco": {
       barsAmount: 1,
       color: "bg-[#ff0816]",
     },
-    fraco: {
+    Fraco: {
       barsAmount: 2,
       color: "bg-[#ffa420]",
     },
-    media: {
+    Regular: {
       barsAmount: 3,
       color: "bg-[#ffff00]",
     },
-    acimaMedia: {
+    Bom: {
       barsAmount: 4,
       color: "bg-[#99ff33]",
     },
-    excelente: {
+    Excelente: {
       barsAmount: 5,
       color: "bg-[#00cc00]",
     },
-    superior: {
+    Superior: {
       barsAmount: 6,
       color: "bg-blue-400",
+    },
+    "Não Aplicável": {
+      barsAmount: 0,
+      color: "bg-none",
     },
   };
 
@@ -212,25 +221,7 @@ const ResultBar = ({ result, className }: ResultBar) => {
         >
           {displayResult}
         </p>
-        <div className="flex gap-1">
-          {/* <div className={`${bars.muitoFraco.color} h-5 w-3`} />
-        <div
-          className={`bg-transparent border-[#6b88a1] border border-solid h-5 w-3`}
-        />
-        <div
-          className={`bg-transparent border-[#6b88a1] border border-solid h-5 w-3`}
-        />
-        <div
-          className={`bg-transparent border-[#6b88a1] border border-solid h-5 w-3`}
-        />
-        <div
-          className={`bg-transparent border-[#6b88a1] border border-solid h-5 w-3`}
-        />
-        <div
-          className={`bg-transparent border-[#6b88a1] border border-solid h-5 w-3`}
-        /> */}
-          {barsElement}
-        </div>
+        <div className="flex gap-1">{barsElement}</div>
       </div>
     </>
   );
