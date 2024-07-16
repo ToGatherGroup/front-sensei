@@ -4,7 +4,7 @@ type Props = {
   msg?: string;
 };
 
-const index = ({ msg }: Props) => {
+const Loader = ({ msg }: Props) => {
   return (
     <div className={styles.loading}>
       <div className={styles.loader}></div>
@@ -12,4 +12,4 @@ const index = ({ msg }: Props) => {
     </div>
   );
 };
-export default index;
+export default Loader;
