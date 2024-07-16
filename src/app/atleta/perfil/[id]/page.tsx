@@ -224,8 +224,8 @@ const Page = ({ params }: Props) => {
           {renderButtons()}
           <div className="max-w-full">
             {qualitativos && (
-              <div>
-                <Qualitativos id={params.id}/>
+              <div className="animate-fade-down animate-duration-1000">
+                <Qualitativos id={params.id} />
               </div>
             )}
             {frequencia && (
