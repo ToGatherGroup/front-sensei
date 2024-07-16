@@ -229,7 +229,7 @@ const Page = ({ params }: Props) => {
               </div>
             )}
             {frequencia && (
-              <div className="mt-4 lg:mt-32">
+              <div className="mt-4 lg:mt-32 animate-fade-down animate-duration-1000">
                 <Frequency
                   height={screenSize.width > 1024 ? 200 : 100}
                   width={screenSize.width > 1024 ? 200 : 100}
@@ -238,7 +238,7 @@ const Page = ({ params }: Props) => {
               </div>
             )}
             {grafico && (
-              <div className="lg:mt-24">
+              <div className="lg:mt-24 animate-fade-down animate-duration-1000">
                 <ReviewsChart
                   height={screenSize.width > 1024 ? 524 : 256}
                   width={screenSize.width > 1024 ? 524 : 256}
@@ -248,7 +248,7 @@ const Page = ({ params }: Props) => {
             )}
             {lesoes && (
               <div>
-                <div className="flex flex-row items-stretch justify-center mt-4 lg:mt-12 lg:gap-6 -z-50">
+                <div className="flex flex-row items-stretch justify-center mt-4 lg:mt-12 lg:gap-6 -z-50 animate-fade-down animate-duration-1000">
                   <Injuries
                     injuries={injuries}
                     type="front"
@@ -272,7 +272,7 @@ const Page = ({ params }: Props) => {
                     }
                   />
                 </div>
-                <div className="flex mb-2">
+                <div className="flex mb-2 animate-fade-down animate-duration-1000">
                   <Button
                     text={"Adicionar lesão"}
                     type={"button"}
