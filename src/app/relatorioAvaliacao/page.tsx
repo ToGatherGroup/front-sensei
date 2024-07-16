@@ -132,7 +132,11 @@ const RelatorioAvaliacao = () => {
                     <Link
                       href={{
                         pathname: `/atleta/perfil/${athlete.id}/relatorio`,
-                        query: { data: selectedDate, nome: athlete.nome },
+                        query: {
+                          data: selectedDate,
+                          nome: athlete.nome,
+                          id: athlete.id,
+                        },
                       }}
                       passHref
                     >
