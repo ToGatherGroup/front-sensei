@@ -56,7 +56,7 @@ function Qualitativos({ id }: Props) {
   return !resultados ? (
     <div className="animate-spin size-10 bg-white relative top-52 left-40 lg:left-56"></div>
   ) : (
-    <div className="p-2 mt-8 animate-jump-in">
+    <div className="p-2 mt-8 animate-fade-down animate-duration-1000">
       <p
         className={`decoration-white scale-75 lg:scale-100 underline font-extrabold text-center mb-14`}
       >
