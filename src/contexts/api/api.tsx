@@ -186,7 +186,7 @@ export const ApiProvider = ({ children }: { children: React.ReactNode }) => {
     <ApiContext.Provider
       value={{ get, post, put, patch, remove, isLoadingAPI }}
     >
-      {isLoadingAPI && <Loader />}
+      {isLoadingAPI && <Loader type="full-screen" />}
       {children}
     </ApiContext.Provider>
   );
