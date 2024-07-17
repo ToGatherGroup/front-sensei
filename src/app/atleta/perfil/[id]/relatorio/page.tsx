@@ -28,62 +28,162 @@ interface IExerciciosData {
 const IExerciciosDataSchema = yup.object().shape({
   peso: yup
     .number()
-    .typeError("Insira o peso em quilogramas.")
+    .typeError("Valor obrigatório.")
     .positive("O peso deve ser um número positivo.")
-    .min(10, "O peso mínimo é 10.")
+    .min(1, "O peso mínimo é 1 kg.")
     .required("Este campo é obrigatório."),
   altura: yup
     .number()
-    .typeError("Insira a altura em centímetros.")
+    .typeError("Valor obrigatório.")
     .integer("A altura deve ser um número inteiro.")
     .positive("A altura deve ser um número positivo.")
-    .min(110, "A altura mínima é 110 cm.")
+    .min(1, "A altura mínima é 1 cm.")
     .required("Este campo é obrigatório."),
   prancha: yup
     .string()
+    .transform((_, val) => {
+      if (val === "") return null;
+      return val;
+    })
+    .test("time_check", function (timeInput: any) {
+      if (timeInput === null) return true;
 
-    .required("A prancha é obrigatória."),
+      let error = false;
+      const [minStr, segStr] = timeInput.split(":");
+
+      try {
+        const min = Number(minStr);
+        const seg = Number(segStr);
+
+        if (isNaN(min) || isNaN(seg)) error = true;
+        if (min < 0 || min > 15) error = true;
+        if (seg < 0 || seg >= 60) error = true;
+      } catch (e) {
+        return this.createError({
+          message: "Tempo inserido é inválido.",
+          path: this.path,
+        });
+      }
+
+      if (error) {
+        return this.createError({
+          message: "Tempo inserido é inválido.",
+          path: this.path,
+        });
+      }
+
+      return true;
+    })
+    .nullable()
+
+    .required("Valor obrigatório."),
   flexoes: yup
     .number()
-    .required("O número de flexões é obrigatório.")
+    .typeError("Valor obrigatório.")
     .positive("As flexões devem ser um número positivo.")
-    .max(999, "Maximo 3 digitos."),
+    .integer("As flexões devem ser um número inteiro.")
+    .max(999, "Máximo 3 dígitos.")
+    .required("O número de flexões é obrigatório."),
   abdominais: yup
     .number()
     .required("O número de abdominais é obrigatório.")
+    .typeError("Valor obrigatório.")
     .positive("Os abdominais deve ser um número positivo.")
     .max(999, "Maximo 3 digitos."),
   burpees: yup
     .number()
     .required("O número de burpees é obrigatório.")
-    .positive("O burpees deve ser um número positivo.")
+    .positive("Os burpees devem ser um número positivo.")
+    .typeError("Valor obrigatório.")
     .max(999, "Maximo 3 digitos."),
   cooper: yup
     .number()
-    .required("A distância de cooper é obrigatória.")
-    .positive("O cooper deve ser um número positivo.")
+    .required("")
+    .min(0, "Não são permitidos valores negativos.")
+    .typeError("Valor obrigatório.")
     .max(9999, "Maximo 4 digitos."),
   rmTerra: yup
     .number()
+    .typeError("Valor obrigatório.")
     .required("O RM no terra é obrigatório.")
-    .positive("O RM Terra ser um número positivo."),
-  forcaIsometricaMaos: yup.string().required("A prancha é obrigatória."),
+    .min(0, "Não são permitidos valores negativos."),
+  forcaIsometricaMaos: yup
+    .string()
+    .transform((_, val) => {
+      if (val === "") return null;
+      return val;
+    })
+    .test("time_check", function (timeInput: any) {
+      if (timeInput === null) return true;
+
+      let error = false;
+      const [minStr, segStr] = timeInput.split(":");
+
+      try {
+        const min = Number(minStr);
+        const seg = Number(segStr);
+
+        if (isNaN(min) || isNaN(seg)) error = true;
+        if (min < 0 || min > 15) error = true;
+        if (seg < 0 || seg >= 60) error = true;
+      } catch (e) {
+        return this.createError({
+          message: "Tempo inserido é inválido.",
+          path: this.path,
+        });
+      }
+
+      if (error) {
+        return this.createError({
+          message: "Tempo inserido é inválido.",
+          path: this.path,
+        });
+      }
+
+      return true;
+    })
+    .nullable()
+    .required("Valor obrigatório."),
   testeDeLunge: yup
     .number()
     .required("O teste de lunge é obrigatório.")
-    .positive("O teste de lunge deve ser positivo.")
+    .typeError("Valor obrigatório.")
+    .min(0, "Não são permitidos valores negativos.")
     .max(12, "Maximo 12 movimentos."),
   impulsaoVertical: yup
     .number()
+    .typeError("Valor obrigatório.")
     .required("A impulsão vertical é obrigatória.")
-    .positive("A impulsão Vertical deve ser um número positivo."),
+    .min(0, "Não são permitidos valores negativos."),
 });
 
 const Relatorio = () => {
   const searchParams = useSearchParams();
-  const data = searchParams.get("data");
+  const date = searchParams.get("data");
   const nome = searchParams.get("nome");
   const id = searchParams.get("id");
+
+  const avaliationUpdate = (data: any): any => {
+    return {
+      impulsaoVertical: data.impulsaoVertical,
+      rmTerra: data.rmTerra,
+      prancha: data.prancha,
+      forcaIsometricaMaos: data.forcaIsometricaMaos,
+      abdominais: data.abdominais,
+      testeDeLunge: data.testeDeLunge,
+      flexoes: data.flexoes,
+      burpees: data.burpees,
+      cooper: data.cooper,
+      altura: data.altura,
+      peso: data.peso,
+      avaliacaoModelId: {
+        atletaModel: {
+          id: id,
+        },
+        data: date,
+      },
+    };
+  };
 
   const {
     register,
@@ -121,7 +221,7 @@ const Relatorio = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await get(`avaliacao/${id}/${data}`);
+        const response = await get(`avaliacao/${id}/${date}`);
         if (response && response.data && response.data.exercicios) {
           const exerciciosData = response.data.exercicios;
           exerciciosData.prancha = parseDuration(exerciciosData.prancha);
@@ -157,7 +257,13 @@ const Relatorio = () => {
         prancha: convertToPTFormat(data.prancha),
         forcaIsometricaMaos: convertToPTFormat(data.forcaIsometricaMaos),
       };
-      console.log("Dados do Formulário:", formattedData);
+      console.log("Envio deDados do Formulário:", formattedData);
+      console.log(id);
+      console.log(date);
+      console.log(
+        "Envio deDados do Formatado para Api:",
+        avaliationUpdate(formattedData)
+      );
     } catch (err) {
       console.error("Erro ao submeter formulário:", err);
     }
@@ -167,7 +273,7 @@ const Relatorio = () => {
     <section className="min-h-screen flex-col justify-center mx-auto my-0 w-auto max-w-[650px] bg-container rounded">
       <div className="flex-col">
         <div className="flex justify-center items-end pb-16 pt-16">
-          <FormTitle title="Relatório do Atleta" iconSrc="/icons/report.png" />
+          <FormTitle title="Editar Avaliação" iconSrc="/icons/report.png" />
         </div>
         <div className="flex items-center justify-center gap-2">
           <label
@@ -176,7 +282,7 @@ const Relatorio = () => {
           >
             Data
           </label>
-          <h3>{data && formatDate(data)}</h3>
+          <h3>{date && formatDate(date)}</h3>
         </div>
         <div className="flex items-center justify-center gap-2">
           <label
@@ -194,24 +300,19 @@ const Relatorio = () => {
             <div className="flex mx-auto my-6 box-border items-center">
               <label
                 htmlFor="rmTerra"
-                className="inline-block w-48 text-center text-base font-semibold"
+                className="inline-block w-48 text-left text-base font-semibold"
               >
                 RM Levantamento Terra:
               </label>
               <input
-                type="number"
+                type="text"
                 placeholder="kg"
-                className="bg-gray-200 w-24 px-4 rounded"
+                className=" w-32 px-4 rounded"
                 {...register("rmTerra")}
               />
-              {errors.rmTerra && (
-                <span className="text-red-500 ml-2">
-                  {errors.rmTerra.message}
-                </span>
-              )}
             </div>
             {errors.rmTerra && (
-              <span className="text-red-500 ml-2">
+              <span className="text-red-500 ml-2 flex items-center justify-left">
                 {errors.rmTerra.message}
               </span>
             )}
@@ -219,27 +320,28 @@ const Relatorio = () => {
             <div className="flex mx-auto my-6 box-border items-center">
               <label
                 htmlFor="impulsaoVertical"
-                className="inline-block w-48 text-center text-base font-semibold"
+                className="inline-block w-48 text-left text-base font-semibold"
               >
                 Impulsão Vertical:
               </label>
               <input
-                type="number"
+                type="text"
                 placeholder="cm"
                 {...register("impulsaoVertical")}
-                className="bg-gray-200 w-24 px-4 py-2 rounded"
+                className="bg-gray-200 w-32 px-4 py-2 rounded"
               />
             </div>
             {errors.impulsaoVertical && (
-              <span className="text-red-500 ml-2">
+              <span className="text-red-500 ml-2 flex items-center justify-left">
                 {errors.impulsaoVertical.message}
               </span>
             )}
+
             {/* Prancha */}
             <div className="flex mx-auto my-6 box-border items-center">
               <label
                 htmlFor="prancha"
-                className="inline-block w-48 text-center text-base font-semibold"
+                className="inline-block w-48 text-left text-base font-semibold"
               >
                 Prancha:
               </label>
@@ -248,28 +350,27 @@ const Relatorio = () => {
                 control={control}
                 render={({ field }) => (
                   <IMaskInput
+                    type="text"
                     {...field}
                     mask={["\\00{:}00", "00{:}00"]}
-                    placeholder="MM:SS"
-                    blocks={{
-                      MM: { mask: IMask.MaskedRange, from: 0, to: 59 },
-                      SS: { mask: IMask.MaskedRange, from: 0, to: 59 },
-                    }}
-                    className="bg-gray-200 w-24 px-4 py-2 rounded"
+                    placeholder="Min  :  Seg"
+                    className=" w-32 px-4 py-2 rounded"
+                    pattern="\d*"
+                    inputMode="numeric"
                   />
                 )}
               />
-              {errors.prancha && (
-                <span className="text-red-500 ml-2">
-                  {errors.prancha.message}
-                </span>
-              )}
             </div>
+            {errors.prancha && (
+              <span className="text-red-500 ml-2 flex items-center justify-left">
+                {errors.prancha.message}
+              </span>
+            )}
             {/* Força de Preensão */}
             <div className="flex mx-auto my-6 box-border items-center">
               <label
                 htmlFor="forcaIsometricaMaos"
-                className="inline-block w-48 text-center text-base font-semibold"
+                className="inline-block w-48 text-left text-base font-semibold"
               >
                 Força de Preensão:
               </label>
@@ -280,38 +381,38 @@ const Relatorio = () => {
                   <IMaskInput
                     {...field}
                     mask={["\\00{:}00", "00{:}00"]}
-                    placeholder="MM:SS"
+                    placeholder="Min  :  Seg"
                     blocks={{
                       MM: { mask: IMask.MaskedRange, from: 0, to: 59 },
                       SS: { mask: IMask.MaskedRange, from: 0, to: 59 },
                     }}
-                    className="bg-gray-200 w-24 px-4 py-2 rounded"
+                    className=" w-32 px-4 py-2 rounded"
                   />
                 )}
               />
-              {errors.forcaIsometricaMaos && (
-                <span className="text-red-500 ml-2">
-                  {errors.forcaIsometricaMaos.message}
-                </span>
-              )}
             </div>
+            {errors.forcaIsometricaMaos && (
+              <span className="text-red-500 ml-2 flex items-center justify-left">
+                {errors.forcaIsometricaMaos.message}
+              </span>
+            )}
             {/* Abdominais */}
             <div className="flex mx-auto my-6 box-border items-center">
               <label
                 htmlFor="abdominais"
-                className="inline-block w-48 text-center text-base font-semibold"
+                className="inline-block w-48 text-left text-base font-semibold"
               >
                 Abdominais:
               </label>
               <input
-                type="number"
+                type="text"
                 placeholder="repetições"
                 {...register("abdominais")}
-                className="bg-gray-200 w-24 px-4 py-2 rounded"
+                className=" w-32 px-4 py-2 rounded"
               />
             </div>
             {errors.abdominais && (
-              <span className="text-red-500 ml-2">
+              <span className="text-red-500 ml-2 flex items-center justify-left">
                 {errors.abdominais.message}
               </span>
             )}
@@ -319,19 +420,19 @@ const Relatorio = () => {
             <div className="flex mx-auto my-6 box-border items-center">
               <label
                 htmlFor="testeDeLunge"
-                className="inline-block w-48 text-center text-base font-semibold"
+                className="inline-block w-48 text-left text-base font-semibold"
               >
                 Teste de Lunge:
               </label>
               <input
-                type="number"
+                type="text"
                 placeholder="cm"
                 {...register("testeDeLunge")}
-                className="bg-gray-200 w-24 px-4 py-2 rounded"
+                className=" w-32 px-4 py-2 rounded"
               />
             </div>
             {errors.testeDeLunge && (
-              <span className="text-red-500 ml-2">
+              <span className="text-red-500 ml-2 flex items-center justify-left">
                 {errors.testeDeLunge.message}
               </span>
             )}
@@ -339,19 +440,19 @@ const Relatorio = () => {
             <div className="flex mx-auto my-6 box-border items-center">
               <label
                 htmlFor="flexoes"
-                className="inline-block w-48 text-center text-base font-semibold"
+                className="inline-block w-48 text-left text-base font-semibold"
               >
                 Flexões:
               </label>
               <input
-                type="number"
+                type="text"
                 placeholder="repetições"
                 {...register("flexoes")}
-                className="bg-gray-200 w-24 px-4 py-2 rounded"
+                className=" w-32 px-4 py-2 rounded"
               />
             </div>
             {errors.flexoes && (
-              <span className="text-red-500 ml-2">
+              <span className="text-red-500 ml-2 flex items-center justify-left">
                 {errors.flexoes.message}
               </span>
             )}
@@ -359,19 +460,19 @@ const Relatorio = () => {
             <div className="flex mx-auto my-6 box-border items-center">
               <label
                 htmlFor="burpees"
-                className="inline-block w-48 text-center text-base font-semibold"
+                className="inline-block w-48 text-left text-base font-semibold"
               >
                 Burpees:
               </label>
               <input
-                type="number"
+                type="text"
                 placeholder="repetições"
                 {...register("burpees")}
-                className="bg-gray-200 w-24 px-4 py-2 rounded"
+                className=" w-32 px-4 py-2 rounded"
               />
             </div>
             {errors.burpees && (
-              <span className="text-red-500 ml-2">
+              <span className="text-red-500 ml-2 flex items-center justify-left">
                 {errors.burpees.message}
               </span>
             )}
@@ -379,55 +480,61 @@ const Relatorio = () => {
             <div className="flex mx-auto my-6 box-border items-center">
               <label
                 htmlFor="cooper"
-                className="inline-block w-48 text-center text-base font-semibold"
+                className="inline-block w-48 text-left text-base font-semibold"
               >
                 Teste de Cooper:
               </label>
               <input
-                type="number"
+                type="text"
                 placeholder="metros"
                 {...register("cooper")}
-                className="bg-gray-200 w-24 px-4 py-2 rounded"
+                className=" w-32 px-4 py-2 rounded"
               />
             </div>
             {errors.cooper && (
-              <span className="text-red-500 ml-2">{errors.cooper.message}</span>
+              <span className="text-red-500 ml-2 flex items-center justify-left">
+                {errors.cooper.message}
+              </span>
             )}
             {/* Peso */}
             <div className="flex mx-auto my-6 box-border items-center">
               <label
                 htmlFor="peso"
-                className="inline-block w-48 text-center text-base font-semibold"
+                className="inline-block w-48 text-left text-base font-semibold"
               >
                 Peso:
               </label>
               <input
-                type="number"
+                type="text"
                 placeholder="kg"
                 {...register("peso")}
-                className="bg-gray-200 w-24 px-4 py-2 rounded"
+                className=" w-32 px-4 py-2 rounded"
               />
             </div>
             {errors.peso && (
-              <span className="text-red-500 ml-2">{errors.peso.message}</span>
+              <span className="text-red-500 ml-2 flex items-center justify-left">
+                {errors.peso.message}
+              </span>
             )}
             {/* Altura */}
             <div className="flex mx-auto my-6 box-border items-center">
               <label
                 htmlFor="altura"
-                className="inline-block w-48 text-center text-base font-semibold"
+                className="inline-block w-48 text-left text-base font-semibold"
               >
                 Altura:
               </label>
               <input
-                type="number"
+                type="text"
                 placeholder="cm"
                 {...register("altura")}
-                className="bg-gray-200 w-24 px-4 py-2 rounded"
+                className=" w-32 px-4 py-2 rounded"
               />
             </div>
             {errors.altura && (
-              <span className="text-red-500 ml-2">{errors.altura.message}</span>
+              <span className="text-red-500 flex items-center pb-2 justify-left">
+                {errors.altura.message}
+              </span>
             )}
             <div className="flex justify-between items-center pb-10 ">
               <Link href="/relatorioAvaliacao">
