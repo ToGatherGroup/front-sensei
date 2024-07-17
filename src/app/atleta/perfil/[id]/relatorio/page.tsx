@@ -1,12 +1,14 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { useForm, Controller } from "react-hook-form"; // Importar Controller do react-hook-form
-import { IMaskInput } from "react-imask"; // Importar IMaskInput do react-imask
+import { useForm, Controller } from "react-hook-form";
+import { IMask, IMaskInput } from "react-imask";
 import FormTitle from "@/components/title/formTitle";
 import Button from "@/components/ui/button";
 import Link from "next/link";
 import { useApiProvider } from "@/contexts";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 // Interface para os dados específicos dos exercícios
 interface IExerciciosData {
@@ -23,17 +25,78 @@ interface IExerciciosData {
   impulsaoVertical: number;
 }
 
+const IExerciciosDataSchema = yup.object().shape({
+  peso: yup
+    .number()
+    .typeError("Insira o peso em quilogramas.")
+    .positive("O peso deve ser um número positivo.")
+    .min(10, "O peso mínimo é 10.")
+    .required("Este campo é obrigatório."),
+  altura: yup
+    .number()
+    .typeError("Insira a altura em centímetros.")
+    .integer("A altura deve ser um número inteiro.")
+    .positive("A altura deve ser um número positivo.")
+    .min(110, "A altura mínima é 110 cm.")
+    .required("Este campo é obrigatório."),
+  prancha: yup
+    .string()
+
+    .required("A prancha é obrigatória."),
+  flexoes: yup
+    .number()
+    .required("O número de flexões é obrigatório.")
+    .positive("As flexões devem ser um número positivo.")
+    .max(999, "Maximo 3 digitos."),
+  abdominais: yup
+    .number()
+    .required("O número de abdominais é obrigatório.")
+    .positive("Os abdominais deve ser um número positivo.")
+    .max(999, "Maximo 3 digitos."),
+  burpees: yup
+    .number()
+    .required("O número de burpees é obrigatório.")
+    .positive("O burpees deve ser um número positivo.")
+    .max(999, "Maximo 3 digitos."),
+  cooper: yup
+    .number()
+    .required("A distância de cooper é obrigatória.")
+    .positive("O cooper deve ser um número positivo.")
+    .max(9999, "Maximo 4 digitos."),
+  rmTerra: yup
+    .number()
+    .required("O RM no terra é obrigatório.")
+    .positive("O RM Terra ser um número positivo."),
+  forcaIsometricaMaos: yup.string().required("A prancha é obrigatória."),
+  testeDeLunge: yup
+    .number()
+    .required("O teste de lunge é obrigatório.")
+    .positive("O teste de lunge deve ser positivo.")
+    .max(12, "Maximo 12 movimentos."),
+  impulsaoVertical: yup
+    .number()
+    .required("A impulsão vertical é obrigatória.")
+    .positive("A impulsão Vertical deve ser um número positivo."),
+});
+
 const Relatorio = () => {
   const searchParams = useSearchParams();
   const data = searchParams.get("data");
   const nome = searchParams.get("nome");
   const id = searchParams.get("id");
 
-  const { register, handleSubmit, setValue, control } =
-    useForm<IExerciciosData>();
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    control,
+    formState: { errors },
+  } = useForm<IExerciciosData>({
+    resolver: yupResolver(IExerciciosDataSchema),
+  });
   const [exercicios, setExercicios] = useState<IExerciciosData | null>(null);
 
-  const { get } = useApiProvider();
+  const { get, put } = useApiProvider();
 
   const formatDate = (dateString: string) => {
     const [year, month, day] = dateString.split("-");
@@ -48,6 +111,11 @@ const Relatorio = () => {
       return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
     }
     return duration;
+  };
+
+  const convertToPTFormat = (time: string) => {
+    const [minutes, seconds] = time.split(":").map(Number);
+    return `PT${minutes}M${seconds}S`;
   };
 
   useEffect(() => {
@@ -82,8 +150,17 @@ const Relatorio = () => {
     fetchData();
   }, []);
 
-  const onSubmit = (data: IExerciciosData) => {
-    console.log("Dados do Formulário:", data);
+  const onSubmit = async (data: IExerciciosData) => {
+    try {
+      const formattedData = {
+        ...data,
+        prancha: convertToPTFormat(data.prancha),
+        forcaIsometricaMaos: convertToPTFormat(data.forcaIsometricaMaos),
+      };
+      console.log("Dados do Formulário:", formattedData);
+    } catch (err) {
+      console.error("Erro ao submeter formulário:", err);
+    }
   };
 
   return (
@@ -123,10 +200,21 @@ const Relatorio = () => {
               </label>
               <input
                 type="number"
+                placeholder="kg"
                 className="bg-gray-200 w-24 px-4 rounded"
                 {...register("rmTerra")}
               />
+              {errors.rmTerra && (
+                <span className="text-red-500 ml-2">
+                  {errors.rmTerra.message}
+                </span>
+              )}
             </div>
+            {errors.rmTerra && (
+              <span className="text-red-500 ml-2">
+                {errors.rmTerra.message}
+              </span>
+            )}
             {/* Impulsão Vertical */}
             <div className="flex mx-auto my-6 box-border items-center">
               <label
@@ -137,10 +225,16 @@ const Relatorio = () => {
               </label>
               <input
                 type="number"
+                placeholder="cm"
                 {...register("impulsaoVertical")}
                 className="bg-gray-200 w-24 px-4 py-2 rounded"
               />
             </div>
+            {errors.impulsaoVertical && (
+              <span className="text-red-500 ml-2">
+                {errors.impulsaoVertical.message}
+              </span>
+            )}
             {/* Prancha */}
             <div className="flex mx-auto my-6 box-border items-center">
               <label
@@ -155,12 +249,21 @@ const Relatorio = () => {
                 render={({ field }) => (
                   <IMaskInput
                     {...field}
-                    mask="00:00"
+                    mask={["\\00{:}00", "00{:}00"]}
                     placeholder="MM:SS"
+                    blocks={{
+                      MM: { mask: IMask.MaskedRange, from: 0, to: 59 },
+                      SS: { mask: IMask.MaskedRange, from: 0, to: 59 },
+                    }}
                     className="bg-gray-200 w-24 px-4 py-2 rounded"
                   />
                 )}
               />
+              {errors.prancha && (
+                <span className="text-red-500 ml-2">
+                  {errors.prancha.message}
+                </span>
+              )}
             </div>
             {/* Força de Preensão */}
             <div className="flex mx-auto my-6 box-border items-center">
@@ -176,12 +279,21 @@ const Relatorio = () => {
                 render={({ field }) => (
                   <IMaskInput
                     {...field}
-                    mask="00:00"
+                    mask={["\\00{:}00", "00{:}00"]}
                     placeholder="MM:SS"
+                    blocks={{
+                      MM: { mask: IMask.MaskedRange, from: 0, to: 59 },
+                      SS: { mask: IMask.MaskedRange, from: 0, to: 59 },
+                    }}
                     className="bg-gray-200 w-24 px-4 py-2 rounded"
                   />
                 )}
               />
+              {errors.forcaIsometricaMaos && (
+                <span className="text-red-500 ml-2">
+                  {errors.forcaIsometricaMaos.message}
+                </span>
+              )}
             </div>
             {/* Abdominais */}
             <div className="flex mx-auto my-6 box-border items-center">
@@ -193,10 +305,16 @@ const Relatorio = () => {
               </label>
               <input
                 type="number"
+                placeholder="repetições"
                 {...register("abdominais")}
                 className="bg-gray-200 w-24 px-4 py-2 rounded"
               />
             </div>
+            {errors.abdominais && (
+              <span className="text-red-500 ml-2">
+                {errors.abdominais.message}
+              </span>
+            )}
             {/* Teste de Lunge */}
             <div className="flex mx-auto my-6 box-border items-center">
               <label
@@ -207,10 +325,16 @@ const Relatorio = () => {
               </label>
               <input
                 type="number"
+                placeholder="cm"
                 {...register("testeDeLunge")}
                 className="bg-gray-200 w-24 px-4 py-2 rounded"
               />
             </div>
+            {errors.testeDeLunge && (
+              <span className="text-red-500 ml-2">
+                {errors.testeDeLunge.message}
+              </span>
+            )}
             {/* Flexões */}
             <div className="flex mx-auto my-6 box-border items-center">
               <label
@@ -221,10 +345,16 @@ const Relatorio = () => {
               </label>
               <input
                 type="number"
+                placeholder="repetições"
                 {...register("flexoes")}
                 className="bg-gray-200 w-24 px-4 py-2 rounded"
               />
             </div>
+            {errors.flexoes && (
+              <span className="text-red-500 ml-2">
+                {errors.flexoes.message}
+              </span>
+            )}
             {/* Burpees */}
             <div className="flex mx-auto my-6 box-border items-center">
               <label
@@ -235,10 +365,16 @@ const Relatorio = () => {
               </label>
               <input
                 type="number"
+                placeholder="repetições"
                 {...register("burpees")}
                 className="bg-gray-200 w-24 px-4 py-2 rounded"
               />
             </div>
+            {errors.burpees && (
+              <span className="text-red-500 ml-2">
+                {errors.burpees.message}
+              </span>
+            )}
             {/* Teste de Cooper */}
             <div className="flex mx-auto my-6 box-border items-center">
               <label
@@ -249,10 +385,14 @@ const Relatorio = () => {
               </label>
               <input
                 type="number"
+                placeholder="metros"
                 {...register("cooper")}
                 className="bg-gray-200 w-24 px-4 py-2 rounded"
               />
             </div>
+            {errors.cooper && (
+              <span className="text-red-500 ml-2">{errors.cooper.message}</span>
+            )}
             {/* Peso */}
             <div className="flex mx-auto my-6 box-border items-center">
               <label
@@ -263,10 +403,14 @@ const Relatorio = () => {
               </label>
               <input
                 type="number"
+                placeholder="kg"
                 {...register("peso")}
                 className="bg-gray-200 w-24 px-4 py-2 rounded"
               />
             </div>
+            {errors.peso && (
+              <span className="text-red-500 ml-2">{errors.peso.message}</span>
+            )}
             {/* Altura */}
             <div className="flex mx-auto my-6 box-border items-center">
               <label
@@ -277,10 +421,14 @@ const Relatorio = () => {
               </label>
               <input
                 type="number"
+                placeholder="cm"
                 {...register("altura")}
                 className="bg-gray-200 w-24 px-4 py-2 rounded"
               />
             </div>
+            {errors.altura && (
+              <span className="text-red-500 ml-2">{errors.altura.message}</span>
+            )}
             <div className="flex justify-between items-center pb-10 ">
               <Link href="/relatorioAvaliacao">
                 <Button text={"Voltar"} type={"button"} />
