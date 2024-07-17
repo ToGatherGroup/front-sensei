@@ -75,7 +75,6 @@ const IExerciciosDataSchema = yup.object().shape({
       return true;
     })
     .nullable()
-
     .required("Valor obrigatório."),
   flexoes: yup
     .number()
@@ -246,7 +245,6 @@ const Relatorio = () => {
         console.error("Erro ao buscar dados da API:", error);
       }
     };
-
     fetchData();
   }, []);
 
@@ -257,9 +255,14 @@ const Relatorio = () => {
         prancha: convertToPTFormat(data.prancha),
         forcaIsometricaMaos: convertToPTFormat(data.forcaIsometricaMaos),
       };
-      console.log("Envio deDados do Formulário:", formattedData);
-      console.log(id);
-      console.log(date);
+
+      const response = await put("avaliacao", avaliationUpdate(formattedData));
+      if (response?.status !== 202) {
+        throw new Error("Erro ao atualizar avaliação");
+      }
+      // console.log("Envio deDados do Formulário:", formattedData);
+      // console.log(id);
+      // console.log(date);
       console.log(
         "Envio deDados do Formatado para Api:",
         avaliationUpdate(formattedData)
@@ -328,7 +331,7 @@ const Relatorio = () => {
                 type="text"
                 placeholder="cm"
                 {...register("impulsaoVertical")}
-                className="bg-gray-200 w-32 px-4 py-2 rounded"
+                className="w-32 px-4 py-2 rounded"
               />
             </div>
             {errors.impulsaoVertical && (
@@ -336,7 +339,6 @@ const Relatorio = () => {
                 {errors.impulsaoVertical.message}
               </span>
             )}
-
             {/* Prancha */}
             <div className="flex mx-auto my-6 box-border items-center">
               <label
@@ -536,6 +538,7 @@ const Relatorio = () => {
                 {errors.altura.message}
               </span>
             )}
+            {/* Botões */}
             <div className="flex justify-between items-center pb-10 ">
               <Link href="/relatorioAvaliacao">
                 <Button text={"Voltar"} type={"button"} />
