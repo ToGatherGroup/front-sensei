@@ -54,7 +54,8 @@ function Qualitativos({ id }: Props) {
       });
   }, []);
   return !resultados ? (
-    <div className="animate-spin size-10 bg-white relative top-52 left-40 lg:left-56"></div>
+    // <div className="animate-spin size-10 bg-white relative top-52 left-40 lg:left-56"></div>
+    <Loader className="mt-24 lg:mt-48" />
   ) : (
     <div className="p-2 mt-8 animate-fade-down animate-duration-1000">
       <p
