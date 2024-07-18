@@ -57,7 +57,7 @@ export const ApiProvider = ({ children }: { children: React.ReactNode }) => {
 
   const apiInstance = axios.create({
     baseURL: BASE_URL,
-    timeout: 10000,
+    timeout: 20000,
     headers: {
       "Content-Type": "application/json",
     },
