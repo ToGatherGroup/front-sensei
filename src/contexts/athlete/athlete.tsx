@@ -4,15 +4,17 @@ import {
   AthleteProfileProps,
   ListAthletesProps,
   MedalsProps,
+  InjuriesProps,
 } from "./athlete.type";
 import { useRouter } from "next/navigation";
 import { Atleta } from "@/types/TAtleta";
+import { bodyPartToOutput } from "@/enums/lesoes";
 
 type AthleteState = {
   listAthletes: ListAthletesProps | null;
   isLoading: boolean;
   injuries: string[];
-  injuriesDescription: string[];
+  injuriesInfo: InjuriesProps[];
   athleteProfile: AthleteProfileProps | null;
   athlete: Atleta | null;
   medals: MedalsProps;
@@ -30,7 +32,7 @@ const initialState = {
   listAthletes: null,
   isLoading: false,
   injuries: [],
-  injuriesDescription: [],
+  injuriesInfo: [],
   athleteProfile: null,
   athlete: null,
   medals: [],
@@ -62,7 +64,7 @@ export const AthleteProvider = ({
     useState<AthleteProfileProps | null>(null);
   const [athlete, setAthlete] = useState<Atleta | null>(null);
   const [medals, setMedals] = useState<MedalsProps>([]);
-  const [injuriesDescription, setInjuriesDescription] = useState<string[]>([]);
+  const [injuriesInfo, setInjuriesInfo] = useState<InjuriesProps[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
 
@@ -148,14 +150,17 @@ export const AthleteProvider = ({
       const response = await get(`lesao/${id}`);
 
       if (response) {
-        setInjuries(response.data.map((injury: any) => injury.regiaoLesao));
-        setInjuriesDescription(
-          response.data.map(
-            (injury: any) => `${injury.data}: ${injury.descricao}`
-          )
-        );
+        const injuriesInfo = response.data.map((injury: any) => ({
+          date: injury.data,
+          description: `${injury.descricao}`,
+          regiaoLesao: `${bodyPartToOutput(injury.regiaoLesao)}`
+        }));
+        injuriesInfo.sort((a: { date: string }, b: { date: string }) => new Date(a.date).getTime() - new Date(b.date).getTime());
+        const injuries = response.data.map((injury: any) => injury.regiaoLesao);
+        setInjuries(injuries);
+        setInjuriesInfo(injuriesInfo);
       } else {
-        setError("Erro ao carregar lesões!");
+        setError("Erro ao tratar resposta!");
       }
     } catch (error) {
       setError("Erro ao carregar lesões!");
@@ -190,7 +195,7 @@ export const AthleteProvider = ({
         isLoading,
         listAthletes,
         injuries,
-        injuriesDescription,
+        injuriesInfo,
         athlete,
         athleteProfile,
         medals,

@@ -199,8 +199,8 @@ const FormAtleta = ({ atleta, method }: Props) => {
               </option>
               <option value="branca">Branca</option>
               <option value="cinza">Cinza</option>
-              <option value="azulClaro">Azul claro</option>
-              <option value="azulEscuro">Azul escuro</option>
+              <option value="azulClaro">Azul clara</option>
+              <option value="azulEscuro">Azul escura</option>
               <option value="amarela">Amarela</option>
               <option value="laranja">Laranja</option>
               <option value="verde">Verde</option>
