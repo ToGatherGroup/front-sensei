@@ -2,7 +2,7 @@
 import React, { useEffect } from "react";
 import ListAthletes from "../../components/listAthletes/index";
 import { useAthleteProvider } from "@/contexts";
-import Loader from "@/components/loading";
+import Loader from "@/components/ui/loader";
 
 const ListAthletesPage = () => {
   const { listAthletes, isLoading } = useAthleteProvider();

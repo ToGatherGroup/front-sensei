@@ -8,7 +8,7 @@ import { atletaCreateSchema } from "@/schemas/athleteSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useAthleteProvider } from "@/contexts";
 import Button from "../ui/button";
-import Loader from "../loading";
+import Loader from "../ui/loader";
 
 type Props = {
   atleta?: Atleta | null;

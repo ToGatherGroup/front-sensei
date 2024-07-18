@@ -2,7 +2,7 @@ import { useApiProvider } from "@/contexts";
 import useScreenSize from "@/hooks/useScreenSize";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import Loader from "../loading";
+import Loader from "../ui/loader";
 
 const RESULT_TEXT_COLOR = "text-[#599BD6]";
 const IMC_CORES: { [key: string]: string } = {
