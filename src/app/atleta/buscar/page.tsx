@@ -151,7 +151,7 @@ const AtletaSelecionar = () => {
             página.
           </p>
         )}
-        {loading && <Loader />}
+        {loading && <Loader className="mt-36" />}
       </div>
       <Observer
         selector=".lastElement"
