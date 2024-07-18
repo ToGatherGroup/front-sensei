@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from "react";
 import axios, { AxiosResponse } from "../../../node_modules/axios/index";
 import toast from "react-hot-toast";
-import Loader from "@/components/loading/index";
+import Loader from "@/components/ui/loader";
 
 // URL FOR ALL REQUESTS:
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;

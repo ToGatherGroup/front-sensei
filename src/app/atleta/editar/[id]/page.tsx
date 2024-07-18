@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useAthleteProvider } from "@/contexts";
 import FormAtleta from "../../../../components/formAtleta/index";
-import Loader from "@/components/loading";
+import Loader from "@/components/ui/loader";
 
 type Params = {
   id: string;
