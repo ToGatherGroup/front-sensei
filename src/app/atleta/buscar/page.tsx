@@ -10,6 +10,7 @@ import { TAtletas } from "@/types/TAtletas";
 
 import { useDebounce } from "@/hooks/useDebounce";
 import Title from "@/components/ui/title";
+import Loader from "@/components/ui/loader";
 
 let height = 1500; // A secure large height definition, in case window is not defined
 
@@ -150,9 +151,7 @@ const AtletaSelecionar = () => {
             página.
           </p>
         )}
-        {loading && (
-          <div className="my-5 mx-auto border-solid border-[10px] border-white border-t-[10px] border-t-winePattern rounded-full w-[60px] h-[60px] animate-spin animate-duration-2000" />
-        )}
+        {loading && <Loader />}
       </div>
       <Observer
         selector=".lastElement"
