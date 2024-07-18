@@ -27,13 +27,13 @@ const Loader = ({ msg, type = "local", className }: Props) => {
   return (
     <>
       <div className={`relative ${className}`}>
-        <div className="my-5 mx-auto border-solid border-[10px] border-white border-t-[10px] border-t-winePattern rounded-full size-32 animate-spin animate-duration-2000 bg-black" />
+        <div className="my-5 mx-auto border-solid border-[5px] border-white border-t-[5px] border-t-winePattern rounded-full size-16 animate-spin animate-duration-2000 bg-black" />
         <Image
           src="/loader/logo_sensei.png"
-          width={80}
-          height={80}
+          width={40}
+          height={40}
           alt="Carregando, aguarde ..."
-          className="absolute top-[calc(50%-25px)] left-[calc(50%-40px)]"
+          className="absolute top-[calc(50%-12.5px)] left-[calc(50%-20px)]"
         />
       </div>
       {msg && (
