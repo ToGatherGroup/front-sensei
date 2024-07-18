@@ -49,14 +49,14 @@ const MENU_ITEMS = [
   },
 ];
 
-const USERNAME = "Michel Espada Machado";
+const USERNAME = "Bruno Amado";
 
 export default function Header() {
   //const screenSize = useScreenSize();
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   return (
     <>
-      <header className="fixed w-screen h-20 block bg-winePattern font-sans text-lg">
+      <header className="fixed w-screen h-20 block bg-winePattern font-sans text-lg z-[999999]">
         <nav className="flex items-center justify-start">
           <Link
             href="/"
@@ -82,7 +82,7 @@ export default function Header() {
               showMobileMenu
                 ? "right-0 animate-fade-left"
                 : "animate-fade-right left-full"
-            } animate-duration-75 fixed z-[99999] flex flex-col top-0 lg:right-0 bg-winePatternDark min-h-screen rounded-bl-md px-5 py-10  lg:min-h-0 lg:h-fit lg:static lg:flex-row lg:bg-transparent lg:rounded-none lg:p-0`}
+            } animate-duration-75 fixed z-[99999] flex flex-col top-0 lg:right-0 bg-winePatternDark min-h-screen rounded-bl-md px-5 py-10 lg:min-h-0 lg:h-fit lg:static lg:flex-row lg:bg-transparent lg:rounded-none lg:p-0`}
           >
             {MENU_ITEMS.map((item) => (
               <Link
@@ -126,7 +126,7 @@ export default function Header() {
               />
             </div>
 
-            <div className="lg:hidden text-[#962e2e] text-base mr-4 flex flex-col gap-2 ml-auto p-2 whitespace-nowrap max-w-48 mt-6">
+            <div className="lg:hidden text-[#962e2e] text-base mr-4 flex flex-col gap-2 ml-auto p-2 whitespace-nowrap max-w-44 mt-6">
               <p className="truncate">Olá, {USERNAME}</p>
               <Link href="#" className="m-auto">
                 Sair
@@ -135,12 +135,15 @@ export default function Header() {
           </div>
           <div className="hidden text-[#962e2e] text-base mr-4 lg:flex flex-col gap-2 ml-auto p-2 whitespace-nowrap max-w-48 mt-6 lg:max-w-none lg:mt-0 lg:min-w-[120px]">
             <p className="truncate">Olá, {USERNAME}</p>
-            <Link href="#" className="ml-auto">
+            <Link href="#" className="m-auto">
               Sair
             </Link>
           </div>
         </nav>
       </header>
+
+      {/* Feito para simular que o Header ocupe espaço vertical em tela */}
+      <div className="w-screen h-20"></div>
     </>
   );
 }
