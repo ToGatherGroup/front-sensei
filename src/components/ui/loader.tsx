@@ -7,6 +7,7 @@ type Props = {
 };
 
 const Loader = ({ msg, type = "local", className }: Props) => {
+  
   // type="full-screen"
   if (type === "full-screen") {
     return (
