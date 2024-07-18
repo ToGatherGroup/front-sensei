@@ -43,23 +43,5 @@ const Loader = ({ msg, type = "local", className }: Props) => {
       )}
     </>
   );
-
-  // Local:
-  /* return (
-    <div className={`bg-black rounded-2xl h-fit w-fit m-4 ${className}`}>
-      <Image
-        src="/loader/sensei_loader_transp.gif"
-        width={128}
-        height={128}
-        alt={"Carregando ..."}
-        className="rounded-xl"
-      />
-      {msg && (
-        <p className="relative text-lg inline-block max-w-64 p-4 text-white bg-[rgb(110,10,10)] top-1/2 left-1/2 -translate-x-1/2 text-center rounded-lg">
-          {msg}
-        </p>
-      )}
-    </div>
-  ); */
 };
 export default Loader;
