@@ -57,65 +57,76 @@ function Qualitativos({ id }: Props) {
     // <div className="animate-spin size-10 bg-white relative top-52 left-40 lg:left-56"></div>
     <Loader className="mt-24 lg:mt-48" />
   ) : (
-    <div className="p-2 mt-8">
-      <p
-        className={`decoration-white scale-75 lg:scale-100 underline font-extrabold text-center mb-14`}
-      >
-        <label htmlFor="imc" className="uppercase text-white">
-          imc:{" "}
-        </label>
-        <span className={`${IMC_CORES[imc]} uppercase`}>{imc}</span>
-      </p>
+    <div className="p-2 mt-8 animate-fade-down animate-duration-1000">
+      {imc === "Não Aplicável" ? (
+        <p className=" p-2 mt-12 text-base text-center text-white lg:mt-32">
+          Ainda não existem dados computados para este atleta.
+        </p>
+      ) : (
+        <>
+          <p
+            className={`decoration-white scale-75 lg:scale-100 underline font-extrabold text-center mb-14`}
+          >
+            <label htmlFor="imc" className="uppercase text-white">
+              imc:{" "}
+            </label>
+            <span className={`${IMC_CORES[imc]} uppercase`}>{imc}</span>
+          </p>
 
-      <div className="m-auto w-fit relative [&>label]:text-white [&>label]:uppercase [&>label]:text-xs [&>label]:lg:text-sm [&>label]:font-extrabold [&>label]:text-center [&>label]:absolute [&>label]:z-10 [&>label]:lg:font-extrabold">
-        <ResultBar
-          result={resultados["Classificação Flexões"]}
-          className="scale-90 lg:scale-100 absolute z-20 -top-4 left-7 lg:-top-5 lg:left-16"
-        />
-        <label
-          htmlFor="superiores"
-          className="left-2 top-3 lg:left-10 lg:top-5"
-        >
-          resist.
-          <br />
-          superiores
-        </label>
+          <div className="m-auto w-fit relative [&>label]:text-white [&>label]:uppercase [&>label]:text-xs [&>label]:lg:text-sm [&>label]:font-extrabold [&>label]:text-center [&>label]:absolute [&>label]:z-10 [&>label]:lg:font-extrabold">
+            <ResultBar
+              result={resultados["Classificação Flexões"]}
+              className="scale-90 lg:scale-100 absolute z-20 -top-4 left-7 lg:-top-5 lg:left-16"
+            />
+            <label
+              htmlFor="superiores"
+              className="left-2 top-3 lg:left-10 lg:top-5"
+            >
+              resist.
+              <br />
+              superiores
+            </label>
 
-        <ResultBar
-          result={resultados["Resultado VO2"]}
-          className="box-border absolute z-20 top-1.5 right-7 scale-90 lg:scale-100 lg:top-4 lg:right-[70px]"
-        />
-        <label htmlFor="vo2" className="right-6 top-9 lg:top-14 lg:right-12">
-          vo2
-        </label>
+            <ResultBar
+              result={resultados["Resultado VO2"]}
+              className="box-border absolute z-20 top-1.5 right-7 scale-90 lg:scale-100 lg:top-4 lg:right-[70px]"
+            />
+            <label
+              htmlFor="vo2"
+              className="right-6 top-9 lg:top-14 lg:right-12"
+            >
+              vo2
+            </label>
 
-        <ResultBar
-          result={resultados["Classificação Abdominal"]}
-          className="absolute z-20 bottom-[143px] right-5 scale-90 lg:scale-100 lg:bottom-[222px] lg:right-[58px]"
-        />
-        <label
-          htmlFor="abdominal"
-          className="right-4 top-44 lg:right-12 lg:top-auto lg:bottom-[170px]"
-        >
-          resist. <br />
-          abdominal
-        </label>
+            <ResultBar
+              result={resultados["Classificação Abdominal"]}
+              className="absolute z-20 bottom-[143px] right-5 scale-90 lg:scale-100 lg:bottom-[222px] lg:right-[58px]"
+            />
+            <label
+              htmlFor="abdominal"
+              className="right-4 top-44 lg:right-12 lg:top-auto lg:bottom-[170px]"
+            >
+              resist. <br />
+              abdominal
+            </label>
 
-        <ResultBar
-          result={resultados["Cooper"]}
-          className="absolute z-20 bottom-3 left-6 scale-90 lg:scale-100 lg:bottom-5 lg:left-[70px]"
-        />
-        <label htmlFor="cooper" className="left-7 -bottom-3 lg:left-14">
-          cooper
-        </label>
+            <ResultBar
+              result={resultados["Cooper"]}
+              className="absolute z-20 bottom-3 left-6 scale-90 lg:scale-100 lg:bottom-5 lg:left-[70px]"
+            />
+            <label htmlFor="cooper" className="left-7 -bottom-3 lg:left-14">
+              cooper
+            </label>
 
-        <Image
-          src={"/boneco_qualitativo_540x480.png"}
-          alt="Informações qualitativas"
-          width={screenSize.width < 1024 ? 350 : 540} //Mobile: 350x338
-          height={screenSize.width < 1024 ? 338 : 480}
-        />
-      </div>
+            <Image
+              src={"/boneco_qualitativo_540x480.png"}
+              alt="Informações qualitativas"
+              width={screenSize.width < 1024 ? 350 : 540} //Mobile: 350x338
+              height={screenSize.width < 1024 ? 338 : 480}
+            />
+          </div>
+        </>
+      )}
     </div>
   );
 };
