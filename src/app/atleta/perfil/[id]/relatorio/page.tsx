@@ -21,7 +21,8 @@ interface IExerciciosData {
   cooper: number;
   rmTerra: number;
   forcaIsometricaMaos: string;
-  testeDeLunge: number;
+  testeDeLungeDireito: number;
+  testeDeLungeEsquerdo: number;
   impulsaoVertical: number;
 }
 
@@ -35,10 +36,10 @@ const IExerciciosDataSchema = yup.object().shape({
   altura: yup
     .number()
     .typeError("Valor obrigatório.")
-    .integer("A altura deve ser um número inteiro.")
-    .positive("A altura deve ser um número positivo.")
-    .min(1, "A altura mínima é 1 cm.")
-    .required("Este campo é obrigatório."),
+    .integer()
+    .positive()
+    .min(1)
+    .required(),
   prancha: yup
     .string()
     .transform((_, val) => {
@@ -79,22 +80,22 @@ const IExerciciosDataSchema = yup.object().shape({
   flexoes: yup
     .number()
     .typeError("Valor obrigatório.")
-    .positive("As flexões devem ser um número positivo.")
-    .integer("As flexões devem ser um número inteiro.")
-    .max(999, "Máximo 3 dígitos.")
-    .required("O número de flexões é obrigatório."),
+    .positive()
+    .integer()
+    .max(999)
+    .required(),
   abdominais: yup
     .number()
     .required("O número de abdominais é obrigatório.")
     .typeError("Valor obrigatório.")
     .positive("Os abdominais deve ser um número positivo.")
-    .max(999, "Maximo 3 digitos."),
+    .max(999),
   burpees: yup
     .number()
     .required("O número de burpees é obrigatório.")
     .positive("Os burpees devem ser um número positivo.")
     .typeError("Valor obrigatório.")
-    .max(999, "Maximo 3 digitos."),
+    .max(999),
   cooper: yup
     .number()
     .required("")
@@ -105,6 +106,7 @@ const IExerciciosDataSchema = yup.object().shape({
     .number()
     .typeError("Valor obrigatório.")
     .required("O RM no terra é obrigatório.")
+
     .min(0, "Não são permitidos valores negativos."),
   forcaIsometricaMaos: yup
     .string()
@@ -143,12 +145,18 @@ const IExerciciosDataSchema = yup.object().shape({
     })
     .nullable()
     .required("Valor obrigatório."),
-  testeDeLunge: yup
+  testeDeLungeDireito: yup
     .number()
-    .required("O teste de lunge é obrigatório.")
+    .required("Valor  obrigatório.")
+    .min(0)
+    .max(12, "12 valor máximo")
+    .typeError("Valor obrigatório."),
+  testeDeLungeEsquerdo: yup
+    .number()
+    .required()
     .typeError("Valor obrigatório.")
-    .min(0, "Não são permitidos valores negativos.")
-    .max(12, "Maximo 12 movimentos."),
+    .min(0)
+    .max(12, "12 valor máximo"),
   impulsaoVertical: yup
     .number()
     .typeError("Valor obrigatório.")
@@ -162,14 +170,15 @@ const Relatorio = () => {
   const nome = searchParams.get("nome");
   const id = searchParams.get("id");
 
-  const avaliationUpdate = (data: any): any => {
+  const avaliationUpdate = (data: IExerciciosData): any => {
     return {
       impulsaoVertical: data.impulsaoVertical,
       rmTerra: data.rmTerra,
       prancha: data.prancha,
       forcaIsometricaMaos: data.forcaIsometricaMaos,
       abdominais: data.abdominais,
-      testeDeLunge: data.testeDeLunge,
+      testeDeLungeJoelhoDireito: data.testeDeLungeDireito,
+      testeDeLungeJoelhoEsquerdo: data.testeDeLungeEsquerdo,
       flexoes: data.flexoes,
       burpees: data.burpees,
       cooper: data.cooper,
@@ -217,6 +226,19 @@ const Relatorio = () => {
     return `PT${minutes}M${seconds}S`;
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (
+      !/[0-9]/.test(e.key) &&
+      e.key !== "Backspace" &&
+      e.key !== "ArrowLeft" &&
+      e.key !== "ArrowRight" &&
+      e.key !== "Delete" &&
+      e.key !== "Tab"
+    ) {
+      e.preventDefault();
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -238,7 +260,8 @@ const Relatorio = () => {
           setValue("cooper", exerciciosData.cooper);
           setValue("rmTerra", exerciciosData.rmTerra);
           setValue("forcaIsometricaMaos", exerciciosData.forcaIsometricaMaos);
-          setValue("testeDeLunge", exerciciosData.testeDeLunge);
+          setValue("testeDeLungeEsquerdo", exerciciosData.testeDeLungeEsquerdo);
+          setValue("testeDeLungeDireito", exerciciosData.testeDeLungeDireito);
           setValue("impulsaoVertical", exerciciosData.impulsaoVertical);
         }
       } catch (error) {
@@ -287,7 +310,7 @@ const Relatorio = () => {
           </label>
           <h3>{date && formatDate(date)}</h3>
         </div>
-        <div className="flex items-center justify-center gap-2">
+        <div className="flex items-center justify-center gap-2 pb-5">
           <label
             htmlFor="nome"
             className="inline-block w-14 text-center text-base font-semibold"
@@ -299,6 +322,56 @@ const Relatorio = () => {
 
         <div className="flex items-center justify-center gap-2">
           <form className="exercise-details" onSubmit={handleSubmit(onSubmit)}>
+            {/* Teste de Lunge */}
+            <div className="flex flex-col gap-2 items-end">
+              <div className="flex gap-8 justify-center">
+                <span className="text-right w-16 font-semibold text-xs pt-1 pl-5">
+                  esquerdo
+                </span>
+                <span className="text-left w-16 font-semibold text-xs pt-1 pl-1">
+                  direito
+                </span>
+              </div>
+              <div className="flex items-center ">
+                <label
+                  htmlFor=""
+                  className="inline-block w-42 text-left text-base font-semibold pr-1"
+                >
+                  Teste de Lunge (Joelho):
+                </label>
+                {/* Teste de Lunge Esquerdo */}
+                <div className="flex w-36 gap-2">
+                  <input
+                    type="text"
+                    maxLength={2}
+                    placeholder="cm"
+                    {...register("testeDeLungeEsquerdo")}
+                    className="flex  w-14 rounded text-center "
+                  />
+
+                  {/* Teste de Lunge Direito*/}
+                  <input
+                    type="text"
+                    maxLength={2}
+                    placeholder="cm"
+                    {...register("testeDeLungeDireito")}
+                    className="w-14 rounded text-center "
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="flex py-1">
+              {errors.testeDeLungeEsquerdo && (
+                <span className="text-red-500 ml-2 flex items-center justify-left">
+                  {errors.testeDeLungeEsquerdo.message}
+                </span>
+              )}
+              {errors.testeDeLungeDireito && (
+                <span className="text-red-500 ml-2 flex items-center justify-left">
+                  {errors.testeDeLungeDireito.message}
+                </span>
+              )}
+            </div>
             {/* levantamento Terra */}
             <div className="flex mx-auto my-6 box-border items-center">
               <label
@@ -310,7 +383,9 @@ const Relatorio = () => {
               <input
                 type="text"
                 placeholder="kg"
-                className=" w-32 px-4 rounded"
+                maxLength={3}
+                onKeyDown={handleKeyDown}
+                className=" w-32 px-4 rounded text-center"
                 {...register("rmTerra")}
               />
             </div>
@@ -330,8 +405,10 @@ const Relatorio = () => {
               <input
                 type="text"
                 placeholder="cm"
+                maxLength={3}
+                onKeyDown={handleKeyDown}
                 {...register("impulsaoVertical")}
-                className="w-32 px-4 py-2 rounded"
+                className="w-32 px-4 py-2 rounded text-center"
               />
             </div>
             {errors.impulsaoVertical && (
@@ -356,7 +433,7 @@ const Relatorio = () => {
                     {...field}
                     mask={["\\00{:}00", "00{:}00"]}
                     placeholder="Min  :  Seg"
-                    className=" w-32 px-4 py-2 rounded"
+                    className=" w-32 px-4 py-2 rounded text-center"
                     pattern="\d*"
                     inputMode="numeric"
                   />
@@ -388,7 +465,7 @@ const Relatorio = () => {
                       MM: { mask: IMask.MaskedRange, from: 0, to: 59 },
                       SS: { mask: IMask.MaskedRange, from: 0, to: 59 },
                     }}
-                    className=" w-32 px-4 py-2 rounded"
+                    className=" w-32 px-4 py-2 rounded text-center"
                   />
                 )}
               />
@@ -408,34 +485,15 @@ const Relatorio = () => {
               </label>
               <input
                 type="text"
+                maxLength={3}
                 placeholder="repetições"
                 {...register("abdominais")}
-                className=" w-32 px-4 py-2 rounded"
+                className=" w-32 px-4 py-2 rounded text-center"
               />
             </div>
             {errors.abdominais && (
               <span className="text-red-500 ml-2 flex items-center justify-left">
                 {errors.abdominais.message}
-              </span>
-            )}
-            {/* Teste de Lunge */}
-            <div className="flex mx-auto my-6 box-border items-center">
-              <label
-                htmlFor="testeDeLunge"
-                className="inline-block w-48 text-left text-base font-semibold"
-              >
-                Teste de Lunge:
-              </label>
-              <input
-                type="text"
-                placeholder="cm"
-                {...register("testeDeLunge")}
-                className=" w-32 px-4 py-2 rounded"
-              />
-            </div>
-            {errors.testeDeLunge && (
-              <span className="text-red-500 ml-2 flex items-center justify-left">
-                {errors.testeDeLunge.message}
               </span>
             )}
             {/* Flexões */}
@@ -450,7 +508,8 @@ const Relatorio = () => {
                 type="text"
                 placeholder="repetições"
                 {...register("flexoes")}
-                className=" w-32 px-4 py-2 rounded"
+                className=" w-32 px-4 py-2 rounded text-center"
+                maxLength={3}
               />
             </div>
             {errors.flexoes && (
@@ -470,7 +529,8 @@ const Relatorio = () => {
                 type="text"
                 placeholder="repetições"
                 {...register("burpees")}
-                className=" w-32 px-4 py-2 rounded"
+                className=" w-32 px-4 py-2 rounded text-center"
+                maxLength={3}
               />
             </div>
             {errors.burpees && (
@@ -490,7 +550,8 @@ const Relatorio = () => {
                 type="text"
                 placeholder="metros"
                 {...register("cooper")}
-                className=" w-32 px-4 py-2 rounded"
+                className=" w-32 px-4 py-2 rounded text-center"
+                maxLength={4}
               />
             </div>
             {errors.cooper && (
@@ -510,7 +571,8 @@ const Relatorio = () => {
                 type="text"
                 placeholder="kg"
                 {...register("peso")}
-                className=" w-32 px-4 py-2 rounded"
+                className=" w-32 px-4 py-2 rounded text-center"
+                maxLength={3}
               />
             </div>
             {errors.peso && (
@@ -530,7 +592,8 @@ const Relatorio = () => {
                 type="text"
                 placeholder="cm"
                 {...register("altura")}
-                className=" w-32 px-4 py-2 rounded"
+                className=" w-32 px-4 py-2 rounded text-center"
+                maxLength={3}
               />
             </div>
             {errors.altura && (
@@ -539,12 +602,15 @@ const Relatorio = () => {
               </span>
             )}
             {/* Botões */}
-            <div className="flex justify-between items-center pb-10 ">
-              <Link href="/relatorioAvaliacao">
-                <Button text={"Voltar"} type={"button"} />
-              </Link>
-
-              <Button text={"Salvar"} type={"submit"} />
+            <div className="flex justify-between items-center pb-10 mb-5 pt-7 ">
+              <div>
+                <Link href="/relatorioAvaliacao">
+                  <Button text={"Voltar"} type={"button"} />
+                </Link>
+              </div>
+              <div className="mr-4">
+                <Button text={"Salvar"} type={"submit"} />
+              </div>
             </div>
           </form>
         </div>
