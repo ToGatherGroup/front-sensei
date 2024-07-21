@@ -1,5 +1,6 @@
 import UnderConstruction from "@/components/underConstruction";
 
-export default function Comparison() {
+const Creditos = () => {
   return <UnderConstruction />;
-}
+};
+export default Creditos;
