@@ -1,6 +1,5 @@
 "use client";
 import styles from "./formAtleta.module.css";
-import Loading from "@/components/loading/index";
 import FormTitle from "@/components/title/formTitle/index";
 import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
@@ -9,6 +8,7 @@ import { atletaCreateSchema } from "@/schemas/athleteSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useAthleteProvider } from "@/contexts";
 import Button from "../ui/button";
+import Loader from "../ui/loader";
 
 type Props = {
   atleta?: Atleta | null;
@@ -104,7 +104,7 @@ const FormAtleta = ({ atleta, method }: Props) => {
 
   return (
     <div className={styles.container}>
-      {loading && <Loading />}
+      {loading && <Loader />}
       <div className={styles.content}>
         <div className={styles.title}>
           <FormTitle

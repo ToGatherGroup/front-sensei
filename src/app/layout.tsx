@@ -21,6 +21,7 @@ export default function RootLayout({
           toastOptions={{
             className: "!bg-winePattern !text-white !py-5",
           }}
+          containerStyle={{ top: 100 }}
         />
         {/* Allow react-hot-toast in all application */}
         <Providers>

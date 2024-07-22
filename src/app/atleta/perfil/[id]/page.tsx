@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
+import Qualitativos from "@/components/qualitativos/index";
 
 type Params = {
   id: string;
@@ -216,9 +217,13 @@ const Page = ({ params }: Props) => {
           {/* Seção Botões Começo */}
           {renderButtons()}
           <div className="max-w-full">
-            {qualitativos && <div></div>}
+            {qualitativos && (
+              <div>
+                <Qualitativos id={params.id} />
+              </div>
+            )}
             {frequencia && (
-              <div className="mt-4 lg:mt-32">
+              <div className="mt-4 lg:mt-32 animate-fade-down animate-duration-1000">
                 <Frequency
                   height={screenSize.width > 1024 ? 200 : 100}
                   width={screenSize.width > 1024 ? 200 : 100}
@@ -227,7 +232,7 @@ const Page = ({ params }: Props) => {
               </div>
             )}
             {grafico && (
-              <div className="lg:mt-24">
+              <div className="lg:mt-24 animate-fade-down animate-duration-1000">
                 <ReviewsChart
                   height={screenSize.width > 1024 ? 524 : 256}
                   width={screenSize.width > 1024 ? 524 : 256}
@@ -237,7 +242,7 @@ const Page = ({ params }: Props) => {
             )}
             {lesoes && (
               <div>
-                <div className="flex flex-row items-stretch justify-center mt-4 lg:mt-12 lg:gap-6 -z-50">
+                <div className="flex flex-row items-stretch justify-center mt-4 lg:mt-12 lg:gap-6 -z-50 animate-fade-down animate-duration-1000">
                   <Injuries
                     injuries={injuries}
                     type="front"
@@ -261,7 +266,7 @@ const Page = ({ params }: Props) => {
                     }
                   />
                 </div>
-                <div className="flex mb-2">
+                <div className="flex mb-2 animate-fade-down animate-duration-1000">
                   <Button
                     text={"Adicionar lesão"}
                     type={"button"}
@@ -275,7 +280,7 @@ const Page = ({ params }: Props) => {
                   {(!isLoading && injuriesInfo.length <= 0) && <h3 className="text-sm lg:text-lg font-semibold">O atleta não possui lesão registrada</h3>}
                   {
                     injuriesInfo.map((injuryInfo, index) => (
-                      <p key={index} className="flex leading-7 justify-between inline-block align-text-bottom text-xs lg:text-sm text-wrap text-transform: capitalize">
+                      <p key={index} className="leading-7 justify-between inline-block align-text-bottom text-xs lg:text-sm text-wrap text-transform: capitalize">
                         <span className="font-bold">{dayjs(injuryInfo.date).format('DD/MM/YYYY')}</span>
                         <span className="italic "> {injuryInfo.regiaoLesao}</span>
                         <Tippy hideOnClick={true} content={injuryInfo.description}>
