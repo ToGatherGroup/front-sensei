@@ -1,6 +1,6 @@
 "use client";
 import Button from "@/components/ui/button";
-import Container from "@/components/ui/container";
+import FormContainer from "@/components/ui/formContainer";
 import Title from "@/components/ui/title";
 import { useAssessmentsProvider } from "@/contexts/assessments/assessments";
 import {
@@ -60,7 +60,7 @@ const ResistenciaAnaerobica = () => {
   }
 
   return (
-    <Container>
+    <FormContainer>
       <Title title={"Resistência Anaeróbica"} />
       <Title title={"Burpee"} />
       <form className="mt-12">
@@ -101,7 +101,7 @@ const ResistenciaAnaerobica = () => {
           className="block m-auto mt-20 mb-10"
         />
       </form>
-    </Container>
+    </FormContainer>
   );
 };
 
