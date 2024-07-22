@@ -29,44 +29,63 @@ interface IExerciciosData {
 const IExerciciosDataSchema = yup.object().shape({
   peso: yup
     .number()
+    .positive()
+    .min(1)
     .typeError("Valor obrigatório.")
-    .positive("O peso deve ser um número positivo.")
-    .min(1, "O peso mínimo é 1 kg.")
-    .required("Este campo é obrigatório."),
+    .required(),
   altura: yup
     .number()
-    .typeError("Valor obrigatório.")
     .integer()
     .positive()
     .min(1)
+    .typeError("Valor obrigatório.")
     .required(),
   prancha: yup
     .string()
     .transform((_, val) => {
       if (val === "") return null;
+      if (val.includes(":")) {
+        const [min, sec] = val.split(":");
+        return `${min.padStart(2, "0")}:${sec.padStart(2, "0")}`;
+      }
       return val;
     })
-    .test("time_check", function (timeInput: any) {
-      if (timeInput === null) return true;
+    .test("time_check", "Tempo inserido é inválido.", function (timeInput) {
+      if (!timeInput) {
+        return this.createError({
+          message: "Valor obrigatório.",
+          path: this.path,
+        });
+      }
 
-      let error = false;
-      const [minStr, segStr] = timeInput.split(":");
+      const [minStr, secStr] = timeInput.split(":");
 
-      try {
-        const min = Number(minStr);
-        const seg = Number(segStr);
-
-        if (isNaN(min) || isNaN(seg)) error = true;
-        if (min < 0 || min > 15) error = true;
-        if (seg < 0 || seg >= 60) error = true;
-      } catch (e) {
+      if (minStr === undefined || secStr === undefined) {
         return this.createError({
           message: "Tempo inserido é inválido.",
           path: this.path,
         });
       }
 
-      if (error) {
+      if (minStr.length !== 2 || secStr.length !== 2) {
+        return this.createError({
+          message: "Tempo inserido é inválido.",
+          path: this.path,
+        });
+      }
+
+      const min = Number(minStr);
+      const sec = Number(secStr);
+
+      // Check for NaN
+      if (isNaN(min) || isNaN(sec)) {
+        return this.createError({
+          message: "Tempo inserido é inválido.",
+          path: this.path,
+        });
+      }
+
+      if (min < 0 || min >= 60 || sec < 0 || sec >= 60) {
         return this.createError({
           message: "Tempo inserido é inválido.",
           path: this.path,
@@ -75,66 +94,78 @@ const IExerciciosDataSchema = yup.object().shape({
 
       return true;
     })
-    .nullable()
     .required("Valor obrigatório."),
   flexoes: yup
     .number()
-    .typeError("Valor obrigatório.")
     .positive()
     .integer()
     .max(999)
+    .typeError("Valor obrigatório.")
     .required(),
   abdominais: yup
     .number()
-    .required("O número de abdominais é obrigatório.")
+    .positive()
+    .max(999)
     .typeError("Valor obrigatório.")
-    .positive("Os abdominais deve ser um número positivo.")
-    .max(999),
+    .required(),
   burpees: yup
     .number()
-    .required("O número de burpees é obrigatório.")
-    .positive("Os burpees devem ser um número positivo.")
+    .positive()
+    .max(999)
     .typeError("Valor obrigatório.")
-    .max(999),
+    .required(),
   cooper: yup
     .number()
-    .required("")
-    .min(0, "Não são permitidos valores negativos.")
+    .positive()
+    .max(9999)
     .typeError("Valor obrigatório.")
-    .max(9999, "Maximo 4 digitos."),
-  rmTerra: yup
-    .number()
-    .typeError("Valor obrigatório.")
-    .required("O RM no terra é obrigatório.")
-
-    .min(0, "Não são permitidos valores negativos."),
+    .required(),
+  rmTerra: yup.number().min(0).typeError("Valor obrigatório.").required(),
   forcaIsometricaMaos: yup
     .string()
     .transform((_, val) => {
       if (val === "") return null;
+      if (val.includes(":")) {
+        const [min, sec] = val.split(":");
+        return `${min.padStart(2, "0")}:${sec.padStart(2, "0")}`;
+      }
       return val;
     })
-    .test("time_check", function (timeInput: any) {
-      if (timeInput === null) return true;
+    .test("time_check", "Tempo inserido é inválido.", function (timeInput) {
+      if (!timeInput) {
+        return this.createError({
+          message: "Valor obrigatório.",
+          path: this.path,
+        });
+      }
 
-      let error = false;
-      const [minStr, segStr] = timeInput.split(":");
+      const [minStr, secStr] = timeInput.split(":");
 
-      try {
-        const min = Number(minStr);
-        const seg = Number(segStr);
-
-        if (isNaN(min) || isNaN(seg)) error = true;
-        if (min < 0 || min > 15) error = true;
-        if (seg < 0 || seg >= 60) error = true;
-      } catch (e) {
+      if (minStr === undefined || secStr === undefined) {
         return this.createError({
           message: "Tempo inserido é inválido.",
           path: this.path,
         });
       }
 
-      if (error) {
+      if (minStr.length !== 2 || secStr.length !== 2) {
+        return this.createError({
+          message: "Tempo inserido é inválido.",
+          path: this.path,
+        });
+      }
+
+      const min = Number(minStr);
+      const sec = Number(secStr);
+
+      if (isNaN(min) || isNaN(sec)) {
+        return this.createError({
+          message: "Tempo inserido é inválido.",
+          path: this.path,
+        });
+      }
+
+      if (min < 0 || min >= 60 || sec < 0 || sec >= 60) {
         return this.createError({
           message: "Tempo inserido é inválido.",
           path: this.path,
@@ -143,25 +174,24 @@ const IExerciciosDataSchema = yup.object().shape({
 
       return true;
     })
-    .nullable()
     .required("Valor obrigatório."),
   testeDeLungeDireito: yup
     .number()
-    .required("Valor  obrigatório.")
     .min(0)
     .max(12, "12 valor máximo")
-    .typeError("Valor obrigatório."),
+    .typeError("Valor obrigatório.")
+    .required(),
   testeDeLungeEsquerdo: yup
     .number()
-    .required()
-    .typeError("Valor obrigatório.")
     .min(0)
-    .max(12, "12 valor máximo"),
+    .max(12, "12 valor máximo")
+    .typeError("Valor obrigatório.")
+    .required(),
   impulsaoVertical: yup
     .number()
+    .min(0, "Não são permitidos valores negativos.")
     .typeError("Valor obrigatório.")
-    .required("A impulsão vertical é obrigatória.")
-    .min(0, "Não são permitidos valores negativos."),
+    .required(),
 });
 
 const Relatorio = () => {
@@ -201,6 +231,7 @@ const Relatorio = () => {
     formState: { errors },
   } = useForm<IExerciciosData>({
     resolver: yupResolver(IExerciciosDataSchema),
+    mode: "onBlur",
   });
   const [exercicios, setExercicios] = useState<IExerciciosData | null>(null);
 
@@ -212,11 +243,13 @@ const Relatorio = () => {
   };
 
   const parseDuration = (duration: string) => {
-    const matches = duration.match(/PT(\d+)M(\d+)S/);
+    const matches = duration.match(/PT(?:(\d+)M)?(?:(\d+)S)?/);
     if (matches) {
-      const minutes = parseInt(matches[1], 10);
-      const seconds = parseInt(matches[2], 10);
-      return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+      const minutes = matches[1] ? parseInt(matches[1], 10) : 0;
+      const seconds = matches[2] ? parseInt(matches[2], 10) : 0;
+      return `${minutes.toString().padStart(2, "0")}:${seconds
+        .toString()
+        .padStart(2, "0")}`;
     }
     return duration;
   };
@@ -343,19 +376,21 @@ const Relatorio = () => {
                 <div className="flex w-36 gap-2">
                   <input
                     type="text"
-                    maxLength={2}
                     placeholder="cm"
                     {...register("testeDeLungeEsquerdo")}
                     className="flex  w-14 rounded text-center "
+                    maxLength={2}
+                    onKeyDown={handleKeyDown}
                   />
 
                   {/* Teste de Lunge Direito*/}
                   <input
                     type="text"
-                    maxLength={2}
                     placeholder="cm"
                     {...register("testeDeLungeDireito")}
                     className="w-14 rounded text-center "
+                    maxLength={2}
+                    onKeyDown={handleKeyDown}
                   />
                 </div>
               </div>
@@ -383,10 +418,10 @@ const Relatorio = () => {
               <input
                 type="text"
                 placeholder="kg"
+                {...register("rmTerra")}
+                className=" w-32 px-4 rounded text-center"
                 maxLength={3}
                 onKeyDown={handleKeyDown}
-                className=" w-32 px-4 rounded text-center"
-                {...register("rmTerra")}
               />
             </div>
             {errors.rmTerra && (
@@ -405,10 +440,10 @@ const Relatorio = () => {
               <input
                 type="text"
                 placeholder="cm"
-                maxLength={3}
-                onKeyDown={handleKeyDown}
                 {...register("impulsaoVertical")}
                 className="w-32 px-4 py-2 rounded text-center"
+                maxLength={3}
+                onKeyDown={handleKeyDown}
               />
             </div>
             {errors.impulsaoVertical && (
@@ -425,17 +460,24 @@ const Relatorio = () => {
                 Prancha:
               </label>
               <Controller
-                name="prancha"
                 control={control}
+                name="prancha"
                 render={({ field }) => (
                   <IMaskInput
-                    type="text"
                     {...field}
-                    mask={["\\00{:}00", "00{:}00"]}
+                    mask="00:00"
+                    definitions={{
+                      "#": /[0-9]/,
+                    }}
+                    onKeyDown={handleKeyDown}
+                    unmask={true}
+                    blocks={{
+                      MM: { mask: IMask.MaskedRange, from: 0, to: 59 },
+                      SS: { mask: IMask.MaskedRange, from: 0, to: 59 },
+                    }}
                     placeholder="Min  :  Seg"
                     className=" w-32 px-4 py-2 rounded text-center"
-                    pattern="\d*"
-                    inputMode="numeric"
+                    minLength={4}
                   />
                 )}
               />
@@ -459,13 +501,19 @@ const Relatorio = () => {
                 render={({ field }) => (
                   <IMaskInput
                     {...field}
-                    mask={["\\00{:}00", "00{:}00"]}
-                    placeholder="Min  :  Seg"
+                    mask="00:00"
+                    definitions={{
+                      "#": /[0-9]/,
+                    }}
+                    onKeyDown={handleKeyDown}
+                    unmask={true}
                     blocks={{
                       MM: { mask: IMask.MaskedRange, from: 0, to: 59 },
                       SS: { mask: IMask.MaskedRange, from: 0, to: 59 },
                     }}
+                    placeholder="Min  :  Seg"
                     className=" w-32 px-4 py-2 rounded text-center"
+                    minLength={4}
                   />
                 )}
               />
@@ -485,10 +533,11 @@ const Relatorio = () => {
               </label>
               <input
                 type="text"
-                maxLength={3}
                 placeholder="repetições"
                 {...register("abdominais")}
                 className=" w-32 px-4 py-2 rounded text-center"
+                maxLength={3}
+                onKeyDown={handleKeyDown}
               />
             </div>
             {errors.abdominais && (
@@ -510,6 +559,7 @@ const Relatorio = () => {
                 {...register("flexoes")}
                 className=" w-32 px-4 py-2 rounded text-center"
                 maxLength={3}
+                onKeyDown={handleKeyDown}
               />
             </div>
             {errors.flexoes && (
@@ -531,6 +581,7 @@ const Relatorio = () => {
                 {...register("burpees")}
                 className=" w-32 px-4 py-2 rounded text-center"
                 maxLength={3}
+                onKeyDown={handleKeyDown}
               />
             </div>
             {errors.burpees && (
@@ -552,6 +603,7 @@ const Relatorio = () => {
                 {...register("cooper")}
                 className=" w-32 px-4 py-2 rounded text-center"
                 maxLength={4}
+                onKeyDown={handleKeyDown}
               />
             </div>
             {errors.cooper && (
@@ -573,6 +625,7 @@ const Relatorio = () => {
                 {...register("peso")}
                 className=" w-32 px-4 py-2 rounded text-center"
                 maxLength={3}
+                onKeyDown={handleKeyDown}
               />
             </div>
             {errors.peso && (
@@ -594,6 +647,7 @@ const Relatorio = () => {
                 {...register("altura")}
                 className=" w-32 px-4 py-2 rounded text-center"
                 maxLength={3}
+                onKeyDown={handleKeyDown}
               />
             </div>
             {errors.altura && (
