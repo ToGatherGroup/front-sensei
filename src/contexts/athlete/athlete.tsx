@@ -71,7 +71,6 @@ export const AthleteProvider = ({
   useEffect(() => {
     setError("");
     setSuccess("");
-    fetchAthletes();
   }, []);
 
   const fetchAthletes = async () => {
@@ -153,9 +152,12 @@ export const AthleteProvider = ({
         const injuriesInfo = response.data.map((injury: any) => ({
           date: injury.data,
           description: `${injury.descricao}`,
-          regiaoLesao: `${bodyPartToOutput(injury.regiaoLesao)}`
+          regiaoLesao: `${bodyPartToOutput(injury.regiaoLesao)}`,
         }));
-        injuriesInfo.sort((a: { date: string }, b: { date: string }) => new Date(a.date).getTime() - new Date(b.date).getTime());
+        injuriesInfo.sort(
+          (a: { date: string }, b: { date: string }) =>
+            new Date(a.date).getTime() - new Date(b.date).getTime()
+        );
         const injuries = response.data.map((injury: any) => injury.regiaoLesao);
         setInjuries(injuries);
         setInjuriesInfo(injuriesInfo);
