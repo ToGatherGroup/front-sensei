@@ -14,7 +14,7 @@ const MENU_ITEMS = [
   },
   {
     title: "Chamada",
-    linkSrc: "/athletes",
+    linkSrc: "/chamada",
     imgSrc: "/header_icons/chamada.png",
     imgW: 20,
     imgH: 20,
