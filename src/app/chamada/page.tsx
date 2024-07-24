@@ -7,6 +7,7 @@ import Title from "@/components/ui/title";
 import { useApiProvider } from "@/contexts";
 import { chamadaSchema } from "@/schemas/chamadaSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
+import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
@@ -19,6 +20,7 @@ type Atleta = {
 const Chamada = () => {
   const router = useRouter();
   const api = useApiProvider();
+  const [fetched, setFetched] = useState(false);
 
   const { handleSubmit, control, register } = useForm({
     mode: "onBlur",
@@ -37,7 +39,9 @@ const Chamada = () => {
       })
       ?.then(({ data }) => {
         const atletas: Array<Atleta> = data;
+
         atletas.forEach((atleta) => {
+          /* MOCK.forEach((atleta) => { */
           append(
             {
               atletaNome: atleta.nome,
@@ -47,7 +51,8 @@ const Chamada = () => {
             { shouldFocus: false }
           );
         });
-      });
+      })
+      .finally(() => setFetched(true));
   }, []);
 
   type FormData = Array<{
@@ -61,7 +66,6 @@ const Chamada = () => {
       .filter((atleta) => atleta.value == true)
       .map((atleta) => atleta.atletaId);
 
-    console.log("ids:", ids);
     if (!ids) return;
 
     api.post("/atleta/chamada", ids)?.then(() => router.push("/"));
@@ -69,13 +73,20 @@ const Chamada = () => {
 
   return (
     <FormContainer>
-      <Title title="Lista de Chamada" iconSrc="/icons/person_24x24_wine.png" />
+      <Title title="Lista de Chamada" iconSrc="/icons/chamada_24x24.png" />
+      <h2 className="text-center -mt-10 mb-12 text-lg font-bold text-winePatternLight">
+        {dayjs().format("DD/MM/YYYY")}
+      </h2>
       <>
-        {fields.length > 0 ? (
+        {!fetched ? (
+          <Loader />
+        ) : fields.length <= 0 ? (
+          <p className="text-center">A chamada de hoje já foi realizada.</p>
+        ) : (
           fields?.map((atleta, index) => (
             <label
               htmlFor={`atletaCheckbox.${index}.value` as const}
-              className="m-auto flex items-center justify-center w-80 my-2"
+              className="m-auto flex items-center justify-center max-w-80 my-2"
               key={atleta.id}
             >
               <input
@@ -84,21 +95,22 @@ const Chamada = () => {
                 type="checkbox"
                 className="sr-only peer"
               />
-              <span className="bg-gray-200 cursor-pointer inline-block w-full text-lg text-center capitalize peer-checked:text-white peer-checked:bg-winePatternLight hover:outline hover:outline-winePatternLight py-2 px-4 rounded">
+              <span className="bg-gray-200 cursor-pointer inline-block w-full text-lg text-center capitalize peer-checked:text-white peer-checked:bg-winePatternLight sm:hover:outline sm:hover:outline-winePatternLight py-2 px-4 rounded">
                 {atleta.atletaNome}
               </span>
             </label>
           ))
-        ) : (
-          <Loader />
+        )}
+
+        {fetched && fields.length > 0 && (
+          <Button
+            text="Finalizar Chamada"
+            type="submit"
+            className="block mx-auto mt-12"
+            onClick={handleSubmit(submit)}
+          />
         )}
       </>
-      <Button
-        text="Finalizar Chamada"
-        type="submit"
-        className="block mx-auto mt-12"
-        onClick={handleSubmit(submit)}
-      />
     </FormContainer>
   );
 };
