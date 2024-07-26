@@ -4,7 +4,6 @@ import { useForm, Controller } from "react-hook-form";
 import Link from "next/link";
 import Image from "next/image";
 import { useApiProvider } from "@/contexts";
-import Button from "@/components/ui/button";
 import FormTitle from "@/components/title/formTitle";
 import download from "../../../public/icons/download.png";
 import edt from "../../../public/icons/edt.png";
@@ -131,11 +130,10 @@ const RelatorioAvaliacao = () => {
                     </button>
                     <Link
                       href={{
-                        pathname: `/atleta/perfil/${athlete.id}/relatorio`,
+                        pathname: `/atleta/perfil/${athlete.id}/editar/avaliacao`,
                         query: {
                           data: selectedDate,
                           nome: athlete.nome,
-                          id: athlete.id,
                         },
                       }}
                       passHref
@@ -167,11 +165,6 @@ const RelatorioAvaliacao = () => {
             </p>
           </div>
         )}
-      </div>
-      <div className="flex justify-center items-center pb-10">
-        <Link href="/menu">
-          <Button text={"Voltar"} type={"button"} className="mx-auto" />
-        </Link>
       </div>
     </section>
   );

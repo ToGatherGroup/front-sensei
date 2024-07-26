@@ -196,11 +196,12 @@ const IExerciciosDataSchema = yup.object().shape({
 
 const Relatorio = () => {
   const searchParams = useSearchParams();
-  const date = searchParams.get("data");
+  const date = searchParams.get("data") || "";
+  console.log(date);
   const nome = searchParams.get("nome");
   const id = searchParams.get("id");
 
-  const avaliationUpdate = (data: IExerciciosData): any => {
+  const assessmentUpdate = (data: IExerciciosData): any => {
     return {
       impulsaoVertical: data.impulsaoVertical,
       rmTerra: data.rmTerra,
@@ -312,7 +313,7 @@ const Relatorio = () => {
         forcaIsometricaMaos: convertToPTFormat(data.forcaIsometricaMaos),
       };
 
-      const response = await put("avaliacao", avaliationUpdate(formattedData));
+      const response = await put("avaliacao", assessmentUpdate(formattedData));
       if (response?.status !== 202) {
         throw new Error("Erro ao atualizar avaliação");
       }
@@ -321,7 +322,7 @@ const Relatorio = () => {
       // console.log(date);
       console.log(
         "Envio deDados do Formatado para Api:",
-        avaliationUpdate(formattedData)
+        assessmentUpdate(formattedData)
       );
     } catch (err) {
       console.error("Erro ao submeter formulário:", err);
@@ -334,18 +335,10 @@ const Relatorio = () => {
         <div className="flex justify-center items-end pb-16 pt-16">
           <FormTitle title="Editar Avaliação" iconSrc="/icons/report.png" />
         </div>
+
         <div className="flex items-center justify-center gap-2">
           <label
             htmlFor="data"
-            className="inline-block w-14 text-center text-base font-semibold"
-          >
-            Data
-          </label>
-          <h3>{date && formatDate(date)}</h3>
-        </div>
-        <div className="flex items-center justify-center gap-2 pb-5">
-          <label
-            htmlFor="nome"
             className="inline-block w-14 text-center text-base font-semibold"
           >
             Atleta
@@ -355,6 +348,15 @@ const Relatorio = () => {
 
         <div className="flex items-center justify-center gap-2">
           <form className="exercise-details" onSubmit={handleSubmit(onSubmit)}>
+            <div className="flex items-center justify-center gap-2 pb-5">
+              <label
+                htmlFor="nome"
+                className="inline-block w-14 text-center text-base font-semibold"
+              >
+                Data
+              </label>
+              <input type="date" id="data" value={date} readOnly />
+            </div>
             {/* Teste de Lunge */}
             <div className="flex flex-col gap-2 items-end">
               <div className="flex gap-8 justify-center">
