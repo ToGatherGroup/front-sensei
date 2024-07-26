@@ -99,7 +99,7 @@ const EvaluationForm = ({ id, method }: Props) => {
     const [minutes, seconds] = time.split(":").map(Number);
     return `PT${minutes}M${seconds}S`;
   };
-  // padrão -> bloquear caracteres
+  // padrão -> bloquear caracteres Desktop
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (
       !/[0-9]/.test(e.key) &&
@@ -111,6 +111,11 @@ const EvaluationForm = ({ id, method }: Props) => {
     ) {
       e.preventDefault();
     }
+  };
+  // padrão -> bloquear caracteres Mobile
+  const handleInput = (e: React.FormEvent<HTMLInputElement>) => {
+    const target = e.target as HTMLInputElement;
+    target.value = target.value.replace(/[^0-9]/g, "");
   };
 
   //buscar dados para editar avaliação
@@ -173,6 +178,8 @@ const EvaluationForm = ({ id, method }: Props) => {
         throw new Error("Erro ao atualizar avaliação");
       }
       console.log("Envio de Dados do Formulário:", formattedData);
+      // console.log(id);
+      // console.log(date);
       console.log(
         "Envio de Dados Formatado para API:",
         evaluationUpdate(formattedData)
@@ -276,6 +283,7 @@ const EvaluationForm = ({ id, method }: Props) => {
                 className="flex  w-14 rounded text-center "
                 maxLength={2}
                 onKeyDown={handleKeyDown}
+                onInput={handleInput}
               />
 
               {/* Teste de Lunge Direito*/}
@@ -286,6 +294,7 @@ const EvaluationForm = ({ id, method }: Props) => {
                 className="w-14 rounded text-center "
                 maxLength={2}
                 onKeyDown={handleKeyDown}
+                onInput={handleInput}
               />
             </div>
           </div>
@@ -317,6 +326,7 @@ const EvaluationForm = ({ id, method }: Props) => {
             className=" w-32 px-4 rounded text-center"
             maxLength={3}
             onKeyDown={handleKeyDown}
+            onInput={handleInput}
           />
         </div>
         {errors.rmTerra && (
@@ -339,6 +349,7 @@ const EvaluationForm = ({ id, method }: Props) => {
             className="w-32 px-4 py-2 rounded text-center"
             maxLength={3}
             onKeyDown={handleKeyDown}
+            onInput={handleInput}
           />
         </div>
         {errors.impulsaoVertical && (
@@ -365,6 +376,7 @@ const EvaluationForm = ({ id, method }: Props) => {
                   "#": /[0-9]/,
                 }}
                 onKeyDown={handleKeyDown}
+                onInput={handleInput}
                 unmask={true}
                 blocks={{
                   MM: { mask: IMask.MaskedRange, from: 0, to: 59 },
@@ -401,6 +413,7 @@ const EvaluationForm = ({ id, method }: Props) => {
                   "#": /[0-9]/,
                 }}
                 onKeyDown={handleKeyDown}
+                onInput={handleInput}
                 unmask={true}
                 blocks={{
                   MM: { mask: IMask.MaskedRange, from: 0, to: 59 },
@@ -433,6 +446,7 @@ const EvaluationForm = ({ id, method }: Props) => {
             className=" w-32 px-4 py-2 rounded text-center"
             maxLength={3}
             onKeyDown={handleKeyDown}
+            onInput={handleInput}
           />
         </div>
         {errors.abdominais && (
@@ -455,6 +469,7 @@ const EvaluationForm = ({ id, method }: Props) => {
             className=" w-32 px-4 py-2 rounded text-center"
             maxLength={3}
             onKeyDown={handleKeyDown}
+            onInput={handleInput}
           />
         </div>
         {errors.flexoes && (
@@ -477,6 +492,7 @@ const EvaluationForm = ({ id, method }: Props) => {
             className=" w-32 px-4 py-2 rounded text-center"
             maxLength={3}
             onKeyDown={handleKeyDown}
+            onInput={handleInput}
           />
         </div>
         {errors.burpees && (
@@ -499,6 +515,7 @@ const EvaluationForm = ({ id, method }: Props) => {
             className=" w-32 px-4 py-2 rounded text-center"
             maxLength={4}
             onKeyDown={handleKeyDown}
+            onInput={handleInput}
           />
         </div>
         {errors.cooper && (
@@ -521,6 +538,7 @@ const EvaluationForm = ({ id, method }: Props) => {
             className=" w-32 px-4 py-2 rounded text-center"
             maxLength={3}
             onKeyDown={handleKeyDown}
+            onInput={handleInput}
           />
         </div>
         {errors.peso && (
@@ -543,6 +561,7 @@ const EvaluationForm = ({ id, method }: Props) => {
             className=" w-32 px-4 py-2 rounded text-center"
             maxLength={3}
             onKeyDown={handleKeyDown}
+            onInput={handleInput}
           />
         </div>
         {errors.altura && (
