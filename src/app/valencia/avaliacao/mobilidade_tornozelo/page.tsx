@@ -38,8 +38,8 @@ const MobilidadeTornozelo = () => {
           {
             atletaId: assessment.atletaId,
             atletaNome: assessment.atletaNome,
-            esquerdo: assessment.exercicios.testeDeLungeEsquerdo ?? "",
-            direito: assessment.exercicios.testeDeLungeDireito ?? "",
+            esquerdo: assessment.exercicios.testeDeLungeJoelhoEsquerdo ?? "",
+            direito: assessment.exercicios.testeDeLungeJoelhoDireito ?? "",
           },
           { shouldFocus: false }
         );
@@ -51,8 +51,8 @@ const MobilidadeTornozelo = () => {
       return {
         atletaId: atleta.atletaId,
         resultado: {
-          testeDeLungeEsquerdo: atleta.esquerdo,
-          testeDeLungeDireito: atleta.direito,
+          testeDeLungeJoelhoEsquerdo: atleta.esquerdo,
+          testeDeLungeJoelhoDireito: atleta.direito,
         },
       };
     });

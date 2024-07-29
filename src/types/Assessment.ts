@@ -38,8 +38,8 @@ export type IncompleteAssessmentsAPI = {
     cooper: number;
     rmTerra: number;
     forcaIsometricaMaos: Time;
-    testeDeLungeEsquerdo: number;
-    testeDeLungeDireito: number;
+    testeDeLungeJoelhoEsquerdo: number;
+    testeDeLungeJoelhoDireito: number;
     impulsaoVertical: number;
   };
 };

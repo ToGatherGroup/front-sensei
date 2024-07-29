@@ -39,7 +39,7 @@ const EXERCICIOS = {
     },
     {
       title: "Mobilidade do Tornozelo",
-      exerciseName: "testeDeLungeEsquerdo", // e testeDeLungeDireito
+      exerciseName: "testeDeLungeJoelhoEsquerdo", // e testeDeLungeJoelhoDireito
       exercisePath: "avaliacao/mobilidade_tornozelo",
       nestedExercise: null,
     },
