@@ -27,8 +27,8 @@ const EvaluationForm = ({ id, method }: Props) => {
       prancha: data.prancha,
       forcaIsometricaMaos: data.forcaIsometricaMaos,
       abdominais: data.abdominais,
-      testeDeLungeJoelhoDireito: data.testeDeLungeDireito,
-      testeDeLungeJoelhoEsquerdo: data.testeDeLungeEsquerdo,
+      testeDeLungeJoelhoDireito: data.testeDeLungeJoelhoDireito,
+      testeDeLungeJoelhoEsquerdo: data.testeDeLungeJoelhoEsquerdo,
       flexoes: data.flexoes,
       burpees: data.burpees,
       cooper: data.cooper,
@@ -51,8 +51,8 @@ const EvaluationForm = ({ id, method }: Props) => {
       prancha: data.prancha,
       forcaIsometricaMaos: data.forcaIsometricaMaos,
       abdominais: data.abdominais,
-      testeDeLungeJoelhoDireito: data.testeDeLungeDireito,
-      testeDeLungeJoelhoEsquerdo: data.testeDeLungeEsquerdo,
+      testeDeLungeJoelhoDireito: data.testeDeLungeJoelhoDireito,
+      testeDeLungeJoelhoEsquerdo: data.testeDeLungeJoelhoEsquerdo,
       flexoes: data.flexoes,
       burpees: data.burpees,
       cooper: data.cooper,
@@ -118,6 +118,59 @@ const EvaluationForm = ({ id, method }: Props) => {
     target.value = target.value.replace(/[^0-9]/g, "");
   };
 
+  // valores até 12 desktop
+  const handleKeyDownLounge = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const input = e.currentTarget;
+    const value = input.value;
+
+    // Permitir teclas de controle
+    if (
+      !/[0-9]/.test(e.key) &&
+      e.key !== "Backspace" &&
+      e.key !== "ArrowLeft" &&
+      e.key !== "ArrowRight" &&
+      e.key !== "Delete" &&
+      e.key !== "Tab"
+    ) {
+      e.preventDefault();
+    } else {
+      const newValue = value + e.key;
+      const parsedValue = parseInt(newValue);
+
+      // Verificar se o valor resultante está dentro do intervalo permitido
+      if (
+        parsedValue > 12 ||
+        (value === "1" &&
+          e.key !== "Backspace" &&
+          e.key !== "ArrowLeft" &&
+          e.key !== "ArrowRight" &&
+          e.key !== "Delete" &&
+          e.key !== "Tab" &&
+          newValue.length > 2)
+      ) {
+        e.preventDefault();
+      }
+    }
+  };
+
+  // valores até 12 mobile
+  const handleInputLounge = (e: React.FormEvent<HTMLInputElement>) => {
+    const input = e.currentTarget;
+    let value = input.value;
+
+    // Remove caracteres não numéricos
+    value = value.replace(/[^0-9]/g, "");
+
+    // Limita o valor a 12
+    if (value.length > 0 && parseInt(value) > 12) {
+      value = value.slice(0, -1);
+    }
+
+    input.value = value;
+  };
+
+  //valores até 12 mobile
+
   //buscar dados para editar avaliação
   useEffect(() => {
     const fetchData = async () => {
@@ -146,12 +199,12 @@ const EvaluationForm = ({ id, method }: Props) => {
                 exerciciosData.forcaIsometricaMaos
               );
               setValue(
-                "testeDeLungeEsquerdo",
-                exerciciosData.testeDeLungeEsquerdo
+                "testeDeLungeJoelhoEsquerdo",
+                exerciciosData.testeDeLungeJoelhoEsquerdo
               );
               setValue(
-                "testeDeLungeDireito",
-                exerciciosData.testeDeLungeDireito
+                "testeDeLungeJoelhoDireito",
+                exerciciosData.testeDeLungeJoelhoDireito
               );
               setValue("impulsaoVertical", exerciciosData.impulsaoVertical);
             }
@@ -279,35 +332,39 @@ const EvaluationForm = ({ id, method }: Props) => {
               <input
                 type="text"
                 placeholder="cm"
-                {...register("testeDeLungeEsquerdo")}
+                {...register("testeDeLungeJoelhoEsquerdo")}
                 className="flex  w-14 rounded text-center "
                 maxLength={2}
-                onKeyDown={handleKeyDown}
-                onInput={handleInput}
+                // onKeyDown={handleKeyDown}
+                onKeyDown={handleKeyDownLounge}
+                // onInput={handleInput}
+                onInput={handleInputLounge}
               />
 
               {/* Teste de Lunge Direito*/}
               <input
                 type="text"
                 placeholder="cm"
-                {...register("testeDeLungeDireito")}
+                {...register("testeDeLungeJoelhoDireito")}
                 className="w-14 rounded text-center "
                 maxLength={2}
-                onKeyDown={handleKeyDown}
-                onInput={handleInput}
+                // onKeyDown={handleKeyDown}
+                onKeyDown={handleKeyDownLounge}
+                // onInput={handleInput}
+                onInput={handleInputLounge}
               />
             </div>
           </div>
         </div>
         <div className="flex py-1">
-          {errors.testeDeLungeEsquerdo && (
+          {errors.testeDeLungeJoelhoEsquerdo && (
             <span className="text-red-500 ml-2 flex items-center justify-left">
-              {errors.testeDeLungeEsquerdo.message}
+              {errors.testeDeLungeJoelhoEsquerdo.message}
             </span>
           )}
-          {errors.testeDeLungeDireito && (
+          {errors.testeDeLungeJoelhoDireito && (
             <span className="text-red-500 ml-2 flex items-center justify-left">
-              {errors.testeDeLungeDireito.message}
+              {errors.testeDeLungeJoelhoDireito.message}
             </span>
           )}
         </div>

@@ -9,7 +9,7 @@ export interface IEvaluationData {
   cooper: number;
   rmTerra: number;
   forcaIsometricaMaos: string;
-  testeDeLungeDireito: number;
-  testeDeLungeEsquerdo: number;
+  testeDeLungeJoelhoDireito: number;
+  testeDeLungeJoelhoEsquerdo: number;
   impulsaoVertical: number;
 }

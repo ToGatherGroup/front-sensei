@@ -23,7 +23,6 @@ export const IEvaluationDataSchema = yup.object().shape({
       }
     )
     .typeError("Valor obrigatório"),
-
   peso: yup
     .number()
     .positive()
@@ -172,13 +171,14 @@ export const IEvaluationDataSchema = yup.object().shape({
       return true;
     })
     .required("Valor obrigatório."),
-  testeDeLungeDireito: yup
+  testeDeLungeJoelhoDireito: yup
     .number()
+
     .min(0)
     .max(12, "12 valor máximo")
     .typeError("Valor obrigatório.")
     .required(),
-  testeDeLungeEsquerdo: yup
+  testeDeLungeJoelhoEsquerdo: yup
     .number()
     .min(0)
     .max(12, "12 valor máximo")

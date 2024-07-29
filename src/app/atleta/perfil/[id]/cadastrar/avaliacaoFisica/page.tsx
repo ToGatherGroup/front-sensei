@@ -21,12 +21,12 @@ const Evaluation = ({ params: { id } }: Props) => {
           />
         </div>
 
-        <div className="flex items-center justify-center">
+        {/* <div className="flex items-center justify-center">
           <label className="inline-block w-20 text-left text-base font-semibold">
             Atleta
           </label>
           <h3 className="inline-block w-24 text-left">nome</h3>
-        </div>
+        </div> */}
       </div>
       <EvaluationForm method={"POST"} id={id} />
     </section>
