@@ -9,6 +9,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import "./styles.css";
 import { IEvaluationData, Time } from "@/types/Evaluation";
 import { IEvaluationDataSchema } from "@/schemas/evaluationSchema";
+import Link from "next/link";
 
 type Props = {
   method: "POST" | "PUT";
@@ -274,6 +275,7 @@ const EvaluationForm = ({ id, method }: Props) => {
       case "PUT":
         // console.log("clicado Alterar");
         await updateData(data);
+
         break;
       case "POST":
         // console.log("clicado Cadastrar");
@@ -425,9 +427,13 @@ const EvaluationForm = ({ id, method }: Props) => {
           <Controller
             control={control}
             name="prancha"
-            render={({ field }) => (
+            render={({ field: { ref, onChange, onBlur, value } }) => (
               <IMaskInput
-                {...field}
+                // {...field}
+                inputRef={ref}
+                value={value}
+                onAccept={onChange}
+                onBlur={onBlur}
                 type="text" // iMask não suporta o tipo 'number'
                 mask={["\\00{:}00", "00{:}00"]}
                 placeholder="Min  :  Seg"
@@ -454,9 +460,13 @@ const EvaluationForm = ({ id, method }: Props) => {
           <Controller
             name="forcaIsometricaMaos"
             control={control}
-            render={({ field }) => (
+            render={({ field: { ref, onChange, onBlur, value } }) => (
               <IMaskInput
-                {...field}
+                // {...field}
+                inputRef={ref}
+                value={value}
+                onAccept={onChange}
+                onBlur={onBlur}
                 type="text" // iMask não suporta o tipo 'number'
                 mask={["\\00{:}00", "00{:}00"]}
                 placeholder="Min  :  Seg"
@@ -613,10 +623,13 @@ const EvaluationForm = ({ id, method }: Props) => {
         {/* Botões */}
         <div className="flex justify-between items-center pb-10 mb-5 pt-7 ">
           <div className="mx-auto">
-            <Button
-              type={"submit"}
-              text={method === "PUT" ? "Alterar" : "Cadastrar"}
-            />
+            {method === "PUT" ? (
+              <Link href={"/relatorioAvaliacao"}>
+                <Button type={"submit"} text={"Alterar"} />
+              </Link>
+            ) : (
+              <Button type={"submit"} text={"Cadastrar"} />
+            )}
           </div>
         </div>
       </form>
