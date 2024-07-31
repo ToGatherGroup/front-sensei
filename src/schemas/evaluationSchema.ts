@@ -40,57 +40,41 @@ export const IEvaluationDataSchema = yup.object().shape({
     .string()
     .transform((_, val) => {
       if (val === "") return null;
-      if (val.includes(":")) {
-        const [min, sec] = val.split(":");
-        return `${min.padStart(2, "0")}:${sec.padStart(2, "0")}`;
-      }
       return val;
     })
-    .test("time_check", "Tempo inserido é inválido.", function (timeInput) {
-      if (!timeInput) {
-        return this.createError({
-          message: "Valor obrigatório.",
-          path: this.path,
-        });
-      }
+    .matches(/^\d{2}:\d{2}$/, "Tempo inserido é inválido.")
+    .test("time_check", function (timeInput) {
+      if (timeInput == null) return true;
 
-      const [minStr, secStr] = timeInput.split(":");
+      let error = false;
 
-      if (minStr === undefined || secStr === undefined) {
-        return this.createError({
-          message: "Tempo inserido é inválido.",
-          path: this.path,
-        });
-      }
+      const [minStr, segStr] = timeInput.split(":");
+      try {
+        const min = Number(minStr);
+        const seg = Number(segStr);
+        if (isNaN(min) || isNaN(seg)) error = true;
 
-      if (minStr.length !== 2 || secStr.length !== 2) {
+        if (min < 0 || min >= 60) error = true;
+
+        if (seg < 0 || seg >= 60) error = true;
+      } catch (e) {
         return this.createError({
           message: "Tempo inserido é inválido.",
           path: this.path,
         });
       }
 
-      const min = Number(minStr);
-      const sec = Number(secStr);
-
-      // Check for NaN
-      if (isNaN(min) || isNaN(sec)) {
+      if (error)
         return this.createError({
           message: "Tempo inserido é inválido.",
           path: this.path,
         });
-      }
-
-      if (min < 0 || min >= 60 || sec < 0 || sec >= 60) {
-        return this.createError({
-          message: "Tempo inserido é inválido.",
-          path: this.path,
-        });
-      }
 
       return true;
     })
-    .required("Valor obrigatório."),
+    .nullable()
+    .required("Valor obrigatório.")
+    .typeError("Verifique se inseriu corretamente o tempo"),
   flexoes: yup
     .number()
     .positive()
@@ -121,59 +105,43 @@ export const IEvaluationDataSchema = yup.object().shape({
     .string()
     .transform((_, val) => {
       if (val === "") return null;
-      if (val.includes(":")) {
-        const [min, sec] = val.split(":");
-        return `${min.padStart(2, "0")}:${sec.padStart(2, "0")}`;
-      }
       return val;
     })
-    .test("time_check", "Tempo inserido é inválido.", function (timeInput) {
-      if (!timeInput) {
-        return this.createError({
-          message: "Valor obrigatório.",
-          path: this.path,
-        });
-      }
+    .matches(/^\d{2}:\d{2}$/, "Tempo inserido é inválido.")
+    .test("time_check", function (timeInput) {
+      if (timeInput == null) return true;
 
-      const [minStr, secStr] = timeInput.split(":");
+      let error = false;
 
-      if (minStr === undefined || secStr === undefined) {
-        return this.createError({
-          message: "Tempo inserido é inválido.",
-          path: this.path,
-        });
-      }
+      const [minStr, segStr] = timeInput.split(":");
+      try {
+        const min = Number(minStr);
+        const seg = Number(segStr);
+        if (isNaN(min) || isNaN(seg)) error = true;
 
-      if (minStr.length !== 2 || secStr.length !== 2) {
+        if (min < 0 || min >= 60) error = true;
+
+        if (seg < 0 || seg >= 60) error = true;
+      } catch (e) {
         return this.createError({
           message: "Tempo inserido é inválido.",
           path: this.path,
         });
       }
 
-      const min = Number(minStr);
-      const sec = Number(secStr);
-
-      if (isNaN(min) || isNaN(sec)) {
+      if (error)
         return this.createError({
           message: "Tempo inserido é inválido.",
           path: this.path,
         });
-      }
-
-      if (min < 0 || min >= 60 || sec < 0 || sec >= 60) {
-        return this.createError({
-          message: "Tempo inserido é inválido.",
-          path: this.path,
-        });
-      }
 
       return true;
     })
-    .required("Valor obrigatório."),
+    .nullable()
+    .required("Valor obrigatório.")
+    .typeError("Verifique se inseriu corretamente o tempo"),
   testeDeLungeJoelhoDireito: yup
     .number()
-
     .min(0)
     .max(12, "12 valor máximo")
     .typeError("Valor obrigatório.")

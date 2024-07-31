@@ -1,13 +1,13 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { useForm, Controller } from "react-hook-form";
-import { IMask, IMaskInput } from "react-imask";
+import { useForm, Controller, SubmitHandler } from "react-hook-form";
+import { IMaskInput } from "react-imask";
 import Button from "@/components/ui/button";
 import { useApiProvider } from "@/contexts";
 import { yupResolver } from "@hookform/resolvers/yup";
 import "./styles.css";
-import { IEvaluationData } from "@/types/Evaluation";
+import { IEvaluationData, Time } from "@/types/Evaluation";
 import { IEvaluationDataSchema } from "@/schemas/evaluationSchema";
 
 type Props = {
@@ -20,7 +20,7 @@ const EvaluationForm = ({ id, method }: Props) => {
   const date = searchParams.get("data") || "";
 
   //exportar futuramente depois de pronto
-  const evaluationUpdate = (data: IEvaluationData): any => {
+  const evaluationUpdate = (data: any): any => {
     return {
       impulsaoVertical: data.impulsaoVertical,
       rmTerra: data.rmTerra,
@@ -43,7 +43,7 @@ const EvaluationForm = ({ id, method }: Props) => {
     };
   };
   //exportar futuramente depois de pronto
-  const evaluationToApiPost = (data: IEvaluationData): any => {
+  const evaluationToApiPost = (data: any): any => {
     return {
       data: data.data,
       impulsaoVertical: data.impulsaoVertical,
@@ -82,7 +82,7 @@ const EvaluationForm = ({ id, method }: Props) => {
   const [exercicios, setExercicios] = useState<IEvaluationData | null>(null);
   const { get, put, post } = useApiProvider();
 
-  //conversão PT -> recebendo da api
+  // conversão PT -> recebendo da api
   const parseDuration = (duration: string) => {
     const matches = duration.match(/PT(?:(\d+)M)?(?:(\d+)S)?/);
     if (matches) {
@@ -95,10 +95,13 @@ const EvaluationForm = ({ id, method }: Props) => {
     return duration;
   };
   //conversão PT -> enviando back
-  const convertToPTFormat = (time: string) => {
+  function minSecToPT(time: string | null): Time | null {
+    if (!time) return null;
     const [minutes, seconds] = time.split(":").map(Number);
-    return `PT${minutes}M${seconds}S`;
-  };
+    // const formattedMinutes = String(minutes).padStart(2, "0");
+    const formattedSeconds = String(seconds).padStart(2, "0");
+    return `PT${minutes}M${formattedSeconds}S` as Time;
+  }
   // padrão -> bloquear caracteres Desktop
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (
@@ -117,7 +120,6 @@ const EvaluationForm = ({ id, method }: Props) => {
     const target = e.target as HTMLInputElement;
     target.value = target.value.replace(/[^0-9]/g, "");
   };
-
   // valores até 12 desktop
   const handleKeyDownLounge = (e: React.KeyboardEvent<HTMLInputElement>) => {
     const input = e.currentTarget;
@@ -152,7 +154,6 @@ const EvaluationForm = ({ id, method }: Props) => {
       }
     }
   };
-
   // valores até 12 mobile
   const handleInputLounge = (e: React.FormEvent<HTMLInputElement>) => {
     const input = e.currentTarget;
@@ -168,9 +169,6 @@ const EvaluationForm = ({ id, method }: Props) => {
 
     input.value = value;
   };
-
-  //valores até 12 mobile
-
   //buscar dados para editar avaliação
   useEffect(() => {
     const fetchData = async () => {
@@ -180,24 +178,24 @@ const EvaluationForm = ({ id, method }: Props) => {
             const response = await get(`avaliacao/${id}/${date}`);
             if (response && response.data && response.data.exercicios) {
               const exerciciosData = response.data.exercicios;
-              exerciciosData.prancha = parseDuration(exerciciosData.prancha);
-              exerciciosData.forcaIsometricaMaos = parseDuration(
-                exerciciosData.forcaIsometricaMaos
-              );
+              const valuePrancha = (exerciciosData.prancha = parseDuration(
+                exerciciosData.prancha
+              ));
+              const valueforcaIsometricaMaos =
+                (exerciciosData.forcaIsometricaMaos = parseDuration(
+                  exerciciosData.forcaIsometricaMaos
+                ));
               console.log(exerciciosData);
               setExercicios(exerciciosData);
               setValue("peso", exerciciosData.peso);
               setValue("altura", exerciciosData.altura);
-              setValue("prancha", exerciciosData.prancha);
+              setValue("prancha", valuePrancha);
               setValue("flexoes", exerciciosData.flexoes);
               setValue("abdominais", exerciciosData.abdominais);
               setValue("burpees", exerciciosData.burpees);
               setValue("cooper", exerciciosData.cooper);
               setValue("rmTerra", exerciciosData.rmTerra);
-              setValue(
-                "forcaIsometricaMaos",
-                exerciciosData.forcaIsometricaMaos
-              );
+              setValue("forcaIsometricaMaos", valueforcaIsometricaMaos);
               setValue(
                 "testeDeLungeJoelhoEsquerdo",
                 exerciciosData.testeDeLungeJoelhoEsquerdo
@@ -222,15 +220,15 @@ const EvaluationForm = ({ id, method }: Props) => {
     try {
       const formattedData = {
         ...data,
-        prancha: convertToPTFormat(data.prancha),
-        forcaIsometricaMaos: convertToPTFormat(data.forcaIsometricaMaos),
+        prancha: minSecToPT(data.prancha),
+        forcaIsometricaMaos: minSecToPT(data.forcaIsometricaMaos),
       };
 
       const response = await put("avaliacao", evaluationUpdate(formattedData));
       if (response?.status !== 202) {
         throw new Error("Erro ao atualizar avaliação");
       }
-      console.log("Envio de Dados do Formulário:", formattedData);
+      //console.log("Envio de Dados do Formulário:", formattedData);
       // console.log(id);
       // console.log(date);
       console.log(
@@ -246,8 +244,8 @@ const EvaluationForm = ({ id, method }: Props) => {
   const postData = async (data: IEvaluationData) => {
     const formattedData = {
       ...data,
-      prancha: convertToPTFormat(data.prancha),
-      forcaIsometricaMaos: convertToPTFormat(data.forcaIsometricaMaos),
+      prancha: minSecToPT(data.prancha),
+      forcaIsometricaMaos: minSecToPT(data.forcaIsometricaMaos),
     };
     const response = await post(
       "avaliacao",
@@ -256,15 +254,22 @@ const EvaluationForm = ({ id, method }: Props) => {
     if (response?.status !== 201) {
       throw new Error("Erro ao cadastrar avaliação");
     }
+    //console.log(formattedData);
     console.log("Avaliação cadastrada com sucesso");
     reset();
+    reset({
+      prancha: "",
+      forcaIsometricaMaos: "",
+    });
     console.log(
       "Form POST submitted with data:",
       evaluationToApiPost(formattedData)
     );
   };
 
-  const onSubmit = async (data: IEvaluationData) => {
+  const onSubmit: SubmitHandler<IEvaluationData> = async (
+    data: IEvaluationData
+  ) => {
     switch (method) {
       case "PUT":
         // console.log("clicado Alterar");
@@ -335,12 +340,9 @@ const EvaluationForm = ({ id, method }: Props) => {
                 {...register("testeDeLungeJoelhoEsquerdo")}
                 className="flex  w-14 rounded text-center "
                 maxLength={2}
-                // onKeyDown={handleKeyDown}
                 onKeyDown={handleKeyDownLounge}
-                // onInput={handleInput}
                 onInput={handleInputLounge}
               />
-
               {/* Teste de Lunge Direito*/}
               <input
                 type="text"
@@ -348,9 +350,7 @@ const EvaluationForm = ({ id, method }: Props) => {
                 {...register("testeDeLungeJoelhoDireito")}
                 className="w-14 rounded text-center "
                 maxLength={2}
-                // onKeyDown={handleKeyDown}
                 onKeyDown={handleKeyDownLounge}
-                // onInput={handleInput}
                 onInput={handleInputLounge}
               />
             </div>
@@ -428,20 +428,12 @@ const EvaluationForm = ({ id, method }: Props) => {
             render={({ field }) => (
               <IMaskInput
                 {...field}
-                mask="00:00"
-                definitions={{
-                  "#": /[0-9]/,
-                }}
-                onKeyDown={handleKeyDown}
-                onInput={handleInput}
-                unmask={true}
-                blocks={{
-                  MM: { mask: IMask.MaskedRange, from: 0, to: 59 },
-                  SS: { mask: IMask.MaskedRange, from: 0, to: 59 },
-                }}
+                type="text" // iMask não suporta o tipo 'number'
+                mask={["\\00{:}00", "00{:}00"]}
                 placeholder="Min  :  Seg"
-                className=" w-32 px-4 py-2 rounded text-center"
-                minLength={4}
+                pattern="\d*" // Habilita teclado numérico em dispositivos móveis
+                inputMode="numeric" // Habilita teclado numérico em dispositivos móveis
+                className="w-32 px-4 py-2 rounded text-center"
               />
             )}
           />
@@ -465,20 +457,12 @@ const EvaluationForm = ({ id, method }: Props) => {
             render={({ field }) => (
               <IMaskInput
                 {...field}
-                mask="00:00"
-                definitions={{
-                  "#": /[0-9]/,
-                }}
-                onKeyDown={handleKeyDown}
-                onInput={handleInput}
-                unmask={true}
-                blocks={{
-                  MM: { mask: IMask.MaskedRange, from: 0, to: 59 },
-                  SS: { mask: IMask.MaskedRange, from: 0, to: 59 },
-                }}
+                type="text" // iMask não suporta o tipo 'number'
+                mask={["\\00{:}00", "00{:}00"]}
                 placeholder="Min  :  Seg"
-                className=" w-32 px-4 py-2 rounded text-center"
-                minLength={4}
+                pattern="\d*" // Habilita teclado numérico em dispositivos móveis
+                inputMode="numeric" // Habilita teclado numérico em dispositivos móveis
+                className="w-32 px-4 py-2 rounded text-center"
               />
             )}
           />
