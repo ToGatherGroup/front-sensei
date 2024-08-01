@@ -24,3 +24,9 @@ type MedalProps = {
     posicao: string,
     quantidade: number,
 }
+
+export type InjuriesProps = {
+    date: string,
+    description: string,
+    regiaoLesao: string
+}   

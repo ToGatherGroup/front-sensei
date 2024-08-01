@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useAthleteProvider } from "@/contexts";
 import FormAtleta from "../../../../components/formAtleta/index";
-import Loading from "@/components/loading/index";
+import Loader from "@/components/ui/loader";
 
 type Params = {
   id: string;
@@ -22,7 +22,7 @@ const EditarAtleta = ({ params: { id } }: Props) => {
 
   return (
     <div>
-      {athlete ? <FormAtleta atleta={athlete} method="PUT" /> : <Loading />}
+      {athlete ? <FormAtleta atleta={athlete} method="PUT" /> : <Loader />}
     </div>
   );
 };

@@ -12,7 +12,7 @@ const NotFound = () => {
           Não encontramos a página que você procura...
         </p>
         <p className="mt-6 ml-6 text-xl underline">
-          <Link href="/menu">Clique aqui para voltar a página inicial</Link>
+          <Link href="/">Clique aqui para voltar a página inicial</Link>
         </p>
       </div>
     </div>
