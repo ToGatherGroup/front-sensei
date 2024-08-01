@@ -101,6 +101,8 @@ const AvatarAtleta = ({ id, name, photo, belt, size, className }: Props) => {
         <div
           className={styles.container}
           onClick={() => alert(`Você clicou no ${name}`)}
+          // Posteriormente atribuir ação para avatar
+          //onClick={onClickHandler ? onClickHandler : () => alert(`Você clicou no ${name}`)}
         >
           <div
             className={styles.photoBgBig}
