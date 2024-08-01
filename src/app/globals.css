@@ -107,6 +107,14 @@
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: #c0a0b9;
   }
+
+  .clip-shape-left {
+    clip-path: polygon(0 20%, 100% 20%, 100% 80%, 50% 80%);
+  }
+
+  .clip-shape-right {
+    clip-path: polygon(0 20%, 100% 20%, 50% 80%, 0 80%);
+  }
 }
 
 @keyframes fadeIn {
