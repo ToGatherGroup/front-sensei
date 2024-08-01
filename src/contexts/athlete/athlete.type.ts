@@ -15,6 +15,7 @@ export type AthleteProfileProps = {
     categoria: string,
     faixa: (typeof Faixas)[number],
     foto: string,
+    altura?: number,
     medalhaDTO: MedalProps[];
 }
 
