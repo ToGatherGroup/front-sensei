@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { IMaskInput } from "react-imask";
 import Button from "@/components/ui/button";
@@ -268,6 +268,8 @@ const EvaluationForm = ({ id, method }: Props) => {
     );
   };
 
+  const router = useRouter();
+
   const onSubmit: SubmitHandler<IEvaluationData> = async (
     data: IEvaluationData
   ) => {
@@ -275,6 +277,7 @@ const EvaluationForm = ({ id, method }: Props) => {
       case "PUT":
         // console.log("clicado Alterar");
         await updateData(data);
+        router.push("/relatorioAvaliacao");
 
         break;
       case "POST":
@@ -624,9 +627,7 @@ const EvaluationForm = ({ id, method }: Props) => {
         <div className="flex justify-between items-center pb-10 mb-5 pt-7 ">
           <div className="mx-auto">
             {method === "PUT" ? (
-              <Link href={"/relatorioAvaliacao"}>
-                <Button type={"submit"} text={"Alterar"} />
-              </Link>
+              <Button type={"submit"} text={"Alterar"} />
             ) : (
               <Button type={"submit"} text={"Cadastrar"} />
             )}
