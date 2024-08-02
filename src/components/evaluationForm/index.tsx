@@ -626,11 +626,10 @@ const EvaluationForm = ({ id, method }: Props) => {
         {/* Botões */}
         <div className="flex justify-between items-center pb-10 mb-5 pt-7 ">
           <div className="mx-auto">
-            {method === "PUT" ? (
-              <Button type={"submit"} text={"Alterar"} />
-            ) : (
-              <Button type={"submit"} text={"Cadastrar"} />
-            )}
+            <Button
+              text={method === "PUT" ? "Alterar" : "Cadastrar"}
+              type={"submit"}
+            />
           </div>
         </div>
       </form>
