@@ -100,7 +100,7 @@ export const AssessmentsProvider = ({ children }: Props) => {
       updateAssesment(response?.data);
       setModalVisible(true);
     } catch (error) {
-      router.push("/menu");
+      router.push("/");
     } finally {
       setIsLoading(false);
     }
@@ -112,7 +112,7 @@ export const AssessmentsProvider = ({ children }: Props) => {
       const response = await post("/avaliacaocoletiva", {});
       updateAssesment(response?.data);
     } catch (error) {
-      router.push("/menu");
+      router.push("/");
     } finally {
       setIsLoading(false);
     }
@@ -120,6 +120,7 @@ export const AssessmentsProvider = ({ children }: Props) => {
 
   const exerciseIsComplete = (exerciseName: string) => {
     if (assessment && assessment[0]?.exercicios?.[exerciseName] === undefined) {
+      console.log("exerciseName:", exerciseName);
       throw new Error(`exerciseName "${exerciseName}" incorreto.`);
     }
 
@@ -128,34 +129,15 @@ export const AssessmentsProvider = ({ children }: Props) => {
         exercise.exercicios?.[exerciseName] !== undefined &&
         exercise.exercicios?.[exerciseName] === null;
 
-      /*       console.log(
-        "exercise.exercicios?.[exerciseName]",
-        exercise.exercicios?.[exerciseName]
-      ); */
-
-      /*       console.log(
-        "exercise.exercicios?.[exerciseName] != undefined",
-        exercise.exercicios?.[exerciseName] != undefined
-      ); */
-
-      /*       console.log(
-        "exercise.exercicios?.[exerciseName] === null",
-        exercise.exercicios?.[exerciseName] === null
-      ); */
-
-      // console.log("resultado dentro do some:", resultado);
-
       return resultado;
     });
 
-    /*     console.log("some:", some);
-    console.log("some retornado:", !some); */
     return !some;
   };
 
   const cancelModal = () => {
     setModalVisible(false);
-    router.push("/menu");
+    router.push("/");
   };
 
   const confirmModal = async () => {
@@ -172,7 +154,7 @@ export const AssessmentsProvider = ({ children }: Props) => {
           "A avaliação foi finalizada!\nAs informações foram salvas.",
           { duration: 8000 }
         );
-        router.push("/menu");
+        router.push("/");
         return;
       }
 

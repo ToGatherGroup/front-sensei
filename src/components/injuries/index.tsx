@@ -4,6 +4,7 @@ import Front from "../../../public/svg/injuries/Front";
 
 type InjuriesProps = {
   injuries: string[];
+  clickable?: boolean;
   type: "back" | "front";
   width?: string;
   height?: string;

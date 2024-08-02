@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from "react";
 import axios, { AxiosResponse } from "../../../node_modules/axios/index";
 import toast from "react-hot-toast";
-import Loading from "@/components/loading/index";
+import Loader from "@/components/ui/loader";
 
 // URL FOR ALL REQUESTS:
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
@@ -37,8 +37,6 @@ type DisplayOptions = {
   showLoading?: boolean | undefined;
   toastSuccess?: boolean | undefined;
   toastSuccessMessage?: string | undefined;
-  toastError?: boolean | undefined;
-  toastErrorMessage?: string | undefined;
 };
 
 const initialState = {
@@ -57,7 +55,7 @@ export const ApiProvider = ({ children }: { children: React.ReactNode }) => {
 
   const apiInstance = axios.create({
     baseURL: BASE_URL,
-    timeout: 10000,
+    timeout: 20000,
     headers: {
       "Content-Type": "application/json",
     },
@@ -67,8 +65,6 @@ export const ApiProvider = ({ children }: { children: React.ReactNode }) => {
     request: Promise<any>,
     displayOptions?: DisplayOptions
   ) {
-    console.log("toastOptions:", displayOptions);
-
     // Monitora o sucesso
     displayOptions?.toastSuccess &&
       request.then((data: any) => {
@@ -80,22 +76,26 @@ export const ApiProvider = ({ children }: { children: React.ReactNode }) => {
       });
 
     // Monitora o erro
-    displayOptions?.toastError != false &&
-      request.catch(({ request: error }) => {
-        if (error.response) {
+    request.catch(({ request: error }) => {
+      switch (error.status) {
+        case 0:
           toast.error(
-            `${
-              displayOptions?.toastErrorMessage ??
-              "Não foi possível carregar as informações do servidor"
-            }\n${error.status && `Cód: ${error.status}`}`
+            `Houve um problema ao se conectar com o servidor.\nTente novamente em alguns instantes.${
+              String(error.status) ? "\nHTTP " + error.status : ""
+            }`
           );
-        } else {
+          break;
+
+        case 502:
           toast.error(
-            "Não foi possível se conectar ao servidor\nTente novamente em alguns instantes."
+            `Ocorreu um problema com o servidor.${
+              String(error.status) ? "\nHTTP " + error.status : ""
+            }`
           );
-        }
-        return error;
-      });
+          break;
+      }
+      return error;
+    });
   }
 
   const get = (
@@ -185,8 +185,10 @@ export const ApiProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <ApiContext.Provider value={{ get, post, put, patch, remove, isLoadingAPI }}>
-      {isLoadingAPI && <Loading />}
+    <ApiContext.Provider
+      value={{ get, post, put, patch, remove, isLoadingAPI }}
+    >
+      {isLoadingAPI && <Loader type="full-screen" />}
       {children}
     </ApiContext.Provider>
   );

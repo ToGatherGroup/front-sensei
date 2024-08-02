@@ -2,7 +2,7 @@
 
 import Injuries from "@/components/injuries";
 import Button from "@/components/ui/button";
-import Container from "@/components/ui/container";
+import FormContainer from "@/components/ui/formContainer";
 import Title from "@/components/ui/title";
 import { useApiProvider } from "@/contexts";
 import { bodyPartToOutput } from "@/enums/lesoes";
@@ -106,7 +106,7 @@ const CadastroLesao = ({ params: { id } }: Props) => {
           onClick={(clickedBodyPart) => handleBodyPartClick(clickedBodyPart)}
         />
       </div>
-      <Container className="flex flex-col items-center">
+      <FormContainer className="flex flex-col items-center">
         <Title title="Cadastrar Lesão" iconSrc="/icons/injuries_24x24.png" />
 
         <form className="mt-8 flex flex-col gap-4 sm:items-start justify-center">
@@ -208,7 +208,7 @@ const CadastroLesao = ({ params: { id } }: Props) => {
             className="block m-auto mt-10"
           />
         </form>
-      </Container>
+      </FormContainer>
     </>
   );
 };

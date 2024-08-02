@@ -29,7 +29,7 @@ export default function ListAthletes({
 
   return (
     <FormWrapper header="Lista de Atletas" handleSubmit={handleSubmit}>
-      <ul className="w-full xl:mb-10 md:mb-7 sm:mb-5 mb-5">
+      <ul className="w-full xl:mb-10 md:mb-7 sm:mb-5 mb-5 mt-7">
         {listAthletes?.data?.map((athlete) => (
           <li
             className="flex items-center justify-start xl:gap-2 md:gap-1 sm:gap-1 gap-1 xl:mb-3 md:mb-2 sm:mb-2 mb-2"
