@@ -25,15 +25,15 @@ export const IEvaluationDataSchema = yup.object().shape({
     .typeError("Valor obrigatório"),
   peso: yup
     .number()
-    .positive()
-    .min(1)
+
+    .min(1, "Valor obrigatório.")
     .typeError("Valor obrigatório.")
     .required(),
   altura: yup
     .number()
     .integer()
-    .positive()
-    .min(1)
+
+    .min(1, "Valor obrigatório.")
     .typeError("Valor obrigatório.")
     .required(),
   prancha: yup
@@ -77,26 +77,26 @@ export const IEvaluationDataSchema = yup.object().shape({
     .typeError("Verifique se inseriu corretamente o tempo"),
   flexoes: yup
     .number()
-    .positive()
+
     .integer()
     .max(999)
     .typeError("Valor obrigatório.")
     .required(),
   abdominais: yup
     .number()
-    .positive()
+
     .max(999)
     .typeError("Valor obrigatório.")
     .required(),
   burpees: yup
     .number()
-    .positive()
+
     .max(999)
     .typeError("Valor obrigatório.")
     .required(),
   cooper: yup
     .number()
-    .positive()
+
     .max(9999)
     .typeError("Valor obrigatório.")
     .required(),

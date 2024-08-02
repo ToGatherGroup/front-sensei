@@ -362,14 +362,11 @@ const EvaluationForm = ({ id, method }: Props) => {
           </div>
         </div>
         <div className="flex py-1">
-          {errors.testeDeLungeJoelhoEsquerdo && (
+          {(errors.testeDeLungeJoelhoEsquerdo ||
+            errors.testeDeLungeJoelhoDireito) && (
             <span className="text-red-500 ml-2 flex items-center justify-left">
-              {errors.testeDeLungeJoelhoEsquerdo.message}
-            </span>
-          )}
-          {errors.testeDeLungeJoelhoDireito && (
-            <span className="text-red-500 ml-2 flex items-center justify-left">
-              {errors.testeDeLungeJoelhoDireito.message}
+              {errors.testeDeLungeJoelhoEsquerdo?.message ||
+                errors.testeDeLungeJoelhoDireito?.message}
             </span>
           )}
         </div>
@@ -619,7 +616,7 @@ const EvaluationForm = ({ id, method }: Props) => {
           />
         </div>
         {errors.altura && (
-          <span className="text-red-500 flex items-center pb-2 justify-left">
+          <span className="text-red-500 ml-2 flex items-center justify-left">
             {errors.altura.message}
           </span>
         )}
