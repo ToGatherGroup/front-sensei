@@ -13,7 +13,9 @@ function Title({
   className: outerClassName,
 }: Props) {
   return (
-    <div className={"flex justify-center items-center gap-4"}>
+    <div
+      className={"flex justify-center items-center gap-4 w-fit mx-auto mb-12"}
+    >
       <h2
         className={`font-extrabold h-fit text-center text-lg md:text-xl lg:text-2xl text-winePatternLight ${
           outerClassName ?? ""
@@ -23,7 +25,7 @@ function Title({
       </h2>
       {iconSrc && (
         <Image
-          className="inline m-auto "
+          className="inline m-auto"
           src={iconSrc}
           alt="Ícone do formulário"
           width={24}

@@ -1,6 +1,6 @@
 "use client";
 import Button from "@/components/ui/button";
-import Container from "@/components/ui/container";
+import FormContainer from "@/components/ui/formContainer";
 import Title from "@/components/ui/title";
 import { useAssessmentsProvider } from "@/contexts/assessments/assessments";
 import { ImcSchema, ImcSchemaType } from "@/schemas/exerciseSchemas";
@@ -59,7 +59,7 @@ const Imc = () => {
   }
 
   return (
-    <Container>
+    <FormContainer>
       <Title title={"IMC"} />
       <Title title={"Peso e Altura"} captlize={false} />
       <div className="flex justify-center items-center gap-14 mt-8 mb-2 font-semibold sm:justify-end sm:mr-20 sm:gap-16">
@@ -139,7 +139,7 @@ const Imc = () => {
           className="block m-auto mt-20 mb-10"
         />
       </form>
-    </Container>
+    </FormContainer>
   );
 };
 
