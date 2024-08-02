@@ -37,8 +37,6 @@ type DisplayOptions = {
   showLoading?: boolean | undefined;
   toastSuccess?: boolean | undefined;
   toastSuccessMessage?: string | undefined;
-  toastError?: boolean | undefined;
-  toastErrorMessage?: string | undefined;
 };
 
 const initialState = {
@@ -78,22 +76,26 @@ export const ApiProvider = ({ children }: { children: React.ReactNode }) => {
       });
 
     // Monitora o erro
-    displayOptions?.toastError != false &&
-      request.catch(({ request: error }) => {
-        if (error.response) {
+    request.catch(({ request: error }) => {
+      switch (error.status) {
+        case 0:
           toast.error(
-            `${
-              displayOptions?.toastErrorMessage ??
-              "Não foi possível carregar as informações do servidor"
-            }\n${error.status && `Cód: ${error.status}`}`
+            `Houve um problema ao se conectar com o servidor.\nTente novamente em alguns instantes.${
+              String(error.status) ? "\nHTTP " + error.status : ""
+            }`
           );
-        } else {
+          break;
+
+        case 502:
           toast.error(
-            "Não foi possível se conectar ao servidor\nTente novamente em alguns instantes."
+            `Ocorreu um problema com o servidor.${
+              String(error.status) ? "\nHTTP " + error.status : ""
+            }`
           );
-        }
-        return error;
-      });
+          break;
+      }
+      return error;
+    });
   }
 
   const get = (
