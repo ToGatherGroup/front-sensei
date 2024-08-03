@@ -7,8 +7,8 @@ import Header from "@/components/header";
 import Footer from "@/components/footer";
 
 export const metadata: Metadata = {
-  title: "Sensei Divino",
-  description: "Aplicativo para gerenciamento de atletas",
+  title: "Sensei",
+  description: "Aplicativo para gerenciamento e análise de atletas",
 };
 
 export default function RootLayout({
