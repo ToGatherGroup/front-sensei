@@ -39,7 +39,7 @@ const EXERCICIOS = {
     },
     {
       title: "Mobilidade do Tornozelo",
-      exerciseName: "testeDeLunge",
+      exerciseName: "testeDeLungeJoelhoEsquerdo", // e testeDeLungeJoelhoDireito
       exercisePath: "avaliacao/mobilidade_tornozelo",
       nestedExercise: null,
     },
@@ -84,8 +84,6 @@ export default function ListAvaliacao() {
   function handleClick(path: string) {
     router.push(path);
   }
-
-  console.log("prancha:", assessment.exerciseIsComplete("prancha"));
 
   return (
     <div className="w-full max-w-96">
