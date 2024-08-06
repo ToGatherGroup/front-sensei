@@ -3,6 +3,7 @@ import useScreenSize from "@/hooks/useScreenSize";
 import { AthleteProfileProps } from "@/contexts/athlete/athlete.type";
 import AvatarAtleta from "@/components/avatarAtleta/page";
 import MedalSection from "@/components/medalSection";
+import InfoArrow from "@/components/infoArrow";
 
 const mockedAthlete = {
   nome: "Fulano",
@@ -20,62 +21,88 @@ export default function Comparison() {
   //const screenType = screenSize.width > 1024 ? "desktop" : "mobile";
   return (
     <>
-      <AvatarAtleta
-        id={"1"}
-        name={mockedAthlete?.nome}
-        photo={mockedAthlete?.foto}
-        size={"big"}
-        className={"scale-[.85]"}
-      />
+      <div className="flex ">
       <div>
-        <MedalSection
-          imgSrc="/formAtleta/medals/medalhasCinza1.png"
-          altText="Ícone Medalha Ouro"
-          ringColor="amber-500"
-          medalCount={2}
-        />
-        <MedalSection
-          imgSrc="/formAtleta/medals/medalhasCinza2.png"
-          altText="Ícone Medalha Prata"
-          ringColor="zinc-500"
-          medalCount={2}
-        />
-        <MedalSection
-          imgSrc="/formAtleta/medals/medalhasCinza3.png"
-          altText="Ícone Medalha Bronze"
-          ringColor="copperMedal"
-          medalCount={2}
-        />
-        <span>Peso</span>
-        <span>Altura</span>
-        <span>Idade</span>
-        <span>Faixa</span>
+          {/* Div dos três elementos */}
+        <div className="flex flex-row">
+          {/* Div do avatar e infos */}
+          <AvatarAtleta
+            id={"1"}
+            name={mockedAthlete?.nome}
+            photo={mockedAthlete?.foto}
+            size={"big"}
+            className={"scale-[.85]"}
+          />
+          <div className="flex flex-col ">
+            <InfoArrow side={"left"} info={"110"} />
+            <InfoArrow side={"left"} info={"1.91"} />
+            <InfoArrow side={"left"} info={"34"} />
+            <InfoArrow side={"left"} info={"Preta"} />
+          </div>
+        </div>
+        <div className="flex flex-col items-center space-y-2 lg:space-y-6">
+          <div className="flex flex-row h-12 w-24">
+            <MedalSection
+              imgSrc="/formAtleta/medals/medalhasCinza1.png"
+              altText="Ícone Medalha Ouro"
+              ringColor="amber-500"
+              medalCount={2}
+            />
+            <MedalSection
+              imgSrc="/formAtleta/medals/medalhasCinza2.png"
+              altText="Ícone Medalha Prata"
+              ringColor="zinc-500"
+              medalCount={2}
+            />
+            <MedalSection
+              imgSrc="/formAtleta/medals/medalhasCinza3.png"
+              altText="Ícone Medalha Bronze"
+              ringColor="copperMedal"
+              medalCount={2}
+            />
+          </div>
+          </div>
+        </div>
+        <div>
+          {/* Div dos três elementos */}
+          <div className="flex flex-row-reverse">
+            {/* Div do avatar e infos */}
+            <AvatarAtleta
+              id={"1"}
+              name={mockedAthlete?.nome}
+              photo={mockedAthlete?.foto}
+              size={"big"}
+              className={"scale-[.85]"}
+            />
+            <div className="flex flex-col ">
+              <InfoArrow side={"right"} info={"110"} />
+              <InfoArrow side={"right"} info={"1.91"} />
+              <InfoArrow side={"right"} info={"34"} />
+              <InfoArrow side={"right"} info={"Preta"} />
+            </div>
+          </div>
+          <div className="flex flex-row h-26 w-32">
+            <MedalSection
+              imgSrc="/formAtleta/medals/medalhasCinza1.png"
+              altText="Ícone Medalha Ouro"
+              ringColor="amber-500"
+              medalCount={2}
+            />
+            <MedalSection
+              imgSrc="/formAtleta/medals/medalhasCinza2.png"
+              altText="Ícone Medalha Prata"
+              ringColor="zinc-500"
+              medalCount={2}
+            />
+            <MedalSection
+              imgSrc="/formAtleta/medals/medalhasCinza3.png"
+              altText="Ícone Medalha Bronze"
+              ringColor="copperMedal"
+              medalCount={2}
+            />
+          </div>
+        </div>
       </div>
-      <AvatarAtleta
-        id={"1"}
-        name={mockedAthlete?.nome}
-        photo={mockedAthlete?.foto}
-        size={"big"}
-        className={"scale-[.85]"}
-      />
-      <MedalSection
-        imgSrc="/formAtleta/medals/medalhasCinza1.png"
-        altText="Ícone Medalha Ouro"
-        ringColor="amber-500"
-        medalCount={2}
-      />
-      <MedalSection
-        imgSrc="/formAtleta/medals/medalhasCinza2.png"
-        altText="Ícone Medalha Prata"
-        ringColor="zinc-500"
-        medalCount={2}
-      />
-      <MedalSection
-        imgSrc="/formAtleta/medals/medalhasCinza3.png"
-        altText="Ícone Medalha Bronze"
-        ringColor="copperMedal"
-        medalCount={2}
-      />
       <div className="lg:mt-10 animate-fade-down animate-duration-1000">
         <ReviewsChart
           height={256}
