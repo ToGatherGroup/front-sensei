@@ -63,7 +63,7 @@ const PosturaCard = ({
       {datasAvaliacaoArray.length > 0 && (
         <select
           id="possibleDates"
-          className="p-2 mt-4 shadow mx-auto w-fit rounded"
+          className="p-2 mb-4 shadow mx-auto w-fit rounded"
           onChange={handleOptionSelect}
           value={selectedOption ? selectedOption : undefined}
         >
@@ -82,6 +82,11 @@ const PosturaCard = ({
 
   return (
     <div className="flex flex-col">
+      {datasAvaliacaoArray && (
+        <RenderDatasAvaliacaoOptions
+          datasAvaliacaoArray={datasAvaliacaoArray}
+        />
+      )}
       <div className="shadow rounded grid-overlay">
         <Image
           src={
@@ -96,11 +101,6 @@ const PosturaCard = ({
           height="750"
         />
       </div>
-      {datasAvaliacaoArray && (
-        <RenderDatasAvaliacaoOptions
-          datasAvaliacaoArray={datasAvaliacaoArray}
-        />
-      )}
     </div>
   );
 };

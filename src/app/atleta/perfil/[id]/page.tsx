@@ -13,9 +13,10 @@ import MedalSection from "@/components/medalSection";
 import Button from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
-import Tippy from '@tippyjs/react';
-import 'tippy.js/dist/tippy.css';
+import Tippy from "@tippyjs/react";
+import "tippy.js/dist/tippy.css";
 import Qualitativos from "@/components/qualitativos/index";
+import PosturaPage from "./postura/page";
 
 type Params = {
   id: string;
@@ -26,12 +27,21 @@ type Props = {
 };
 
 const Page = ({ params }: Props) => {
-  const { getInjuries, injuries, injuriesInfo, medals, athleteProfile, getProfile, isLoading } = useAthleteProvider();
+  const {
+    getInjuries,
+    injuries,
+    injuriesInfo,
+    medals,
+    athleteProfile,
+    getProfile,
+    isLoading,
+  } = useAthleteProvider();
   const router = useRouter();
   const [lesoes, setLesoes] = useState<string[] | null>(null);
   const [grafico, setGrafico] = useState<any | null>(true);
   const [qualitativos, setQualitativos] = useState<any | null>(null);
   const [frequencia, setFrequencia] = useState<any | null>(null);
+  const [postura, setPostura] = useState<any | null>(null);
   const [medalhaOuro, setMedalhaOuro] = useState<number>(0);
   const [medalhaPrata, setMedalhaPrata] = useState<number>(0);
   const [medalhaBronze, setMedalhaBronze] = useState<number>(0);
@@ -49,6 +59,7 @@ const Page = ({ params }: Props) => {
     setGrafico(null);
     setFrequencia(null);
     setQualitativos(null);
+    setPostura(null);
   };
 
   const handleLesoesClick = useCallback(async () => {
@@ -68,6 +79,10 @@ const Page = ({ params }: Props) => {
 
   const handleQualitativoClick = () => {
     setQualitativos(true);
+  };
+
+  const handlePosturaClick = () => {
+    setPostura(true);
   };
 
   useEffect(() => {
@@ -92,6 +107,7 @@ const Page = ({ params }: Props) => {
     { label: "Lesões", onClick: handleLesoesClick },
     { label: "Frequência", onClick: handleFrequenciaClick },
     { label: "Qualitativos", onClick: handleQualitativoClick },
+    { label: "Postura", onClick: handlePosturaClick },
   ];
 
   const screenSize = useScreenSize();
@@ -115,7 +131,7 @@ const Page = ({ params }: Props) => {
   }, [medals]);
 
   const renderButtons = () => (
-    <section className="flex mt-6 space-x-2 lg:space-x-6 justify-center">
+    <section className="flex ml-auto mr-auto mt-6 space-x-2 lg:space-x-6  box-border max-h-screen overflow-scroll">
       {buttons.map((button, index) => (
         <Button
           key={index}
@@ -231,6 +247,11 @@ const Page = ({ params }: Props) => {
                 />
               </div>
             )}
+            {postura && (
+              <div className="mt-4 lg:mt-32 animate-fade-down animate-duration-1000">
+                <PosturaPage />
+              </div>
+            )}
             {grafico && (
               <div className="lg:mt-24 animate-fade-down animate-duration-1000">
                 <ReviewsChart
@@ -277,18 +298,31 @@ const Page = ({ params }: Props) => {
                   ></Button>
                 </div>
                 <div className="flex flex-col-reverse custom-scrollbar mx-auto max-h-26 lg:max-h-40 scroll-auto overflow-y-auto justify-center bg-white rounded-lg p-4 pt-2 lg:-mt-4 max-w-xs lg:min-w-fit lg:max-w-sm ">
-                  {(!isLoading && injuriesInfo.length <= 0) && <h3 className="text-sm lg:text-lg font-semibold">O atleta não possui lesão registrada</h3>}
-                  {
-                    injuriesInfo.map((injuryInfo, index) => (
-                      <p key={index} className="leading-7 justify-between inline-block align-text-bottom text-xs lg:text-sm text-wrap text-transform: capitalize">
-                        <span className="font-bold">{dayjs(injuryInfo.date).format('DD/MM/YYYY')}</span>
-                        <span className="italic "> {injuryInfo.regiaoLesao}</span>
-                        <Tippy hideOnClick={true} content={injuryInfo.description}>
-                          <span className="cursor-pointer lg:text-base text-lg"> ℹ️</span>
-                        </Tippy>
-                      </p>
-                    ))
-                  }
+                  {!isLoading && injuriesInfo.length <= 0 && (
+                    <h3 className="text-sm lg:text-lg font-semibold">
+                      O atleta não possui lesão registrada
+                    </h3>
+                  )}
+                  {injuriesInfo.map((injuryInfo, index) => (
+                    <p
+                      key={index}
+                      className="leading-7 justify-between inline-block align-text-bottom text-xs lg:text-sm text-wrap text-transform: capitalize"
+                    >
+                      <span className="font-bold">
+                        {dayjs(injuryInfo.date).format("DD/MM/YYYY")}
+                      </span>
+                      <span className="italic "> {injuryInfo.regiaoLesao}</span>
+                      <Tippy
+                        hideOnClick={true}
+                        content={injuryInfo.description}
+                      >
+                        <span className="cursor-pointer lg:text-base text-lg">
+                          {" "}
+                          ℹ️
+                        </span>
+                      </Tippy>
+                    </p>
+                  ))}
                 </div>
               </div>
             )}
