@@ -21,51 +21,10 @@ export default function Comparison() {
   //const screenType = screenSize.width > 1024 ? "desktop" : "mobile";
   return (
     <>
-      <div className="flex ">
-      <div>
+      <div className=" flex justify-center max-w-screen-lg min-w-full">
+        <div className="shrink flex-col z-10">
           {/* Div dos três elementos */}
-        <div className="flex flex-row">
-          {/* Div do avatar e infos */}
-          <AvatarAtleta
-            id={"1"}
-            name={mockedAthlete?.nome}
-            photo={mockedAthlete?.foto}
-            size={"big"}
-            className={"scale-[.85]"}
-          />
-          <div className="flex flex-col ">
-            <InfoArrow side={"left"} info={"110"} />
-            <InfoArrow side={"left"} info={"1.91"} />
-            <InfoArrow side={"left"} info={"34"} />
-            <InfoArrow side={"left"} info={"Preta"} />
-          </div>
-        </div>
-        <div className="flex flex-col items-center space-y-2 lg:space-y-6">
-          <div className="flex flex-row h-12 w-24">
-            <MedalSection
-              imgSrc="/formAtleta/medals/medalhasCinza1.png"
-              altText="Ícone Medalha Ouro"
-              ringColor="amber-500"
-              medalCount={2}
-            />
-            <MedalSection
-              imgSrc="/formAtleta/medals/medalhasCinza2.png"
-              altText="Ícone Medalha Prata"
-              ringColor="zinc-500"
-              medalCount={2}
-            />
-            <MedalSection
-              imgSrc="/formAtleta/medals/medalhasCinza3.png"
-              altText="Ícone Medalha Bronze"
-              ringColor="copperMedal"
-              medalCount={2}
-            />
-          </div>
-          </div>
-        </div>
-        <div>
-          {/* Div dos três elementos */}
-          <div className="flex flex-row-reverse">
+          <div className="shrink flex max-w-fit flex-row">
             {/* Div do avatar e infos */}
             <AvatarAtleta
               id={"1"}
@@ -75,6 +34,53 @@ export default function Comparison() {
               className={"scale-[.85]"}
             />
             <div className="flex flex-col ">
+              <InfoArrow side={"left"} info={"110"} />
+              <InfoArrow side={"left"} info={"1.91"} />
+              <InfoArrow side={"left"} info={"34"} />
+              <InfoArrow side={"left"} info={"Preta"} />
+            </div>
+          </div>
+          <div className="flex flex-col items-center space-y-2 lg:space-y-6">
+            <div className="flex flex-row h-12 w-24">
+              <MedalSection
+                imgSrc="/formAtleta/medals/medalhasCinza1.png"
+                altText="Ícone Medalha Ouro"
+                ringColor="amber-500"
+                medalCount={2}
+              />
+              <MedalSection
+                imgSrc="/formAtleta/medals/medalhasCinza2.png"
+                altText="Ícone Medalha Prata"
+                ringColor="zinc-500"
+                medalCount={2}
+              />
+              <MedalSection
+                imgSrc="/formAtleta/medals/medalhasCinza3.png"
+                altText="Ícone Medalha Bronze"
+                ringColor="copperMedal"
+                medalCount={2}
+              />
+            </div>
+          </div>
+        </div>
+        <section className="flex max-h-64 gap-8 flex-col bg-winePatternDark z-0 min-w-64 w-64 mx-[-20px] p-4">
+          <span className="italic font-bold text-xl text-center text-white">PESO</span>
+          <span className="italic font-bold text-xl text-center text-white">ALTURA</span>
+          <span className="italic font-extrabold text-xl text-center text-white">IDADE</span>
+          <span className="italic font-bold text-xl text-center text-white">FAIXA</span>
+        </section>
+        <div className="shrink flex-col z-10">
+          {/* Div dos três elementos */}
+          <div className="flex max-w-fit flex-row-reverse">
+            {/* Div do avatar e infos */}
+            <AvatarAtleta
+              id={"1"}
+              name={mockedAthlete?.nome}
+              photo={mockedAthlete?.foto}
+              size={"big"}
+              className={"scale-[.85]"}
+            />
+            <div className="flex flex-col">
               <InfoArrow side={"right"} info={"110"} />
               <InfoArrow side={"right"} info={"1.91"} />
               <InfoArrow side={"right"} info={"34"} />
