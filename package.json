@@ -11,6 +11,7 @@
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
     "@tippyjs/react": "^4.2.6",
+    "@vercel/speed-insights": "^1.0.12",
     "axios": "^1.6.7",
     "chart.js": "^4.4.2",
     "dayjs": "^1.11.11",

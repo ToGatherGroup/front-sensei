@@ -5,6 +5,7 @@ import "./reset.css";
 import { Toaster } from "react-hot-toast";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata: Metadata = {
   title: "Sensei",
@@ -28,6 +29,7 @@ export default function RootLayout({
           <Header />
           <main className="px-2.5 py-10 bg-gradient-to-t from-gray-800 from-0% via-black via-50% to-gray-800 to-100% min-w-screen min-h-screen">
             {children}
+            <SpeedInsights />
           </main>
           <Footer />
         </Providers>
