@@ -25,9 +25,10 @@ const ImageCropper: React.FC<ImageCropperProps> = ({
   return (
     <>
       <div>
-        <div className="relative w-full h-72 bg-gray-800">
+        <div className="relative w-full h-96 bg-gray-800">
           <Cropper
             image={imageSrc}
+            classes={{ mediaClassName: "min-w-0 min-h-0" }}
             crop={crop}
             zoom={zoom}
             aspect={2 / 4}
@@ -36,7 +37,7 @@ const ImageCropper: React.FC<ImageCropperProps> = ({
             onCropComplete={onCropComplete}
           />
         </div>
-        <div className="flex justify-between">
+        <div className="flex justify-center gap-6 mt-6">
           <button
             className="bg-black text-white border border-white py-2 px-4 rounded"
             onClick={onCropCancel}
