@@ -3,7 +3,7 @@ import useScreenSize from "@/hooks/useScreenSize";
 import { AthleteProfileProps } from "@/contexts/athlete/athlete.type";
 import AvatarAtleta from "@/components/avatarAtleta/page";
 import MedalSection from "@/components/medalSection";
-import InfoArrow from "@/components/infoArrow";
+import InfoBoard from "@/components/infoBoard";
 
 const mockedAthlete = {
   nome: "Fulano",
@@ -20,8 +20,8 @@ export default function Comparison() {
 
   //const screenType = screenSize.width > 1024 ? "desktop" : "mobile";
   return (
-    <>
-      <div className=" flex justify-center max-w-screen-lg min-w-full">
+    <div className="">
+      <div className="flex justify-center max-w-screen-lg min-w-full">
         <div className="shrink flex-col z-10">
           {/* Div dos três elementos */}
           <div className="shrink flex max-w-fit flex-row">
@@ -30,15 +30,10 @@ export default function Comparison() {
               id={"1"}
               name={mockedAthlete?.nome}
               photo={mockedAthlete?.foto}
-              size={"big"}
+              size={"alt"}
               className={"scale-[.85]"}
             />
-            <div className="flex flex-col ">
-              <InfoArrow side={"left"} info={"110"} />
-              <InfoArrow side={"left"} info={"1.91"} />
-              <InfoArrow side={"left"} info={"34"} />
-              <InfoArrow side={"left"} info={"Preta"} />
-            </div>
+
           </div>
           <div className="flex flex-col items-center space-y-2 lg:space-y-6">
             <div className="flex flex-row h-12 w-24">
@@ -63,12 +58,7 @@ export default function Comparison() {
             </div>
           </div>
         </div>
-        <section className="flex max-h-64 gap-8 flex-col bg-winePatternDark z-0 min-w-64 w-64 mx-[-20px] p-4">
-          <span className="italic font-bold text-xl text-center text-white">PESO</span>
-          <span className="italic font-bold text-xl text-center text-white">ALTURA</span>
-          <span className="italic font-extrabold text-xl text-center text-white">IDADE</span>
-          <span className="italic font-bold text-xl text-center text-white">FAIXA</span>
-        </section>
+        <InfoBoard/>
         <div className="shrink flex-col z-10">
           {/* Div dos três elementos */}
           <div className="flex max-w-fit flex-row-reverse">
@@ -77,15 +67,9 @@ export default function Comparison() {
               id={"1"}
               name={mockedAthlete?.nome}
               photo={mockedAthlete?.foto}
-              size={"big"}
+              size={"alt"}
               className={"scale-[.85]"}
             />
-            <div className="flex flex-col">
-              <InfoArrow side={"right"} info={"110"} />
-              <InfoArrow side={"right"} info={"1.91"} />
-              <InfoArrow side={"right"} info={"34"} />
-              <InfoArrow side={"right"} info={"Preta"} />
-            </div>
           </div>
           <div className="flex flex-row h-26 w-32">
             <MedalSection
@@ -109,13 +93,15 @@ export default function Comparison() {
           </div>
         </div>
       </div>
-      <div className="lg:mt-10 animate-fade-down animate-duration-1000">
+      <div className="flex justify-center">
+      <div className="lg:max-w-md lg:mt-10 animate-fade-down animate-duration-1000">
         <ReviewsChart
-          height={256}
-          width={256}
+          height={600}
+          width={600}
           id={2} // Não vai ser parâmetro de tela, no caso será devolvido o id do busca atleta
         />
       </div>
-    </>
+      </div>
+    </div>
   );
 }
