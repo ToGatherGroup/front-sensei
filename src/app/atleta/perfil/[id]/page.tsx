@@ -131,7 +131,7 @@ const Page = ({ params }: Props) => {
   }, [medals]);
 
   const renderButtons = () => (
-    <section className="flex ml-auto mr-auto mt-6 space-x-2 lg:space-x-6  box-border max-h-screen overflow-scroll">
+    <section className="flex m-auto mt-6 space-x-2 lg:space-x-6 box-border w-fit">
       {buttons.map((button, index) => (
         <Button
           key={index}

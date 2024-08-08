@@ -63,7 +63,7 @@ const PosturaCard = ({
       {datasAvaliacaoArray.length > 0 && (
         <select
           id="possibleDates"
-          className="p-2 mb-4 shadow mx-auto w-fit rounded"
+          className="p-2 mb-4 shadow mx-auto w-fit max-w-full rounded"
           onChange={handleOptionSelect}
           value={selectedOption ? selectedOption : undefined}
         >
@@ -81,7 +81,7 @@ const PosturaCard = ({
   );
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col max-w-full">
       {datasAvaliacaoArray && (
         <RenderDatasAvaliacaoOptions
           datasAvaliacaoArray={datasAvaliacaoArray}
@@ -96,7 +96,7 @@ const PosturaCard = ({
           } //src={posturasAtleta[viewSide].foto}
           alt="Athlete Posture View"
           object-fit="contain"
-          className="object-cover shadow w-full rounded aspect-[4/12] max-h-[600px]"
+          className="object-cover shadow rounded aspect-[4/12] max-h-[600px] w-full h-auto"
           width="750"
           height="750"
         />
