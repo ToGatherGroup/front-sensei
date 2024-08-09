@@ -9,6 +9,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useAthleteProvider } from "@/contexts";
 import Button from "../ui/button";
 import Loader from "../ui/loader";
+import ImageCropper from "@/components/imageCropper/imageCropper";
+import { Area } from "react-easy-crop";
 
 type Props = {
   atleta?: Atleta | null;
@@ -22,6 +24,8 @@ const FormAtleta = ({ atleta, method }: Props) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [disableSubmitBtn, setDisableSubmitBtn] = useState<boolean>(false);
   const { registerAthlete, updateAthlete } = useAthleteProvider();
+  const [openCropper, setOpenCropper] = useState<boolean>(false); // Estado para controlar a abertura do cropper
+  const [croppedImage, setCroppedImage] = useState<string | null>(null);
 
   useEffect(() => {
     if (atleta?.foto && avatarBase64 == "") {
@@ -51,14 +55,11 @@ const FormAtleta = ({ atleta, method }: Props) => {
   const onSubmit = (data: any) => {
     switch (method) {
       case "PUT":
-        const preparedData = data;
-
-        if (avatarBase64) {
-          preparedData.foto = avatarBase64;
-        } else {
-          preparedData.foto = atleta?.foto;
-        }
-        preparedData.isAtivo = getValues("isAtivo");
+        const preparedData = {
+          ...data,
+          foto: croppedImage || atleta?.foto,
+          isAtivo: getValues("isAtivo"),
+        };
         updateAthlete(preparedData);
 
         break;
@@ -87,19 +88,62 @@ const FormAtleta = ({ atleta, method }: Props) => {
     });
   };
 
-  const uploadAvatar = (event: EventListener) => {
-    setDisableSubmitBtn(true);
-    setLoading(true);
+  // Função modificada para abrir o cropper
+  const uploadAvatar = (e: any) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = () => {
+      setAvatarBase64(reader.result as string);
+      setOpenCropper(true); // Abrir o cropper após carregar a imagem
+    };
+    reader.readAsDataURL(file);
+  };
 
-    const avatarFile = getValues("foto")![0];
-    file2Base64(avatarFile)
-      .then((avatarBase64) => {
-        setAvatarBase64(avatarBase64);
-      })
-      .finally(() => {
-        setDisableSubmitBtn(false);
-        setLoading(false);
-      });
+  const getCroppedImg = (
+    imageSrc: string,
+    croppedArea: Area
+  ): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const canvas = document.createElement("canvas");
+      const imageObj = new Image();
+      imageObj.src = imageSrc;
+
+      imageObj.onload = () => {
+        const context = canvas.getContext("2d");
+        if (context) {
+          canvas.width = croppedArea.width;
+          canvas.height = croppedArea.height;
+          context.drawImage(
+            imageObj,
+            croppedArea.x,
+            croppedArea.y,
+            croppedArea.width,
+            croppedArea.height,
+            0,
+            0,
+            croppedArea.width,
+            croppedArea.height
+          );
+          const croppedImage = canvas.toDataURL("image/jpeg");
+          resolve(croppedImage);
+        } else {
+          reject(new Error("Contexto do canvas não encontrado."));
+        }
+      };
+      imageObj.onerror = (error) => reject(error);
+    });
+  };
+
+  // Funções para lidar com o recorte
+  const handleCropDone = async (croppedArea: any) => {
+    const croppedImage = await getCroppedImg(avatarBase64, croppedArea);
+    setCroppedImage(croppedImage);
+    setAvatarBase64(croppedImage);
+    setOpenCropper(false);
+  };
+
+  const handleCropCancel = () => {
+    setOpenCropper(false);
   };
 
   return (
@@ -114,28 +158,39 @@ const FormAtleta = ({ atleta, method }: Props) => {
         </div>
 
         <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
-          <div className={`${styles.inputRow} ${styles.avatar}`}>
-            <label htmlFor="photo">
-              <p>Foto do atleta</p>
-              <img
-                src={avatarBase64 ? avatarBase64 : "/formAtleta/avatar.png"}
-                alt="Foto do atleta"
-              ></img>
-            </label>
-            <input
-              {...register("foto", {
-                onChange: (e) => {
-                  uploadAvatar(e);
-                },
-              })}
-              type="file"
-              id="photo"
-              accept="image/png"
+          {!openCropper && (
+            <div className={`${styles.inputRow} ${styles.avatar}`}>
+              <label htmlFor="photo">
+                <p>Foto do atleta</p>
+                <img
+                  src={croppedImage || avatarBase64 || "/formAtleta/avatar.png"}
+                  alt="Foto do atleta"
+                />
+                <input
+                  {...register("foto", {
+                    onChange: (e) => {
+                      uploadAvatar(e);
+                    },
+                  })}
+                  className="hidden"
+                  type="file"
+                  id="photo"
+                  accept="image/png"
+                />
+                {errors.foto && (
+                  <p className={styles.displayError}>{errors.foto.message}</p>
+                )}
+              </label>
+            </div>
+          )}
+
+          {openCropper && (
+            <ImageCropper
+              imageSrc={avatarBase64}
+              onCropDone={handleCropDone}
+              onCropCancel={handleCropCancel}
             />
-            {errors.foto && (
-              <p className={styles.displayError}>{errors.foto.message}</p>
-            )}
-          </div>
+          )}
 
           <div className={styles.inputRow}>
             <label htmlFor="nome" className={styles.required}>
