@@ -111,9 +111,9 @@ export default function ListAvaliacao() {
                           height="20"
                           width="20"
                           stroke="currentColor"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
                           viewBox="0 0 24 24"
                         >
                           <polyline points="6 9 12 15 18 9"></polyline>
