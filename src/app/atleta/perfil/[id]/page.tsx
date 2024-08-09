@@ -255,8 +255,8 @@ const Page = ({ params }: Props) => {
             {grafico && (
               <div className="lg:mt-24 animate-fade-down animate-duration-1000">
                 <ReviewsChart
-                  height={screenSize.width > 1024 ? 524 : 256}
-                  width={screenSize.width > 1024 ? 524 : 256}
+                  height={screenSize.width > 1024 ? 524 : 200}
+                  width={screenSize.width > 1024 ? 524 : 200}
                   id={params.id}
                 />
               </div>
