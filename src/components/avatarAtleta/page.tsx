@@ -11,13 +11,17 @@ type Props = {
   id: string;
   name?: string;
   photo?: string;
-  size: "small" | "big";
   belt?: (typeof Faixas)[number];
   className?: string | undefined;
+  pathUri?: string;
+  isRedirect?: boolean;
 };
 
-const AvatarAtleta = ({ id, name, photo, belt, size, className }: Props) => {
+const AvatarAtleta = ({ id, name, photo, belt, size, className, pathUri, isRedirect }: Props) => {
   const router = useRouter();
+
+  const onClick = pathUri ? () => router.push(`${pathUri}?Athlete=${id}`) : () => router.push(`/atleta/perfil/${id}`)
+
 
   const beltsColor = {
     branca: {
@@ -100,7 +104,7 @@ const AvatarAtleta = ({ id, name, photo, belt, size, className }: Props) => {
       return (
         <div
           className={styles.container}
-          onClick={() => alert(`Você clicou no ${name}`)}
+          onClick={onClick}
           // Posteriormente atribuir ação para avatar
           //onClick={onClickHandler ? onClickHandler : () => alert(`Você clicou no ${name}`)}
         >
@@ -149,7 +153,7 @@ const AvatarAtleta = ({ id, name, photo, belt, size, className }: Props) => {
       <div
         className={styles.container}
         style={{ cursor: "pointer" }}
-        onClick={() => router.push(`/atleta/perfil/${id}`)}
+        onClick={onClick}
       >
         <div className={styles.photoBg}></div>
         <img className={styles.photo} src={photo} alt={`Foto de ${name}`} />

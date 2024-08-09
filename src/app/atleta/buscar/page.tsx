@@ -41,7 +41,7 @@ function Observer({ selector, callback }: any) {
   return null;
 }
 
-const AtletaSelecionar = () => {
+const AtletaSelecionar = ({ className }: { className?: string }) => {
   const [listAtleta, setListAtleta] = useState<TAtletas[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [lastPage, setLastPage] = useState(false);
@@ -102,8 +102,9 @@ const AtletaSelecionar = () => {
     if (currentPage > 0) searchByName();
   }, [debouncedValue]);
 
+
   return (
-    <div className="flex min-w-52">
+    <div className={`flex min-w-52 ${className}`}>
       <div
         className={`form-container !px-1 mx-auto flex flex-col items-center !w-[600px]`}
       >

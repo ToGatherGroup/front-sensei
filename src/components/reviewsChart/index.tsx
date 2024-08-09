@@ -17,7 +17,7 @@ interface IApiData {
   values: number[];
 }
 
-export const ReviewsChart = ({ id, height, width }: ReviewsChartProps) => {
+export const ReviewsChart = ({ id, className, height, width }: ReviewsChartProps & { className?: string }) => {
   const [apiData, setApiData] = useState<IApiData | null>(null);
   const { get } = useApiProvider();
 
@@ -102,7 +102,7 @@ export const ReviewsChart = ({ id, height, width }: ReviewsChartProps) => {
 
   return (
     <>
-      <section className="mx-auto w-64 lg:w-full">
+      <section className={`mx-auto w-64 lg:w-full ${className || ""}`}>
       <Radar key={`${width}-${height}`} height={height} width={width} data={chartData} options={options}></Radar>
       </section>
     </>
