@@ -322,7 +322,7 @@ const PosturalEvaluation = ({ params: { id } }: Props) => {
         </div>
       )}
       {currentPage === "crop-img" && imageToCrop && (
-        <div className="w-[80vw] h-[80vh] flex justify-center items-center">
+        <div className="m-auto size-full">
           <ImageCropper
             imageSrc={imageToCrop}
             onCropDone={handleCropComplete}

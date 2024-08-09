@@ -16,6 +16,7 @@ import dayjs from "dayjs";
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 import Qualitativos from "@/components/qualitativos/index";
+import PosturaPage from "./postura/page";
 
 type Params = {
   id: string;
@@ -40,6 +41,7 @@ const Page = ({ params }: Props) => {
   const [grafico, setGrafico] = useState<any | null>(true);
   const [qualitativos, setQualitativos] = useState<any | null>(null);
   const [frequencia, setFrequencia] = useState<any | null>(null);
+  const [postura, setPostura] = useState<any | null>(null);
   const [medalhaOuro, setMedalhaOuro] = useState<number>(0);
   const [medalhaPrata, setMedalhaPrata] = useState<number>(0);
   const [medalhaBronze, setMedalhaBronze] = useState<number>(0);
@@ -57,6 +59,7 @@ const Page = ({ params }: Props) => {
     setGrafico(null);
     setFrequencia(null);
     setQualitativos(null);
+    setPostura(null);
   };
 
   const handleLesoesClick = useCallback(async () => {
@@ -76,6 +79,10 @@ const Page = ({ params }: Props) => {
 
   const handleQualitativoClick = () => {
     setQualitativos(true);
+  };
+
+  const handlePosturaClick = () => {
+    setPostura(true);
   };
 
   useEffect(() => {
@@ -100,6 +107,7 @@ const Page = ({ params }: Props) => {
     { label: "Lesões", onClick: handleLesoesClick },
     { label: "Frequência", onClick: handleFrequenciaClick },
     { label: "Qualitativos", onClick: handleQualitativoClick },
+    { label: "Postura", onClick: handlePosturaClick },
   ];
 
   const screenSize = useScreenSize();
@@ -123,7 +131,7 @@ const Page = ({ params }: Props) => {
   }, [medals]);
 
   const renderButtons = () => (
-    <section className="flex mt-6 space-x-2 lg:space-x-6 justify-center">
+    <section className="flex m-auto mt-6 space-x-2 lg:space-x-6 box-border w-fit">
       {buttons.map((button, index) => (
         <Button
           key={index}
@@ -237,6 +245,11 @@ const Page = ({ params }: Props) => {
                   width={screenSize.width > 1024 ? 200 : 100}
                   id={params.id}
                 />
+              </div>
+            )}
+            {postura && (
+              <div className="mt-4 lg:mt-32 animate-fade-down animate-duration-1000">
+                <PosturaPage />
               </div>
             )}
             {grafico && (
