@@ -13,8 +13,8 @@ import MedalSection from "@/components/medalSection";
 import Button from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
-import Tippy from '@tippyjs/react';
-import 'tippy.js/dist/tippy.css';
+import Tippy from "@tippyjs/react";
+import "tippy.js/dist/tippy.css";
 import Qualitativos from "@/components/qualitativos/index";
 
 type Params = {
@@ -26,7 +26,15 @@ type Props = {
 };
 
 const Page = ({ params }: Props) => {
-  const { getInjuries, injuries, injuriesInfo, medals, athleteProfile, getProfile, isLoading } = useAthleteProvider();
+  const {
+    getInjuries,
+    injuries,
+    injuriesInfo,
+    medals,
+    athleteProfile,
+    getProfile,
+    isLoading,
+  } = useAthleteProvider();
   const router = useRouter();
   const [lesoes, setLesoes] = useState<string[] | null>(null);
   const [grafico, setGrafico] = useState<any | null>(true);
@@ -234,8 +242,8 @@ const Page = ({ params }: Props) => {
             {grafico && (
               <div className="lg:mt-24 animate-fade-down animate-duration-1000">
                 <ReviewsChart
-                  height={screenSize.width > 1024 ? 524 : 256}
-                  width={screenSize.width > 1024 ? 524 : 256}
+                  height={screenSize.width > 1024 ? 524 : 200}
+                  width={screenSize.width > 1024 ? 524 : 200}
                   id={params.id}
                 />
               </div>
@@ -277,18 +285,31 @@ const Page = ({ params }: Props) => {
                   ></Button>
                 </div>
                 <div className="flex flex-col-reverse custom-scrollbar mx-auto max-h-26 lg:max-h-40 scroll-auto overflow-y-auto justify-center bg-white rounded-lg p-4 pt-2 lg:-mt-4 max-w-xs lg:min-w-fit lg:max-w-sm ">
-                  {(!isLoading && injuriesInfo.length <= 0) && <h3 className="text-sm lg:text-lg font-semibold">O atleta não possui lesão registrada</h3>}
-                  {
-                    injuriesInfo.map((injuryInfo, index) => (
-                      <p key={index} className="leading-7 justify-between inline-block align-text-bottom text-xs lg:text-sm text-wrap text-transform: capitalize">
-                        <span className="font-bold">{dayjs(injuryInfo.date).format('DD/MM/YYYY')}</span>
-                        <span className="italic "> {injuryInfo.regiaoLesao}</span>
-                        <Tippy hideOnClick={true} content={injuryInfo.description}>
-                          <span className="cursor-pointer lg:text-base text-lg"> ℹ️</span>
-                        </Tippy>
-                      </p>
-                    ))
-                  }
+                  {!isLoading && injuriesInfo.length <= 0 && (
+                    <h3 className="text-sm lg:text-lg font-semibold">
+                      O atleta não possui lesão registrada
+                    </h3>
+                  )}
+                  {injuriesInfo.map((injuryInfo, index) => (
+                    <p
+                      key={index}
+                      className="leading-7 justify-between inline-block align-text-bottom text-xs lg:text-sm text-wrap text-transform: capitalize"
+                    >
+                      <span className="font-bold">
+                        {dayjs(injuryInfo.date).format("DD/MM/YYYY")}
+                      </span>
+                      <span className="italic "> {injuryInfo.regiaoLesao}</span>
+                      <Tippy
+                        hideOnClick={true}
+                        content={injuryInfo.description}
+                      >
+                        <span className="cursor-pointer lg:text-base text-lg">
+                          {" "}
+                          ℹ️
+                        </span>
+                      </Tippy>
+                    </p>
+                  ))}
                 </div>
               </div>
             )}

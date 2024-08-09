@@ -102,8 +102,14 @@ export const ReviewsChart = ({ id, height, width }: ReviewsChartProps) => {
 
   return (
     <>
-      <section className="mx-auto w-64 lg:w-full">
-      <Radar key={`${width}-${height}`} height={height} width={width} data={chartData} options={options}></Radar>
+      <section className="mx-auto w-full">
+        <Radar
+          key={`${width}-${height}`}
+          height={height}
+          width={width}
+          data={chartData}
+          options={options}
+        ></Radar>
       </section>
     </>
   );
