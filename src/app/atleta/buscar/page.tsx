@@ -41,11 +41,7 @@ function Observer({ selector, callback }: any) {
   return null;
 }
 
-export type AvatarAtletaProps = {
-  className?: string | undefined;
-};
-
-export default function AtletaSelecionar({className}: AvatarAtletaProps) {
+export default function AtletaSelecionar() {
   const [listAtleta, setListAtleta] = useState<TAtletas[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [lastPage, setLastPage] = useState(false);
@@ -108,7 +104,7 @@ export default function AtletaSelecionar({className}: AvatarAtletaProps) {
 
 
   return (
-    <div className={`flex min-w-52 ${className}`}>
+    <div className={`flex min-w-52`}>
       <div
         className={`form-container !px-1 mx-auto flex flex-col items-center !w-[600px]`}
       >

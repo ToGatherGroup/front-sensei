@@ -11,33 +11,6 @@ import {
 } from "@/contexts/comparison/comparison";
 import AtletaSelecionar from "@/app/atleta/buscar/page";
 
-const rightAthlete: AthleteProfileProps = {
-  nome: "Fulano de tal",
-  idade: 32,
-  categoria: "Porradeiro",
-  faixa: "Ouro",
-  foto: "strrring",
-  altura: 1.8,
-  medalhaDTO: [],
-  valencia: {
-    labels: ["string[]", "asd"],
-    values: [12, 31],
-  }
-};
-let leftAthlete: AthleteProfileProps = {
-  nome: "Fulano de tal",
-  idade: 32,
-  categoria: "Porradeiro",
-  faixa: "Ouro",
-  foto: "strrring",
-  altura: 1.8,
-  medalhaDTO: [],
-  valencia: {
-    labels: ["string[]", "asd"],
-    values: [12, 31],
-  }
-};
-
 const medalSectionStyle = "flex flex-row h-26 w-32";
 const medalWrapper = "flex flex-col items-center space-y-2 lg:space-y-6";
 const avatarAtletaStyle = "w-32 h-32";
@@ -46,56 +19,16 @@ const athleteWrapperStyle = "shrink max-h-fit flex max-w-fit";
 export default function Comparison() {
   const { leftAthlete, rightAthlete, setIsLeft, showModal, toggleComparisonModalVisibility } = useComparisonProvider();
 
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  
-  const [pageShowModal, setPageShowModal] = useState(false);
-
-  // const updateParentState = (newState: SetStateAction<string>) => {
-  //   setParentState(newState);
-  // };
-
   const handleClick = (isLeft?: boolean) => {
-    console.log("handleClick acionado:")
-    
-    console.log(isLeft)
-    console.log(rightAthlete)
-    console.log(leftAthlete)
-    console.log("---------------------")
     if (isLeft) {
       setIsLeft(isLeft);
     }
-
     toggleComparisonModalVisibility(!showModal);
-    setPageShowModal(!pageShowModal);
-    setTimeout(() => {
-      console.log("showModal ->");
-      console.log(showModal);
-      console.log("pageShowModal");
-      console.log(pageShowModal);
-    })
   };
-
   
   const handleInternClick = ( event: { stopPropagation: () => void },) => {
     event.stopPropagation();
-    //setar modal falso com uso de useeffect em caso de mudança de objeto atleta um ou dois? Isso fecharia o modal após a seleção do usuario
-    //setPageShowModal(false);
-    //toggleComparisonModalVisibility(pageShowModal);
   };
-
-  useEffect(() => {
-    //toggleComparisonModalVisibility(pageShowModal);
-    //setPageShowModal(showModal)
-    const url = `${pathname}?${searchParams}`;
-    console.log("showModal");
-    console.log(showModal);
-  }, [showModal]);
-
-  // useEffect(() => {
-  //   console.log("Athlete atualizado:", leftAthlete, rightAthlete);
-  //   //setPageShowModal(false);
-  // }, [leftAthlete, rightAthlete]);
 
   return (
     <div>
@@ -149,7 +82,7 @@ export default function Comparison() {
               </div>
             </div>
           </div>
-          <InfoBoard leftAthlete={leftAthlete? leftAthlete : null} rightAthlete={rightAthlete ? rightAthlete : null} />
+          <InfoBoard leftAthlete={leftAthlete ? leftAthlete : null} rightAthlete={rightAthlete ? rightAthlete : null} />
           <div className="shrink h-fit flex-col z-10">
             {/* Div dos três elementos */}
             <div className={`${athleteWrapperStyle}`}>
