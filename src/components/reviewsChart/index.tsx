@@ -1,6 +1,7 @@
 "use client";
 import { useApiProvider } from "@/contexts";
 import { Chart, registerables } from "chart.js/auto";
+import { Valencia } from "@/contexts/athlete/athlete.type";
 import { useEffect, useState } from "react";
 import { Radar } from "react-chartjs-2";
 
@@ -10,17 +11,17 @@ type ReviewsChartProps = {
   id?: number | string;
   width?: number;
   height?: number;
-  firstValencia?: boolean;
-  secondValencia?: boolean;
+  firstValencia?: Valencia;
+  secondValencia?: Valencia;
 };
 
-interface IApiData {
+interface IChartData {
   labels: string[];
   values: number[];
 }
 
-export const ReviewsChart = ({ id, className, height, width }: ReviewsChartProps & { className?: string }) => {
-  const [apiData, setApiData] = useState<IApiData | null>(null);
+export const ReviewsChart = ({ id, className, height, width, firstValencia, secondValencia }: ReviewsChartProps & { className?: string }) => {
+  const [chartData, setApiData] = useState<IChartData | null>(null);
   const { get } = useApiProvider();
 
   useEffect(() => {
@@ -43,22 +44,12 @@ export const ReviewsChart = ({ id, className, height, width }: ReviewsChartProps
     fetchData();
   }, [id]);
 
-  const chartData = {
-    labels: apiData ? apiData.labels : [],
-    // labels: [
-    //   "Core",
-    //   "Explosiva",
-    //   "Isométrica",
-    //   "Tornozelo",
-    //   "Abdominal",
-    //   "MMSS",
-    //   "Anaeróbica",
-    //   "Aeróbica",
-    // ],
+  const comparisonChartData = {
+    labels: firstValencia ? firstValencia.labels : [],
     datasets: [
       {
-        label: "Avaliação Atual",
-        data: apiData ? apiData.values : [],
+        label: "Atleta da esquerda",
+        data: firstValencia ? firstValencia.values : [],
         //data: [60, 70, 80, 75, 96, 70, 90, 70, 80],
         fill: true,
         backgroundColor: "rgba(54, 162, 235, 0.8)",
@@ -70,6 +61,20 @@ export const ReviewsChart = ({ id, className, height, width }: ReviewsChartProps
         pointRadius: 0,
         borderWidth: 1,
       },
+      {
+      label: "Atleta da direita",
+      data: secondValencia ? secondValencia.values : [],
+      //data: [60, 70, 80, 75, 96, 70, 90, 70, 80],
+      fill: true,
+      backgroundColor: "rgba(120, 220, 100, 0.8)",
+      borderColor: "rgb(120, 220, 100)",
+      pointBackgroundColor: "rgb(120, 220, 100)",
+      pointBorderColor: "#fff",
+      pointHoverBackgroundColor: "#fff",
+      pointHoverBorderColor: "rgb(120, 220, 100)",
+      pointRadius: 0,
+      borderWidth: 1,
+    }
     ],
   };
 
@@ -105,7 +110,7 @@ export const ReviewsChart = ({ id, className, height, width }: ReviewsChartProps
   return (
     <>
       <section className={`mx-auto w-64 lg:w-full ${className || ""}`}>
-      <Radar key={`${width}-${height}`} height={height} width={width} data={chartData} options={options}></Radar>
+      {comparisonChartData ? <Radar key={`${width}-${height}`} height={height} width={width} data={comparisonChartData} options={options}></Radar> : <p>Selecione os atletas...</p>}
       </section>
     </>
   );

@@ -209,10 +209,11 @@ export default function Comparison() {
         <div className="flex justify-center">
           <div className="lg:max-w-md lg:mt-10 animate-fade-down animate-duration-1000">
               <ReviewsChart
-                className={pageShowModal ? "hidden" : "block"}
+                className={showModal ? "hidden" : "block"}
                 height={600}
                 width={600}
-                id={2} // Não vai ser parâmetro de tela, no caso será devolvido o id do busca atleta
+                firstValencia={leftAthlete?.valencia} // Não vai ser parâmetro de tela, no caso será devolvido o id do busca atleta
+                secondValencia={rightAthlete?.valencia}
               />
           </div>
         </div>

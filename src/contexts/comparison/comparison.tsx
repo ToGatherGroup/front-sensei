@@ -37,9 +37,6 @@ export const ComparisonStateProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-
-
-
   const { get } = useApiProvider();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [leftAthlete, setLeftAthlete] = useState<AthleteProfileProps | null>(null);
@@ -51,7 +48,7 @@ export const ComparisonStateProvider = ({
 
   useEffect(() => {
     console.log("useEffect do contexto acionado:")
-    if (selectedAthleteId && selectedAthleteId != rightAthlete?.id && selectedAthleteId != leftAthlete?.id) {
+    if (selectedAthleteId) { // && selectedAthleteId != rightAthlete?.id && selectedAthleteId != leftAthlete?.id) {
       try {
         getAthleteComparison(selectedAthleteId);
       }
@@ -59,18 +56,7 @@ export const ComparisonStateProvider = ({
         console.error("Erro ao obter dados do atleta", error);
       }
     }
-
-    if (selectedAthleteId) {
-      if (isLeft) {
-        setLeftAthlete(athlete);
-      } else {
-        setRightAthlete(athlete);
-      }
-    }
-    console.log(athlete)
-    console.log(leftAthlete)
   }, [selectedAthleteId]);
-
 
   const toggleComparisonModalVisibility = (showModal: boolean) => {
     console.log("toggleComparisonModalVisibility:", showModal)
@@ -87,7 +73,6 @@ export const ComparisonStateProvider = ({
       console.log("response", response?.data)
       console.log("isLeft", isLeft)
 
-
       if (isLeft) {
         console.log("setLeftAthlete acionado")
         setLeftAthlete(response?.data);
@@ -98,6 +83,7 @@ export const ComparisonStateProvider = ({
     } catch (error) {
       console.error("Erro ao obter dados do atleta", error);
     } finally {
+      setAthlete(null);
       setIsLeft(false);
       setIsLoading(false);
     }
