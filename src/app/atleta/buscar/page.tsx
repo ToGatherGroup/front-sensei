@@ -40,13 +40,12 @@ function Observer({ selector, callback }: any) {
 
   return null;
 }
-  
-  type AvatarAtletaProps = {
-    className?: string | undefined;
-  };
-  
-  const AtletaSelecionar = ({className}: AvatarAtletaProps) => {
-  const router = useRouter();
+
+export type AvatarAtletaProps = {
+  className?: string | undefined;
+};
+
+export default function AtletaSelecionar({className}: AvatarAtletaProps) {
   const [listAtleta, setListAtleta] = useState<TAtletas[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [lastPage, setLastPage] = useState(false);
@@ -168,5 +167,4 @@ function Observer({ selector, callback }: any) {
       />
     </div>
   );
-};
-export default AtletaSelecionar;
+}
