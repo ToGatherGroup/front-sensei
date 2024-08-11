@@ -7,9 +7,11 @@ import { Radar } from "react-chartjs-2";
 Chart.register(...registerables);
 
 type ReviewsChartProps = {
-  id: number | string;
+  id?: number | string;
   width?: number;
   height?: number;
+  firstValencia?: boolean;
+  secondValencia?: boolean;
 };
 
 interface IApiData {

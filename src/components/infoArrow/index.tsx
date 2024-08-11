@@ -1,7 +1,7 @@
 import React from "react";
 
 type infoArrowProps = {
-  info: string;
+  info?: string;
   side?: "left" | "right";
 };
 
