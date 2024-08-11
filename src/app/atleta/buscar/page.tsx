@@ -5,9 +5,7 @@ import { getAtletas, getAtletasByName } from "@/api/endpoints";
 
 //import AvatarAtleta from "@/components/avatarAtleta/page";
 import { apiToAtletas } from "@/api/middleware/atletas";
-
 import { TAtletas } from "@/types/TAtletas";
-
 import { useDebounce } from "@/hooks/useDebounce";
 import Title from "@/components/ui/title";
 import Loader from "@/components/ui/loader";
@@ -42,10 +40,12 @@ function Observer({ selector, callback }: any) {
 
   return null;
 }
-
-
-
-const AtletaSelecionar = ({ className }: { className?: string }) => {
+  
+  type AvatarAtletaProps = {
+    className?: string | undefined;
+  };
+  
+  const AtletaSelecionar = ({className}: AvatarAtletaProps) => {
   const router = useRouter();
   const [listAtleta, setListAtleta] = useState<TAtletas[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
