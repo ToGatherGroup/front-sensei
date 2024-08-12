@@ -21,35 +21,47 @@ interface IChartData {
 }
 
 export const ReviewsChart = ({ id, className, height, width, firstValencia, secondValencia }: ReviewsChartProps & { className?: string }) => {
+  const [firstValenciaReceived, setFirstValenciaReceived] = useState<Valencia | null>(null);
+  const [secondValenciaReceived, setSecondValenciaReceived] = useState<Valencia | null>(null);
   const [chartData, setApiData] = useState<IChartData | null>(null);
+
   const { get } = useApiProvider();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        console.log(`Fetching data for atleta id: ${id}`);
-        const response = await get(`avaliacao/${id}`);
-        console.log("API response:", response);
-        if (response?.data) {
-          const { labels, values } = response.data;
-          console.log("Data received:", { labels, values });
-          setApiData({ labels, values });
-        } else {
-          console.log("No data found in response");
+    if (id) {
+      const fetchData = async () => {
+        try {
+          console.log(`Fetching data for atleta id: ${id}`);
+          const response = await get(`avaliacao/${id}`);
+          console.log("API response:", response);
+          if (response?.data) {
+            const { labels, values } = response.data;
+            console.log("Data received:", { labels, values });
+            setApiData({ labels, values });
+          } else {
+            console.log("No data found in response");
+          }
+        } catch (error) {
+          console.error("Erro ao solicitar a API", error);
         }
-      } catch (error) {
-        console.error("Erro ao solicitar a API", error);
-      }
-    };
-    fetchData();
-  }, [id]);
+      };
+      fetchData();
+    }
+    if (firstValencia) {
+      setFirstValenciaReceived(firstValencia);
+    }
+    if (secondValencia) {
+      setSecondValenciaReceived(secondValencia);
+    }
+    console.log("id, firstValencia, secondValencia", id, firstValencia, secondValencia)
+  }, [id, firstValencia, secondValencia]);
 
-  const comparisonChartData = {
-    labels: firstValencia ? firstValencia.labels : [],
+  const completeChartData = {
+    labels: chartData ? chartData.labels : firstValenciaReceived?.labels,
     datasets: [
       {
         label: "Atleta da esquerda",
-        data: firstValencia ? firstValencia.values : [],
+        data: chartData ? chartData.values : firstValenciaReceived?.values,
         //data: [60, 70, 80, 75, 96, 70, 90, 70, 80],
         fill: true,
         backgroundColor: "rgba(54, 162, 235, 0.8)",
@@ -63,10 +75,10 @@ export const ReviewsChart = ({ id, className, height, width, firstValencia, seco
       },
       {
       label: "Atleta da direita",
-      data: secondValencia ? secondValencia.values : [],
+      data: secondValenciaReceived ? secondValenciaReceived.values : [],
       //data: [60, 70, 80, 75, 96, 70, 90, 70, 80],
       fill: true,
-      backgroundColor: "rgba(120, 220, 100, 0.8)",
+      backgroundColor: "rgba(120, 220, 100, 0.9)",
       borderColor: "rgb(120, 220, 100)",
       pointBackgroundColor: "rgb(120, 220, 100)",
       pointBorderColor: "#fff",
@@ -110,7 +122,7 @@ export const ReviewsChart = ({ id, className, height, width, firstValencia, seco
   return (
     <>
       <section className={`mx-auto w-64 lg:w-full ${className || ""}`}>
-      {comparisonChartData ? <Radar key={`${width}-${height}`} height={height} width={width} data={comparisonChartData} options={options}></Radar> : <p>Selecione os atletas...</p>}
+      {completeChartData ? <Radar key={`${width}-${height}`} height={height} width={width} data={completeChartData} options={options}></Radar> : null}
       </section>
     </>
   );
