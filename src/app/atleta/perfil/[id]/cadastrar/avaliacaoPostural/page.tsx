@@ -327,6 +327,7 @@ const PosturalEvaluation = ({ params: { id } }: Props) => {
             imageSrc={imageToCrop}
             onCropDone={handleCropComplete}
             onCropCancel={() => setCurrentPage("choose-img")}
+            aspectRatio={2 / 4}
           />
         </div>
       )}

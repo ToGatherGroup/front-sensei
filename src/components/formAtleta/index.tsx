@@ -189,6 +189,7 @@ const FormAtleta = ({ atleta, method }: Props) => {
               imageSrc={avatarBase64}
               onCropDone={handleCropDone}
               onCropCancel={handleCropCancel}
+              aspectRatio={3 / 3}
             />
           )}
 
