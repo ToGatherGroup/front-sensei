@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { getAtletas, getAtletasByName } from "@/api/endpoints";
 
-import AvatarAtleta from "@/components/avatarAtleta/page";
+//import AvatarAtleta from "@/components/avatarAtleta/page";
 import { apiToAtletas } from "@/api/middleware/atletas";
 
 import { TAtletas } from "@/types/TAtletas";
@@ -11,6 +11,8 @@ import { TAtletas } from "@/types/TAtletas";
 import { useDebounce } from "@/hooks/useDebounce";
 import Title from "@/components/ui/title";
 import Loader from "@/components/ui/loader";
+import AvatarAtleta from "@/components/avatarAtleta/avatarAtleta";
+import { useRouter } from "next/navigation";
 
 let height = 1500; // A secure large height definition, in case window is not defined
 
@@ -42,6 +44,8 @@ function Observer({ selector, callback }: any) {
 }
 
 const AtletaSelecionar = () => {
+  const router = useRouter();
+
   const [listAtleta, setListAtleta] = useState<TAtletas[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [lastPage, setLastPage] = useState(false);
@@ -124,12 +128,13 @@ const AtletaSelecionar = () => {
           }
         >
           {listAtleta.map((atleta, i) => (
-            <li key={i}>
+            <li key={i} className="w-40 h-fit">
               <AvatarAtleta
-                id={atleta.id}
                 name={atleta.name}
-                photo={atleta.photo}
-                size="small"
+                photoUrl={atleta.photo}
+                onClick={() => router.push(`/atleta/perfil/${atleta.id}`)}
+                nameClassName="max-h-[33px] leading-4 scale-125 mt-3"
+                className="scale-[.6] md:scale-[.7] -mt-10 -mb-10"
               />
             </li>
           ))}
