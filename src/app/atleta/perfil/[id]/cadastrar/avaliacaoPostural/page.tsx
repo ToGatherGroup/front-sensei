@@ -150,7 +150,7 @@ const PosturalEvaluation = ({ params: { id } }: Props) => {
           croppedArea.height
         );
 
-        const croppedImage = canvas.toDataURL("image/jpeg");
+        const croppedImage = canvas.toDataURL("image/png");
         setImageAfterCrop(croppedImage);
       };
     }

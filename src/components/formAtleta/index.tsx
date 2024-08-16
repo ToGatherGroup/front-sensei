@@ -55,29 +55,47 @@ const FormAtleta = ({ atleta, method }: Props) => {
   });
 
   const onSubmit = async (data: any) => {
-    switch (method) {
-      case "PUT":
-        const preparedData = {
-          ...data,
-          foto: croppedImage || atleta?.foto,
-          isAtivo: getValues("isAtivo"),
-        };
-        updateAthlete(preparedData);
+    try {
+      switch (method) {
+        case "PUT":
+          console.log("Método PUT acionado");
+          const preparedDataPut = {
+            ...data,
+            foto: croppedImage || atleta?.foto,
+            isAtivo: getValues("isAtivo"),
+          };
+          console.log("Dados preparados para PUT:", preparedDataPut);
+          updateAthlete(preparedDataPut);
+          break;
 
-        break;
-      default:
-        file2Base64(data.foto[0])
-          .then((avatarBase64) => {
-            const preparedData = data;
-            preparedData.foto = avatarBase64;
-            registerAthlete(preparedData);
-          })
-          .catch((error) => {
-            alert(
-              "Houve um erro ao carregar a imagem de avatar. Tente usar uma outra imagem!"
-            );
-            console.log(error);
-          });
+        default:
+          console.log("Método POST acionado");
+          let finalAvatarBase64 = croppedImage;
+
+          if (!finalAvatarBase64 && data.foto && data.foto[0]) {
+            console.log("Arquivo de imagem encontrado:", data.foto[0]);
+            finalAvatarBase64 = await file2Base64(data.foto[0]);
+            console.log("Imagem convertida para Base64:", finalAvatarBase64);
+          }
+
+          const preparedDataPost = {
+            ...data,
+            foto: finalAvatarBase64,
+          };
+
+          if (finalAvatarBase64) {
+            console.log("Dados preparados para POST:", preparedDataPost);
+            registerAthlete(preparedDataPost);
+          } else {
+            alert("Por favor, selecione uma imagem para o avatar.");
+            console.log("Nenhuma imagem foi selecionada.");
+          }
+      }
+    } catch (error) {
+      alert(
+        "Houve um erro ao carregar a imagem de avatar. Tente usar uma outra imagem!"
+      );
+      console.error("Erro ao carregar a imagem:", error);
     }
   };
 
@@ -127,7 +145,7 @@ const FormAtleta = ({ atleta, method }: Props) => {
           croppedArea.height
         );
 
-        const croppedImage = canvas.toDataURL("image/jpeg");
+        const croppedImage = canvas.toDataURL("image/png");
         setImageAfterCrop(croppedImage);
       };
     }
@@ -137,6 +155,7 @@ const FormAtleta = ({ atleta, method }: Props) => {
   const handleCropDone = (croppedArea: Area) => {
     cropImage(avatarBase64, croppedArea, (croppedImage) => {
       setCroppedImage(croppedImage);
+      setAvatarBase64(croppedImage);
     });
     setOpenCropper(false);
   };
@@ -167,12 +186,15 @@ const FormAtleta = ({ atleta, method }: Props) => {
                   alt="Foto do atleta"
                 />
                 <input
-                  {...register("foto", { onChange: uploadAvatar })}
+                  {...register("foto", {
+                    onChange: (e) => {
+                      uploadAvatar(e);
+                    },
+                  })}
                   className="hidden"
                   type="file"
                   id="photo"
                   accept="image/png"
-                  onChange={uploadAvatar}
                 />
                 {errors.foto && (
                   <p className={styles.displayError}>{errors.foto.message}</p>
