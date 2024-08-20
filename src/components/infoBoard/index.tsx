@@ -3,7 +3,7 @@ import { AthleteProfileProps } from "./../../contexts/athlete/athlete.type";
 
 export default function InfoBoard({ leftAthlete, rightAthlete }: { leftAthlete: AthleteProfileProps | null, rightAthlete: AthleteProfileProps | null }) {
   return (
-    <div className="flex max-h-64">
+    <div className="flex max-h-64 mx-12">
       <div className="z-10 flex flex-col max-h-fit">
         <InfoArrow side={"left"} info={leftAthlete?.peso?.toString()} />
         <InfoArrow side={"left"} info={leftAthlete?.altura?.toString()} />
