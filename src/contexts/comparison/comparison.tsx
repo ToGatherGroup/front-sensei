@@ -53,7 +53,7 @@ export const ComparisonStateProvider = ({
         getAthleteComparison(selectedAthleteId);
       }
       catch (error) {
-        console.error("Erro ao obter dados do atleta", error);
+        console.error("Erro ao obter informações de comparação do atleta", error);
       }
     }
   }, [selectedAthleteId]);
@@ -81,7 +81,7 @@ export const ComparisonStateProvider = ({
         setRightAthlete(response?.data);
       }
     } catch (error) {
-      console.error("Erro ao obter dados do atleta", error);
+      console.error("Erro ao obter e tratar dados de comparação do atleta", error);
     } finally {
       setAthlete(null);
       setIsLeft(false);

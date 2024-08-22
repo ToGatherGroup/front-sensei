@@ -8,8 +8,38 @@ import AthleteComparisonCard from "@/components/athleteComparison";
 
 const medalSectionStyle = "flex flex-row h-26 w-32 mt-24";
 const medalWrapper = "flex flex-col items-center space-y-2 lg:space-y-6";
-const avatarAtletaStyle = "nax-w-48";
-const athleteWrapperStyle = "shrink max-h-fit flex max-w-fit";
+const avatarAtletaStyle = "w-48";
+const athleteWrapperStyle = "shrink flex";
+
+// Array padrão de medalhas com contagem zero
+const defaultMedals: MedalProps[] = [
+  {
+    tipo: "Ouro",
+    imgSrc: "/medalhasCinzas1.png",
+    ringColor: "amber-500",
+    medalCount: 0,
+  },
+  {
+    tipo: "Prata",
+    imgSrc: "/medalhasCinzas2.png",
+    ringColor: "zinc-500",
+    medalCount: 0,
+  },
+  {
+    tipo: "Bronze",
+    imgSrc: "/medalhasCinzas3.png",
+    ringColor: "copperMedal",
+    medalCount: 0,
+  },
+];
+
+// Definição de MedalProps para os objetos de entrada que podem ter campos opcionais
+interface MedalProps {
+  tipo?: string;
+  imgSrc?: string;
+  ringColor?: string;
+  medalCount?: number;
+}
 
 export default function Comparison() {
   const {
@@ -31,6 +61,21 @@ export default function Comparison() {
     event.stopPropagation();
   };
 
+  // Função para obter o array de medalhas (usar default se vazio)
+  const getMedals = (medalhaDTO: MedalProps[] | undefined): MedalProps[] => {
+    return (
+      medalhaDTO && medalhaDTO.length > 0 ? medalhaDTO : defaultMedals
+    ).map(
+      (medal: MedalProps, index): MedalProps => ({
+        tipo: medal.tipo || `Medalha ${index + 1}`,
+        imgSrc:
+          medal.imgSrc || `/formAtleta/medals/medalhasCinzas${index + 1}.png`,
+        ringColor: medal.ringColor || "gray-500",
+        medalCount: medal.medalCount || 0,
+      })
+    );
+  };
+
   return (
     <div>
       <div className="flex-col h-svh w-screen">
@@ -47,66 +92,62 @@ export default function Comparison() {
                 athlete={leftAthlete ? leftAthlete : null}
                 onClick={() => handleClick(true)}
                 avatarAtletaStyle={avatarAtletaStyle}
-                isLeft={true} />
+                isLeft={true}
+              />
             </div>
             <div className={medalWrapper}>
-              <div className={medalSectionStyle}>
-                <MedalSection
-                  imgSrc="/formAtleta/medals/medalhasCinza1.png"
-                  altText="Ícone Medalha Ouro"
-                  ringColor="amber-500"
-                  medalCount={2}
-                />
-                <MedalSection
-                  imgSrc="/formAtleta/medals/medalhasCinza2.png"
-                  altText="Ícone Medalha Prata"
-                  ringColor="zinc-500"
-                  medalCount={2}
-                />
-                <MedalSection
-                  imgSrc="/formAtleta/medals/medalhasCinza3.png"
-                  altText="Ícone Medalha Bronze"
-                  ringColor="copperMedal"
-                  medalCount={2}
-                />
-              </div>
+              {leftAthlete && (
+                <div className={medalSectionStyle}>
+                  {getMedals(leftAthlete?.medalhaDTO).map(
+                    (medal: MedalProps, index) => (
+                      <MedalSection
+                        key={index}
+                        imgSrc={
+                          `/formAtleta/medals/medalhasCinza${index + 1}.png`
+                        }
+                        altText={`Ícone Medalha ${medal.tipo}`}
+                        ringColor={medal.ringColor}
+                        medalCount={medal.medalCount}
+                      />
+                    )
+                  )}
+                </div>
+              )}
             </div>
           </div>
           <InfoBoard
             leftAthlete={leftAthlete ? leftAthlete : null}
             rightAthlete={rightAthlete ? rightAthlete : null}
           />
-          <div className="shrink h-fit flex-col z-10">
+          <div className="shrink h-fit flex-col">
             {/* Div dos três elementos */}
             <div className={`${athleteWrapperStyle}`}>
               {/* Div do avatar e infos */}
               <AthleteComparisonCard
                 athlete={rightAthlete ? rightAthlete : null}
-                onClick={() => handleClick(true)}
+                onClick={() => handleClick(false)}
                 avatarAtletaStyle={avatarAtletaStyle}
-                isLeft={false} />
+                isLeft={false}
+              />
             </div>
             <div className={medalWrapper}>
-              <div className={medalSectionStyle}>
-                <MedalSection
-                  imgSrc="/formAtleta/medals/medalhasCinza1.png"
-                  altText="Ícone Medalha Ouro"
-                  ringColor="amber-500"
-                  medalCount={2}
-                />
-                <MedalSection
-                  imgSrc="/formAtleta/medals/medalhasCinza2.png"
-                  altText="Ícone Medalha Prata"
-                  ringColor="zinc-500"
-                  medalCount={2}
-                />
-                <MedalSection
-                  imgSrc="/formAtleta/medals/medalhasCinza3.png"
-                  altText="Ícone Medalha Bronze"
-                  ringColor="copperMedal"
-                  medalCount={2}
-                />
-              </div>
+              {leftAthlete && (
+                <div className={medalSectionStyle}>
+                  {getMedals(rightAthlete?.medalhaDTO).map(
+                    (medal: MedalProps, index) => (
+                      <MedalSection
+                        key={index}
+                        imgSrc={
+                          `/formAtleta/medals/medalhasCinza${index + 1}.png`
+                        }
+                        altText={`Ícone Medalha ${medal.tipo}`}
+                        ringColor={medal.ringColor}
+                        medalCount={medal.medalCount}
+                      />
+                    )
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>

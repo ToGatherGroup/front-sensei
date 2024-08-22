@@ -14,7 +14,7 @@ type AthleteComparisonCardProps = {
 const AthleteComparisonCard: React.FC<AthleteComparisonCardProps> = ({
   athlete,
   onClick,
-  avatarAtletaStyle = "",
+  avatarAtletaStyle = "relative", // TODO: Aplicar espaçamento absoluto no botão
   isLeft,
 }) => {
   const defaultNome = "Selecionar atleta";
@@ -28,16 +28,34 @@ const AthleteComparisonCard: React.FC<AthleteComparisonCardProps> = ({
       style={{ cursor: "pointer" }}
       onClick={onClick}
     >
+      <div className="w-48 w-48 h-60 min-h-60 p-auto ">
       <img
-        className="max-w-48"
+        style={{
+          ...(athlete?.foto ? {} : { width: "100%", height: "100%" }),
+        }}
         src={athlete?.foto || defaultFoto}
         alt={`Foto de ${athlete?.nome || "Atleta"}`}
       />
-      <button className={`bg-yellow-500 w-48 min-w-fit h-24 skew-x-[${isLeft ? '-30deg' : '30deg'}]`}>
-        <p className={`skew-x-[${isLeft ? '30deg' : '-30deg'}] w-full h-full z-80 shadow-xl text-white text-center pt-9 p-auto leading-6`}>
+      </div>
+      <button 
+        className="absolute z-10 bg-winePattern w-48 min-w-fit h-fit"
+        style={{
+          transform: `skewX(${isLeft ? '-30deg' : '30deg'})`,
+          marginLeft: isLeft ? '-6px' : '6px',
+        }}
+      >
+        <p 
+          className=" w-full h-full z-80 shadow-xl text-white text-center py-4  leading-6"
+          style={{transform: `skewX(${isLeft ? '30deg' : '-30deg'})` }}
+        >
           {athlete?.nome || defaultNome}
         </p>
+        
       </button>
+      <div 
+      className='z-0 absolute w-48 h-12 bg-white mt-4'
+      style={{transform: `skewX(${isLeft ? '-30deg' : '30deg'})` }}
+      ></div>
     </div>
   );
 };

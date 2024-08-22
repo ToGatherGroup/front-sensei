@@ -3,6 +3,7 @@ import React from "react";
 type infoArrowProps = {
   info?: string;
   side?: "left" | "right";
+  className?: string;
 };
 
 /**
@@ -11,12 +12,13 @@ type infoArrowProps = {
  * @param {Object} props - The component props.
  * @param {string} props.info - The text to display inside the arrow.
  * @param {string} [props.side="left"] - The pointing side of the arrow. Can be "left" or "right".
+ * @param {string} [props.className] - The class name to apply to the span element.
  * @returns {JSX.Element} - The InfoArrow component.
  */
-const InfoArrow = ({ side = "left", info }: infoArrowProps): JSX.Element => {
+const InfoArrow = ({ side = "left", info, className }: infoArrowProps): JSX.Element => {
 
   const spanSideClassName = side === "left" ? "clip-shape-left pl-10 " : " clip-shape-right pr-10";
-  const spanClassName = `flex items-center bg-white lg:max-w-32 max-h-32 font-bold text-xl  shadow-lg flex-1 ${spanSideClassName}`;
+  const spanClassName = `flex  items-center bg-white lg:max-w-32 max-w-28 max-h-32 font-bold text-xl shadow-lg flex-1 ${spanSideClassName} ${className ?? ""}`;
 
   const textSideClassName = side === "left" ? "text-right" : "text-left";
   const textClassName = `mx-4 p-2 text-center ${textSideClassName}`;
@@ -28,3 +30,4 @@ const InfoArrow = ({ side = "left", info }: infoArrowProps): JSX.Element => {
 };
 
 export default InfoArrow;
+

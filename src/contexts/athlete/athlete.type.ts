@@ -31,6 +31,10 @@ export type AthleteProfileProps = {
 export type MedalsProps = MedalProps[];
 
 type MedalProps = {
+    imgSrc?: string;
+    tipo?: any;
+    ringColor?: string;
+    medalCount?: number;
     posicao: string,
     quantidade: number,
 }
