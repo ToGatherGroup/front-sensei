@@ -5,6 +5,7 @@ import InfoBoard from "@/components/infoBoard";
 import { useComparisonProvider } from "@/contexts/comparison/comparison";
 import AtletaSelecionar from "@/app/atleta/buscar/page";
 import AthleteComparisonCard from "@/components/athleteComparison";
+import { each } from "chart.js/helpers";
 
 const medalSectionStyle = "flex flex-row h-26 w-32 mt-24";
 const medalWrapper = "flex flex-col items-center space-y-2 lg:space-y-6";
@@ -63,6 +64,19 @@ export default function Comparison() {
 
   // Função para obter o array de medalhas (usar default se vazio)
   const getMedals = (medalhaDTO: MedalProps[] | undefined): MedalProps[] => {
+
+    const medalhaExiste = (medalhaDTO && medalhaDTO?.length > 0 ? true : false)
+    const medalhaIncompleta = (medalhaDTO && medalhaDTO?.length < 3 ? true : false)
+
+    if (medalhaExiste && medalhaIncompleta) {
+      console.log("medalhaIncompleta")
+      for (let i = 0; i < 3; i++) {
+        if (!medalhaDTO?.includes(defaultMedals[i]))
+        medalhaDTO?.push(defaultMedals[i]);
+    }
+        
+      }
+
     return (
       medalhaDTO && medalhaDTO.length > 0 ? medalhaDTO : defaultMedals
     ).map(
@@ -98,19 +112,13 @@ export default function Comparison() {
             <div className={medalWrapper}>
               {leftAthlete && (
                 <div className={medalSectionStyle}>
-                  {getMedals(leftAthlete?.medalhaDTO).map(
-                    (medal: MedalProps, index) => (
-                      <MedalSection
-                        key={index}
-                        imgSrc={
-                          `/formAtleta/medals/medalhasCinza${index + 1}.png`
-                        }
-                        altText={`Ícone Medalha ${medal.tipo}`}
-                        ringColor={medal.ringColor}
-                        medalCount={medal.medalCount}
-                      />
-                    )
-                  )}
+                  {/* //{getMedals(leftAthlete?.medalhaDTO).map( */}
+                  {/* //  (medal: MedalProps, index) => ( */}
+                      { leftAthlete?.medalhaDTO && leftAthlete.medalhaDTO.every((medal: MedalProps) => (
+                        medal.tipo == "Medalha de ouro"
+                      ))}
+                  {/* //  ) */}
+                  {/* //)} */}
                 </div>
               )}
             </div>
@@ -131,7 +139,7 @@ export default function Comparison() {
               />
             </div>
             <div className={medalWrapper}>
-              {leftAthlete && (
+              {rightAthlete && (
                 <div className={medalSectionStyle}>
                   {getMedals(rightAthlete?.medalhaDTO).map(
                     (medal: MedalProps, index) => (
@@ -165,7 +173,7 @@ export default function Comparison() {
           </div>
         )}
         <div className="flex justify-center">
-          <div className="lg:max-w-md lg:mt-10 animate-fade-down animate-duration-1000">
+          <div className="lg:max-w-md -mt-40 animate-fade-down animate-duration-1000">
             <ReviewsChart
               className={showModal ? "hidden" : "block"}
               height={600}
