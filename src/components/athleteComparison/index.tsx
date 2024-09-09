@@ -28,11 +28,12 @@ const AthleteComparisonCard: React.FC<AthleteComparisonCardProps> = ({
       style={{ cursor: "pointer" }}
       onClick={onClick}
     >
-      <div className="w-48 w-48 h-60 min-h-60 p-auto ">
+      <div className={`w-48 p-auto ${athlete?.foto ? 'mt-14 h-fit' : 'h-60 w-full h-full'}`}>
       <img
-        style={{
-          ...(athlete?.foto ? {} : { width: "100%", height: "100%" }),
-        }}
+        // style={{
+        //   ...(athlete?.foto ? {} : { width: "100%", height: "100%" }),
+        // }}
+        className={athlete?.foto ? '' : 'w-full h-full'}
         src={athlete?.foto || defaultFoto}
         alt={`Foto de ${athlete?.nome || "Atleta"}`}
       />

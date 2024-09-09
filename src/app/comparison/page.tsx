@@ -9,7 +9,7 @@ import { each } from "chart.js/helpers";
 
 const medalSectionStyle = "flex flex-row h-26 w-32 mt-24";
 const medalWrapper = "flex flex-col items-center space-y-2 lg:space-y-6";
-const avatarAtletaStyle = "w-48";
+const avatarAtletaStyle = "w-48 h-fit";
 const athleteWrapperStyle = "shrink flex";
 
 // Array padrão de medalhas com contagem zero
