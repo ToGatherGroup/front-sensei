@@ -92,7 +92,7 @@ export default function Comparison() {
 
   return (
     <div>
-      <div className="flex-col h-svh w-screen">
+      <div className="flex-col max-h-dvh w-screen">
         <div
           className={`${
             showModal ? "blur" : ""
@@ -165,10 +165,10 @@ export default function Comparison() {
             onClick={() => handleClick()}
           >
             <div
-              className="fixed mt-48 z-99 scroll-smooth"
+              className=" z-99 relative w-fit my-auto h-fit"
               onClick={(event) => handleInternClick(event)}
             >
-              <AtletaSelecionar />
+              <AtletaSelecionar isModal={true} />
             </div>
           </div>
         )}
