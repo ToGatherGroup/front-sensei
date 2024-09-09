@@ -165,7 +165,7 @@ export default function Comparison() {
             onClick={() => handleClick()}
           >
             <div
-              className="fixed mt-48 z-99"
+              className="fixed mt-48 z-99 scroll-smooth"
               onClick={(event) => handleInternClick(event)}
             >
               <AtletaSelecionar />

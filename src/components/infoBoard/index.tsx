@@ -10,7 +10,7 @@ export default function InfoBoard({ leftAthlete, rightAthlete }: { leftAthlete: 
         <InfoArrow side={"left"} info={leftAthlete?.idade?.toString()} />
         <InfoArrow side={"left"} info={leftAthlete?.faixa?.toString()} className="text-sm"/>
       </div>
-      <section className="flex max-h-64 gap-9 flex-col bg-winePatternDark z-0 min-w-64 w-64 mx-[-20px] p-4">
+      <section className="flex max-h-64 gap-9 flex-col bg-winePatternDark z-0 min-w-52 w-52 mx-[-20px] p-4">
         <span className="italic font-bold text-xl text-center text-white">
           PESO
         </span>
