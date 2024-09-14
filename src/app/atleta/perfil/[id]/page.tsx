@@ -194,7 +194,7 @@ const Page = ({ params }: Props) => {
           <AvatarAtleta
             name={athleteProfile?.nome ?? "Carregando .."}
             photoUrl={athleteProfile?.foto}
-            losangoClassName={"p-0"}
+            nameClassName="leading-6"
             className="mb-2"
           />
           <section>
