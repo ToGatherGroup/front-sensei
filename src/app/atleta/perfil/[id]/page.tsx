@@ -1,6 +1,6 @@
 "use client";
 
-import AvatarAtleta from "@/components/avatarAtleta/page";
+import AvatarAtleta from "@/components/avatarAtleta/avatarAtleta";
 
 import { useEffect, useState, useCallback } from "react";
 import useScreenSize from "@/hooks/useScreenSize";
@@ -192,11 +192,10 @@ const Page = ({ params }: Props) => {
             {/* <IconButton href={`/postura/${params.id}`} src="/icons/posture_icon.png" alt="Postura" /> */}
           </div>
           <AvatarAtleta
-            id={params.id}
-            name={athleteProfile?.nome}
-            photo={athleteProfile?.foto}
-            size={"big"}
-            className={screenSize.width < 600 ? "scale-[.85]" : undefined}
+            name={athleteProfile?.nome ?? "Carregando .."}
+            photoUrl={athleteProfile?.foto}
+            nameClassName="leading-6"
+            className="mb-2"
           />
           <section>
             <div className="flex flex-col items-center space-y-2 lg:space-y-6">
