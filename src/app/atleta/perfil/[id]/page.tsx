@@ -17,6 +17,8 @@ import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 import Qualitativos from "@/components/qualitativos/index";
 import PosturaPage from "./postura/page";
+import Losango from "@/components/losango/losango";
+import Link from "next/link";
 
 type Params = {
   id: string;
@@ -93,10 +95,11 @@ const Page = ({ params }: Props) => {
   }, [params.id]);
 
   const athleteInfo = [
-    { label: athleteProfile?.faixa },
-    { label: `${athleteProfile?.idade} anos` },
+    { label: "idade", value: `${athleteProfile?.idade} anos` },
+    { label: "faixa", value: athleteProfile?.faixa },
     {
-      label: athleteProfile?.categoria
+      label: "categoria",
+      value: athleteProfile?.categoria
         ? athleteProfile?.categoria
         : "Sem categoria",
     },
@@ -152,12 +155,23 @@ const Page = ({ params }: Props) => {
   const renderAthleteInfo = () => (
     <div className="flex flex-col items-center space-y-2 lg:space-y-6">
       {athleteInfo.map((info, index) => (
-        <div
+        <Losango
           key={index}
-          className="bg-gray-300 p-2 lg:p-5 rounded-md text-center text-black flex justify-center items-center w-40 lg:w-60 h-7"
+          className="bg-gray-300 p-5 text-center text-black flex justify-center items-center w-60 h-7"
         >
-          <h4 className="text-lg font-semibold">{info.label}</h4>
-        </div>
+          <div className="flex relative w-[250px] h-8 -translate-y-0.3">
+            <Losango className="box-content bg-winePattern ml-3 w-[190px]">
+              <p className="uppercase text-white text-base font-semibold">
+                {info.label}
+              </p>
+            </Losango>
+            <div className="w-full text-center flex items-center">
+              <p className="m-auto text-lg font-semibold w-fit max-w-[120px] leading-4">
+                {info.value}
+              </p>
+            </div>
+          </div>
+        </Losango>
       ))}
     </div>
   );
@@ -166,37 +180,45 @@ const Page = ({ params }: Props) => {
     <div className="flex justify-center mx-auto min-h-dvh max-h-max max-w-screen-xl">
       <section className="flex flex-col lg:flex-row lg:justify-around lg:w-full">
         <div>
-          <div className="flex justify-center space-x-6 mb-4 mt-6 lg:space-x-10 lg:mt-8 lg:mb-8">
-            {/* <IconButton href="/comparison" src="/icons/avaliacao_fisica.png" alt="Avaliação Física Individual" /> */}
-            <IconButton
-              href={`${params.id}/cadastrar/avaliacaoFisica`}
-              src="/icons/avaliacao_fisica.png"
-              alt="Edição"
+          <div className="relative">
+            <Link href={`/atleta/editar/${params.id}`}>
+              <div className="bg-red-600 left-[125px] lg:left-[35px] bottom-[50px] rounded-full size-[180px] absolute z-40"></div>
+            </Link>
+            <AvatarAtleta
+              name={athleteProfile?.nome ?? "Carregando .."}
+              photoUrl={athleteProfile?.foto}
+              nameClassName="leading-6"
+              className="mb-2 z-20"
             />
-            <IconButton
+
+            {/* Cadastrar campeonato */}
+            <Link
               href={`${params.id}/cadastrar/campeonato`}
-              src="/icons/campeonato.png"
-              alt="Campeonato"
+              className="bg-transparent w-10 h-10 absolute z-40 bottom-[98px] right-20 lg:-right-[10px] rounded-md hover:translate-x-6 hover:w-16 duration-300 peer/campeonato"
             />
-            <IconButton
-              href={`${params.id}/postura`}
-              src="/icons/posture_icon.png"
-              alt="Postura"
+            <div className="bg-white w-20 absolute z-10 bottom-[98px] right-20 lg:-right-[10px] rounded-md peer-hover/campeonato:translate-x-6 duration-300">
+              <IconButton
+                href={`${params.id}/cadastrar/campeonato`}
+                src="/icons/add_campeonato_48x48.png"
+                alt="Edição"
+                className="ml-auto !h-10 !w-10"
+              />
+            </div>
+
+            {/* Cadastrar Avaliação Física */}
+            <Link
+              href={`${params.id}/cadastrar/avaliacaoFisica`}
+              className="bg-transparent w-[50px] h-10 absolute z-40 bottom-14 right-20 lg:-right-[10px] rounded-md hover:translate-x-6 hover:w-[70px] duration-300 peer/avaliacao"
             />
-            <IconButton
-              href={`/atleta/editar/${params.id}`}
-              src="/icons/ferramenta-lapis.png"
-              alt="Edição"
-            />
-            {/* <IconButton href={`/atleta/perfil/${params.id}/cadastrar/campeonato`} src="/icons/campeonato.png" alt="Campeonato" /> */}
-            {/* <IconButton href={`/postura/${params.id}`} src="/icons/posture_icon.png" alt="Postura" /> */}
+            <div className="bg-white w-[100px] absolute z-10 bottom-14 right-20 lg:-right-[10px] rounded-md peer-hover/avaliacao:translate-x-6 duration-300">
+              <IconButton
+                href={`${params.id}/cadastrar/avaliacaoFisica`}
+                src="/icons/add_avaliacao_48x48.png"
+                alt="Edição"
+                className="ml-auto !h-10 !w-10"
+              />
+            </div>
           </div>
-          <AvatarAtleta
-            name={athleteProfile?.nome ?? "Carregando .."}
-            photoUrl={athleteProfile?.foto}
-            nameClassName="leading-6"
-            className="mb-2"
-          />
           <section>
             <div className="flex flex-col items-center space-y-2 lg:space-y-6">
               <div className="flex flex-row">
