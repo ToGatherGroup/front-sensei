@@ -7,12 +7,14 @@ interface ImageCropperProps {
   imageSrc: string;
   onCropDone: (croppedArea: Area) => void;
   onCropCancel: () => void;
+  aspectRatio: number;
 }
 
 const ImageCropper: React.FC<ImageCropperProps> = ({
   imageSrc,
   onCropDone,
   onCropCancel,
+  aspectRatio,
 }) => {
   const [crop, setCrop] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [zoom, setZoom] = useState<number>(1);
@@ -31,7 +33,7 @@ const ImageCropper: React.FC<ImageCropperProps> = ({
             classes={{ mediaClassName: "min-w-0 min-h-0" }}
             crop={crop}
             zoom={zoom}
-            aspect={2 / 4}
+            aspect={aspectRatio}
             onCropChange={setCrop}
             onZoomChange={setZoom}
             onCropComplete={onCropComplete}
