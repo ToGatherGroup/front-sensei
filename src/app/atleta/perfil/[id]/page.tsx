@@ -180,10 +180,11 @@ const Page = ({ params }: Props) => {
     <div className="flex justify-center mx-auto min-h-dvh max-h-max max-w-screen-xl">
       <section className="flex flex-col lg:flex-row lg:justify-around lg:w-full">
         <div>
-          <div className="relative">
-            <Link href={`/atleta/editar/${params.id}`}>
-              <div className="bg-red-600 left-[125px] lg:left-[35px] bottom-[50px] rounded-full size-[180px] absolute z-40"></div>
-            </Link>
+          <div className="box-border relative">
+            <Link
+              href={`/atleta/editar/${params.id}`}
+              className="box-border absolute z-40 bg-red-600 left-[calc(50%-90px)] bottom-[45px] rounded-full size-[180px]"
+            />
             <AvatarAtleta
               name={athleteProfile?.nome ?? "Carregando .."}
               photoUrl={athleteProfile?.foto}
@@ -252,7 +253,7 @@ const Page = ({ params }: Props) => {
         <div>
           {" "}
           {/* Seção Botões Começo */}
-          {renderButtons()}
+          {/* {renderButtons()} */}
           <div className="max-w-full">
             {qualitativos && (
               <div>
