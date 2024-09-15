@@ -253,7 +253,7 @@ const Page = ({ params }: Props) => {
         <div>
           {" "}
           {/* Seção Botões Começo */}
-          {/* {renderButtons()} */}
+          {renderButtons()}
           <div className="max-w-full">
             {qualitativos && (
               <div>
