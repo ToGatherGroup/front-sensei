@@ -19,6 +19,7 @@ import Qualitativos from "@/components/qualitativos/index";
 import PosturaPage from "./postura/page";
 import Losango from "@/components/losango/losango";
 import Link from "next/link";
+import Image from "next/image";
 
 type Params = {
   id: string;
@@ -181,10 +182,19 @@ const Page = ({ params }: Props) => {
       <section className="flex flex-col lg:flex-row lg:justify-around lg:w-full">
         <div>
           <div className="box-border relative">
-            <Link
-              href={`/atleta/editar/${params.id}`}
-              className="box-border absolute z-40 bg-red-600 left-[calc(50%-90px)] bottom-[45px] rounded-full size-[180px]"
-            />
+            <Link href={`/atleta/editar/${params.id}`}>
+              <div className="box-border absolute z-40 left-[calc(50%-90px)] bottom-[45px] rounded-full size-[180px] flex justify-center items-center bg-none group/perfil">
+                <div className="p-1 bg-white rounded-lg opacity-0 group-hover/perfil:opacity-70">
+                  <Image
+                    alt="Editar atleta"
+                    src={"/icons/editar_perfil_48x48.png"}
+                    width={48}
+                    height={48}
+                    className={"opacity-0 group-hover/perfil:opacity-70"}
+                  />
+                </div>
+              </div>
+            </Link>
             <AvatarAtleta
               name={athleteProfile?.nome ?? "Carregando .."}
               photoUrl={athleteProfile?.foto}
