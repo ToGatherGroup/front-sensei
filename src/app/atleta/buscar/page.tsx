@@ -5,26 +5,17 @@ import { getAtletas, getAtletasByName } from "@/api/endpoints";
 
 //import AvatarAtleta from "@/components/avatarAtleta/page";
 import { apiToAtletas } from "@/api/middleware/atletas";
-
 import { TAtletas } from "@/types/TAtletas";
-
 import { useDebounce } from "@/hooks/useDebounce";
 import Title from "@/components/ui/title";
 import Loader from "@/components/ui/loader";
 import AvatarAtleta from "@/components/avatarAtleta/avatarAtleta";
 import { useRouter } from "next/navigation";
 
-let height = 1500; // A secure large height definition, in case window is not defined
-
-if (typeof window !== "undefined") {
-  height = window.innerHeight;
-}
-
-const MINIMUM_ELEMENTS_PER_PAGE = 16;
-const ELEMENTS_PER_PAGE = Math.ceil(((height - 250) * 4) / 130);
-
-function Observer({ selector, callback }: any) {
+function Observer({ selector, callback, isModal = false }: any) {
   useEffect(() => {
+    if (isModal) return; // Se isModal for true, o Observer não será ativado
+
     const observer = new IntersectionObserver((entries) => callback(entries), {
       root: null,
       rootMargin: "0px",
@@ -33,19 +24,19 @@ function Observer({ selector, callback }: any) {
 
     const element = document.querySelector(selector);
 
-    observer.observe(element);
+    if (element) {
+      observer.observe(element);
+    }
 
     return () => {
       observer.disconnect();
     };
-  }, []);
+  }, [isModal]); // Reexecuta o efeito caso isModal mude
 
   return null;
 }
 
-const AtletaSelecionar = () => {
-  const router = useRouter();
-
+export default function AtletaSelecionar({ isModal = false }: any) {
   const [listAtleta, setListAtleta] = useState<TAtletas[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [lastPage, setLastPage] = useState(false);
@@ -54,6 +45,19 @@ const AtletaSelecionar = () => {
   const [loading, setLoading] = useState(false);
   const [scrollListener, setScrollListener] = useState(false);
   const [blockListener, setBlockListener] = useState(false);
+  const [height, setHeight] = useState(1500);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (!isModal) {
+      setHeight(window.innerHeight);
+    } else {
+      setHeight(500);
+    }
+  }, [isModal]);
+
+const MINIMUM_ELEMENTS_PER_PAGE = isModal ? 4 : 16;
+const ELEMENTS_PER_PAGE = Math.ceil(((height - 250) * 4) / 130);
 
   const debouncedValue = useDebounce(requestName, 500);
 
@@ -106,17 +110,26 @@ const AtletaSelecionar = () => {
     if (currentPage > 0) searchByName();
   }, [debouncedValue]);
 
+
   return (
-    <div className="flex min-w-52">
+    <div
+      className={`flex min-w-52 ${
+        isModal ? " max-h-[480px] overflow-hidden bg-white mx-auto rounded" : ""
+      }`}
+    >
       <div
-        className={`form-container !px-1 mx-auto flex flex-col items-center !w-[600px]`}
+        className={`form-container !px-1 mx-auto flex flex-col items-center !w-[600px] ${
+          isModal ? " max-h-[420px]" : ""
+        }`}
       >
         <Title title="Buscar atleta" iconSrc="/icons/person_24x24_wine.png" />
 
         <input
           onChange={(e) => setRequestName(e.target.value)}
           value={requestName}
-          className={"text-center my-6 w-72 placeholder:text-center"}
+          className={`text-center my-6 w-72 placeholder:text-center ${
+            isModal ? "-mt-4 " : ""
+          }`}
           type="text"
           placeholder="Insira o nome do atleta"
           autoComplete="off"
@@ -166,5 +179,4 @@ const AtletaSelecionar = () => {
       />
     </div>
   );
-};
-export default AtletaSelecionar;
+}
