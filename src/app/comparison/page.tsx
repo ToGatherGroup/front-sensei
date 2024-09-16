@@ -92,10 +92,10 @@ export default function Comparison() {
 
   return (
     <div>
-      <div className="flex-col max-h-dvh w-screen">
+      <div className="flex-col h-svh w-dvh overflow-hidden">
         <div
           className={`${
-            showModal ? "blur" : ""
+            showModal ? "blur " : ""
           } flex justify-center relative max-w-screen-lg min-w-full`}
         >
           <div className="shrink h-fit flex-col z-10">
@@ -172,8 +172,8 @@ export default function Comparison() {
             </div>
           </div>
         )}
-        <div className="flex justify-center">
-          <div className="lg:max-w-md -mt-40 animate-fade-down animate-duration-1000">
+        <div className="flex relative justify-center">
+          <div className="absolute lg:max-w-md animate-fade-down animate-duration-1000">
             <ReviewsChart
               className={showModal ? "hidden" : "block"}
               height={600}

@@ -12,7 +12,7 @@ import Loader from "@/components/ui/loader";
 import AvatarAtleta from "@/components/avatarAtleta/avatarAtleta";
 import { useRouter } from "next/navigation";
 
-function Observer({ selector, callback, isModal }: any) {
+function Observer({ selector, callback, isModal = false }: any) {
   useEffect(() => {
     if (isModal) return; // Se isModal for true, o Observer não será ativado
 
@@ -36,7 +36,7 @@ function Observer({ selector, callback, isModal }: any) {
   return null;
 }
 
-export default function AtletaSelecionar({ isModal = false }: { isModal?: boolean }) {
+export default function AtletaSelecionar({ isModal = false }: any) {
   const [listAtleta, setListAtleta] = useState<TAtletas[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [lastPage, setLastPage] = useState(false);
@@ -47,14 +47,14 @@ export default function AtletaSelecionar({ isModal = false }: { isModal?: boolea
   const [blockListener, setBlockListener] = useState(false);
   const [height, setHeight] = useState(1500);
 
-useEffect(() => {
-  if (typeof window !== "undefined" && !isModal) {
-    setHeight(window.innerHeight);
-  } else if (typeof window !== "undefined" && isModal) {
-    setHeight(500);
-    console.log("entrei aqui")
-  }
-}, []);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (!isModal) {
+      setHeight(window.innerHeight);
+    } else {
+      setHeight(500);
+    }
+  }, [isModal]);
 
 const MINIMUM_ELEMENTS_PER_PAGE = isModal ? 4 : 16;
 const ELEMENTS_PER_PAGE = Math.ceil(((height - 250) * 4) / 130);
@@ -172,7 +172,6 @@ const ELEMENTS_PER_PAGE = Math.ceil(((height - 250) * 4) / 130);
         {loading && <Loader className="mt-36" />}
       </div>
       <Observer
-        // isModal={isModal}
         selector=".lastElement"
         callback={(e: any) => {
           setScrollListener(e[0].isIntersecting ? true : false);
