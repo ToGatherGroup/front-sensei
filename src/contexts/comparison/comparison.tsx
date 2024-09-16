@@ -68,12 +68,11 @@ export const ComparisonStateProvider = ({
     setIsLoading(true);
     try {
       const response = await get(`atleta/comparativo/${id}`);
-
       setAthlete(response?.data);
       console.log("response", response?.data)
       console.log("isLeft", isLeft)
 
-      if (isLeft) {
+      if (isLeft || !leftAthlete ) { 
         console.log("setLeftAthlete acionado")
         setLeftAthlete(response?.data);
       } else {

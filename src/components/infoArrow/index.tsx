@@ -19,7 +19,7 @@ const InfoArrow = ({ side = "left", info, className }: infoArrowProps): JSX.Elem
   const spanSideClassName = side === "left" ? "clip-shape-left pl-10 " : " clip-shape-right pr-10";
   const cssTreatment = side === "left" ? "left-0" : "right-0";
   const validateInfo =  (Number.isNaN(Number(info))) ? "" : "text-xl";
-  const spanClassName = `flex items-center bg-white min-w-24 lg:max-w-32 max-w-28 max-h-32 font-bold shadow-lg flex-1 ${spanSideClassName} ${cssTreatment} ${validateInfo} ${className ?? ""}`;
+  const spanClassName = `flex items-center justify-center bg-white min-w-24 lg:max-w-32 max-w-28 max-h-32 font-bold shadow-lg flex-1 ${spanSideClassName} ${cssTreatment} ${validateInfo} ${className ?? ""}`;
 
   
 

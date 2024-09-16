@@ -55,7 +55,10 @@ const AthleteComparisonCard: React.FC<AthleteComparisonCardProps> = ({
       </button>
       <div 
       className='z-0 absolute w-48 h-12 bg-white mt-4'
-      style={{transform: `skewX(${isLeft ? '-30deg' : '30deg'})` }}
+      style={{
+        transform: `skewX(${isLeft ? '-30deg' : '30deg'})`,
+        backgroundColor: athlete?.nome && isLeft ? 'rgb(54, 162, 235, 0.8)' : athlete?.nome && !isLeft ? 'rgb(120, 220, 100, 0.9)' : '',
+      }}
       ></div>
     </div>
   );
