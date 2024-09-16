@@ -180,8 +180,8 @@ const Page = ({ params }: Props) => {
   return (
     <div className="flex justify-center mx-auto min-h-dvh max-h-max max-w-screen-xl">
       <section className="flex flex-col lg:flex-row lg:justify-around lg:w-full">
-        <div>
-          <div className="box-border relative">
+        <div className="flex flex-col items-center">
+          <div className="w-fit box-border relative">
             <Link href={`/atleta/editar/${params.id}`}>
               <div className="box-border absolute z-40 left-[calc(50%-90px)] bottom-[45px] rounded-full size-[180px] flex justify-center items-center bg-none group/perfil">
                 <div className="p-1 bg-white rounded-lg opacity-0 group-hover/perfil:opacity-70">
@@ -205,9 +205,9 @@ const Page = ({ params }: Props) => {
             {/* Cadastrar campeonato */}
             <Link
               href={`${params.id}/cadastrar/campeonato`}
-              className="bg-transparent w-[40px] h-10 absolute z-40 bottom-[98px] right-[80px] lg:-right-[10px] rounded-md hover:translate-x-6 hover:w-16 duration-300 peer/campeonato"
+              className="bg-transparent w-[40px] h-10 absolute z-40 bottom-[110px] right-0 translate-x-3 rounded-md hover:translate-x-8 hover:w-16 duration-300 peer/campeonato"
             />
-            <div className="bg-white w-[80px] absolute z-10 bottom-[98px] right-[80px] lg:-right-[10px] rounded-md peer-hover/campeonato:translate-x-6 duration-300">
+            <div className="bg-white w-[80px] absolute z-10 bottom-[110px] right-0 translate-x-3 rounded-md peer-hover/campeonato:translate-x-8 duration-300">
               <IconButton
                 href={`${params.id}/cadastrar/campeonato`}
                 src="/icons/add_campeonato_48x48.png"
@@ -219,9 +219,9 @@ const Page = ({ params }: Props) => {
             {/* Cadastrar Avaliação Física */}
             <Link
               href={`${params.id}/cadastrar/avaliacaoFisica`}
-              className="bg-transparent w-[50px] h-10 absolute z-40 bottom-14 right-[80px] lg:-right-[10px] rounded-md hover:translate-x-6 hover:w-[70px] duration-300 peer/avaliacao"
+              className="bg-transparent w-[50px] h-10 absolute z-40 bottom-[68px] right-0 translate-x-3 rounded-md hover:translate-x-8 hover:w-[70px] duration-300 peer/avaliacao"
             />
-            <div className="bg-white w-[100px] absolute z-10 bottom-14 right-[80px] lg:-right-[10px] rounded-md peer-hover/avaliacao:translate-x-6 duration-300">
+            <div className="bg-white w-[100px] absolute z-10 bottom-[68px] right-0 translate-x-3 rounded-md peer-hover/avaliacao:translate-x-8 duration-300">
               <IconButton
                 href={`${params.id}/cadastrar/avaliacaoFisica`}
                 src="/icons/add_avaliacao_48x48.png"
