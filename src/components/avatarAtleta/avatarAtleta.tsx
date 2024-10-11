@@ -30,15 +30,15 @@ const AvatarAtleta = ({
       <Image
         src={photoUrl ?? "/avatar_generico.png"}
         alt={`Foto de ${name}`}
-        className="absolute z-10 bottom-12 h-auto w-56 overflow-scroll"
-        width={224}
-        height={224}
+        className="absolute z-10 bottom-12 h-auto w-[200px] overflow-scroll"
+        width={200}
+        height={200}
       />
       <Losango
-        className={`relative z-20 bg-winePattern outline outline-4 outline-[#d4d4d4] h-[3rem] w-[15.5rem] overflow-hidden ${losangoClassName}`}
+        className={`relative flex justify-center items-center z-20 bg-winePattern outline outline-4 outline-[#d4d4d4] h-[3.5rem] w-[15.5rem] overflow-hidden ${losangoClassName}`}
       >
         <p
-          className={`px-0.5 bottom-0 left-0 right-0 inline-block m-auto text-center w-full text-lg min-h-[3rem] -translate-y-1 overflow-hidden font-bold text-white ${nameClassName}`}
+          className={`px-1 inline-block text-center w-full text-lg h-fit overflow-hidden font-bold text-white ${nameClassName}`}
         >
           {name}
         </p>

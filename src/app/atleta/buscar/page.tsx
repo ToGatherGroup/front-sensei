@@ -133,7 +133,7 @@ const AtletaSelecionar = () => {
                 name={atleta.name}
                 photoUrl={atleta.photo}
                 onClick={() => router.push(`/atleta/perfil/${atleta.id}`)}
-                nameClassName="max-h-[33px] leading-4 scale-125 mt-3"
+                nameClassName=" max-h-[33px] max-w-[160px] leading-[18px] scale-125"
                 className="scale-[.6] md:scale-[.7] -mt-10 -mb-10"
               />
             </li>
