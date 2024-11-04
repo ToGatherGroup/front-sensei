@@ -3,8 +3,8 @@ import React from "react";
 type MedalSectionProps = {
   imgSrc: string;
   altText: string;
-  ringColor: string;
-  medalCount: number;
+  ringColor?: string;
+  medalCount?: number;
 };
 
 const MedalSection = ({ imgSrc, altText, ringColor, medalCount }: MedalSectionProps) => {
@@ -18,7 +18,7 @@ const MedalSection = ({ imgSrc, altText, ringColor, medalCount }: MedalSectionPr
         className="transition delay-100 duration-300 ease-in-out hover:skew-y-6 hover:invert rounded-lg p-1 object-contain w-14 h-14 lg:w-20 lg:h-20"
       />
       <div className="lg:text-xl text-white font-semibold text-center">
-        {medalCount}
+        {medalCount ?? "0"}
       </div>
     </section>
   );

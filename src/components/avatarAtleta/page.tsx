@@ -1,11 +1,9 @@
 "use client";
-import Image from "next/image";
 
 import { useRouter } from "next/navigation";
-
 import { Faixas } from "@/enums/faixas";
-
 import styles from "./avatarAtleta.module.css";
+import { useComparisonProvider } from "@/contexts/comparison/comparison";
 
 type Props = {
   id: string;
@@ -17,7 +15,18 @@ type Props = {
 };
 
 const AvatarAtleta = ({ id, name, photo, belt, size, className }: Props) => {
+
+  const { showModal, setSelectedAthleteId, toggleComparisonModalVisibility } = useComparisonProvider();
+
+  const handleClick = 
+   showModal ?
+    (() => {toggleComparisonModalVisibility(false); setSelectedAthleteId(id); })
+  :
+     (() => router.push(`/atleta/perfil/${id}`))
+
   const router = useRouter();
+
+
 
   const beltsColor = {
     branca: {
@@ -100,7 +109,9 @@ const AvatarAtleta = ({ id, name, photo, belt, size, className }: Props) => {
       return (
         <div
           className={styles.container}
-          onClick={() => alert(`Você clicou no ${name}`)}
+          onClick={handleClick}
+          // Posteriormente atribuir ação para avatar
+          //onClick={onClickHandler ? onClickHandler : () => alert(`Você clicou no ${name}`)}
         >
           <div
             className={styles.photoBgBig}
@@ -147,7 +158,7 @@ const AvatarAtleta = ({ id, name, photo, belt, size, className }: Props) => {
       <div
         className={styles.container}
         style={{ cursor: "pointer" }}
-        onClick={() => router.push(`/atleta/perfil/${id}`)}
+        onClick={handleClick}
       >
         <div className={styles.photoBg}></div>
         <img className={styles.photo} src={photo} alt={`Foto de ${name}`} />

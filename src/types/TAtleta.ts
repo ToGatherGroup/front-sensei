@@ -1,4 +1,8 @@
 import { Faixas } from "@/enums/faixas";
+import {
+  MedalsProps,
+} from "./../contexts/athlete/athlete.type";
+
 
 export type Atleta = {
   id?: number;
@@ -10,4 +14,5 @@ export type Atleta = {
   faixa: (typeof Faixas)[number];
   sexo: "M" | "F";
   isAtivo?: boolean;
+  medals: MedalsProps;
 };
