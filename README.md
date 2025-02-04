@@ -76,7 +76,7 @@ http://institutodivino.com.br/
     `npm install`
 ---
   4. **Inicie o projeto localmente**
-    Execute o comando abaixo para instalar todas as dependências necessárias:
+    Execute o comando abaixo para iniciar o projeto:
     `npm run dev`
 
 ---
