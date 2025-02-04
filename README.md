@@ -74,9 +74,13 @@ http://institutodivino.com.br/
   3. **Instale as dependências**
     Execute o comando abaixo para instalar todas as dependências necessárias:
     `npm install`
+---
+  4. **Inicie o projeto localmente**
+    Execute o comando abaixo para instalar todas as dependências necessárias:
+    `npm run dev`
 
 ---
-  4. **Acesse o projeto no navegador**
+  5. **Acesse o projeto no navegador**
     Abra seu navegador de preferência e acesse a URL:
 
     `http://localhost:3000`
