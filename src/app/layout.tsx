@@ -1,15 +1,20 @@
 import { Providers } from "@/providers";
-import type { Metadata } from "next";
 import "./globals.css";
 import "./reset.css";
 import { Toaster } from "react-hot-toast";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Metadata, Viewport } from "next";
 
 export const metadata: Metadata = {
   title: "Sensei",
   description: "Aplicativo para gerenciamento e análise de atletas",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({

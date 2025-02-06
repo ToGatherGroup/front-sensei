@@ -6,6 +6,8 @@ import { getAvaliacaoPosturalDatas } from "@/api/endpoints";
 import { useEffect, useState } from "react";
 import PosturaCard from "@/components/posturaCard";
 import IconButton from "@/components/iconButton";
+import Button from "@/components/ui/button";
+import Link from "next/link";
 
 const PosturaPage = () => {
   const [datasAvaliacaoArray, setDatasAvaliacaoArray] = useState<string[]>([]); //useState([])
@@ -32,41 +34,42 @@ const PosturaPage = () => {
   };
 
   return (
-    <div className="mx-auto min-h-screen flex flex-col justify-center">
-      <div className="mx-auto pb-6">
-        <IconButton
-          href={`/atleta/perfil/${parametros.id}/cadastrar/avaliacaoPostural`}
-          src="/icons/add_ava_post.png"
-          alt="Cadastrar Avalição"
-        />
-      </div>
-      <style jsx>{cssGrid}</style>
-      <div className="flex justify-center items-center space-x-2 mb-4 mx-4">
-        <PosturaCard
-          atletaId={parametros.id}
-          datasAvaliacaoArray={datasAvaliacaoArray}
-          viewSide={viewSide}
-        />
-        <PosturaCard
-          atletaId={parametros.id}
-          datasAvaliacaoArray={datasAvaliacaoArray}
-          viewSide={viewSide}
-        />
-      </div>
+    <div className="mx-auto">
+      <div className="mx-auto lg:-mt-14">
+        <style jsx>{cssGrid}</style>
+        {datasAvaliacaoArray.length == 0 && (
+          <p className="mx-auto my-2 italic text-white block w-fit border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50 text-center">
+            Nenhuma data de avaliação encontrada.
+          </p>
+        )}
+        {datasAvaliacaoArray.length > 0 && (
+          <button
+            className=" mx-auto justify-center mb-6 w-14 h-14 bg-stone-200 rounded flex items-center text-black font-bold"
+            onClick={handleViewSide}
+          >
+            <Image src={rotateIcon} alt="Rotate Icon" width="80" height="80" />
+          </button>
+        )}
+        <div className="m-auto box-border flex justify-center w-[350px] lg:w-full space-x-2 mb-4 p-2">
+          <PosturaCard
+            atletaId={parametros.id}
+            datasAvaliacaoArray={datasAvaliacaoArray}
+            viewSide={viewSide}
+          />
+          <PosturaCard
+            atletaId={parametros.id}
+            datasAvaliacaoArray={datasAvaliacaoArray}
+            viewSide={viewSide}
+          />
+        </div>
 
-      {datasAvaliacaoArray.length == 0 && (
-        <p className="mx-auto my-2 italic text-white block w-fit border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50 text-center">
-          Nenhuma data de avaliação encontrada.
-        </p>
-      )}
-      {datasAvaliacaoArray.length > 0 && (
-        <button
-          className=" mx-auto justify-center mx-2 w-14 h-14 bg-stone-200 rounded flex justify-center items-center text-black font-bold"
-          onClick={handleViewSide}
+        <Link
+          href={`/atleta/perfil/${parametros.id}/cadastrar/avaliacaoPostural`}
+          className="block w-fit m-auto"
         >
-          <Image src={rotateIcon} alt="Rotate Icon" width="80" height="80" />
-        </button>
-      )}
+          <Button text="Cadastrar avaliação postural" type="button" />
+        </Link>
+      </div>
     </div>
   );
 };
@@ -87,6 +90,6 @@ const cssGrid = `
   bottom: 0;
   background-image: linear-gradient(0deg, transparent 24%, rgba(0, 0, 0, 0.5) 25%, rgba(0, 0, 0, 0.5) 26%, transparent 27%, transparent 74%, rgba(0, 0, 0, 0.5) 75%, rgba(0, 0, 0, 0.5) 76%, transparent 77%, transparent),
                     linear-gradient(90deg, transparent 24%, rgba(0, 0, 0, 0.5) 25%, rgba(0, 0, 0, 0.5) 26%, transparent 27%, transparent 74%, rgba(0, 0, 0, 0.5) 75%, rgba(0, 0, 0, 0.5) 76%, transparent 77%, transparent);
-  background-size: 40px 40px;
+  background-size: 80px 80px;
 }
 `;

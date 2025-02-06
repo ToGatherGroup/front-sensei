@@ -1,6 +1,6 @@
 "use client";
 
-import AvatarAtleta from "@/components/avatarAtleta/page";
+import AvatarAtleta from "@/components/avatarAtleta/avatarAtleta";
 
 import { useEffect, useState, useCallback } from "react";
 import useScreenSize from "@/hooks/useScreenSize";
@@ -13,9 +13,13 @@ import MedalSection from "@/components/medalSection";
 import Button from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
-import Tippy from '@tippyjs/react';
-import 'tippy.js/dist/tippy.css';
+import Tippy from "@tippyjs/react";
+import "tippy.js/dist/tippy.css";
 import Qualitativos from "@/components/qualitativos/index";
+import PosturaPage from "./postura/page";
+import Losango from "@/components/losango/losango";
+import Link from "next/link";
+import Image from "next/image";
 
 type Params = {
   id: string;
@@ -26,12 +30,21 @@ type Props = {
 };
 
 const Page = ({ params }: Props) => {
-  const { getInjuries, injuries, injuriesInfo, medals, athleteProfile, getProfile, isLoading } = useAthleteProvider();
+  const {
+    getInjuries,
+    injuries,
+    injuriesInfo,
+    medals,
+    athleteProfile,
+    getProfile,
+    isLoading,
+  } = useAthleteProvider();
   const router = useRouter();
   const [lesoes, setLesoes] = useState<string[] | null>(null);
   const [grafico, setGrafico] = useState<any | null>(true);
   const [qualitativos, setQualitativos] = useState<any | null>(null);
   const [frequencia, setFrequencia] = useState<any | null>(null);
+  const [postura, setPostura] = useState<any | null>(null);
   const [medalhaOuro, setMedalhaOuro] = useState<number>(0);
   const [medalhaPrata, setMedalhaPrata] = useState<number>(0);
   const [medalhaBronze, setMedalhaBronze] = useState<number>(0);
@@ -49,6 +62,7 @@ const Page = ({ params }: Props) => {
     setGrafico(null);
     setFrequencia(null);
     setQualitativos(null);
+    setPostura(null);
   };
 
   const handleLesoesClick = useCallback(async () => {
@@ -70,6 +84,10 @@ const Page = ({ params }: Props) => {
     setQualitativos(true);
   };
 
+  const handlePosturaClick = () => {
+    setPostura(true);
+  };
+
   useEffect(() => {
     if (params.id && id == null) {
       setId(parseInt(params.id));
@@ -78,10 +96,11 @@ const Page = ({ params }: Props) => {
   }, [params.id]);
 
   const athleteInfo = [
-    { label: athleteProfile?.faixa },
-    { label: `${athleteProfile?.idade} anos` },
+    { label: "idade", value: `${athleteProfile?.idade} anos` },
+    { label: "faixa", value: athleteProfile?.faixa },
     {
-      label: athleteProfile?.categoria
+      label: "categoria",
+      value: athleteProfile?.categoria
         ? athleteProfile?.categoria
         : "Sem categoria",
     },
@@ -92,6 +111,7 @@ const Page = ({ params }: Props) => {
     { label: "Lesões", onClick: handleLesoesClick },
     { label: "Frequência", onClick: handleFrequenciaClick },
     { label: "Qualitativos", onClick: handleQualitativoClick },
+    { label: "Postura", onClick: handlePosturaClick },
   ];
 
   const screenSize = useScreenSize();
@@ -115,7 +135,7 @@ const Page = ({ params }: Props) => {
   }, [medals]);
 
   const renderButtons = () => (
-    <section className="flex mt-6 space-x-2 lg:space-x-6 justify-center">
+    <section className="flex m-auto mt-6 space-x-2 lg:space-x-6 box-border w-fit">
       {buttons.map((button, index) => (
         <Button
           key={index}
@@ -136,12 +156,23 @@ const Page = ({ params }: Props) => {
   const renderAthleteInfo = () => (
     <div className="flex flex-col items-center space-y-2 lg:space-y-6">
       {athleteInfo.map((info, index) => (
-        <div
+        <Losango
           key={index}
-          className="bg-gray-300 p-2 lg:p-5 rounded-md text-center text-black flex justify-center items-center w-40 lg:w-60 h-7"
+          className="bg-gray-300 p-5 text-center text-black flex justify-center items-center w-60 h-7"
         >
-          <h4 className="text-lg font-semibold">{info.label}</h4>
-        </div>
+          <div className="flex relative w-[250px] h-8 -translate-y-0.3">
+            <Losango className="box-content bg-winePattern ml-3 w-[190px]">
+              <p className="uppercase text-white text-base font-semibold">
+                {info.label}
+              </p>
+            </Losango>
+            <div className="w-full text-center flex items-center">
+              <p className="m-auto text-lg font-semibold w-fit max-w-[120px] leading-4">
+                {info.value}
+              </p>
+            </div>
+          </div>
+        </Losango>
       ))}
     </div>
   );
@@ -149,39 +180,56 @@ const Page = ({ params }: Props) => {
   return (
     <div className="flex justify-center mx-auto min-h-dvh max-h-max max-w-screen-xl">
       <section className="flex flex-col lg:flex-row lg:justify-around lg:w-full">
-        <div>
-          <div className="flex justify-center space-x-6 mb-4 mt-6 lg:space-x-10 lg:mt-8 lg:mb-8">
-            {/* <IconButton href="/comparison" src="/icons/avaliacao_fisica.png" alt="Avaliação Física Individual" /> */}
-            <IconButton
-              href={`${params.id}/cadastrar/avaliacaoFisica`}
-              src="/icons/avaliacao_fisica.png"
-              alt="Edição"
+        <div className="flex flex-col items-center">
+          <div className="w-fit box-border relative">
+            <Link href={`/atleta/editar/${params.id}`}>
+              <div className="box-border absolute z-40 left-[calc(50%-90px)] bottom-[45px] rounded-full size-[180px] flex justify-center items-center bg-none group/perfil">
+                <div className="p-1 bg-white rounded-lg opacity-0 group-hover/perfil:opacity-70">
+                  <Image
+                    alt="Editar atleta"
+                    src={"/icons/editar_perfil_48x48.png"}
+                    width={48}
+                    height={48}
+                    className={"opacity-0 group-hover/perfil:opacity-70"}
+                  />
+                </div>
+              </div>
+            </Link>
+            <AvatarAtleta
+              name={athleteProfile?.nome ?? "Carregando .."}
+              photoUrl={athleteProfile?.foto}
+              nameClassName="leading-6"
+              className="mb-2 z-20"
             />
-            <IconButton
+
+            {/* Cadastrar campeonato */}
+            <Link
               href={`${params.id}/cadastrar/campeonato`}
-              src="/icons/campeonato.png"
-              alt="Campeonato"
+              className="bg-transparent w-[40px] h-10 absolute z-40 bottom-[110px] right-0 translate-x-3 rounded-md hover:translate-x-8 hover:w-16 duration-300 peer/campeonato"
             />
-            <IconButton
-              href={`${params.id}/postura`}
-              src="/icons/posture_icon.png"
-              alt="Postura"
+            <div className="bg-white w-[80px] absolute z-10 bottom-[110px] right-0 translate-x-3 rounded-md peer-hover/campeonato:translate-x-8 duration-300">
+              <IconButton
+                href={`${params.id}/cadastrar/campeonato`}
+                src="/icons/add_campeonato_48x48.png"
+                alt="Edição"
+                className="ml-auto !h-10 !w-10"
+              />
+            </div>
+
+            {/* Cadastrar Avaliação Física */}
+            <Link
+              href={`${params.id}/cadastrar/avaliacaoFisica`}
+              className="bg-transparent w-[50px] h-10 absolute z-40 bottom-[68px] right-0 translate-x-3 rounded-md hover:translate-x-8 hover:w-[70px] duration-300 peer/avaliacao"
             />
-            <IconButton
-              href={`/atleta/editar/${params.id}`}
-              src="/icons/ferramenta-lapis.png"
-              alt="Edição"
-            />
-            {/* <IconButton href={`/atleta/perfil/${params.id}/cadastrar/campeonato`} src="/icons/campeonato.png" alt="Campeonato" /> */}
-            {/* <IconButton href={`/postura/${params.id}`} src="/icons/posture_icon.png" alt="Postura" /> */}
+            <div className="bg-white w-[100px] absolute z-10 bottom-[68px] right-0 translate-x-3 rounded-md peer-hover/avaliacao:translate-x-8 duration-300">
+              <IconButton
+                href={`${params.id}/cadastrar/avaliacaoFisica`}
+                src="/icons/add_avaliacao_48x48.png"
+                alt="Edição"
+                className="ml-auto !h-10 !w-10"
+              />
+            </div>
           </div>
-          <AvatarAtleta
-            id={params.id}
-            name={athleteProfile?.nome}
-            photo={athleteProfile?.foto}
-            size={"big"}
-            className={screenSize.width < 600 ? "scale-[.85]" : undefined}
-          />
           <section>
             <div className="flex flex-col items-center space-y-2 lg:space-y-6">
               <div className="flex flex-row">
@@ -231,11 +279,16 @@ const Page = ({ params }: Props) => {
                 />
               </div>
             )}
+            {postura && (
+              <div className="mt-4 lg:mt-32 animate-fade-down animate-duration-1000">
+                <PosturaPage />
+              </div>
+            )}
             {grafico && (
               <div className="lg:mt-24 animate-fade-down animate-duration-1000">
                 <ReviewsChart
-                  height={screenSize.width > 1024 ? 524 : 256}
-                  width={screenSize.width > 1024 ? 524 : 256}
+                  height={screenSize.width > 1024 ? 524 : 200}
+                  width={screenSize.width > 1024 ? 524 : 200}
                   id={params.id}
                 />
               </div>
@@ -277,18 +330,31 @@ const Page = ({ params }: Props) => {
                   ></Button>
                 </div>
                 <div className="flex flex-col-reverse custom-scrollbar mx-auto max-h-26 lg:max-h-40 scroll-auto overflow-y-auto justify-center bg-white rounded-lg p-4 pt-2 lg:-mt-4 max-w-xs lg:min-w-fit lg:max-w-sm ">
-                  {(!isLoading && injuriesInfo.length <= 0) && <h3 className="text-sm lg:text-lg font-semibold">O atleta não possui lesão registrada</h3>}
-                  {
-                    injuriesInfo.map((injuryInfo, index) => (
-                      <p key={index} className="leading-7 justify-between inline-block align-text-bottom text-xs lg:text-sm text-wrap text-transform: capitalize">
-                        <span className="font-bold">{dayjs(injuryInfo.date).format('DD/MM/YYYY')}</span>
-                        <span className="italic "> {injuryInfo.regiaoLesao}</span>
-                        <Tippy hideOnClick={true} content={injuryInfo.description}>
-                          <span className="cursor-pointer lg:text-base text-lg"> ℹ️</span>
-                        </Tippy>
-                      </p>
-                    ))
-                  }
+                  {!isLoading && injuriesInfo.length <= 0 && (
+                    <h3 className="text-sm lg:text-lg font-semibold">
+                      O atleta não possui lesão registrada
+                    </h3>
+                  )}
+                  {injuriesInfo.map((injuryInfo, index) => (
+                    <p
+                      key={index}
+                      className="leading-7 justify-between inline-block align-text-bottom text-xs lg:text-sm text-wrap text-transform: capitalize"
+                    >
+                      <span className="font-bold">
+                        {dayjs(injuryInfo.date).format("DD/MM/YYYY")}
+                      </span>
+                      <span className="italic "> {injuryInfo.regiaoLesao}</span>
+                      <Tippy
+                        hideOnClick={true}
+                        content={injuryInfo.description}
+                      >
+                        <span className="cursor-pointer lg:text-base text-lg">
+                          {" "}
+                          ℹ️
+                        </span>
+                      </Tippy>
+                    </p>
+                  ))}
                 </div>
               </div>
             )}

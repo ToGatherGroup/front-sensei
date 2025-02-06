@@ -1,4 +1,3 @@
-import Imc from "@/app/valencia/avaliacao/imc/page";
 import * as yup from "yup";
 
 const minSecValidation = yup.object().shape({
@@ -16,6 +15,8 @@ const minSecValidation = yup.object().shape({
       let error = false;
 
       const [minStr, segStr] = timeInput.split(":");
+      if (!minStr || !segStr || minStr.length < 2 || segStr.length < 2)
+        error = true;
       try {
         const min = Number(minStr);
         const seg = Number(segStr);

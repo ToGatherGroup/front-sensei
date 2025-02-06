@@ -59,7 +59,7 @@ function Qualitativos({ id }: Props) {
   ) : (
     <div className="p-2 mt-8 animate-fade-down animate-duration-1000">
       {imc === "Não Aplicável" ? (
-        <p className=" p-2 mt-12 text-base text-center text-white lg:mt-32">
+        <p className=" p-2 mt-12 text-base text-center text-white lg:mt-32 overflow-clip text-wrap">
           Ainda não existem dados computados para este atleta.
         </p>
       ) : (
@@ -129,7 +129,7 @@ function Qualitativos({ id }: Props) {
       )}
     </div>
   );
-};
+}
 export default Qualitativos;
 
 function resultToDisplay(result: string) {

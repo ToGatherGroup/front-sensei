@@ -7,9 +7,10 @@ import Button from "@/components/ui/button";
 import { useApiProvider } from "@/contexts";
 import { yupResolver } from "@hookform/resolvers/yup";
 import "./styles.css";
-import { IEvaluationData, Time } from "@/types/Evaluation";
+import { IEvaluationData } from "@/types/Evaluation";
 import { IEvaluationDataSchema } from "@/schemas/evaluationSchema";
-import Link from "next/link";
+import minSecToPT from "@/functions/minSecToPT";
+import ptToMinSec from "@/functions/ptToMinSec";
 
 type Props = {
   method: "POST" | "PUT";
@@ -83,26 +84,6 @@ const EvaluationForm = ({ id, method }: Props) => {
   const [exercicios, setExercicios] = useState<IEvaluationData | null>(null);
   const { get, put, post } = useApiProvider();
 
-  // conversão PT -> recebendo da api
-  const parseDuration = (duration: string) => {
-    const matches = duration.match(/PT(?:(\d+)M)?(?:(\d+)S)?/);
-    if (matches) {
-      const minutes = matches[1] ? parseInt(matches[1], 10) : 0;
-      const seconds = matches[2] ? parseInt(matches[2], 10) : 0;
-      return `${minutes.toString().padStart(2, "0")}:${seconds
-        .toString()
-        .padStart(2, "0")}`;
-    }
-    return duration;
-  };
-  //conversão PT -> enviando back
-  function minSecToPT(time: string | null): Time | null {
-    if (!time) return null;
-    const [minutes, seconds] = time.split(":").map(Number);
-    // const formattedMinutes = String(minutes).padStart(2, "0");
-    const formattedSeconds = String(seconds).padStart(2, "0");
-    return `PT${minutes}M${formattedSeconds}S` as Time;
-  }
   // padrão -> bloquear caracteres Desktop
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (
@@ -179,24 +160,24 @@ const EvaluationForm = ({ id, method }: Props) => {
             const response = await get(`avaliacao/${id}/${date}`);
             if (response && response.data && response.data.exercicios) {
               const exerciciosData = response.data.exercicios;
-              const valuePrancha = (exerciciosData.prancha = parseDuration(
+              const valuePrancha = (exerciciosData.prancha = ptToMinSec(
                 exerciciosData.prancha
               ));
               const valueforcaIsometricaMaos =
-                (exerciciosData.forcaIsometricaMaos = parseDuration(
+                (exerciciosData.forcaIsometricaMaos = ptToMinSec(
                   exerciciosData.forcaIsometricaMaos
                 ));
               console.log(exerciciosData);
               setExercicios(exerciciosData);
               setValue("peso", exerciciosData.peso);
               setValue("altura", exerciciosData.altura);
-              setValue("prancha", valuePrancha);
+              setValue("prancha", valuePrancha ?? "");
               setValue("flexoes", exerciciosData.flexoes);
               setValue("abdominais", exerciciosData.abdominais);
               setValue("burpees", exerciciosData.burpees);
               setValue("cooper", exerciciosData.cooper);
               setValue("rmTerra", exerciciosData.rmTerra);
-              setValue("forcaIsometricaMaos", valueforcaIsometricaMaos);
+              setValue("forcaIsometricaMaos", valueforcaIsometricaMaos ?? "");
               setValue(
                 "testeDeLungeJoelhoEsquerdo",
                 exerciciosData.testeDeLungeJoelhoEsquerdo
