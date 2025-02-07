@@ -9,9 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
     "@hookform/resolvers": "^3.3.4",
+    "@mui/material": "^6.4.3",
     "@tippyjs/react": "^4.2.6",
     "axios": "^1.6.7",
+    "bootstrap": "^5.3.3",
     "chart.js": "^4.4.2",
     "dayjs": "^1.11.11",
     "imask": "^7.6.1",
