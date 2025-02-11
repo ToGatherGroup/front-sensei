@@ -14,65 +14,73 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import PopupState, { bindMenu, bindHover } from 'material-ui-popup-state';
 import HoverMenu from 'material-ui-popup-state/HoverMenu'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Icon } from "@iconify/react";
 
 const menuItems = [
   {
     label: 'Atletas', 
-    icon: {
-      path: "/header_icons/add_atletas.png",
-      height: 25,
-      width: 20
-    },
+    icon: <Icon icon="hugeicons:user" width="28px" height="28px" className='text-white' />,
     childrens: [
+      {
+        label: 'Buscar',
+        path: '/atleta/buscar',
+        icon: <Icon icon="hugeicons:user-search-01" width="28px" height="28px" className='text-white' />
+      },
       {
         label: 'Cadastrar', 
         path: '/atleta/cadastrar',
-        icon: {
-          path: "/header_icons/add_atletas.png",
-          height: 25,
-          width: 20
-        }
+        icon: <Image src="/header_icons/add_atletas.png" width={30} height={30} alt='' className='h-fit' ></Image>
       },
       {
-        label: 'Chamada', 
-        path: '/chamada',
-        icon: {
-          path: "/header_icons/chamada.png",
-          height: 20,
-          width: 20
-        }
-      },
-      {
-        label: 'Avaliação', 
-        path: '/valencia/menu',
-        icon: {
-          path: "/header_icons/avaliacao.png",
-          height: 30,
-          width: 30
-        }
-      },
-      {
-        label: 'Relatório', 
-        path: '/relatorioAvaliacao',
-        icon: {
-          path: "/header_icons/relatorio.png",
-          height: 20,
-          width: 20
-        }
-      },
+        label: 'Aniversariantes', 
+        path: '/atleta/aniversariantes',
+        icon: <Icon icon="hugeicons:birthday-cake" width="28px" height="28px" className='text-white' />
+      }
     ]
+  },
+  {
+    label: 'Chamada', 
+    path: '/chamada',
+    icon: <Image src="/header_icons/chamada.png" width={20} height={20} alt='' className="h-fit"></Image>
+  },
+  {
+    label: 'Avaliação', 
+    path: '/valencia/menu',
+    icon: <Icon icon="hugeicons:body-part-muscle" width="28px" height="28px" className='text-white' />
+  },
+  {
+    label: 'Grupos', 
+    path: '/grupos',
+    icon: <Icon icon="hugeicons:user-group" width="28px" height="28px" className='text-white' />
   },
   {
     label: "Comparativo",
     path: "/comparison",
-    icon: {
-      path: "/header_icons/versus.png",
-      height: 30,
-      width: 25,
-    }
+    icon: <Image src="/header_icons/versus.png" width={25} height={25} alt='' className="h-fit"></Image>
+  },
+  {
+    label: 'Relatório', 
+    icon: <Image src="/header_icons/relatorio.png" width={20} height={20} alt='' className="h-fit" />,
+    childrens: [
+      {
+        label: 'Estatísticas', 
+        path: '/estatisticas',
+        icon: <Icon icon="hugeicons:chart-line-data-01" width="28px" height="28px" className='text-white' />
+      },
+      {
+        label: 'Avaliação', 
+        path: '/relatorioAvaliacao',
+        icon: <Image src="/header_icons/avaliacao.png" width={30} height={30} alt='' className="h-fit" />
+      },
+      {
+        label: 'Frequência', 
+        path: '/frequencia',
+        icon: <Icon icon="hugeicons:percent" width="28px" height="28px" className='text-white' />
+      },
+    ]
   },
 ];
 
@@ -80,6 +88,16 @@ const settings = ['Meu usuário', 'Sair'];
 
 function Header() {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const [position, setPosition] = useState<"sticky" | "static">(window.innerWidth <= 1050 ? "sticky" : "static");
+
+  useEffect(() => {
+    const handleResize = () => {
+      setPosition(window.innerWidth <= 1050 ? "sticky" : "static");
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -90,151 +108,169 @@ function Header() {
   };
 
   return (
-    <AppBar position="sticky">
+    <AppBar position={position}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <Link
-              href={"/"}
-            >
-              <Image
-                width={90}
-                height={50}
-                alt="Logotipo Sensei"
-                src="/logo_sensei_white.png"
-                className='mr-4 hidden min-[900px]:flex'
-              />
-            </Link>
-          </Box>
-
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-            <MobileDrawer />
-          </Box>
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-            <Link
-              href={"/"}
-            >
-              <Image
-                width={90}
-                height={50}
-                alt="Logotipo Sensei"
-                src="/logo_sensei_white.png"
-                className='hidden max-[900px]:flex'
+          <Box sx={{display: 'flex', width: 'max-content', flex: '1', justifyContent: 'center', alignItems: 'center', "@media (max-width:1050px)": { flexDirection: 'row-reverse'}}}>
+            {/* Logo Sensei para DESKTOP */}
+            <Box sx={{
+              display: "none",
+              "@media (min-width:1050px)": {
+                display: "flex",
+              },
+            }}>
+              <Link
+                href={"/"}
+              >
+                <Image
+                  width={90}
+                  height={50}
+                  alt="Logotipo Sensei"
+                  src="/logo_sensei_white.png"
+                  className='mr-4 hidden min-[900px]:flex'
                 />
-            </Link>
-          </Box>
+              </Link>
+            </Box>
 
+            {/* Menu sanduíche para Mobile */}
+            <Box sx={{ 
+              flexGrow: 1, 
+              display: "none",
+              "@media (max-width:1050px)": {
+                display: "flex",
+                justifyContent: 'flex-end'
+              }
+              }}>
+              <MobileDrawer />
+            </Box>
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, marginLeft: '24px', gap: '24px' }}>
-            {menuItems.map((item) => (
-              <>
-                {item.childrens ?
-                  <PopupState variant="popover" popupId={item.label}>
-                    {(popupState) => (
-                      <>
-                        <Button  {...bindHover(popupState)} sx={{ my: 2, color: 'white', display: 'flex', gap: '6px' }}>
-                          <Image
-                            src={item.icon.path}
-                            width={item.icon.width}
-                            height={item.icon.height}
-                            className="m-auto"
-                            alt=''
-                          />
-                          <Typography sx={{ textAlign: 'center', fontWeight: 'bold' }}>{item.label}</Typography>
-                        </Button>
-                        <HoverMenu
-                          {...bindMenu(popupState)} 
-                          sx={(theme) => ({
-                            '& .MuiPaper-root': {
-                              backgroundColor: theme.palette.primary.main,
-                              color: theme.palette.background.paper
-                            },
-                            '& .MuiMenuItem-root:hover': {
-                                backgroundColor: theme.palette.secondary.main,
-                              }
-                          }
-                        )}
-                        >
-                          {item.childrens.map((itemChildren) => (
-                            <MenuItem onClick={popupState.close} key={itemChildren.label}>
-                              <Link href={itemChildren.path} className="flex gap-3 justify-center items-center">
-                                <Box sx={{width: '40px', height: '40px', display: 'flex'}}>
-                                  <Image
-                                    src={itemChildren.icon.path}
-                                    width={itemChildren.icon.width}
-                                    height={itemChildren.icon.height}
-                                    className="m-auto"
-                                    alt=''
-                                    />
-                                </Box>
-                                <Typography sx={{ textAlign: 'center', fontWeight: 'bold' }}>{itemChildren.label}</Typography>
-                              </Link>
-                            </MenuItem>
-                          ))}
-                        </HoverMenu>
-                      </>
-                    )}
-                  </PopupState>
-                  :
-                  <Button
-                    key={item.label}
-                    sx={{ my: 2, color: 'white'}}
-                  >
-                    <Link href={item.path} className='flex gap-2'>
-                      <Image
-                        src={item.icon.path}
-                        width={item.icon.width}
-                        height={item.icon.height}
-                        className="m-auto"
-                        alt=''
-                      />
-                      <Typography sx={{ textAlign: 'center', fontWeight: 'bold' }}>{item.label}</Typography>
-                    </Link>
-                </Button>
-                }
-              </>
-            ))}
-          </Box>
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Abrir configurações">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0, color: '#fff' }} >
-                <AccountBoxIcon style={{ fontSize: '36px' }}/>
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={(theme) => (
-                { 
-                  mt: '45px',
-                  '& .MuiPaper-root': {
-                    backgroundColor: theme.palette.primary.main,
-                    color: theme.palette.background.paper,
-                  },
-                  '& .MuiMenuItem-root:hover': {
-                    backgroundColor: theme.palette.secondary.main,
+            {/* Logo Sensei para Mobile */}
+            <Box sx={{ flexGrow: 1, display: "none",
+              "@media (max-width:1050px)": {
+                display: "flex",
+                justifyContent: 'center'
+              } }}>
+              <Link
+                href={"/"}
+              >
+                <Image
+                  width={90}
+                  height={50}
+                  alt="Logotipo Sensei"
+                  src="/logo_sensei_white.png"
+                  className='hidden max-[1050px]:flex'
+                  />
+              </Link>
+            </Box>
+
+            {/* Menu Items para Desktop */}
+            <Box sx={{ 
+              flexGrow: 1, 
+              display: "none",
+              "@media (min-width:1050px)": {
+                display: "flex",
+              },
+              marginLeft: '24px', gap: '24px' 
+            }}>
+              {menuItems.map((item) => (
+                <>
+                  {item.childrens ?
+                    <PopupState variant="popover" popupId={item.label}>
+                      {(popupState) => (
+                        <>
+                          <Button  {...bindHover(popupState)} sx={{ my: 2, color: 'white', display: 'flex', gap: '6px' }}>
+                            {item.icon}
+                            <Typography sx={{ textAlign: 'center', fontWeight: 'bold' }}>{item.label}</Typography>
+                            {popupState.isOpen ? 
+                              <ExpandLess sx={{ color: 'white' }} />
+                              :
+                              <ExpandMore sx={{ color: 'white' }} />
+                            }
+
+                          </Button>
+                          <HoverMenu
+                            {...bindMenu(popupState)} 
+                            sx={(theme) => ({
+                              '& .MuiPaper-root': {
+                                backgroundColor: theme.palette.primary.main,
+                                color: theme.palette.background.paper
+                              },
+                              '& .MuiMenuItem-root:hover': {
+                                  backgroundColor: theme.palette.secondary.main,
+                                }
+                            })}
+                          >
+                            {item.childrens.map((itemChildren) => (
+                              <MenuItem onClick={popupState.close} key={itemChildren.label}>
+                                <Link href={itemChildren.path} className="flex gap-3 justify-center items-center">
+                                  <Box sx={{width: '40px', height: '40px', display: 'flex'}}>
+                                    {itemChildren.icon}
+                                  </Box>
+                                  <Typography sx={{ textAlign: 'center', fontWeight: 'bold' }}>{itemChildren.label}</Typography>
+                                </Link>
+                              </MenuItem>
+                            ))}
+                          </HoverMenu>
+                        </>
+                      )}
+                    </PopupState>
+                    :
+                    <Button
+                      key={item.label}
+                      sx={{ my: 2, color: 'white'}}
+                    >
+                      <Link href={item.path} className='flex gap-2'>
+                        {item.icon}
+                        <Typography sx={{ textAlign: 'center', fontWeight: 'bold' }}>{item.label}</Typography>
+                      </Link>
+                  </Button>
                   }
-                }
-              )}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
-                </MenuItem>
+                </>
               ))}
-            </Menu>
+            </Box>
+
+            {/* Menu de configurações Mobile/Desktop */}
+            <Box sx={{ flexGrow: 1 }}>
+              <Tooltip title="Abrir configurações">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0, color: '#fff' }} >
+                  <AccountBoxIcon style={{ fontSize: '36px' }}/>
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={(theme) => (
+                  { 
+                    mt: '45px',
+                    '& .MuiPaper-root': {
+                      backgroundColor: theme.palette.primary.main,
+                      color: theme.palette.background.paper,
+                    },
+                    '& .MuiMenuItem-root:hover': {
+                      backgroundColor: theme.palette.secondary.main,
+                    }
+                  }
+                )}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                {settings.map((setting) => (
+                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                    <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
           </Box>
         </Toolbar>
       </Container>
@@ -284,13 +320,7 @@ const MobileDrawer = () => {
             <ListItem disablePadding>
               <ListItemButton onClick={(event) => handleSubmenuClick(event, menuItem.label)}>
                 <ListItemIcon>
-                  <Image
-                    src={menuItem.icon.path}
-                    width={menuItem.icon.width}
-                    height={menuItem.icon.height}
-                    className="m-auto"
-                    alt=''
-                    />
+                  {menuItem.icon}
                 </ListItemIcon>
                 <ListItemText primary={menuItem.label} />
                 {isSubmenuOpened(menuItem.label) ? <ExpandLess sx={{ color: 'white' }}/> : <ExpandMore sx={{ color: 'white' }} />}
@@ -302,13 +332,7 @@ const MobileDrawer = () => {
               <Link href={menuItemChildren.path} key={menuItemChildren.label}>
                 <ListItemButton sx={{ pl: 4 }} key={menuItemChildren.label}>
                   <ListItemIcon>
-                    <Image
-                      src={menuItemChildren.icon.path}
-                      width={menuItemChildren.icon.width}
-                      height={menuItemChildren.icon.height}
-                      className="m-auto"
-                      alt=''
-                    />
+                    {menuItemChildren.icon}
                   </ListItemIcon>
                   <ListItemText primary={menuItemChildren.label} />
                 </ListItemButton>
@@ -322,13 +346,7 @@ const MobileDrawer = () => {
             <Link href={menuItem.path}>
               <ListItemButton>
                 <ListItemIcon>
-                <Image
-                  src={menuItem.icon.path}
-                  width={menuItem.icon.width}
-                  height={menuItem.icon.height}
-                  className="m-auto"
-                  alt=''
-                  />
+                {menuItem.icon}
                 </ListItemIcon>
                 <ListItemText primary={menuItem.label} />
               </ListItemButton>
@@ -352,7 +370,7 @@ const MobileDrawer = () => {
         <MenuIcon />
       </IconButton>
 
-      <Drawer open={open} onClose={toggleDrawer(false)} sx={(theme) => ({
+      <Drawer open={open} onClose={toggleDrawer(false)} anchor='right' sx={(theme) => ({
         '& .MuiDrawer-paper': {
           bgcolor: theme.palette.primary.main,
         },
