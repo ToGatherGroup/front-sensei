@@ -88,9 +88,11 @@ const settings = ['Meu usuário', 'Sair'];
 
 function Header() {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-  const [position, setPosition] = useState<"sticky" | "static">(window.innerWidth <= 1050 ? "sticky" : "static");
+  const [position, setPosition] = useState<"sticky" | "static">("static"); // Inicialização sem acessar `window`
 
   useEffect(() => {
+    setPosition(window.innerWidth <= 1050 ? "sticky" : "static");
+
     const handleResize = () => {
       setPosition(window.innerWidth <= 1050 ? "sticky" : "static");
     };
