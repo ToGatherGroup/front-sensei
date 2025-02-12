@@ -8,9 +8,11 @@ import { atletaCreateSchema } from "@/schemas/athleteSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useAthleteProvider } from "@/contexts";
 import Button from "../ui/button";
+import MuiButton from "@mui/material/Button";
 import Loader from "../ui/loader";
 import ImageCropper from "@/components/imageCropper/imageCropper";
 import { Area } from "react-easy-crop";
+import { GruposMock } from "@/mock/grupos"; // Importando a lista mockada
 
 type Props = {
   atleta?: Atleta | null;
@@ -48,6 +50,7 @@ const FormAtleta = ({ atleta, method }: Props) => {
       nascimento: atleta?.nascimento ?? "",
       sexo: atleta?.sexo ?? "",
       faixa: atleta?.faixa,
+      grupo: atleta?.grupo,
       isAtivo: !!atleta?.isAtivo,
     },
     mode: "onBlur",
@@ -56,6 +59,7 @@ const FormAtleta = ({ atleta, method }: Props) => {
 
   const onSubmit = async (data: any) => {
     try {
+      console.log("Formulario enviado com sucesso");
       switch (method) {
         case "PUT":
           console.log("Método PUT acionado");
@@ -220,7 +224,7 @@ const FormAtleta = ({ atleta, method }: Props) => {
               {...register("nome")}
               type="text"
               id="nome"
-              placeholder="Insira seu nome"
+              placeholder="Insira o nome do atleta"
             />
             {errors.nome && (
               <p className={styles.displayError}>{errors.nome.message}</p>
@@ -233,7 +237,7 @@ const FormAtleta = ({ atleta, method }: Props) => {
               {...register("email")}
               type="email"
               id="email"
-              placeholder="Insira seu e-mail"
+              placeholder="Insira o e-mail do atleta"
             />
             {errors.email && (
               <p className={styles.displayError}>{errors.email.message}</p>
@@ -255,7 +259,7 @@ const FormAtleta = ({ atleta, method }: Props) => {
               Sexo
             </label>
             <select {...register("sexo")} id="sexo">
-              <option value="">Selecione</option>
+              <option disabled value="">Selecione</option>
               <option value="M">Masculino</option>
               <option value="F">Feminino</option>
             </select>
@@ -269,7 +273,7 @@ const FormAtleta = ({ atleta, method }: Props) => {
               Faixa
             </label>
             <select {...register("faixa")} id="faixa">
-              <option value="" disabled hidden>
+              <option disabled >
                 Selecione
               </option>
               <option value="branca">Branca</option>
@@ -289,7 +293,28 @@ const FormAtleta = ({ atleta, method }: Props) => {
               <p className={styles.displayError}>{errors.faixa.message}</p>
             )}
           </div>
+          <div className={styles.inputRow}>
+            <label htmlFor="faixa" className={styles.required}>
+              Grupo
+            </label>
+            <MuiButton variant="contained" sx={{ backgroundColor: "red", }} endIcon={<img width={50} src="/icons/add_grupo.png" />}>
+              {/* // onClick={handleOpen}> */}
+        Novo Grupo
+            </MuiButton>
+            <select {...register("grupo")} id="grupo">
+              <option disabled >
+                Selecione
+              </option>
+              {GruposMock.map((grupo) => (
+          <option key={grupo.id} value="branca">{grupo.nome}</option>
+      ))}
+              {/* <option value="vermelha">Criar novo grupo +</option> */}
+            </select>
+            {/* {errors.faixa && (
+              <p className={styles.displayError}>{errors.grupo.message}</p>
+            )} */}
 
+          </div>
           {method === "PUT" && (
             <div className={styles.isAtivo}>
               <style>{switchStyles}</style>

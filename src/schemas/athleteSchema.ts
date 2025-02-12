@@ -53,6 +53,9 @@ export const atletaCreateSchema = yup.object().shape({
     )
     .required("Este campo é obrigatório.")
     .typeError("Selecione a faixa."),
+    grupo: yup
+    .number().optional()
+    .typeError("Selecione um grupo."),
 
 
   isAtivo: yup.boolean().required().default(true)

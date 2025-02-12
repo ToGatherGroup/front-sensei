@@ -1,0 +1,31 @@
+.grupoList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px;
+  }
+  
+  .grupoItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  .grupoNome {
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  .grupoIcones {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .icone {
+    width: 24px; /* Ajuste o tamanho dos ícones conforme necessário */
+    height: 24px;
+  }

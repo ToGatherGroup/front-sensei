@@ -8,6 +8,7 @@ export type Atleta = {
   foto: string;
   categoria?: string;
   faixa: (typeof Faixas)[number];
+  grupo?: number;
   sexo: "M" | "F";
   isAtivo?: boolean;
 };
