@@ -6,18 +6,23 @@ import { useState, useEffect } from "react";
 import { Atleta } from "@/types/TAtleta";
 import { atletaCreateSchema } from "@/schemas/athleteSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useAthleteProvider } from "@/contexts";
+import { useApiProvider, useAthleteProvider } from "@/contexts";
+import { useGroupProvider } from "@/contexts/groups/groups";
 import Button from "../ui/button";
-import MuiButton from "@mui/material/Button";
+//import MuiButton from "@mui/material/Button";
 import Loader from "../ui/loader";
 import ImageCropper from "@/components/imageCropper/imageCropper";
 import { Area } from "react-easy-crop";
+import { Grupo } from "@/types/Grupo";
+import ModalNewGroup from "@/components/modalNovoGrupo";
+import MuiButton from "@mui/material/Button";
 import { GruposMock } from "@/mock/grupos"; // Importando a lista mockada
 
 type Props = {
   atleta?: Atleta | null;
   method: "POST" | "PUT";
 };
+
 
 const FormAtleta = ({ atleta, method }: Props) => {
   const switchStyles =
@@ -28,7 +33,12 @@ const FormAtleta = ({ atleta, method }: Props) => {
   const [disableSubmitBtn, setDisableSubmitBtn] = useState<boolean>(false);
   const { registerAthlete, updateAthlete } = useAthleteProvider();
   const [openCropper, setOpenCropper] = useState<boolean>(false); // Estado para controlar a abertura do cropper
+  const [openGroupModal, setOpenGroupModal] = useState<boolean>(false);
   const [croppedImage, setCroppedImage] = useState<string | null>(null);
+  const {
+    groupList,
+    getGroups
+  } = useGroupProvider();
 
   useEffect(() => {
     if (atleta?.foto && avatarBase64 == "") {
@@ -36,6 +46,10 @@ const FormAtleta = ({ atleta, method }: Props) => {
       setOriginalAvatarBase64(atleta.foto);
     }
   }, [atleta, setAvatarBase64]);
+
+  useEffect( () => {
+    getGroups();
+  }, []); 
 
   const {
     register,
@@ -50,7 +64,7 @@ const FormAtleta = ({ atleta, method }: Props) => {
       nascimento: atleta?.nascimento ?? "",
       sexo: atleta?.sexo ?? "",
       faixa: atleta?.faixa,
-      grupo: atleta?.grupo,
+      grupo: atleta?.grupo?.id?.toString() ?? "",
       isAtivo: !!atleta?.isAtivo,
     },
     mode: "onBlur",
@@ -59,41 +73,39 @@ const FormAtleta = ({ atleta, method }: Props) => {
 
   const onSubmit = async (data: any) => {
     try {
-      console.log("Formulario enviado com sucesso");
-      switch (method) {
-        case "PUT":
-          console.log("Método PUT acionado");
-          const preparedDataPut = {
-            ...data,
-            foto: croppedImage || atleta?.foto,
-            isAtivo: getValues("isAtivo"),
-          };
-          console.log("Dados preparados para PUT:", preparedDataPut);
-          updateAthlete(preparedDataPut);
-          break;
+      const selectedGroup = groupList?.find(g => g.id.toString() === data.grupo);
 
-        default:
-          console.log("Método POST acionado");
-          let finalAvatarBase64 = croppedImage;
+      const formData = {
+        ...data,
+        grupo: selectedGroup ? {
+          id: selectedGroup.id,
+          nome: selectedGroup.nome,
+          isAtivo: selectedGroup.isAtivo
+        } : undefined,
+        foto: croppedImage || atleta?.foto,
+        isAtivo: getValues("isAtivo"),
+      };
 
-          if (!finalAvatarBase64 && data.foto && data.foto[0]) {
-            console.log("Arquivo de imagem encontrado:", data.foto[0]);
-            finalAvatarBase64 = await file2Base64(data.foto[0]);
-            console.log("Imagem convertida para Base64:", finalAvatarBase64);
-          }
+      if (method === "PUT") {
+        updateAthlete(formData); //TODO: Corrigir comportamento com grupo
+      } else {
+        let finalAvatarBase64 = croppedImage;
 
-          const preparedDataPost = {
-            ...data,
+        if (!finalAvatarBase64 && data.foto && data.foto[0]) {
+console.log("Arquivo de imagem encontrado:", data.foto[0]);
+          finalAvatarBase64 = await file2Base64(data.foto[0]);
+console.log("Imagem convertida para Base64:", finalAvatarBase64);
+        }
+
+        if (finalAvatarBase64) {
+          registerAthlete({
+            ...formData,
             foto: finalAvatarBase64,
-          };
-
-          if (finalAvatarBase64) {
-            console.log("Dados preparados para POST:", preparedDataPost);
-            registerAthlete(preparedDataPost);
-          } else {
-            alert("Por favor, selecione uma imagem para o avatar.");
-            console.log("Nenhuma imagem foi selecionada.");
-          }
+          });
+        } else {
+          alert("Por favor, selecione uma imagem para o avatar.");
+console.log("Nenhuma imagem foi selecionada.");
+        }
       }
     } catch (error) {
       alert(
@@ -167,6 +179,10 @@ const FormAtleta = ({ atleta, method }: Props) => {
   const handleCropCancel = () => {
     setAvatarBase64(originalAvatarBase64);
     setOpenCropper(false);
+  };
+
+  const handleGroupCreated = () => {
+    getGroups();
   };
 
   return (
@@ -297,22 +313,35 @@ const FormAtleta = ({ atleta, method }: Props) => {
             <label htmlFor="faixa" className={styles.required}>
               Grupo
             </label>
-            <MuiButton variant="contained" sx={{ backgroundColor: "red", }} endIcon={<img width={50} src="/icons/add_grupo.png" />}>
-              {/* // onClick={handleOpen}> */}
-        Novo Grupo
-            </MuiButton>
+              Novo Grupo
+
+            <ModalNewGroup
+              open={openGroupModal}
+              setOpen={setOpenGroupModal}
+              onGroupCreated={handleGroupCreated} // Aqui pode ser possível atualizar a lista de grupos
+            />
             <select {...register("grupo")} id="grupo">
               <option disabled >
                 Selecione
               </option>
-              {GruposMock.map((grupo) => (
-          <option key={grupo.id} value="branca">{grupo.nome}</option>
-      ))}
-              {/* <option value="vermelha">Criar novo grupo +</option> */}
+              {loading ? (
+                <option disabled>Carregando grupos...</option>
+              ) : Array.isArray(groupList) && groupList.length > 0 ? (
+                groupList.map((grupo) => (
+                  <option key={grupo.id} value={grupo.id}>
+                    {grupo.nome}
+                  </option>
+                ))
+              ) : (
+                <option disabled>Nenhum grupo disponível</option>
+              )}
             </select>
-            {/* {errors.faixa && (
+            {errors.grupo && (
               <p className={styles.displayError}>{errors.grupo.message}</p>
-            )} */}
+            )}
+            <MuiButton variant="contained" sx={{ backgroundColor: "red", }} endIcon={<img width={50} src="/icons/add_grupo.png" />} onClick={() => setOpenGroupModal(true)}>
+              Novo Grupo
+            </MuiButton>
 
           </div>
           {method === "PUT" && (
