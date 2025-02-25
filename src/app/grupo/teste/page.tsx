@@ -60,7 +60,9 @@ export default function SubscriptionDialog() {
             />
           </div>
           </Modal> */}
-        <ModalDialog></ModalDialog>
+        <ModalDialog open={false} setOpen={function (value: React.SetStateAction<boolean>): void {
+          throw new Error('Function not implemented.');
+        } }></ModalDialog>
       </div>
     </div>
   );
