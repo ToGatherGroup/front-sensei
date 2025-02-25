@@ -53,9 +53,18 @@ export const atletaCreateSchema = yup.object().shape({
     )
     .required("Este campo é obrigatório.")
     .typeError("Selecione a faixa."),
-    grupo: yup
-    .number().optional()
-    .typeError("Selecione um grupo."),
+  grupo: yup
+    .string()
+    // .object()
+    // .shape({
+    //   grupo: yup.object().shape({
+    //     id: yup.number().required(),
+    //     nome: yup.string().optional(),
+    //     isAtivo: yup.boolean().optional(),
+    //   })
+    // })
+    .optional()
+    .typeError("Selecione um grupo."),// aqui valida se é string, mas preciso que seja o id ou objeto completo (?)
 
 
   isAtivo: yup.boolean().required().default(true)
