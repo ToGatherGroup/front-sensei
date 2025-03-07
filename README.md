@@ -12,6 +12,7 @@
 
 ## Índice
 
+- [Índice](#índice)
 - [Descrição do Projeto](#descrição-do-projeto)
 - [Tecnologias Utilizadas](#tecnologias-utilizadas)
 - [Funcionalidades](#funcionalidades)
@@ -67,4 +68,5 @@ http://institutodivino.com.br/
 - [Michel Machado](https://github.com/Michel-Machado)
 - [Charles Anderson](https://github.com/charlesanderson25)
 - [Paulo Mota](https://github.com/Roberto-Mota)
+- [Rafael Palau](https://github.com/RafaPalau)
 - [Wilson Alves](https://github.com/Wilrrama)

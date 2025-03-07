@@ -13,8 +13,8 @@ import MedalSection from "@/components/medalSection";
 import Button from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
-import Tippy from '@tippyjs/react';
-import 'tippy.js/dist/tippy.css';
+import Tippy from "@tippyjs/react";
+import "tippy.js/dist/tippy.css";
 import Qualitativos from "@/components/qualitativos/index";
 
 type Params = {
@@ -26,7 +26,15 @@ type Props = {
 };
 
 const Page = ({ params }: Props) => {
-  const { getInjuries, injuries, injuriesInfo, medals, athleteProfile, getProfile, isLoading } = useAthleteProvider();
+  const {
+    getInjuries,
+    injuries,
+    injuriesInfo,
+    medals,
+    athleteProfile,
+    getProfile,
+    isLoading,
+  } = useAthleteProvider();
   const router = useRouter();
   const [lesoes, setLesoes] = useState<string[] | null>(null);
   const [grafico, setGrafico] = useState<any | null>(true);
@@ -97,6 +105,10 @@ const Page = ({ params }: Props) => {
   const screenSize = useScreenSize();
 
   useEffect(() => {
+    setMedalhaOuro(0);
+    setMedalhaPrata(0);
+    setMedalhaBronze(0);
+
     medals?.forEach((medalha: { posicao: string; quantidade: number }) => {
       switch (medalha.posicao) {
         case "Medalha de ouro":
@@ -112,7 +124,7 @@ const Page = ({ params }: Props) => {
           break;
       }
     });
-  }, [medals]);
+  }, [medals, params.id]);
 
   const renderButtons = () => (
     <section className="flex mt-6 space-x-2 lg:space-x-6 justify-center">
@@ -151,7 +163,6 @@ const Page = ({ params }: Props) => {
       <section className="flex flex-col lg:flex-row lg:justify-around lg:w-full">
         <div>
           <div className="flex justify-center space-x-6 mb-4 mt-6 lg:space-x-10 lg:mt-8 lg:mb-8">
-            {/* <IconButton href="/comparison" src="/icons/avaliacao_fisica.png" alt="Avaliação Física Individual" /> */}
             <IconButton
               href={`${params.id}/cadastrar/avaliacaoFisica`}
               src="/icons/avaliacao_fisica.png"
@@ -172,8 +183,6 @@ const Page = ({ params }: Props) => {
               src="/icons/ferramenta-lapis.png"
               alt="Edição"
             />
-            {/* <IconButton href={`/atleta/perfil/${params.id}/cadastrar/campeonato`} src="/icons/campeonato.png" alt="Campeonato" /> */}
-            {/* <IconButton href={`/postura/${params.id}`} src="/icons/posture_icon.png" alt="Postura" /> */}
           </div>
           <AvatarAtleta
             id={params.id}
@@ -190,18 +199,23 @@ const Page = ({ params }: Props) => {
                   altText="Ícone Medalha Ouro"
                   ringColor="amber-500"
                   medalCount={medalhaOuro}
+                  athleteId={Number(params.id)}
                 />
+
                 <MedalSection
                   imgSrc="/formAtleta/medals/medalhasCinza2.png"
                   altText="Ícone Medalha Prata"
                   ringColor="zinc-500"
                   medalCount={medalhaPrata}
+                  athleteId={Number(params.id)}
                 />
+
                 <MedalSection
                   imgSrc="/formAtleta/medals/medalhasCinza3.png"
                   altText="Ícone Medalha Bronze"
                   ringColor="copperMedal"
                   medalCount={medalhaBronze}
+                  athleteId={Number(params.id)}
                 />
               </div>
               {renderAthleteInfo()}
@@ -277,18 +291,31 @@ const Page = ({ params }: Props) => {
                   ></Button>
                 </div>
                 <div className="flex flex-col-reverse custom-scrollbar mx-auto max-h-26 lg:max-h-40 scroll-auto overflow-y-auto justify-center bg-white rounded-lg p-4 pt-2 lg:-mt-4 max-w-xs lg:min-w-fit lg:max-w-sm ">
-                  {(!isLoading && injuriesInfo.length <= 0) && <h3 className="text-sm lg:text-lg font-semibold">O atleta não possui lesão registrada</h3>}
-                  {
-                    injuriesInfo.map((injuryInfo, index) => (
-                      <p key={index} className="leading-7 justify-between inline-block align-text-bottom text-xs lg:text-sm text-wrap text-transform: capitalize">
-                        <span className="font-bold">{dayjs(injuryInfo.date).format('DD/MM/YYYY')}</span>
-                        <span className="italic "> {injuryInfo.regiaoLesao}</span>
-                        <Tippy hideOnClick={true} content={injuryInfo.description}>
-                          <span className="cursor-pointer lg:text-base text-lg"> ℹ️</span>
-                        </Tippy>
-                      </p>
-                    ))
-                  }
+                  {!isLoading && injuriesInfo.length <= 0 && (
+                    <h3 className="text-sm lg:text-lg font-semibold">
+                      O atleta não possui lesão registrada
+                    </h3>
+                  )}
+                  {injuriesInfo.map((injuryInfo, index) => (
+                    <p
+                      key={index}
+                      className="leading-7 justify-between inline-block align-text-bottom text-xs lg:text-sm text-wrap text-transform: capitalize"
+                    >
+                      <span className="font-bold">
+                        {dayjs(injuryInfo.date).format("DD/MM/YYYY")}
+                      </span>
+                      <span className="italic "> {injuryInfo.regiaoLesao}</span>
+                      <Tippy
+                        hideOnClick={true}
+                        content={injuryInfo.description}
+                      >
+                        <span className="cursor-pointer lg:text-base text-lg">
+                          {" "}
+                          ℹ️
+                        </span>
+                      </Tippy>
+                    </p>
+                  ))}
                 </div>
               </div>
             )}
