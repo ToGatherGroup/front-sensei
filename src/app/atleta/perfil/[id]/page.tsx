@@ -169,11 +169,6 @@ const Page = ({ params }: Props) => {
               alt="Edição"
             />
             <IconButton
-              href={`${params.id}/cadastrar/campeonato`}
-              src="/icons/campeonato.png"
-              alt="Campeonato"
-            />
-            <IconButton
               href={`${params.id}/postura`}
               src="/icons/posture_icon.png"
               alt="Postura"

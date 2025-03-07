@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import Button from "../ui/button";
+import Link from "next/link";
 
 interface ModalProps {
   title: string;
@@ -11,6 +12,7 @@ interface ModalProps {
   cancelButtonText?: string;
   showCloseIcon?: boolean;
   imageSrc?: string;
+  imageLink?: string;
   children?: React.ReactNode;
 }
 
@@ -25,6 +27,7 @@ const Modal = ({
   showCloseIcon = true,
   children,
   imageSrc,
+  imageLink,
 }: ModalProps) => {
   
   useEffect(() => {
@@ -45,7 +48,13 @@ const Modal = ({
       <div className="relative bg-white rounded-md xl:p-10 lg:p-8 md:p-5 p-5 shadow-lg w-full max-w-md" onClick={(e) => e.stopPropagation()}>
         
         {imageSrc && (
-          <img src={imageSrc} alt="Ícone" className="absolute top-3 left-3 w-8 h-8" />
+          imageLink ? (
+            <Link href={imageLink}>
+              <img src={imageSrc} alt="Ícone" className="absolute top-3 left-3 w-8 h-8 cursor-pointer" />
+            </Link>
+          ) : (
+            <img src={imageSrc} alt="Ícone" className="absolute top-3 left-3 w-8 h-8" />
+          )
         )}
 
         {showCloseIcon && (

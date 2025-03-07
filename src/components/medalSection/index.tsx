@@ -77,7 +77,13 @@ const MedalSection = ({ imgSrc, altText, ringColor, medalCount, athleteId }: Med
         </section>
 
         {isOpen && (
-          <Modal title="Campeonatos" closeModalFunction={() => setIsOpen(false)} showCloseIcon={true} imageSrc="/icons/campeonato.png">
+          <Modal 
+            title="Campeonatos" 
+            closeModalFunction={() => setIsOpen(false)} 
+            showCloseIcon={true} 
+            imageSrc="/icons/campeonato.png" 
+            imageLink={`${athleteId}/cadastrar/campeonato`}
+          >
             {isLoading ? (
               <p>Carregando...</p>
             ) : (
