@@ -9,7 +9,7 @@ type BackProps = {
   onClick?: (clickedBodyPart: string) => any;
 };
 
-const Back = ({
+const SvgBack = ({
   injuries,
   width,
   height,
@@ -344,4 +344,4 @@ const Back = ({
   );
 };
 
-export default Back;
+export default SvgBack;

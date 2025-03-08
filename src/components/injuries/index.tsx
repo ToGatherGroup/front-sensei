@@ -1,6 +1,6 @@
 import React from "react";
-import Back from "../../../public/svg/injuries/Back";
-import Front from "../../../public/svg/injuries/Front";
+import SvgBack from "../../../public/svg/injuries/SvgBack";
+import SvgFront from "../../../public/svg/injuries/SvgFront";
 
 type InjuriesProps = {
   injuries: string[];
@@ -24,7 +24,7 @@ const Injuries = ({
   return (
     <div>
       {type === "back" ? (
-        <Back
+        <SvgBack
           injuries={injuries}
           width={width}
           height={height}
@@ -32,7 +32,7 @@ const Injuries = ({
           onClick={onClick}
         />
       ) : (
-        <Front
+        <SvgFront
           injuries={injuries}
           width={width}
           height={height}
