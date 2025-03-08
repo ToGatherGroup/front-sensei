@@ -1,6 +1,6 @@
 import { SvgProps } from "@/types/Svg";
 
-const User = ({ size = 24, ...props }: SvgProps) => (
+const SvgUser = ({ size = 24, ...props }: SvgProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -14,4 +14,4 @@ const User = ({ size = 24, ...props }: SvgProps) => (
   </svg>
 );
 
-export default User;
+export default SvgUser;

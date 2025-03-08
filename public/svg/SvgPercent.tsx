@@ -1,6 +1,6 @@
 import { SvgProps } from "@/types/Svg";
 
-const Percent = ({ size = 24, ...props }: SvgProps) => (
+const SvgPercent = ({ size = 24, ...props }: SvgProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -15,4 +15,4 @@ const Percent = ({ size = 24, ...props }: SvgProps) => (
   </svg>
 );
 
-export default Percent;
+export default SvgPercent;

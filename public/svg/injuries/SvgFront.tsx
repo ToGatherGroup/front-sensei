@@ -9,7 +9,7 @@ type FrontProps = {
   onClick?: (clickedBodyPart: string) => any;
 };
 
-const Front = ({
+const SvgFront = ({
   injuries,
   width,
   height,
@@ -437,4 +437,4 @@ const Front = ({
   );
 };
 
-export default Front;
+export default SvgFront;

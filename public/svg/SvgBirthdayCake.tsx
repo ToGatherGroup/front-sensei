@@ -1,6 +1,6 @@
 import { SvgProps } from "@/types/Svg";
 
-const BirthdayCake = ({ size = 24, ...props }: SvgProps) => (
+const SvgBirthdayCake = ({ size = 24, ...props }: SvgProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -16,4 +16,4 @@ const BirthdayCake = ({ size = 24, ...props }: SvgProps) => (
   </svg>
 );
 
-export default BirthdayCake;
+export default SvgBirthdayCake;

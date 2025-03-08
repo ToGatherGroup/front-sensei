@@ -18,73 +18,91 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
+const DESKTOP_WIDTH_BREAKPOINT = 1130
+
 const iconStyle = {
   stroke: "white",
   fillOpacity: 0,
-  className: "stroke-[1.5]",
+  className: "stroke-[1.5] min-w-[28px]",
   size: 28
 }
 
 const menuItems = [
   {
     label: 'Atletas', 
-    icon: <User {...iconStyle} />,
+    icon: <SvgUser {...iconStyle} />,
     childrens: [
       {
         label: 'Buscar',
         path: '/atleta/buscar',
-        icon: <UserSearch {...iconStyle} />
+        icon: <SvgUserSearch {...iconStyle} />
       },
       {
         label: 'Cadastrar', 
         path: '/atleta/cadastrar',
-        icon: <Image src="/header_icons/add_atletas.png" width={30} height={30} alt='' className='h-fit' ></Image>
+        icon: <SvgAddUser {...iconStyle} />
       },
       {
         label: 'Aniversariantes', 
         path: '/atleta/aniversariantes',
-        icon: <BirthdayCake {...iconStyle} />
+        icon: <SvgBirthdayCake {...iconStyle} />
       }
     ]
   },
   {
     label: 'Chamada', 
     path: '/chamada',
-    icon: <Image src="/header_icons/chamada.png" width={20} height={20} alt='' className="h-fit"></Image>
+    icon: <SvgChecklist {...iconStyle} />
   },
   {
     label: 'Avaliação', 
-    path: '/valencia/menu',
-    icon: <Assessment {...iconStyle}/>
+    icon: <SvgAssessment {...iconStyle}/>,
+    childrens: [
+      {
+        label: 'Nova Avaliação', 
+        icon: <SvgAddAssessment {...iconStyle}/>,
+        path: '/valencia/menu',
+      },
+      {
+        label: 'Buscar', 
+        icon: <SvgFileSearch {...iconStyle} className="stroke-[1]" />,
+        path: '/relatorioAvaliacao'
+      },
+    ]
   },
   {
     label: 'Grupos', 
     path: '/grupos',
-    icon: <UserGroup {...iconStyle} />
+    icon: <SvgUserGroup {...iconStyle} />
   },
   {
     label: "Comparativo",
     path: "/comparison",
-    icon: <Image src="/header_icons/versus.png" width={25} height={25} alt='' className="h-fit"></Image>
+    icon: <SvgVersus {...iconStyle} />
+  },
+  {
+    label: "Notas",
+    path: "/notes",
+    icon: <SvgNotebook {...iconStyle} />
   },
   {
     label: 'Relatório', 
-    icon: <Image src="/header_icons/relatorio.png" width={20} height={20} alt='' className="h-fit" />,
+    icon: <SvgReport {...iconStyle} />,
     childrens: [
       {
         label: 'Estatísticas', 
         path: '/estatisticas',
-        icon: <ChartLineData {...iconStyle} />
-      },
-      {
-        label: 'Avaliação', 
-        path: '/relatorioAvaliacao',
-        icon: <Image src="/header_icons/avaliacao.png" width={30} height={30} alt='' className="h-fit" />
+        icon: <SvgChartLineData {...iconStyle} />
       },
       {
         label: 'Frequência', 
         path: '/frequencia',
-        icon: <Percent {...iconStyle} />
+        icon: <SvgPercent {...iconStyle} />
+      },
+      {
+        label: 'Planilha', 
+        icon: <SvgCsv {...iconStyle} />,
+        path: '/reports'
       },
     ]
   },
@@ -97,10 +115,10 @@ function Header() {
   const [position, setPosition] = useState<"sticky" | "static">("static"); // Inicialização sem acessar `window`
 
   useEffect(() => {
-    setPosition(window.innerWidth <= 1050 ? "sticky" : "static");
+    setPosition(window.innerWidth < DESKTOP_WIDTH_BREAKPOINT ? "sticky" : "static");
 
     const handleResize = () => {
-      setPosition(window.innerWidth <= 1050 ? "sticky" : "static");
+      setPosition(window.innerWidth < DESKTOP_WIDTH_BREAKPOINT ? "sticky" : "static");
     };
 
     window.addEventListener("resize", handleResize);
@@ -119,12 +137,13 @@ function Header() {
     <AppBar position={position}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Box sx={{display: 'flex', width: 'max-content', flex: '1', justifyContent: 'center', alignItems: 'center', "@media (max-width:1050px)": { flexDirection: 'row-reverse'}}}>
+          <Box sx={{display: 'flex', width: 'max-content', flex: '1', justifyContent: 'center', alignItems: 'center', [`@media (max-width:${DESKTOP_WIDTH_BREAKPOINT - 1}px)`]: { flexDirection: 'row-reverse'}}}>
             {/* Logo Sensei para DESKTOP */}
             <Box sx={{
               display: "none",
-              "@media (min-width:1050px)": {
+              [`@media (min-width:${DESKTOP_WIDTH_BREAKPOINT}px)`]: {
                 display: "flex",
+                minWidth: 'fit-content'
               },
             }}>
               <Link
@@ -135,7 +154,7 @@ function Header() {
                   height={50}
                   alt="Logotipo Sensei"
                   src="/logo_sensei_white.png"
-                  className='mr-4 hidden min-[900px]:flex'
+                  className={`mr-4 ${window.innerWidth < DESKTOP_WIDTH_BREAKPOINT ? "hidden" : "flex"}`}
                 />
               </Link>
             </Box>
@@ -144,7 +163,7 @@ function Header() {
             <Box sx={{ 
               flexGrow: 1, 
               display: "none",
-              "@media (max-width:1050px)": {
+              [`@media (max-width:${DESKTOP_WIDTH_BREAKPOINT - 1}px)`]: {
                 display: "flex",
                 justifyContent: 'flex-end'
               }
@@ -154,7 +173,7 @@ function Header() {
 
             {/* Logo Sensei para Mobile */}
             <Box sx={{ flexGrow: 1, display: "none",
-              "@media (max-width:1050px)": {
+              [`@media (max-width:${DESKTOP_WIDTH_BREAKPOINT - 1}px)`]: {
                 display: "flex",
                 justifyContent: 'center'
               } }}>
@@ -166,7 +185,7 @@ function Header() {
                   height={50}
                   alt="Logotipo Sensei"
                   src="/logo_sensei_white.png"
-                  className='hidden max-[1050px]:flex'
+                  className={window.innerWidth < DESKTOP_WIDTH_BREAKPOINT ? "flex" : "hidden"}
                   />
               </Link>
             </Box>
@@ -175,10 +194,11 @@ function Header() {
             <Box sx={{ 
               flexGrow: 1, 
               display: "none",
-              "@media (min-width:1050px)": {
+              [`@media (min-width:${DESKTOP_WIDTH_BREAKPOINT}px)`]: {
                 display: "flex",
               },
-              marginLeft: '24px', gap: '24px' 
+              gap: "clamp(4px, 1.5vw, 24px)",
+              justifyContent: "center",
             }}>
               {menuItems.map((item) => (
                 <>
@@ -186,7 +206,7 @@ function Header() {
                     <PopupState variant="popover" popupId={item.label} key={item.label}>
                       {(popupState) => (
                         <>
-                          <Button  {...bindHover(popupState)} sx={{ my: 2, color: 'white', display: 'flex', gap: '6px', alignItems: 'center', justifyContent: 'center' }}>
+                          <Button  {...bindHover(popupState)} sx={{ textTransform: 'capitalize', my: 2, color: 'white', display: 'flex', gap: '6px', alignItems: 'center', justifyContent: 'center' }}>
                             {item.icon}
                             <Typography sx={{ textAlign: 'center', fontWeight: 'bold' }}>{item.label}</Typography>
                             {popupState.isOpen ? 
@@ -225,7 +245,7 @@ function Header() {
                     :
                     <Button
                       key={item.label}
-                      sx={{ my: 2, color: 'white'}}
+                      sx={{ textTransform: 'capitalize', my: 2, color: 'white'}}
                     >
                       <Link href={item.path} className='flex gap-2 items-center'>
                         {item.icon}
@@ -297,13 +317,21 @@ import ListItemText from '@mui/material/ListItemText';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import { Collapse } from '@mui/material';
-import User from '../../../public/svg/User';
-import UserSearch from '../../../public/svg/UserSearch';
-import BirthdayCake from '../../../public/svg/BirthdayCake';
-import UserGroup from '../../../public/svg/UserGroup';
-import ChartLineData from '../../../public/svg/ChartLineData';
-import Percent from '../../../public/svg/Percent';
-import Assessment from '../../../public/svg/Assessment';
+import SvgUser from '../../../public/svg/SvgUser';
+import SvgUserSearch from '../../../public/svg/SvgUserSearch';
+import SvgBirthdayCake from '../../../public/svg/SvgBirthdayCake';
+import SvgUserGroup from '../../../public/svg/SvgUserGroup';
+import SvgChartLineData from '../../../public/svg/SvgChartLineData';
+import SvgPercent from '../../../public/svg/SvgPercent';
+import SvgAssessment from '../../../public/svg/SvgAssessment';
+import SvgFileSearch from '../../../public/svg/SvgFileSearchOld';
+import SvgNotebook from '../../../public/svg/SvgNotebook';
+import SvgCsv from '../../../public/svg/SvgCsv';
+import SvgAddUser from '../../../public/svg/SvgAddUser';
+import SvgChecklist from '../../../public/svg/SvgChecklist';
+import SvgReport from '../../../public/svg/SvgReport';
+import SvgAddAssessment from '../../../public/svg/SvgAddAssessment';
+import SvgVersus from '../../../public/svg/SvgVersus';
 
 const MobileDrawer = () => {
   const [open, setOpen] = useState(false);

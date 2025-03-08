@@ -1,6 +1,6 @@
 import { SvgProps } from "@/types/Svg";
 
-const Muscle = ({ size = 24, ...props }: SvgProps) => (
+const SvgMuscle = ({ size = 24, ...props }: SvgProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -13,4 +13,4 @@ const Muscle = ({ size = 24, ...props }: SvgProps) => (
   </svg>
 );
 
-export default Muscle;
+export default SvgMuscle;

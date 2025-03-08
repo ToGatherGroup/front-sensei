@@ -1,6 +1,6 @@
 import { SvgProps } from "@/types/Svg";
 
-const ChartLineData = ({ size = 24, ...props }: SvgProps) => (
+const SvgChartLineData = ({ size = 24, ...props }: SvgProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -14,4 +14,4 @@ const ChartLineData = ({ size = 24, ...props }: SvgProps) => (
   </svg>
 );
 
-export default ChartLineData;
+export default SvgChartLineData;
