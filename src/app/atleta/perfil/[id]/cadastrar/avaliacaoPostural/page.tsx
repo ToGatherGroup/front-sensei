@@ -150,7 +150,7 @@ const PosturalEvaluation = ({ params: { id } }: Props) => {
           croppedArea.height
         );
 
-        const croppedImage = canvas.toDataURL("image/jpeg");
+        const croppedImage = canvas.toDataURL("image/png");
         setImageAfterCrop(croppedImage);
       };
     }
@@ -322,11 +322,12 @@ const PosturalEvaluation = ({ params: { id } }: Props) => {
         </div>
       )}
       {currentPage === "crop-img" && imageToCrop && (
-        <div className="w-[80vw] h-[80vh] flex justify-center items-center">
+        <div className="m-auto size-full">
           <ImageCropper
             imageSrc={imageToCrop}
             onCropDone={handleCropComplete}
             onCropCancel={() => setCurrentPage("choose-img")}
+            aspectRatio={2 / 4}
           />
         </div>
       )}

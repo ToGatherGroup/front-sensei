@@ -56,6 +56,44 @@ http://institutodivino.com.br/
 - Gráfico de performance e aproveitando do atleta.
 - Gráfico de presença.
 
+##  Como rodar o projeto localmente
+
+> Presume-se que seu ambiente esteja configurado com o npm
+
+---
+  1. **Clone o repositório**
+    Abra o terminal e execute o comando abaixo para clonar o projeto:
+    `git clone https://github.com/ToGatherGroup/front-sensei.git`
+
+---
+  2. **Acesse a pasta do projeto**
+    Navegue até a pasta do projeto clonado:
+    `cd front-sensei`
+
+---
+  3. **Instale as dependências**
+    Execute o comando abaixo para instalar todas as dependências necessárias:
+    `npm install`
+---
+  4. **Inicie o projeto localmente**
+    Execute o comando abaixo para iniciar o projeto:
+    `npm run dev`
+
+---
+  5. **Acesse o projeto no navegador**
+    Abra seu navegador de preferência e acesse a URL:
+
+    `http://localhost:3000`
+
+---
+  5. **Pronto!** Seu projeto estará rodando localmente. 🚀
+
+---
+
+> Ps. É necessário que você tenha acesso às variáveis de ambiente específicas do ambiente local de desenvolvimento e/ou produção para que as requisições sejam efetuadas de forma correta
+
+  Se precisar de ajuda adicional, consulte o README.md do projeto ou entre em contato com a gente! 😊
+
 ## Pessoas Contribuidoras
 
 - [Alex Almeida](https://github.com/alexalmeidaleonardo)

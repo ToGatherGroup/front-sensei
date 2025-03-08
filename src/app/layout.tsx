@@ -1,5 +1,4 @@
 import { Providers } from "@/providers";
-import type { Metadata } from "next";
 import "./globals.css";
 import "./reset.css";
 import Header from "@/components/header";
@@ -9,10 +8,16 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
+import { Metadata, Viewport } from "next";
 
 export const metadata: Metadata = {
   title: "Sensei",
   description: "Aplicativo para gerenciamento e análise de atletas",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({
