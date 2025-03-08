@@ -112,12 +112,15 @@ const settings = ['Meu usuário', 'Sair'];
 
 function Header() {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-  const [position, setPosition] = useState<"sticky" | "static">("static"); // Inicialização sem acessar `window`
+  const [position, setPosition] = useState<"sticky" | "static">("static");
+  const [innerWidth, setInnerWidth] = useState(0);
 
   useEffect(() => {
+    setInnerWidth(window.innerWidth);
     setPosition(window.innerWidth < DESKTOP_WIDTH_BREAKPOINT ? "sticky" : "static");
 
     const handleResize = () => {
+      setInnerWidth(window.innerWidth);
       setPosition(window.innerWidth < DESKTOP_WIDTH_BREAKPOINT ? "sticky" : "static");
     };
 
@@ -154,7 +157,7 @@ function Header() {
                   height={50}
                   alt="Logotipo Sensei"
                   src="/logo_sensei_white.png"
-                  className={`mr-4 ${window.innerWidth < DESKTOP_WIDTH_BREAKPOINT ? "hidden" : "flex"}`}
+                  className={`mr-4 ${innerWidth < DESKTOP_WIDTH_BREAKPOINT ? "hidden" : "flex"}`}
                 />
               </Link>
             </Box>
@@ -185,7 +188,7 @@ function Header() {
                   height={50}
                   alt="Logotipo Sensei"
                   src="/logo_sensei_white.png"
-                  className={window.innerWidth < DESKTOP_WIDTH_BREAKPOINT ? "flex" : "hidden"}
+                  className={innerWidth < DESKTOP_WIDTH_BREAKPOINT ? "flex" : "hidden"}
                   />
               </Link>
             </Box>
