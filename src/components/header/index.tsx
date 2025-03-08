@@ -1,149 +1,432 @@
-"use client";
+"use client"
 
-import Image from "next/image";
-import Link from "next/link";
-import { useState } from "react";
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import Menu from '@mui/material/Menu';
+import MenuIcon from '@mui/icons-material/Menu';
+import Container from '@mui/material/Container';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import Button from '@mui/material/Button';
+import Tooltip from '@mui/material/Tooltip';
+import MenuItem from '@mui/material/MenuItem';
+import PopupState, { bindMenu, bindHover } from 'material-ui-popup-state';
+import HoverMenu from 'material-ui-popup-state/HoverMenu'
+import { useEffect, useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
 
-const MENU_ITEMS = [
+const DESKTOP_WIDTH_BREAKPOINT = 1130
+
+const iconStyle = {
+  stroke: "white",
+  fillOpacity: 0,
+  className: "stroke-[1.5] min-w-[28px]",
+  size: 28
+}
+
+const menuItems = [
   {
-    title: "Cadastro",
-    linkSrc: "/atleta/cadastrar",
-    imgSrc: "/header_icons/add_atletas.png",
-    imgW: 25,
-    imgH: 20,
+    label: 'Atletas', 
+    icon: <SvgUser {...iconStyle} />,
+    childrens: [
+      {
+        label: 'Buscar',
+        path: '/atleta/buscar',
+        icon: <SvgUserSearch {...iconStyle} />
+      },
+      {
+        label: 'Cadastrar', 
+        path: '/atleta/cadastrar',
+        icon: <SvgAddUser {...iconStyle} />
+      },
+      {
+        label: 'Aniversariantes', 
+        path: '/atleta/aniversariantes',
+        icon: <SvgBirthdayCake {...iconStyle} />
+      }
+    ]
   },
   {
-    title: "Chamada",
-    linkSrc: "/chamada",
-    imgSrc: "/header_icons/chamada.png",
-    imgW: 20,
-    imgH: 20,
+    label: 'Chamada', 
+    path: '/chamada',
+    icon: <SvgChecklist {...iconStyle} />
   },
   {
-    title: "Avaliação",
-    linkSrc: "/valencia/menu",
-    imgSrc: "/header_icons/avaliacao.png",
-    imgW: 30,
-    imgH: 30,
+    label: 'Avaliação', 
+    icon: <SvgAssessment {...iconStyle}/>,
+    childrens: [
+      {
+        label: 'Nova Avaliação', 
+        icon: <SvgAddAssessment {...iconStyle}/>,
+        path: '/valencia/menu',
+      },
+      {
+        label: 'Buscar', 
+        icon: <SvgFileSearch {...iconStyle} className="stroke-[1]" />,
+        path: '/relatorioAvaliacao'
+      },
+    ]
   },
   {
-    title: "Relatórios",
-    linkSrc: "/relatorioAvaliacao",
-    imgSrc: "/header_icons/relatorio.png",
-    imgW: 20,
-    imgH: 20,
+    label: 'Grupos', 
+    path: '/grupos',
+    icon: <SvgUserGroup {...iconStyle} />
   },
   {
-    title: "Atletas",
-    linkSrc: "/atleta/buscar",
-    imgSrc: "/header_icons/atletas.png",
-    imgW: 30,
-    imgH: 25,
+    label: "Comparativo",
+    path: "/comparison",
+    icon: <SvgVersus {...iconStyle} />
   },
   {
-    title: "Comparativo",
-    linkSrc: "/comparison",
-    imgSrc: "/header_icons/versus.png",
-    imgW: 30,
-    imgH: 25,
+    label: "Notas",
+    path: "/notes",
+    icon: <SvgNotebook {...iconStyle} />
+  },
+  {
+    label: 'Relatório', 
+    icon: <SvgReport {...iconStyle} />,
+    childrens: [
+      {
+        label: 'Estatísticas', 
+        path: '/estatisticas',
+        icon: <SvgChartLineData {...iconStyle} />
+      },
+      {
+        label: 'Frequência', 
+        path: '/frequencia',
+        icon: <SvgPercent {...iconStyle} />
+      },
+      {
+        label: 'Planilha', 
+        icon: <SvgCsv {...iconStyle} />,
+        path: '/reports'
+      },
+    ]
   },
 ];
 
-const USERNAME = "Bruno Amado";
+const settings = ['Meu usuário', 'Sair'];
 
-export default function Header() {
-  //const screenSize = useScreenSize();
-  const [showMobileMenu, setShowMobileMenu] = useState(false);
+function Header() {
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const [position, setPosition] = useState<"sticky" | "static">("static");
+  const [innerWidth, setInnerWidth] = useState(0);
+
+  useEffect(() => {
+    setInnerWidth(window.innerWidth);
+    setPosition(window.innerWidth < DESKTOP_WIDTH_BREAKPOINT ? "sticky" : "static");
+
+    const handleResize = () => {
+      setInnerWidth(window.innerWidth);
+      setPosition(window.innerWidth < DESKTOP_WIDTH_BREAKPOINT ? "sticky" : "static");
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
   return (
-    <>
-      <header className="fixed w-screen h-20 block bg-winePattern font-sans text-lg z-[999999]">
-        <nav className="flex items-center justify-start">
-          <Link
-            href="/"
-            className="h-20 w-fit inline-block ml-2 mr-10 flex-shrink-0"
-          >
-            <Image
-              width={90}
-              height={50}
-              alt="Logotipo Sensei"
-              src="/logo_sensei_white.png"
-              className="mt-[15px]"
-            />
-          </Link>
-          {/* Background for mobile */}
-          <div
-            onClick={() => setShowMobileMenu(false)}
-            className={`${
-              showMobileMenu ? "block" : "hidden"
-            } bg-black z-[99998] bg-opacity-40 w-screen h-screen top-0 left-0 fixed lg:hidden`}
-          ></div>
-          <div
-            className={`${
-              showMobileMenu
-                ? "right-0 animate-fade-left"
-                : "animate-fade-right left-full"
-            } animate-duration-75 fixed z-[99999] flex flex-col top-0 lg:right-0 bg-winePatternDark min-h-screen rounded-bl-md px-5 py-10 lg:min-h-0 lg:h-fit lg:static lg:flex-row lg:bg-transparent lg:rounded-none lg:p-0`}
-          >
-            {MENU_ITEMS.map((item) => (
+    <AppBar position={position}>
+      <Container maxWidth="xl">
+        <Toolbar disableGutters>
+          <Box sx={{display: 'flex', width: 'max-content', flex: '1', justifyContent: 'center', alignItems: 'center', [`@media (max-width:${DESKTOP_WIDTH_BREAKPOINT - 1}px)`]: { flexDirection: 'row-reverse'}}}>
+            {/* Logo Sensei para DESKTOP */}
+            <Box sx={{
+              display: "none",
+              [`@media (min-width:${DESKTOP_WIDTH_BREAKPOINT}px)`]: {
+                display: "flex",
+                minWidth: 'fit-content'
+              },
+            }}>
               <Link
-                key={item.title}
-                href={item.linkSrc}
-                className="flex justify-center items-center hover:bg-winePatternLight lg:hover:bg-winePatternDark hover:rounded hover:outline hover:outline-1 hover:outline-white py-3 px-5"
-                onClick={() => setShowMobileMenu(false)}
+                href={"/"}
               >
-                <div className="flex items-center justify-center gap-2">
-                  <div className="w-[30px] h-[30px] flex justify-center items-center">
-                    <Image
-                      src={item.imgSrc}
-                      width={item.imgW}
-                      height={item.imgH}
-                      alt={item.title}
-                      className="m-auto"
-                    />
-                  </div>
-                  <span className="text-white h-fit w-28 text-center lg:w-fit lg:text-start">
-                    {item.title}
-                  </span>
-                </div>
+                <Image
+                  width={90}
+                  height={50}
+                  alt="Logotipo Sensei"
+                  src="/logo_sensei_white.png"
+                  className={`mr-4 ${innerWidth < DESKTOP_WIDTH_BREAKPOINT ? "hidden" : "flex"}`}
+                />
+              </Link>
+            </Box>
+
+            {/* Menu sanduíche para Mobile */}
+            <Box sx={{ 
+              flexGrow: 1, 
+              display: "none",
+              [`@media (max-width:${DESKTOP_WIDTH_BREAKPOINT - 1}px)`]: {
+                display: "flex",
+                justifyContent: 'flex-end'
+              }
+              }}>
+              <MobileDrawer />
+            </Box>
+
+            {/* Logo Sensei para Mobile */}
+            <Box sx={{ flexGrow: 1, display: "none",
+              [`@media (max-width:${DESKTOP_WIDTH_BREAKPOINT - 1}px)`]: {
+                display: "flex",
+                justifyContent: 'center'
+              } }}>
+              <Link
+                href={"/"}
+              >
+                <Image
+                  width={90}
+                  height={50}
+                  alt="Logotipo Sensei"
+                  src="/logo_sensei_white.png"
+                  className={innerWidth < DESKTOP_WIDTH_BREAKPOINT ? "flex" : "hidden"}
+                  />
+              </Link>
+            </Box>
+
+            {/* Menu Items para Desktop */}
+            <Box sx={{ 
+              flexGrow: 1, 
+              display: "none",
+              [`@media (min-width:${DESKTOP_WIDTH_BREAKPOINT}px)`]: {
+                display: "flex",
+              },
+              gap: "clamp(4px, 1.5vw, 24px)",
+              justifyContent: "center",
+            }}>
+              {menuItems.map((item) => (
+                <>
+                  {item.childrens ?
+                    <PopupState variant="popover" popupId={item.label} key={item.label}>
+                      {(popupState) => (
+                        <>
+                          <Button  {...bindHover(popupState)} sx={{ textTransform: 'capitalize', my: 2, color: 'white', display: 'flex', gap: '6px', alignItems: 'center', justifyContent: 'center' }}>
+                            {item.icon}
+                            <Typography sx={{ textAlign: 'center', fontWeight: 'bold' }}>{item.label}</Typography>
+                            {popupState.isOpen ? 
+                              <ExpandLess sx={{ color: 'white' }} />
+                              :
+                              <ExpandMore sx={{ color: 'white' }} />
+                            }
+
+                          </Button>
+                          <HoverMenu
+                            {...bindMenu(popupState)} 
+                            sx={(theme) => ({
+                              '& .MuiPaper-root': {
+                                backgroundColor: theme.palette.primary.main,
+                                color: theme.palette.background.paper
+                              },
+                              '& .MuiMenuItem-root:hover': {
+                                  backgroundColor: theme.palette.secondary.main,
+                                }
+                            })}
+                          >
+                            {item.childrens.map((itemChildren) => (
+                              <MenuItem onClick={popupState.close} key={itemChildren.label}>
+                                <Link href={itemChildren.path} className="flex gap-3 justify-center items-center">
+                                  <Box sx={{width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                                    {itemChildren.icon}
+                                  </Box>
+                                  <Typography sx={{ textAlign: 'center', fontWeight: 'bold' }}>{itemChildren.label}</Typography>
+                                </Link>
+                              </MenuItem>
+                            ))}
+                          </HoverMenu>
+                        </>
+                      )}
+                    </PopupState>
+                    :
+                    <Button
+                      key={item.label}
+                      sx={{ textTransform: 'capitalize', my: 2, color: 'white'}}
+                    >
+                      <Link href={item.path} className='flex gap-2 items-center'>
+                        {item.icon}
+                        <Typography sx={{ textAlign: 'center', fontWeight: 'bold' }}>{item.label}</Typography>
+                      </Link>
+                  </Button>
+                  }
+                </>
+              ))}
+            </Box>
+
+            {/* Menu de configurações Mobile/Desktop */}
+            <Box sx={{ flexGrow: 1 }}>
+              <Tooltip title="Abrir configurações">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0, color: '#fff' }} >
+                  <AccountBoxIcon style={{ fontSize: '36px' }}/>
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={(theme) => (
+                  { 
+                    mt: '45px',
+                    '& .MuiPaper-root': {
+                      backgroundColor: theme.palette.primary.main,
+                      color: theme.palette.background.paper,
+                    },
+                    '& .MuiMenuItem-root:hover': {
+                      backgroundColor: theme.palette.secondary.main,
+                    }
+                  }
+                )}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                {settings.map((setting) => (
+                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                    <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
+          </Box>
+        </Toolbar>
+      </Container>
+    </AppBar>
+  );
+}
+export default Header;
+
+
+import Drawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import { Collapse } from '@mui/material';
+import SvgUser from '../../../public/svg/SvgUser';
+import SvgUserSearch from '../../../public/svg/SvgUserSearch';
+import SvgBirthdayCake from '../../../public/svg/SvgBirthdayCake';
+import SvgUserGroup from '../../../public/svg/SvgUserGroup';
+import SvgChartLineData from '../../../public/svg/SvgChartLineData';
+import SvgPercent from '../../../public/svg/SvgPercent';
+import SvgAssessment from '../../../public/svg/SvgAssessment';
+import SvgFileSearch from '../../../public/svg/SvgFileSearchOld';
+import SvgNotebook from '../../../public/svg/SvgNotebook';
+import SvgCsv from '../../../public/svg/SvgCsv';
+import SvgAddUser from '../../../public/svg/SvgAddUser';
+import SvgChecklist from '../../../public/svg/SvgChecklist';
+import SvgReport from '../../../public/svg/SvgReport';
+import SvgAddAssessment from '../../../public/svg/SvgAddAssessment';
+import SvgVersus from '../../../public/svg/SvgVersus';
+
+const MobileDrawer = () => {
+  const [open, setOpen] = useState(false);
+
+  const toggleDrawer = (newOpen: boolean) => () => {
+    setOpen(newOpen);
+  };
+  const [openSubmenu, setOpenSubmenu] = useState('')
+
+  const handleSubmenuClick = (event:any, submenuLabel: string) => {
+    event.stopPropagation()
+    if (openSubmenu == submenuLabel){
+      setOpenSubmenu('')
+    } else {
+      setOpenSubmenu(submenuLabel)
+    }
+  }
+
+  const isSubmenuOpened = (submenuLabel: string) => {
+    return submenuLabel == openSubmenu
+  }
+
+  const DrawerList = (
+    <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
+      <List>
+        {menuItems.map((menuItem) => (
+          menuItem.childrens ?
+          <Box key={menuItem.path}>
+            <ListItem disablePadding>
+              <ListItemButton onClick={(event) => handleSubmenuClick(event, menuItem.label)}>
+                <ListItemIcon>
+                  {menuItem.icon}
+                </ListItemIcon>
+                <ListItemText primary={menuItem.label} />
+                {isSubmenuOpened(menuItem.label) ? <ExpandLess sx={{ color: 'white' }}/> : <ExpandMore sx={{ color: 'white' }} />}
+              </ListItemButton>
+            </ListItem>
+            <Collapse in={openSubmenu == menuItem.label} timeout="auto" unmountOnExit >
+            <List component="div" disablePadding>
+            {menuItem.childrens.map((menuItemChildren) => (
+              <Link href={menuItemChildren.path} key={menuItemChildren.label}>
+                <ListItemButton sx={{ pl: 4 }} key={menuItemChildren.label}>
+                  <ListItemIcon>
+                    {menuItemChildren.icon}
+                  </ListItemIcon>
+                  <ListItemText primary={menuItemChildren.label} />
+                </ListItemButton>
               </Link>
             ))}
-
-            {/* Mobile return menu */}
-            <div
-              onClick={() => setShowMobileMenu((oldValue) => !oldValue)}
-              className={`lg:hidden h-14 w-20 bg-transparent absolute top-3.5 right-[248px] flex ${
-                !showMobileMenu && "cursor-pointer"
-              } rounded-tl-md rounded-bl-md`}
-            >
-              <Image
-                src="/icons/sanduiche.png"
-                width={40}
-                height={40}
-                alt="Abrir menu"
-                className={`m-auto outline outline-2 outline-winePattern rounded-lg bg-winePattern ${
-                  showMobileMenu && "hidden"
-                }`}
-              />
-            </div>
-
-            <div className="lg:hidden text-[#962e2e] text-base mr-4 flex flex-col gap-2 ml-auto p-2 whitespace-nowrap max-w-44 mt-6">
-              <p className="truncate">Olá, {USERNAME}</p>
-              <Link href="#" className="m-auto">
-                Sair
-              </Link>
-            </div>
-          </div>
-          <div className="hidden text-[#962e2e] text-base mr-4 lg:flex flex-col gap-2 ml-auto p-2 whitespace-nowrap max-w-48 mt-6 lg:max-w-none lg:mt-0 lg:min-w-[120px]">
-            <p className="truncate">Olá, {USERNAME}</p>
-            <Link href="#" className="m-auto">
-              Sair
+            </List>
+            </Collapse>
+          </Box>
+          :
+          <ListItem key={menuItem.path} disablePadding>
+            <Link href={menuItem.path}>
+              <ListItemButton>
+                <ListItemIcon>
+                {menuItem.icon}
+                </ListItemIcon>
+                <ListItemText primary={menuItem.label} />
+              </ListItemButton>
             </Link>
-          </div>
-        </nav>
-      </header>
+          </ListItem>
+        ))}
+      </List>
+    </Box>
+  );
 
-      {/* Feito para simular que o Header ocupe espaço vertical em tela */}
-      <div className="w-screen h-20"></div>
-    </>
+  return (
+    <div>
+      <IconButton
+        size="large"
+        aria-label="menu de navegação"
+        aria-controls="menu-appbar"
+        aria-haspopup="true"
+        onClick={toggleDrawer(true)}
+        color="inherit"
+      >
+        <MenuIcon />
+      </IconButton>
+
+      <Drawer open={open} onClose={toggleDrawer(false)} anchor='right' sx={(theme) => ({
+        '& .MuiDrawer-paper': {
+          bgcolor: theme.palette.primary.main,
+        },
+        '& .MuiTypography-root': {
+          color: theme.palette.background.paper
+        }
+        })}
+      >
+        {DrawerList}
+      </Drawer>
+    </div>
   );
 }
