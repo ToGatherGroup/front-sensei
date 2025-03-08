@@ -17,17 +17,23 @@ import HoverMenu from 'material-ui-popup-state/HoverMenu'
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Icon } from "@iconify/react";
+
+const iconStyle = {
+  stroke: "white",
+  fillOpacity: 0,
+  className: "stroke-[1.5]",
+  size: 28
+}
 
 const menuItems = [
   {
     label: 'Atletas', 
-    icon: <Icon icon="hugeicons:user" width="28px" height="28px" className='text-white' />,
+    icon: <User {...iconStyle} />,
     childrens: [
       {
         label: 'Buscar',
         path: '/atleta/buscar',
-        icon: <Icon icon="hugeicons:user-search-01" width="28px" height="28px" className='text-white' />
+        icon: <UserSearch {...iconStyle} />
       },
       {
         label: 'Cadastrar', 
@@ -37,7 +43,7 @@ const menuItems = [
       {
         label: 'Aniversariantes', 
         path: '/atleta/aniversariantes',
-        icon: <Icon icon="hugeicons:birthday-cake" width="28px" height="28px" className='text-white' />
+        icon: <BirthdayCake {...iconStyle} />
       }
     ]
   },
@@ -49,12 +55,12 @@ const menuItems = [
   {
     label: 'Avaliação', 
     path: '/valencia/menu',
-    icon: <Icon icon="hugeicons:body-part-muscle" width="28px" height="28px" className='text-white' />
+    icon: <Assessment {...iconStyle}/>
   },
   {
     label: 'Grupos', 
     path: '/grupos',
-    icon: <Icon icon="hugeicons:user-group" width="28px" height="28px" className='text-white' />
+    icon: <UserGroup {...iconStyle} />
   },
   {
     label: "Comparativo",
@@ -68,7 +74,7 @@ const menuItems = [
       {
         label: 'Estatísticas', 
         path: '/estatisticas',
-        icon: <Icon icon="hugeicons:chart-line-data-01" width="28px" height="28px" className='text-white' />
+        icon: <ChartLineData {...iconStyle} />
       },
       {
         label: 'Avaliação', 
@@ -78,7 +84,7 @@ const menuItems = [
       {
         label: 'Frequência', 
         path: '/frequencia',
-        icon: <Icon icon="hugeicons:percent" width="28px" height="28px" className='text-white' />
+        icon: <Percent {...iconStyle} />
       },
     ]
   },
@@ -177,10 +183,10 @@ function Header() {
               {menuItems.map((item) => (
                 <>
                   {item.childrens ?
-                    <PopupState variant="popover" popupId={item.label}>
+                    <PopupState variant="popover" popupId={item.label} key={item.label}>
                       {(popupState) => (
                         <>
-                          <Button  {...bindHover(popupState)} sx={{ my: 2, color: 'white', display: 'flex', gap: '6px' }}>
+                          <Button  {...bindHover(popupState)} sx={{ my: 2, color: 'white', display: 'flex', gap: '6px', alignItems: 'center', justifyContent: 'center' }}>
                             {item.icon}
                             <Typography sx={{ textAlign: 'center', fontWeight: 'bold' }}>{item.label}</Typography>
                             {popupState.isOpen ? 
@@ -205,7 +211,7 @@ function Header() {
                             {item.childrens.map((itemChildren) => (
                               <MenuItem onClick={popupState.close} key={itemChildren.label}>
                                 <Link href={itemChildren.path} className="flex gap-3 justify-center items-center">
-                                  <Box sx={{width: '40px', height: '40px', display: 'flex'}}>
+                                  <Box sx={{width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                                     {itemChildren.icon}
                                   </Box>
                                   <Typography sx={{ textAlign: 'center', fontWeight: 'bold' }}>{itemChildren.label}</Typography>
@@ -221,7 +227,7 @@ function Header() {
                       key={item.label}
                       sx={{ my: 2, color: 'white'}}
                     >
-                      <Link href={item.path} className='flex gap-2'>
+                      <Link href={item.path} className='flex gap-2 items-center'>
                         {item.icon}
                         <Typography sx={{ textAlign: 'center', fontWeight: 'bold' }}>{item.label}</Typography>
                       </Link>
@@ -291,6 +297,13 @@ import ListItemText from '@mui/material/ListItemText';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import { Collapse } from '@mui/material';
+import User from '../../../public/svg/User';
+import UserSearch from '../../../public/svg/UserSearch';
+import BirthdayCake from '../../../public/svg/BirthdayCake';
+import UserGroup from '../../../public/svg/UserGroup';
+import ChartLineData from '../../../public/svg/ChartLineData';
+import Percent from '../../../public/svg/Percent';
+import Assessment from '../../../public/svg/Assessment';
 
 const MobileDrawer = () => {
   const [open, setOpen] = useState(false);

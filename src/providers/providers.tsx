@@ -5,10 +5,6 @@ import { AthleteProvider } from "@/contexts";
 import { ThemeProvider } from "@mui/material";
 import { muiGlobalTheme } from "@/components/ui/mui/globalTheme";
 import { Toaster } from "react-hot-toast";
-import { addCollection } from "@iconify/react";
-import * as hugeicons from "@iconify-json/hugeicons";
-
-addCollection(hugeicons.icons);
 
 export const Providers = ({ children }: { children: React.ReactNode }) => {
   return (

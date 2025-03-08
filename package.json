@@ -13,7 +13,6 @@
     "@emotion/styled": "^11.14.0",
     "@fontsource/roboto": "^5.1.1",
     "@hookform/resolvers": "^3.3.4",
-    "@iconify-json/hugeicons": "^1.2.3",
     "@iconify/json": "^2.2.305",
     "@mui/icons-material": "^6.4.3",
     "@mui/material": "^6.4.3",
@@ -39,7 +38,6 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@iconify/react": "^5.2.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
