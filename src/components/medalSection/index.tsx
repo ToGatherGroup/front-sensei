@@ -15,9 +15,9 @@ const positionMapping: Record<string, string> = {
 };
 
 const highlightStyles: Record<string, string> = {
-  PRIMEIRO: "border-4 border-yellow-500 bg-yellow-200 shadow-md",
-  SEGUNDO: "border-4 border-gray-500 bg-gray-200 shadow-md",
-  TERCEIRO: "border-4 border-amber-600 bg-amber-200 shadow-md",
+  PRIMEIRO: "border-4 border-yellow-500 bg-yellow-300 shadow-md",
+  SEGUNDO: "border-4 border-gray-500 bg-gray-300 shadow-md",
+  TERCEIRO: "border-4 border-amber-500 bg-amber-500 shadow-md",
 };
 
 interface Campeonato {
