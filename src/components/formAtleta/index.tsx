@@ -14,7 +14,7 @@ import Loader from "../ui/loader";
 import ImageCropper from "@/components/imageCropper/imageCropper";
 import { Area } from "react-easy-crop";
 import { Grupo } from "@/types/Grupo";
-import ModalNewGroup from "@/components/modalNovoGrupo";
+import ModalGroup from "@/components/modalGrupo";
 import MuiButton from "@mui/material/Button";
 import { GruposMock } from "@/mock/grupos"; // Importando a lista mockada
 
@@ -333,7 +333,6 @@ const FormAtleta = ({ atleta, method }: Props) => {
               <p className={styles.displayError}>{errors.grupo.message}</p>
             )}
             <div className="flex w-full items-center justify-center rounded-md " >
-              {/* //bg-winePattern "> */}
             <MuiButton color="inherit" variant="contained" sx={(theme) => (
               {
                 margin: 0,
@@ -358,23 +357,12 @@ const FormAtleta = ({ atleta, method }: Props) => {
             )} endIcon={<img width={50} src="/icons/add_grupo.png" />} onClick={() => setOpenGroupModal(true)}>
               Novo Grupo
             </MuiButton>
-            <ModalNewGroup
+            <ModalGroup
               open={openGroupModal}
               setOpen={setOpenGroupModal}
               onGroupChange={handleGroupCreated} // Aqui pode ser possível atualizar a lista de grupos
             />
             </div>
-            {/* 
-            <TextField
-                        sx={(theme) => (
-                            {
-                                '& .MuiInputLabel-root': {
-                                    borderColor: theme.palette.primary.main,
-                                    borderWidth: 12,
-                                }, */}
-
-
-
           </div>
           {method === "PUT" && (
             <div className={styles.isAtivo}>

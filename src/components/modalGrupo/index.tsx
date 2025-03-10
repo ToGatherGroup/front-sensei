@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react';
 import { Grupo } from '@/types/Grupo';
 import Switch from '@mui/material/Switch';
 
-interface ModalNewGroupProps {
+interface ModalGroupProps {
     putMethod?: boolean;
     open: boolean;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -19,13 +19,12 @@ interface ModalNewGroupProps {
     group?: Grupo | null;
 }
 
-export default function ModalNewGroup({ open, setOpen, onGroupChange, putMethod, group }: ModalNewGroupProps) {
+export default function ModalGroup({ open, setOpen, onGroupChange, putMethod, group }: ModalGroupProps) {
     const { postGroup, putGroup } = useGroupProvider();
     const [name, setName] = useState<string>('');
     const [checked, setChecked] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string>('');
 
-    // Função para validar se o input contém apenas caracteres comuns
     const validateInput = (input: string): boolean => {
         // Regex para identificar caracteres comuns (letras, números e alguns símbolos básicos)
         const commonCharRegex = /[a-zA-Z0-9 \-_.,!?()]/;
@@ -40,7 +39,6 @@ export default function ModalNewGroup({ open, setOpen, onGroupChange, putMethod,
             return false;
         }
 
-        // Verifica se pelo menos um caractere comum está presente
         if (!commonCharRegex.test(input)) {
             setErrorMessage('O nome deve conter pelo menos um caractere comum');
             return false;
@@ -122,7 +120,7 @@ export default function ModalNewGroup({ open, setOpen, onGroupChange, putMethod,
                         helperText={errorMessage}
                     />
                 </DialogContent>
-                <div className='flex justify-center items-center'>
+                <div className='flex justify-center items-center mb-4'>
                     <Switch
                         checked={checked}
                         onChange={handleToggle}
@@ -134,24 +132,17 @@ export default function ModalNewGroup({ open, setOpen, onGroupChange, putMethod,
                     <Button onClick={handleClose} disableElevation>Cancelar</Button>
                     <Button
                         onClick={putMethod ? handleEditGroup : handleCreateGroup}
-                        variant='outlined'
-                        sx={(theme) => ({
-                            '& .MuiButton-outlinedPrimary': {
-                                color: theme.palette.primary.main,
-                                borderWidth: 12,
-                            },
-                            '& .MuiButton-colorPrimary': {
-                                color: theme.palette.secondary.main,
-                                borderWidth: 2,
-                            },
-                            '& .MuiButtonBase-root': {
-                                color: theme.palette.primary.main,
-                                borderWidth: 12,
-                            },
-                        })}
+                        variant="contained"
+                        sx={{
+                            bgcolor: (theme) => theme.palette.primary.main + " !important",
+                            color: (theme) => theme.palette.primary.contrastText + " !important",
+                            "&:hover": {
+                                bgcolor: (theme) => theme.palette.primary.dark + " !important",
+                            }
+                        }}
                         disableElevation
                     >
-                        {putMethod ? 'Editar' : 'Criar'}
+                        {putMethod ? 'Salvar' : 'Criar'}
                     </Button>
                 </DialogActions>
             </Dialog>
