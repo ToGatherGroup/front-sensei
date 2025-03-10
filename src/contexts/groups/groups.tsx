@@ -7,12 +7,14 @@ type GroupState = {
     groupList: Grupo[] | []; // Array vazio como fallback
     getGroups: () => Promise<void>;
     postGroup: (name: string) => Promise<void>;
+    putGroup: (id: number, grupoData: Partial<Grupo>) => Promise<void>;
 };
 
 const initialState = {
     groupList: [] as Grupo[], // Inicializando como array vazio
     getGroups: async () => {},
-    postGroup: async () => {}
+    postGroup: async () => {},
+    putGroup: async () => {},
 };
 
 const GroupContext = createContext<GroupState>(initialState);
@@ -50,18 +52,24 @@ export const GroupProvider = ({
         }
       };
 
-    const putGroup = async (id: number) => {
+      const putGroup = async (id: number, grupoData: Partial<Grupo>) => {
         setIsLoading(true);
         try {
-            const response = await put(`/grupo`, {id});
-            console.log("Requisição do tipo PUT feita para /grupo", response?.data)
-            getGroups();
+          // Combinando o ID com os dados do grupo em um único objeto
+          const bodyData = {
+            id,
+            ...grupoData
+          };
+          
+          const response = await put(`/grupo`, bodyData);
+          console.log("Requisição do tipo PUT feita para /grupo", response?.data);
+          getGroups();
         } catch (error) {
-            console.error("Erro ao obter lista de grupos", error);
+          console.error("Erro ao atualizar grupo", error);
         } finally {
-            setIsLoading(false);
+          setIsLoading(false);
         }
-    };
+      };
 
     const postGroup = async (name: string) => {
         setIsLoading(true);
@@ -77,12 +85,15 @@ export const GroupProvider = ({
         }
     }
 
+
+
     return (
         <GroupContext.Provider
             value={{
                 groupList,
                 getGroups,
-                postGroup
+                postGroup,
+                putGroup,
             }}
         >
             {children}

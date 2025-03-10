@@ -40,6 +40,7 @@ export default function SubscriptionDialog() {
         Novo Grupo
       </Button>
       <div>
+      {/* // Modal Vanilla */}
       {/* <Modal
           title=
            "Novo Grupo"

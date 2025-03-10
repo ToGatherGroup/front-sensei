@@ -47,9 +47,9 @@ const FormAtleta = ({ atleta, method }: Props) => {
     }
   }, [atleta, setAvatarBase64]);
 
-  useEffect( () => {
+  useEffect(() => {
     getGroups();
-  }, []); 
+  }, []);
 
   const {
     register,
@@ -92,9 +92,9 @@ const FormAtleta = ({ atleta, method }: Props) => {
         let finalAvatarBase64 = croppedImage;
 
         if (!finalAvatarBase64 && data.foto && data.foto[0]) {
-console.log("Arquivo de imagem encontrado:", data.foto[0]);
+          console.log("Arquivo de imagem encontrado:", data.foto[0]);
           finalAvatarBase64 = await file2Base64(data.foto[0]);
-console.log("Imagem convertida para Base64:", finalAvatarBase64);
+          console.log("Imagem convertida para Base64:", finalAvatarBase64);
         }
 
         if (finalAvatarBase64) {
@@ -104,7 +104,7 @@ console.log("Imagem convertida para Base64:", finalAvatarBase64);
           });
         } else {
           alert("Por favor, selecione uma imagem para o avatar.");
-console.log("Nenhuma imagem foi selecionada.");
+          console.log("Nenhuma imagem foi selecionada.");
         }
       }
     } catch (error) {
@@ -313,13 +313,6 @@ console.log("Nenhuma imagem foi selecionada.");
             <label htmlFor="faixa" className={styles.required}>
               Grupo
             </label>
-              Novo Grupo
-
-            <ModalNewGroup
-              open={openGroupModal}
-              setOpen={setOpenGroupModal}
-              onGroupCreated={handleGroupCreated} // Aqui pode ser possível atualizar a lista de grupos
-            />
             <select {...register("grupo")} id="grupo">
               <option disabled >
                 Selecione
@@ -329,7 +322,7 @@ console.log("Nenhuma imagem foi selecionada.");
               ) : Array.isArray(groupList) && groupList.length > 0 ? (
                 groupList.map((grupo) => (
                   <option key={grupo.id} value={grupo.id}>
-                    {grupo.nome}
+                    {grupo.nome.replace(/^["']|["']$/g, '')}
                   </option>
                 ))
               ) : (
@@ -339,9 +332,48 @@ console.log("Nenhuma imagem foi selecionada.");
             {errors.grupo && (
               <p className={styles.displayError}>{errors.grupo.message}</p>
             )}
-            <MuiButton variant="contained" sx={{ backgroundColor: "red", }} endIcon={<img width={50} src="/icons/add_grupo.png" />} onClick={() => setOpenGroupModal(true)}>
+            <div className="flex w-full items-center justify-center rounded-md " >
+              {/* //bg-winePattern "> */}
+            <MuiButton color="inherit" variant="contained" sx={(theme) => (
+              {
+                margin: 0,
+                bgcolor: 'theme.palette.primary.main',
+                color: 'theme.palette.primary.main',
+                borderColor: 'primary.main',
+                '&:hover': {
+                  color: theme.palette.secondary.main,
+                },
+                '& .MuiButton-root ': {
+                  borderWidth: 24,
+                },
+                '& .MuiButton-color:hover': {
+                  color: 'red',
+                  borderWidth: 24,
+                },
+                '& .MuiButtonBase-root': {
+
+                  borderWidth: 2,
+                },
+              }
+            )} endIcon={<img width={50} src="/icons/add_grupo.png" />} onClick={() => setOpenGroupModal(true)}>
               Novo Grupo
             </MuiButton>
+            <ModalNewGroup
+              open={openGroupModal}
+              setOpen={setOpenGroupModal}
+              onGroupChange={handleGroupCreated} // Aqui pode ser possível atualizar a lista de grupos
+            />
+            </div>
+            {/* 
+            <TextField
+                        sx={(theme) => (
+                            {
+                                '& .MuiInputLabel-root': {
+                                    borderColor: theme.palette.primary.main,
+                                    borderWidth: 12,
+                                }, */}
+
+
 
           </div>
           {method === "PUT" && (
