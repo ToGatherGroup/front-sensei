@@ -117,6 +117,10 @@ const Page = ({ params }: Props) => {
   const screenSize = useScreenSize();
 
   useEffect(() => {
+    setMedalhaOuro(0);
+    setMedalhaPrata(0);
+    setMedalhaBronze(0);
+
     medals?.forEach((medalha: { posicao: string; quantidade: number }) => {
       switch (medalha.posicao) {
         case "Medalha de ouro":
@@ -132,7 +136,7 @@ const Page = ({ params }: Props) => {
           break;
       }
     });
-  }, [medals]);
+  }, [medals, params.id]);
 
   const renderButtons = () => (
     <section className="flex m-auto mt-6 space-x-2 lg:space-x-6 box-border w-fit">
@@ -236,20 +240,28 @@ const Page = ({ params }: Props) => {
                 <MedalSection
                   imgSrc="/formAtleta/medals/medalhasCinza1.png"
                   altText="Ícone Medalha Ouro"
-                  ringColor="amber-500"
+                  ringColor="gold"
                   medalCount={medalhaOuro}
+                  athleteId={Number(params.id)}
+                  podiumPosition="PRIMEIRO"
                 />
+
                 <MedalSection
                   imgSrc="/formAtleta/medals/medalhasCinza2.png"
                   altText="Ícone Medalha Prata"
-                  ringColor="zinc-500"
+                  ringColor="silver"
                   medalCount={medalhaPrata}
+                  athleteId={Number(params.id)}
+                  podiumPosition="SEGUNDO"
                 />
+
                 <MedalSection
                   imgSrc="/formAtleta/medals/medalhasCinza3.png"
                   altText="Ícone Medalha Bronze"
-                  ringColor="copperMedal"
+                  ringColor="bronze"
                   medalCount={medalhaBronze}
+                  athleteId={Number(params.id)}
+                  podiumPosition="TERCEIRO"
                 />
               </div>
               {renderAthleteInfo()}

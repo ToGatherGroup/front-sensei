@@ -19,3 +19,7 @@ export const getAvaliacaoPostural = (atletaId: number, data: string) => {
     console.log(`Requisição feita para /avaliacaopostural/${atletaId}/${data}`)
     return axios.get(`/avaliacaopostural/${atletaId}/${data}`);
 }
+
+export const getCampeonatosByAtleta = (atletaId: number) => {
+    return axios.get(`/campeonato/lista/${atletaId}`);
+};
