@@ -8,9 +8,6 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useGroupProvider } from '@/contexts/groups/groups';
 import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
 import { Grupo } from '@/types/Grupo';
 import Switch from '@mui/material/Switch';
 
@@ -22,30 +19,40 @@ interface ModalNewGroupProps {
     group?: Grupo | null;
 }
 
-// Schema de validação para o formulário do modal
-const groupSchema = yup.object().shape({
-    nome: yup.string().required('Nome do grupo é obrigatório')
-});
-
-
-
 export default function ModalNewGroup({ open, setOpen, onGroupChange, putMethod, group }: ModalNewGroupProps) {
-
     const { postGroup, putGroup } = useGroupProvider();
     const [name, setName] = useState<string>('');
-
-    // Configuração do react-hook-form
-    const {
-        formState: { errors },
-        reset
-    } = useForm({
-        resolver: yupResolver(groupSchema)
-    });
-
     const [checked, setChecked] = useState(false);
+    const [errorMessage, setErrorMessage] = useState<string>('');
+
+    // Função para validar se o input contém apenas caracteres comuns
+    const validateInput = (input: string): boolean => {
+        // Regex para identificar caracteres comuns (letras, números e alguns símbolos básicos)
+        const commonCharRegex = /[a-zA-Z0-9 \-_.,!?()]/;
+
+        if (!input || input.trim() === '') {
+            setErrorMessage('Nome do grupo é obrigatório');
+            return false;
+        }
+
+        if (input.length < 3) {
+            setErrorMessage('O nome deve ter pelo menos 3 caracteres');
+            return false;
+        }
+
+        // Verifica se pelo menos um caractere comum está presente
+        if (!commonCharRegex.test(input)) {
+            setErrorMessage('O nome deve conter pelo menos um caractere comum');
+            return false;
+        }
+
+        setErrorMessage('');
+        return true;
+    };
 
     const handleClose = () => {
-        reset();
+        setName('');
+        setErrorMessage('');
         setOpen(false);
     };
 
@@ -54,88 +61,100 @@ export default function ModalNewGroup({ open, setOpen, onGroupChange, putMethod,
     };
 
     const handleCreateGroup = async () => {
-        if (name) {
+        if (validateInput(name)) {
             postGroup(name).then(() => {
-                onGroupChange && onGroupChange(); // Callback opcional para o pai saber que um grupo foi criado
-            })
+                onGroupChange && onGroupChange();
+                handleClose();
+            }).catch(error => {
+                setErrorMessage('Erro ao criar grupo. Tente novamente.');
+            });
         }
-        handleClose();
     };
 
     const handleEditGroup = async () => {
-        if (group) {
-            putGroup(group?.id, {
+        if (validateInput(name) && group) {
+            putGroup(group.id, {
                 nome: name,
                 isAtivo: checked
             }).then(() => {
-                onGroupChange && onGroupChange(); // Callback opcional para o pai saber que um grupo foi criado
-            })
+                onGroupChange && onGroupChange();
+                handleClose();
+            }).catch(error => {
+                setErrorMessage('Erro ao editar grupo. Tente novamente.');
+            });
         }
-    }
+    };
 
-        useEffect(() => {
-            if (group && putMethod) {
-                // Preencher o formulário com os dados do grupo selecionado
-                setName(group.nome)
-                // outros campos do formulário...
-            }
-        }, [group, putMethod, reset]);
+    useEffect(() => {
+        if (group && putMethod) {
+            // Preencher o formulário com os dados do grupo selecionado
+            setName(group.nome);
+            setChecked(group.isAtivo || false);
+        }
+    }, [group, putMethod]);
 
-        return (
-            <div>
-                <Dialog open={open} onClose={handleClose}>
-                    <DialogTitle>{putMethod ? `Editar` : 'Criar'} Grupo</DialogTitle>
-                    <DialogContent>
-                        <TextField
-                            sx={(theme) => (
-                                {
-                                    '& .MuiInputLabel-root': {
-                                        borderColor: theme.palette.primary.main,
-                                        borderWidth: 12,
-                                    },
-                                    '& .MuiOutlinedInput-notchedOutline': {
-                                        borderColor: theme.palette.secondary.main,
-                                        borderWidth: 2,
-                                    },
-                                }
-                            )}
-                            fullWidth
-                            margin="dense"
-                            id="inputField"
-                            name="inputText"
-                            label="Nome do grupo"
-                            placeholder='Digite o nome do grupo'
-                            variant="outlined"
-                            value={name ? name : ''}
-                            onChange={(e) => setName(e.target.value.trim?.())}
-                        />
-                    </DialogContent>
-                    <div className='flex justify-center items-center'>
-                        <Switch defaultChecked checked={checked}
-                            onChange={handleToggle} className='self-center' />
-                        <label className='self-center'>{`${checked ? 'Ativo' : 'Inativo'}`}</label>
-
-                    </div>
-                    <DialogActions sx={{ justifyContent: 'space-around' }}>
-                        <Button onClick={handleClose} disableElevation>Cancelar</Button>
-                        <Button onClick={putMethod ? handleEditGroup : handleCreateGroup} variant='outlined' sx={(theme) => (
-                            {
-                                '& .MuiButton-outlinedPrimary': {
-                                    color: theme.palette.primary.main,
-                                    borderWidth: 12,
-                                },
-                                '& .MuiButton-colorPrimary': {
-                                    color: theme.palette.secondary.main,
-                                    borderWidth: 2,
-                                },
-                                '& .MuiButtonBase-root': {
-                                    color: theme.palette.primary.main,
-                                    borderWidth: 12,
-                                },
-                            }
-                        )} disableElevation>{`${putMethod ? `Editar` : 'Criar'}`}</Button>
-                    </DialogActions>
-                </Dialog>
-            </div>
-        );
-    }
+    return (
+        <div>
+            <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>{putMethod ? 'Editar' : 'Criar'} Grupo</DialogTitle>
+                <DialogContent>
+                    <TextField
+                        sx={(theme) => ({
+                            '& .MuiInputLabel-root': {
+                                borderColor: theme.palette.primary.main,
+                                borderWidth: 12,
+                            },
+                            '& .MuiOutlinedInput-notchedOutline': {
+                                borderColor: theme.palette.secondary.main,
+                                borderWidth: 2,
+                            },
+                        })}
+                        fullWidth
+                        margin="dense"
+                        id="inputField"
+                        name="inputText"
+                        label="Nome do grupo"
+                        placeholder='Digite o nome do grupo'
+                        variant="outlined"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        error={!!errorMessage}
+                        helperText={errorMessage}
+                    />
+                </DialogContent>
+                <div className='flex justify-center items-center'>
+                    <Switch
+                        checked={checked}
+                        onChange={handleToggle}
+                        className='self-center'
+                    />
+                    <label className='self-center'>{`${checked ? 'Ativo' : 'Inativo'}`}</label>
+                </div>
+                <DialogActions sx={{ justifyContent: 'space-around' }}>
+                    <Button onClick={handleClose} disableElevation>Cancelar</Button>
+                    <Button
+                        onClick={putMethod ? handleEditGroup : handleCreateGroup}
+                        variant='outlined'
+                        sx={(theme) => ({
+                            '& .MuiButton-outlinedPrimary': {
+                                color: theme.palette.primary.main,
+                                borderWidth: 12,
+                            },
+                            '& .MuiButton-colorPrimary': {
+                                color: theme.palette.secondary.main,
+                                borderWidth: 2,
+                            },
+                            '& .MuiButtonBase-root': {
+                                color: theme.palette.primary.main,
+                                borderWidth: 12,
+                            },
+                        })}
+                        disableElevation
+                    >
+                        {putMethod ? 'Editar' : 'Criar'}
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        </div>
+    );
+}
