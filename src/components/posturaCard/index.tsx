@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { PosturasType } from "@/types/Posturas";
-import { getAvaliacaoPostural } from "@/api/endpoints";
+import { getAvaliacoesPosturais } from "@/api/endpoints";
 import { converterData } from "@/utils/utils";
 
 interface PosturaCardProps {
@@ -33,7 +33,7 @@ const PosturaCard = ({
         if (!hasDates && selectedOption == null) {
           return;
         }
-        const posturas = await getAvaliacaoPostural(
+        const posturas = await getAvaliacoesPosturais(
           Number(atletaId),
           selectedOption != null ? selectedOption : datasAvaliacaoArray[0]
         );

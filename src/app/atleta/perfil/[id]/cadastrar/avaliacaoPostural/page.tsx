@@ -178,7 +178,7 @@ const PosturalEvaluation = ({ params: { id } }: Props) => {
       const preparedData = PosturalEvaluationToApi(data);
       console.log("Prepared Data:", JSON.stringify(preparedData, null, 2));
       const response = await post(
-        "avaliacaopostural",
+        "avaliacoes_posturais",
         PosturalEvaluationToApi(data)
       );
       if (response?.status !== 201) {

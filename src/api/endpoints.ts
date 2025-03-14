@@ -1,23 +1,23 @@
 import {axios} from "@/api/api";
 
 export const getAtletas = (page: number, elementsQty: number | null) => {
-    if (elementsQty) return axios.get(`/atleta?page=${page}&size=${elementsQty}`);
-    return axios.get(`/atleta?page=${page}`)
+    if (elementsQty) return axios.get(`/atletas?page=${page}&size=${elementsQty}`);
+    return axios.get(`/atletas?page=${page}`)
 }
 
 export const getAtletasByName = (name:string, page: number, elementsQty: number | null) => {
-    if (elementsQty) return axios.get(`/atleta/nome/${name}?page=${page}&size=${elementsQty}`);
-    return axios.get(`/atleta/nome/${name}?page=${page}`);
+    if (elementsQty) return axios.get(`/atletas/nome/${name}?page=${page}&size=${elementsQty}`);
+    return axios.get(`/atletas/nome/${name}?page=${page}`);
 }
 
 export const getAvaliacaoPosturalDatas = (atletaId: number) => {
-    console.log(`Requisição feita para /avaliacaopostural/datas/${atletaId}`)
-    return axios.get(`/avaliacaopostural/datas/${atletaId}`);
+    console.log(`Requisição feita para /avaliacoes/postural/datas/${atletaId}`)
+    return axios.get(`/avaliacoes/postural/datas/${atletaId}`);
 }
 
-export const getAvaliacaoPostural = (atletaId: number, data: string) => {
-    console.log(`Requisição feita para /avaliacaopostural/${atletaId}/${data}`)
-    return axios.get(`/avaliacaopostural/${atletaId}/${data}`);
+export const getAvaliacoesPosturais = (atletaId: number, data: string) => {
+    console.log(`Requisição feita para /avaliacoes/posturais/${atletaId}/data/${data}`)
+    return axios.get(`/avaliacoes/posturais/${atletaId}/data/${data}`);
 }
 
 export const getCampeonatosByAtleta = (atletaId: number) => {

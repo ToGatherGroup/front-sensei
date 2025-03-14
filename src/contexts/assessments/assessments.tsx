@@ -66,7 +66,6 @@ export const AssessmentsProvider = ({ children }: Props) => {
   const updateAssesment = (response: ResponseIncompleteAssessmentAPI) => {
     setAssessmentData(dayjs(response.data));
     setAssessment(response.avaliacoesIncompletas);
-    // console.log("setted Assessment:", response.avaliacoesIncompletas);
   };
 
   const updateExercise = (data: Array<any>) => {
@@ -96,7 +95,7 @@ export const AssessmentsProvider = ({ children }: Props) => {
   const getIncompleteAssessments = async () => {
     setIsLoading(true);
     try {
-      const response = await get("/avaliacoes_incompletas");
+      const response = await get("/avaliacoes/incompletas");
       updateAssesment(response?.data);
       setModalVisible(true);
     } catch (error) {
@@ -109,7 +108,7 @@ export const AssessmentsProvider = ({ children }: Props) => {
   const createAssessments = async () => {
     setIsLoading(true);
     try {
-      const response = await post("/avaliacaocoletiva", {});
+      const response = await post("/avaliacoes/coletivas", {});
       updateAssesment(response?.data);
     } catch (error) {
       router.push("/");
@@ -146,22 +145,23 @@ export const AssessmentsProvider = ({ children }: Props) => {
   };
 
   const send = async (data: any) => {
-    await patch("/exercicio_coletivo", data)?.then((response) => {
-      const avaliacaoFinalizada = response?.data?.avaliacaoEstaCompleta;
+    await patch("/avaliacoes/exercicio_coletivo", data)
+      ?.then((response) => {
+        const avaliacaoFinalizada = response?.data?.avaliacaoEstaCompleta;
 
-      if (avaliacaoFinalizada) {
-        toast.success(
-          "A avaliação foi finalizada!\nAs informações foram salvas.",
-          { duration: 8000 }
-        );
-        router.push("/");
-        return;
-      }
+        if (avaliacaoFinalizada) {
+          toast.success(
+            "A avaliação foi finalizada!\nAs informações foram salvas.",
+            { duration: 8000 }
+          );
+          router.push("/");
+          return;
+        }
 
-      toast.success("As informações foram salvas.");
-      updateExercise(data);
-      router.push("/valencia/menu");
-    });
+        toast.success("As informações foram salvas.");
+        updateExercise(data);
+        router.push("/valencia/menu");
+      });
   };
 
   useEffect(() => {
