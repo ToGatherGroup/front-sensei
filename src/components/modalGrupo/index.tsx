@@ -94,7 +94,7 @@ export default function ModalGroup({ open, setOpen, onGroupChange, putMethod, gr
     return (
         <div>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>{putMethod ? 'Editar' : 'Criar'} Grupo</DialogTitle>
+                <DialogTitle>{group ? 'Editar' : 'Criar'} Grupo</DialogTitle>
                 <DialogContent>
                     <TextField
                         sx={(theme) => ({
@@ -121,7 +121,7 @@ export default function ModalGroup({ open, setOpen, onGroupChange, putMethod, gr
                     />
                 </DialogContent>
                 <div className='flex justify-center items-center mb-4'>
-                    {putMethod && <><Switch
+                    {group && <><Switch
                         checked={checked}
                         onChange={handleToggle}
                         className='self-center'

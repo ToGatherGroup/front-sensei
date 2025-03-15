@@ -22,8 +22,6 @@ type Props = {
 
 
 const FormAtleta = ({ atleta, method }: Props) => {
-  const switchStyles =
-    ".switch { position: relative; display: inline-block; width: 160px; height: 34px;}.switch input { display: none;}.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #3C3C3C; -webkit-transition: .4s; transition: .4s; border-radius: 34px;}.slider:before { position: absolute; content: ''; height: 26px; width: 26px; left: 4px; bottom: 4px; background-color: white; -webkit-transition: .4s; transition: .4s; border-radius: 50%;}input:checked + .slider { background-color: green;}input:focus + .slider { box-shadow: 0 0 1px #2196F3;}input:checked + .slider:before { -webkit-transform: translateX(26px); -ms-transform: translateX(26px); transform: translateX(125px);}/*------ ADDED CSS ---------*/.slider:after { content: 'Atleta inativo'; color: white; display: block; position: absolute; width: 120px; transform: translate(-50%,-50%); top: 50%; left: 60%; right: 0; font-size: 16px; font-family: Verdana, sans-serif; transition: .4s;}input:checked + .slider:after { content: 'Atleta ativo'; top: 50%; right: 60%; left: 50%; transition: .4s;}";
   const [avatarBase64, setAvatarBase64] = useState<string>("");
   const [originalAvatarBase64, setOriginalAvatarBase64] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -357,6 +355,7 @@ const FormAtleta = ({ atleta, method }: Props) => {
               <ModalGroup
                 open={openGroupModal}
                 setOpen={setOpenGroupModal}
+                putMethod={false}
                 onGroupChange={handleGroupCreated} // Aqui pode ser possível atualizar a lista de grupos
               />
             </div>
