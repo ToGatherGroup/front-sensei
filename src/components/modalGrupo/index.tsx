@@ -121,12 +121,13 @@ export default function ModalGroup({ open, setOpen, onGroupChange, putMethod, gr
                     />
                 </DialogContent>
                 <div className='flex justify-center items-center mb-4'>
-                    <Switch
+                    {putMethod && <><Switch
                         checked={checked}
                         onChange={handleToggle}
                         className='self-center'
                     />
-                    <label className='self-center'>{`${checked ? 'Ativo' : 'Inativo'}`}</label>
+                        <label className='self-center'>{`${checked ? 'Ativo' : 'Inativo'}`}</label></>
+                    }
                 </div>
                 <DialogActions sx={{ justifyContent: 'space-around' }}>
                     <Button onClick={handleClose} disableElevation>Cancelar</Button>

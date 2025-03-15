@@ -1,6 +1,5 @@
 "use client";
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Grupo } from "@/types/Grupo";
 import styles from "./groupList.module.css";
 import FormTitle from "@/components/title/formTitle";
@@ -49,7 +48,7 @@ const GrupoList = () => {
           <div className="w-full flex justify-center mb-4 md:mb-0 md:absolute md:left-0 md:right-0">
             <FormTitle
               title="Grupos"
-              className={`rounded p-2 z-10`}
+              className="rounded p-2 z-10"
               iconSrc="/icons/grupos.png"
             />
           </div>
@@ -146,7 +145,7 @@ const GrupoList = () => {
         <ModalGroup
           open={openGroupModal}
           group={currentGroup}
-          putMethod={currentGroup !== null}
+          putMethod={!!currentGroup}
           setOpen={setOpenGroupModal}
           onGroupChange={handleGroupCreated}
         />

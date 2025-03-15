@@ -6,17 +6,14 @@ import { useState, useEffect } from "react";
 import { Atleta } from "@/types/TAtleta";
 import { atletaCreateSchema } from "@/schemas/athleteSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useApiProvider, useAthleteProvider } from "@/contexts";
+import { useAthleteProvider } from "@/contexts";
 import { useGroupProvider } from "@/contexts/groups/groups";
 import Button from "../ui/button";
-//import MuiButton from "@mui/material/Button";
 import Loader from "../ui/loader";
 import ImageCropper from "@/components/imageCropper/imageCropper";
 import { Area } from "react-easy-crop";
-import { Grupo } from "@/types/Grupo";
 import ModalGroup from "@/components/modalGrupo";
 import MuiButton from "@mui/material/Button";
-import { GruposMock } from "@/mock/grupos"; // Importando a lista mockada
 
 type Props = {
   atleta?: Atleta | null;
@@ -333,43 +330,42 @@ const FormAtleta = ({ atleta, method }: Props) => {
               <p className={styles.displayError}>{errors.grupo.message}</p>
             )}
             <div className="flex w-full items-center justify-center rounded-md " >
-            <MuiButton color="inherit" variant="contained" sx={(theme) => (
-              {
-                margin: 0,
-                bgcolor: 'theme.palette.primary.main',
-                color: 'theme.palette.primary.main',
-                borderColor: 'primary.main',
-                '&:hover': {
-                  color: theme.palette.secondary.main,
-                },
-                '& .MuiButton-root ': {
-                  borderWidth: 24,
-                },
-                '& .MuiButton-color:hover': {
-                  color: 'red',
-                  borderWidth: 24,
-                },
-                '& .MuiButtonBase-root': {
+              <MuiButton color="inherit" variant="contained" sx={(theme) => (
+                {
+                  margin: 0,
+                  bgcolor: 'theme.palette.primary.main',
+                  color: 'theme.palette.primary.main',
+                  borderColor: 'primary.main',
+                  '&:hover': {
+                    color: theme.palette.secondary.main,
+                  },
+                  '& .MuiButton-root ': {
+                    borderWidth: 24,
+                  },
+                  '& .MuiButton-color:hover': {
+                    color: 'red',
+                    borderWidth: 24,
+                  },
+                  '& .MuiButtonBase-root': {
 
-                  borderWidth: 2,
-                },
-              }
-            )} endIcon={<img width={50} src="/icons/add_grupo.png" />} onClick={() => setOpenGroupModal(true)}>
-              Novo Grupo
-            </MuiButton>
-            <ModalGroup
-              open={openGroupModal}
-              setOpen={setOpenGroupModal}
-              onGroupChange={handleGroupCreated} // Aqui pode ser possível atualizar a lista de grupos
-            />
+                    borderWidth: 2,
+                  },
+                }
+              )} endIcon={<img width={50} src="/icons/add_grupo.png" />} onClick={() => setOpenGroupModal(true)}>
+                Novo Grupo
+              </MuiButton>
+              <ModalGroup
+                open={openGroupModal}
+                setOpen={setOpenGroupModal}
+                onGroupChange={handleGroupCreated} // Aqui pode ser possível atualizar a lista de grupos
+              />
             </div>
           </div>
           {method === "PUT" && (
             <div className={styles.isAtivo}>
-              <style>{switchStyles}</style>
-              <label className="switch">
+              <label className={styles.switch}>
                 <input type="checkbox" {...register("isAtivo")} />
-                <span className="slider"></span>
+                <span className={styles.slider}></span>
               </label>
 
               {errors.isAtivo && (

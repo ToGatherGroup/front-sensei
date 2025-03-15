@@ -39,7 +39,6 @@ export const GroupProvider = ({
           // Verificando se a resposta contém um array antes de atualizar o estado
           if (Array.isArray(response?.data)) {
             setGroupList(response.data);
-            console.log("Requisição feita para /grupo", response.data);
           } else {
             console.error("Resposta da API não é um array:", response?.data);
             setGroupList([]);  // Define como array vazio em caso de erro
@@ -62,7 +61,6 @@ export const GroupProvider = ({
           };
           
           const response = await put(`/grupo`, bodyData);
-          console.log("Requisição do tipo PUT feita para /grupo", response?.data);
           getGroups();
         } catch (error) {
           console.error("Erro ao atualizar grupo", error);
@@ -76,8 +74,6 @@ export const GroupProvider = ({
         try {
             const response = await post(`/grupo`, name);
             setGroupList(response?.data);
-            console.log("Requisição do tipo POST feita para /grupo", {name})
-            //getGroups();
         } catch (error) {
             console.error("Erro ao obter lista de grupos", error);
         } finally {

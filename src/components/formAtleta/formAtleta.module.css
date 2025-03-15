@@ -125,17 +125,17 @@
   text-align: center;
 }
 
-.avatar > label {
+.avatar>label {
   width: 250px;
   height: 250px;
 }
 
-.avatar > label > p {
+.avatar>label>p {
   font-size: 1rem;
   text-align: center;
 }
 
-.avatar > label > img {
+.avatar>label>img {
   border-radius: 50%;
   /* border: 3px solid rgb(0, 0, 0); */
   width: 250px;
@@ -144,8 +144,75 @@
   margin-top: 20px;
 }
 
-.avatar > input {
+.avatar>input {
   display: none;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 160px;
+  height: 34px;
+}
+
+.switch input {
+  display: none;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #3c3c3c;
+  transition: 0.4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: '';
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked+.slider {
+  background-color: green;
+}
+
+input:focus+.slider {
+  box-shadow: 0 0 1px #2196f3;
+}
+
+input:checked+.slider:before {
+  transform: translateX(125px);
+}
+
+/* Texto dentro do switch */
+.slider:after {
+  content: 'Atleta inativo';
+  color: white;
+  display: block;
+  position: absolute;
+  width: 120px;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 60%;
+  font-size: 16px;
+  font-family: Verdana, sans-serif;
+  transition: 0.4s;
+}
+
+input:checked+.slider:after {
+  content: 'Atleta ativo';
+  left: 50%;
 }
 
 /* Tablet */
@@ -182,9 +249,14 @@
     min-width: initial;
   }
 
-  .title {padding-bottom: 0px;}
+  .title {
+    padding-bottom: 0px;
+  }
 
-  .inputRow {gap: 5px; margin: 5px auto;}
+  .inputRow {
+    gap: 5px;
+    margin: 5px auto;
+  }
 
   .inputRow label {
     margin-top: 10px;
