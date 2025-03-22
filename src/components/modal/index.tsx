@@ -1,6 +1,8 @@
+import React, { useEffect } from "react";
 import Button from "../ui/button";
+import Link from "next/link";
 
-type ModalProps = {
+interface ModalProps {
   title: string;
   text?: string;
   closeModalFunction: () => void;
@@ -9,7 +11,10 @@ type ModalProps = {
   confirmButtonText?: string;
   cancelButtonText?: string;
   showCloseIcon?: boolean;
-};
+  imageSrc?: string;
+  imageLink?: string;
+  children?: React.ReactNode;
+}
 
 const Modal = ({
   title,
@@ -20,53 +25,62 @@ const Modal = ({
   confirmButtonText = "Confirmar",
   cancelButtonText = "Cancelar",
   showCloseIcon = true,
+  children,
+  imageSrc,
+  imageLink,
 }: ModalProps) => {
+  
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        closeModalFunction();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [closeModalFunction]);
+
   return (
-    <div className="relative w-scren min-h-screen flex items-center justify-center">
-      <div className="absolute m-auto mx-auto z-20 lg:max-w-[650px] md:max-w-[500px] sm:max-w-[350px] max-w-[350px] flex items-center justify-center bg-white rounded-md xl:p-10 lg:p-8 md:p-5 p-5">
-        <div>
-          {showCloseIcon && (
-            <button
-              onClick={closeModalFunction}
-              className="absolute block xl:top-[7px] lg:top-[6px] md:top-[5px] top-[5px] xl:right-[10px] lg:right-[9px] md:right-[8px] right-[8px] text-winePattern font-bold xl:text-sm lg:text-xs md:text-xs text-xs p-1"
-            >
-              X
-            </button>
+    <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50" onClick={closeModalFunction}>
+      <div className="relative bg-white rounded-md xl:p-10 lg:p-8 md:p-5 p-5 shadow-lg w-full max-w-md" onClick={(e) => e.stopPropagation()}>
+        
+        {imageSrc && (
+          imageLink ? (
+            <Link href={imageLink}>
+              <img src={imageSrc} alt="Ícone" className="absolute top-3 left-3 w-8 h-8 cursor-pointer" />
+            </Link>
+          ) : (
+            <img src={imageSrc} alt="Ícone" className="absolute top-3 left-3 w-8 h-8" />
+          )
+        )}
+
+        {showCloseIcon && (
+          <button
+            onClick={closeModalFunction}
+            className="absolute top-3 right-3 text-winePattern font-bold text-xl"
+          >
+            X
+          </button>
+        )}
+
+        <h3 className="text-2xl text-winePattern font-bold text-center uppercase">{title}</h3>
+
+        {text && <p className="text-left text-base mt-4">{text}</p>}
+
+        <div className="mt-4">{children}</div>
+
+        <div className="flex flex-col-reverse mt-6 gap-y-4 md:flex-row justify-center items-center">
+          {cancelButtonFunction && (
+            <Button text={cancelButtonText} onClick={cancelButtonFunction} type="button" />
           )}
-
-          <h3 className="xl:text-2xl lg:text-xl md:text-lg text-lg text-winePattern font-bold text-center uppercase">
-            {title}
-          </h3>
-
-          {text && (
-            <p className="text-left xl:text-base lg:text-sm md:text-xs text-xs xl:mt-4 lg:mt-3 md:mt-2 mt-2">
-              {text}
-            </p>
+          {confirmButtonFunction && (
+            <Button text={confirmButtonText} onClick={confirmButtonFunction} type="button" />
           )}
-
-          <div className="flex flex-1 flex-col-reverse mt-12 gap-y-6 gap-x-10 md:flex-row justify-center items-center">
-            {cancelButtonFunction && (
-              <Button
-                text={cancelButtonText}
-                onClick={cancelButtonFunction}
-                type={"button"}
-              />
-            )}
-
-            {confirmButtonFunction && (
-              <Button
-                text={confirmButtonText}
-                onClick={confirmButtonFunction}
-                type={"button"}
-              />
-            )}
-          </div>
         </div>
       </div>
-      <div
-        className="absolute z-10 top-0 bottom-0 left-0 right-0 w-scren min-h-screen"
-        onClick={closeModalFunction}
-      ></div>
     </div>
   );
 };
