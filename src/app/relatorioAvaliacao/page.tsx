@@ -2,11 +2,8 @@
 import React, { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import Link from "next/link";
-import Image from "next/image";
 import { useApiProvider } from "@/contexts";
 import FormTitle from "@/components/title/formTitle";
-import download from "../../../public/icons/download.png";
-import edt from "../../../public/icons/edt.png";
 import FormContainer from "@/components/ui/formContainer";
 
 interface IReportData {

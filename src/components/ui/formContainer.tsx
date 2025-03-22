@@ -1,8 +1,8 @@
-import { ReactElement } from "react";
+import { ReactNode } from "react";
 
 type ContainerProps = {
-  children: ReactElement | ReactElement[];
-  className?: string | undefined;
+  children: ReactNode;
+  className?: string;
 };
 const FormContainer = ({ children, className = "" }: ContainerProps) => {
   return (
