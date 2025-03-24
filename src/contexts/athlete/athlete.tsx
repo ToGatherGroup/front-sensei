@@ -76,7 +76,7 @@ export const AthleteProvider = ({
   const fetchAthletes = async () => {
     setIsLoading(true);
     try {
-      const response = await get("/atleta/lista");
+      const response = await get("/atletas/lista_ausentes");
       if (response?.data) {
         setListAthletes(response);
       }
@@ -90,7 +90,7 @@ export const AthleteProvider = ({
   const getProfile = async (id: number | string) => {
     setIsLoading(true);
     try {
-      const response = await get(`/atleta/ficha/${id}`);
+      const response = await get(`/atletas/ficha/${id}`);
       setAthleteProfile(response?.data);
       setMedals(response?.data?.medalhaDTO);
     } catch (error) {
@@ -104,7 +104,7 @@ export const AthleteProvider = ({
     setAthlete(null);
     setIsLoading(true);
     try {
-      const response = await get(`/atleta/${id}`);
+      const response = await get(`/atletas/${id}`);
       setAthlete(response?.data);
     } catch (error) {
       console.error("Erro ao obter dados do atleta", error);
@@ -147,7 +147,7 @@ export const AthleteProvider = ({
   const getInjuries = async (id: number | string) => {
     setIsLoading(true);
     try {
-      const response = await get(`lesao/${id}`);
+      const response = await get(`lesoes/${id}`);
 
       if (response) {
         const injuriesInfo = response.data.map((injury: any) => ({
@@ -175,7 +175,7 @@ export const AthleteProvider = ({
   const call = async (ids: number[]) => {
     setIsLoading(true);
     try {
-      const response = await post("atleta/chamada", JSON.stringify(ids));
+      const response = await post("atletas/chamada", JSON.stringify(ids));
       if (response?.status == 204) {
         fetchAthletes();
       } else {

@@ -276,7 +276,7 @@ const Relatorio = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await get(`avaliacao/${id}/${date}`);
+        const response = await get(`avaliacoes/${id}/${date}`);
         if (response && response.data && response.data.exercicios) {
           const exerciciosData = response.data.exercicios;
           exerciciosData.prancha = parseDuration(exerciciosData.prancha);
@@ -313,7 +313,7 @@ const Relatorio = () => {
         forcaIsometricaMaos: convertToPTFormat(data.forcaIsometricaMaos),
       };
 
-      const response = await put("avaliacao", assessmentUpdate(formattedData));
+      const response = await put("avaliacoes", assessmentUpdate(formattedData));
       if (response?.status !== 202) {
         throw new Error("Erro ao atualizar avaliação");
       }
