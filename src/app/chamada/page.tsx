@@ -34,7 +34,7 @@ const Chamada = () => {
 
   useEffect(() => {
     api
-      .get("/atleta/lista", {
+      .get("/atletas/lista", {
         showLoading: false,
       })
       ?.then(({ data }) => {

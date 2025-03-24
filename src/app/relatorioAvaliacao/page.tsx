@@ -24,7 +24,7 @@ const RelatorioAvaliacao = () => {
   useEffect(() => {
     const fetchDates = async () => {
       try {
-        const response = await get("avaliacao/datas");
+        const response = await get("avaliacoes/datas");
         if (response) {
           setDates(response.data);
         }
@@ -40,7 +40,7 @@ const RelatorioAvaliacao = () => {
     if (selectedDate) {
       const fetchReports = async () => {
         try {
-          const response = await get(`atleta/avaliacao/${selectedDate}`);
+          const response = await get(`atletas/avaliacoes/${selectedDate}`);
           if (response) {
             const sortedData = response.data.sort(
               (a: IReportData, b: IReportData) => a.nome.localeCompare(b.nome)

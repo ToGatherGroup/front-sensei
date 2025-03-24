@@ -75,7 +75,7 @@ const CadastroLesao = ({ params: { id } }: Props) => {
       },
     };
 
-    api.post("/lesao", preparedData)?.then(() => {
+    api.post("/lesoes", preparedData)?.then(() => {
       router.push(`/atleta/perfil/${id}`);
     });
   }
