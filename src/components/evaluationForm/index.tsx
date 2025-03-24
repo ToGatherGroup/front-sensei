@@ -158,7 +158,7 @@ const EvaluationForm = ({ id, method, viewMode = false }: Props) => {
       switch (method) {
         case "PUT":
           try {
-            const response = await get(`avaliacao/${id}/${date}`);
+            const response = await get(`avaliacoes/${id}/${date}`);
             if (response && response.data && response.data.exercicios) {
               const exerciciosData = response.data.exercicios;
               const valuePrancha = (exerciciosData.prancha = ptToMinSec(
@@ -231,7 +231,7 @@ const EvaluationForm = ({ id, method, viewMode = false }: Props) => {
       forcaIsometricaMaos: minSecToPT(data.forcaIsometricaMaos),
     };
     const response = await post(
-      "avaliacao",
+      "avaliacoes",
       evaluationToApiPost(formattedData)
     );
     if (response?.status !== 201) {

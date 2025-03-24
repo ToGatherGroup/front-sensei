@@ -25,7 +25,7 @@ export const ReviewsChart = ({ id, height, width }: ReviewsChartProps) => {
     const fetchData = async () => {
       try {
         console.log(`Fetching data for atleta id: ${id}`);
-        const response = await get(`avaliacao/${id}`);
+        const response = await get(`avaliacoes/${id}`);
         console.log("API response:", response);
         if (response?.data) {
           const { labels, values } = response.data;
