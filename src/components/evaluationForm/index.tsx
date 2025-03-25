@@ -15,9 +15,10 @@ import ptToMinSec from "@/functions/ptToMinSec";
 type Props = {
   method: "POST" | "PUT";
   id: number | string;
+  viewMode?: boolean;
 };
 
-const EvaluationForm = ({ id, method }: Props) => {
+const EvaluationForm = ({ id, method, viewMode = false }: Props) => {
   const searchParams = useSearchParams();
   const date = searchParams.get("data") || "";
 
@@ -328,6 +329,7 @@ const EvaluationForm = ({ id, method }: Props) => {
                 maxLength={2}
                 onKeyDown={handleKeyDownLounge}
                 onInput={handleInputLounge}
+                disabled={viewMode}
               />
               {/* Teste de Lunge Direito*/}
               <input
@@ -338,6 +340,7 @@ const EvaluationForm = ({ id, method }: Props) => {
                 maxLength={2}
                 onKeyDown={handleKeyDownLounge}
                 onInput={handleInputLounge}
+                disabled={viewMode}
               />
             </div>
           </div>
@@ -367,6 +370,7 @@ const EvaluationForm = ({ id, method }: Props) => {
             maxLength={3}
             onKeyDown={handleKeyDown}
             onInput={handleInput}
+            disabled={viewMode}
           />
         </div>
         {errors.rmTerra && (
@@ -390,6 +394,7 @@ const EvaluationForm = ({ id, method }: Props) => {
             maxLength={3}
             onKeyDown={handleKeyDown}
             onInput={handleInput}
+            disabled={viewMode}
           />
         </div>
         {errors.impulsaoVertical && (
@@ -421,6 +426,7 @@ const EvaluationForm = ({ id, method }: Props) => {
                 pattern="\d*" // Habilita teclado numérico em dispositivos móveis
                 inputMode="numeric" // Habilita teclado numérico em dispositivos móveis
                 className="w-32 px-4 py-2 rounded text-center"
+                disabled={viewMode}
               />
             )}
           />
@@ -454,6 +460,7 @@ const EvaluationForm = ({ id, method }: Props) => {
                 pattern="\d*" // Habilita teclado numérico em dispositivos móveis
                 inputMode="numeric" // Habilita teclado numérico em dispositivos móveis
                 className="w-32 px-4 py-2 rounded text-center"
+                disabled={viewMode}
               />
             )}
           />
@@ -479,6 +486,7 @@ const EvaluationForm = ({ id, method }: Props) => {
             maxLength={3}
             onKeyDown={handleKeyDown}
             onInput={handleInput}
+            disabled={viewMode}
           />
         </div>
         {errors.abdominais && (
@@ -502,6 +510,7 @@ const EvaluationForm = ({ id, method }: Props) => {
             maxLength={3}
             onKeyDown={handleKeyDown}
             onInput={handleInput}
+            disabled={viewMode}
           />
         </div>
         {errors.flexoes && (
@@ -525,6 +534,7 @@ const EvaluationForm = ({ id, method }: Props) => {
             maxLength={3}
             onKeyDown={handleKeyDown}
             onInput={handleInput}
+            disabled={viewMode}
           />
         </div>
         {errors.burpees && (
@@ -548,6 +558,7 @@ const EvaluationForm = ({ id, method }: Props) => {
             maxLength={4}
             onKeyDown={handleKeyDown}
             onInput={handleInput}
+            disabled={viewMode}
           />
         </div>
         {errors.cooper && (
@@ -571,6 +582,7 @@ const EvaluationForm = ({ id, method }: Props) => {
             maxLength={3}
             onKeyDown={handleKeyDown}
             onInput={handleInput}
+            disabled={viewMode}
           />
         </div>
         {errors.peso && (
@@ -594,6 +606,7 @@ const EvaluationForm = ({ id, method }: Props) => {
             maxLength={3}
             onKeyDown={handleKeyDown}
             onInput={handleInput}
+            disabled={viewMode}
           />
         </div>
         {errors.altura && (
@@ -602,14 +615,16 @@ const EvaluationForm = ({ id, method }: Props) => {
           </span>
         )}
         {/* Botões */}
-        <div className="flex justify-between items-center pb-10 mb-5 pt-7 ">
-          <div className="mx-auto">
-            <Button
-              text={method === "PUT" ? "Alterar" : "Cadastrar"}
-              type={"submit"}
-            />
+        {!viewMode && (
+          <div className="flex justify-between items-center pb-10 mb-5 pt-7 ">
+            <div className="mx-auto">
+              <Button
+                text={method === "PUT" ? "Alterar" : "Cadastrar"}
+                type={"submit"}
+              />
+            </div>
           </div>
-        </div>
+        )}
       </form>
     </div>
   );
