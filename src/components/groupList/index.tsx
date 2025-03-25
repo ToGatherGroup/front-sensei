@@ -89,7 +89,7 @@ const GrupoList = () => {
           <button 
             className={`px-4 py-2 rounded-md border transition-colors ${
               filtroStatus === 'todos' 
-                ? 'bg-wine-500 text-white border-wine-600' 
+                ? 'bg-winePattern text-white border-wine-600' 
                 : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
             }`}
             onClick={() => setFiltroStatus('todos')}
@@ -99,7 +99,7 @@ const GrupoList = () => {
           <button 
             className={`px-4 py-2 rounded-md border transition-colors ${
               filtroStatus === 'ativos' 
-                ? 'bg-wine-500 text-white border-wine-600' 
+                ? 'bg-winePattern text-white border-wine-600' 
                 : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
             }`}
             onClick={() => setFiltroStatus('ativos')}
@@ -109,7 +109,7 @@ const GrupoList = () => {
           <button 
             className={`px-4 py-2 rounded-md border transition-colors ${
               filtroStatus === 'inativos' 
-                ? 'bg-wine-500 text-white border-wine-600' 
+                ? 'bg-winePattern text-white border-wine-600' 
                 : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
             }`}
             onClick={() => setFiltroStatus('inativos')}
@@ -120,11 +120,11 @@ const GrupoList = () => {
 
         <div className="w-full">
           {gruposFiltrados.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            <div className={`${styles.grupoList} max-h-96 overflow-y-auto`}>
               {gruposFiltrados.map((grupo) => (
                 <div
                   key={grupo.id}
-                  className={`${styles.grupoItem} text-center cursor-pointer hover:bg-gray-100 hover:shadow-md hover:scale-105 transform transition-all duration-200 p-4 border rounded-md
+                  className={`${styles.grupoItem} mb-2 text-center cursor-pointer hover:bg-gray-100 hover:shadow-md transition-all duration-200 p-4 border rounded-md
                     ${!grupo.isAtivo ? 'opacity-60 border-dashed border-gray-400' : ''}`}
                   onClick={() => {setCurrentGroup(grupo); setOpenGroupModal(true)}}
                 >
