@@ -25,9 +25,7 @@ const SvgAddAssessment = ({ size = 24, ...props }: SvgProps) => (
   <g transform="translate(14, 14) scale(0.5)">
     <path
       d="M12 8v8m4-4H8m14 0c0-5.523-4.477-10-10-10S2 6.477 2 12s4.477 10 10 10s10-4.477 10-10"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
+      
     />
   </g>
 </svg>
