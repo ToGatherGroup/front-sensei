@@ -27,8 +27,7 @@ const AvatarAtleta = ({
       onClick={onClick}
     >
       <div className="outline outline-2 outline-[#d4d4d4] w-48 h-48 bg-winePattern border-2 border-solid border-[#350202] rounded-full translate-y-5"></div>
-      <Image
-        src={photoUrl ?? "/avatar_generico.png"}
+      <Image src={photoUrl ? `data:image/${photoUrl}` : "/avatar_generico.png"}
         alt={`Foto de ${name}`}
         className="absolute z-10 bottom-12 h-auto w-[200px] overflow-scroll"
         width={200}

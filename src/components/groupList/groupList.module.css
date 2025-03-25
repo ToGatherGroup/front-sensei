@@ -1,0 +1,58 @@
+.grupoList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  width: 100%;
+}
+
+.grupoItem {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  width: 100%;
+}
+
+.grupoNome {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.grupoIcones {
+  display: flex;
+  gap: 10px;
+}
+
+.icone {
+  width: 24px; /* Ajuste o tamanho dos ícones conforme necessário */
+  height: 24px;
+}
+
+/* Estilo para botões de filtro */
+.filtroButton {
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  transition: all 0.2s;
+  border: 1px solid;
+}
+
+.filtroActive {
+  background-color: #722F37; /* Cor vinho */
+  color: white;
+  border-color: #5D2025; /* Vinho mais escuro para a borda */
+}
+
+.filtroInactive {
+  background-color: white;
+  color: #4B5563; /* gray-700 */
+  border-color: #D1D5DB; /* gray-300 */
+}
+
+.filtroInactive:hover {
+  background-color: #F9FAFB; /* gray-50 */
+}

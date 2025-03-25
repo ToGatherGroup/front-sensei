@@ -7,26 +7,33 @@ import { Atleta } from "@/types/TAtleta";
 import { atletaCreateSchema } from "@/schemas/athleteSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useAthleteProvider } from "@/contexts";
+import { useGroupProvider } from "@/contexts/groups/groups";
 import Button from "../ui/button";
 import Loader from "../ui/loader";
 import ImageCropper from "@/components/imageCropper/imageCropper";
 import { Area } from "react-easy-crop";
+import ModalGroup from "@/components/modalGrupo";
+import MuiButton from "@mui/material/Button";
 
 type Props = {
   atleta?: Atleta | null;
   method: "POST" | "PUT";
 };
 
+
 const FormAtleta = ({ atleta, method }: Props) => {
-  const switchStyles =
-    ".switch { position: relative; display: inline-block; width: 160px; height: 34px;}.switch input { display: none;}.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #3C3C3C; -webkit-transition: .4s; transition: .4s; border-radius: 34px;}.slider:before { position: absolute; content: ''; height: 26px; width: 26px; left: 4px; bottom: 4px; background-color: white; -webkit-transition: .4s; transition: .4s; border-radius: 50%;}input:checked + .slider { background-color: green;}input:focus + .slider { box-shadow: 0 0 1px #2196F3;}input:checked + .slider:before { -webkit-transform: translateX(26px); -ms-transform: translateX(26px); transform: translateX(125px);}/*------ ADDED CSS ---------*/.slider:after { content: 'Atleta inativo'; color: white; display: block; position: absolute; width: 120px; transform: translate(-50%,-50%); top: 50%; left: 60%; right: 0; font-size: 16px; font-family: Verdana, sans-serif; transition: .4s;}input:checked + .slider:after { content: 'Atleta ativo'; top: 50%; right: 60%; left: 50%; transition: .4s;}";
   const [avatarBase64, setAvatarBase64] = useState<string>("");
   const [originalAvatarBase64, setOriginalAvatarBase64] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [disableSubmitBtn, setDisableSubmitBtn] = useState<boolean>(false);
   const { registerAthlete, updateAthlete } = useAthleteProvider();
   const [openCropper, setOpenCropper] = useState<boolean>(false); // Estado para controlar a abertura do cropper
+  const [openGroupModal, setOpenGroupModal] = useState<boolean>(false);
   const [croppedImage, setCroppedImage] = useState<string | null>(null);
+  const {
+    groupList,
+    getGroups
+  } = useGroupProvider();
 
   useEffect(() => {
     if (atleta?.foto && avatarBase64 == "") {
@@ -34,6 +41,10 @@ const FormAtleta = ({ atleta, method }: Props) => {
       setOriginalAvatarBase64(atleta.foto);
     }
   }, [atleta, setAvatarBase64]);
+
+  useEffect(() => {
+    getGroups();
+  }, []);
 
   const {
     register,
@@ -48,6 +59,7 @@ const FormAtleta = ({ atleta, method }: Props) => {
       nascimento: atleta?.nascimento ?? "",
       sexo: atleta?.sexo ?? "",
       faixa: atleta?.faixa,
+      grupo: atleta?.grupo?.id?.toString() ?? "",
       isAtivo: !!atleta?.isAtivo,
     },
     mode: "onBlur",
@@ -56,40 +68,39 @@ const FormAtleta = ({ atleta, method }: Props) => {
 
   const onSubmit = async (data: any) => {
     try {
-      switch (method) {
-        case "PUT":
-          console.log("Método PUT acionado");
-          const preparedDataPut = {
-            ...data,
-            foto: croppedImage || atleta?.foto,
-            isAtivo: getValues("isAtivo"),
-          };
-          console.log("Dados preparados para PUT:", preparedDataPut);
-          updateAthlete(preparedDataPut);
-          break;
+      const selectedGroup = groupList?.find(g => g.id.toString() === data.grupo);
 
-        default:
-          console.log("Método POST acionado");
-          let finalAvatarBase64 = croppedImage;
+      const formData = {
+        ...data,
+        grupo: selectedGroup ? {
+          id: selectedGroup.id,
+          nome: selectedGroup.nome,
+          isAtivo: selectedGroup.isAtivo
+        } : undefined,
+        foto: croppedImage || atleta?.foto,
+        isAtivo: getValues("isAtivo"),
+      };
 
-          if (!finalAvatarBase64 && data.foto && data.foto[0]) {
-            console.log("Arquivo de imagem encontrado:", data.foto[0]);
-            finalAvatarBase64 = await file2Base64(data.foto[0]);
-            console.log("Imagem convertida para Base64:", finalAvatarBase64);
-          }
+      if (method === "PUT") {
+        updateAthlete(formData); //TODO: Corrigir comportamento com grupo
+      } else {
+        let finalAvatarBase64 = croppedImage;
 
-          const preparedDataPost = {
-            ...data,
+        if (!finalAvatarBase64 && data.foto && data.foto[0]) {
+          console.log("Arquivo de imagem encontrado:", data.foto[0]);
+          finalAvatarBase64 = await file2Base64(data.foto[0]);
+          console.log("Imagem convertida para Base64:", finalAvatarBase64);
+        }
+
+        if (finalAvatarBase64) {
+          registerAthlete({
+            ...formData,
             foto: finalAvatarBase64,
-          };
-
-          if (finalAvatarBase64) {
-            console.log("Dados preparados para POST:", preparedDataPost);
-            registerAthlete(preparedDataPost);
-          } else {
-            alert("Por favor, selecione uma imagem para o avatar.");
-            console.log("Nenhuma imagem foi selecionada.");
-          }
+          });
+        } else {
+          alert("Por favor, selecione uma imagem para o avatar.");
+          console.log("Nenhuma imagem foi selecionada.");
+        }
       }
     } catch (error) {
       alert(
@@ -165,6 +176,10 @@ const FormAtleta = ({ atleta, method }: Props) => {
     setOpenCropper(false);
   };
 
+  const handleGroupCreated = () => {
+    getGroups();
+  };
+
   return (
     <div className={styles.container}>
       {loading && <Loader />}
@@ -220,7 +235,7 @@ const FormAtleta = ({ atleta, method }: Props) => {
               {...register("nome")}
               type="text"
               id="nome"
-              placeholder="Insira seu nome"
+              placeholder="Insira o nome do atleta"
             />
             {errors.nome && (
               <p className={styles.displayError}>{errors.nome.message}</p>
@@ -233,7 +248,7 @@ const FormAtleta = ({ atleta, method }: Props) => {
               {...register("email")}
               type="email"
               id="email"
-              placeholder="Insira seu e-mail"
+              placeholder="Insira o e-mail do atleta"
             />
             {errors.email && (
               <p className={styles.displayError}>{errors.email.message}</p>
@@ -255,7 +270,7 @@ const FormAtleta = ({ atleta, method }: Props) => {
               Sexo
             </label>
             <select {...register("sexo")} id="sexo">
-              <option value="">Selecione</option>
+              <option disabled value="">Selecione</option>
               <option value="M">Masculino</option>
               <option value="F">Feminino</option>
             </select>
@@ -269,7 +284,7 @@ const FormAtleta = ({ atleta, method }: Props) => {
               Faixa
             </label>
             <select {...register("faixa")} id="faixa">
-              <option value="" disabled hidden>
+              <option disabled >
                 Selecione
               </option>
               <option value="branca">Branca</option>
@@ -289,13 +304,67 @@ const FormAtleta = ({ atleta, method }: Props) => {
               <p className={styles.displayError}>{errors.faixa.message}</p>
             )}
           </div>
+          <div className={styles.inputRow}>
+            <label htmlFor="faixa" className={styles.required}>
+              Grupo
+            </label>
+            <select {...register("grupo")} id="grupo">
+              <option disabled >
+                Selecione
+              </option>
+              {loading ? (
+                <option disabled>Carregando grupos...</option>
+              ) : Array.isArray(groupList) && groupList.length > 0 ? (
+                groupList.map((grupo) => (
+                  <option key={grupo.id} value={grupo.id}>
+                    {grupo.nome.replace(/^["']|["']$/g, '')}
+                  </option>
+                ))
+              ) : (
+                <option disabled>Nenhum grupo disponível</option>
+              )}
+            </select>
+            {errors.grupo && (
+              <p className={styles.displayError}>{errors.grupo.message}</p>
+            )}
+            <div className="flex w-full items-center justify-center rounded-md " >
+              <MuiButton color="inherit" variant="contained" sx={(theme) => (
+                {
+                  margin: 0,
+                  bgcolor: 'theme.palette.primary.main',
+                  color: 'theme.palette.primary.main',
+                  borderColor: 'primary.main',
+                  '&:hover': {
+                    color: theme.palette.secondary.main,
+                  },
+                  '& .MuiButton-root ': {
+                    borderWidth: 24,
+                  },
+                  '& .MuiButton-color:hover': {
+                    color: 'red',
+                    borderWidth: 24,
+                  },
+                  '& .MuiButtonBase-root': {
 
+                    borderWidth: 2,
+                  },
+                }
+              )} endIcon={<img width={50} src="/icons/add_grupo.png" />} onClick={() => setOpenGroupModal(true)}>
+                Novo Grupo
+              </MuiButton>
+              <ModalGroup
+                open={openGroupModal}
+                setOpen={setOpenGroupModal}
+                putMethod={false}
+                onGroupChange={handleGroupCreated} // Aqui pode ser possível atualizar a lista de grupos
+              />
+            </div>
+          </div>
           {method === "PUT" && (
             <div className={styles.isAtivo}>
-              <style>{switchStyles}</style>
-              <label className="switch">
+              <label className={styles.switch}>
                 <input type="checkbox" {...register("isAtivo")} />
-                <span className="slider"></span>
+                <span className={styles.slider}></span>
               </label>
 
               {errors.isAtivo && (

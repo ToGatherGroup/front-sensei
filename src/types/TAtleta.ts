@@ -1,4 +1,5 @@
 import { Faixas } from "@/enums/faixas";
+import { Grupo } from "./Grupo";
 
 export type Atleta = {
   id?: number;
@@ -8,6 +9,7 @@ export type Atleta = {
   foto: string;
   categoria?: string;
   faixa: (typeof Faixas)[number];
+  grupo?: Grupo;
   sexo: "M" | "F";
   isAtivo?: boolean;
 };

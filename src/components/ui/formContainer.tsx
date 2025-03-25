@@ -8,7 +8,7 @@ const FormContainer = ({ children, className = "" }: ContainerProps) => {
   return (
     <section className="py-10 px-5">
       <div
-        className={`m-auto w-auto max-w-[650px] min-h-fit bg-container rounded-lg px-5 py-12 box-border ${className}`}
+        className={`m-auto w-auto max-w-[650px] min-w-fit min-h-fit bg-container rounded-lg px-5 py-12 box-border ${className}`}
       >
         {children}
       </div>
