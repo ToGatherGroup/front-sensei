@@ -72,7 +72,7 @@ const Frequency = ({ id, height, width }: FrequencyProps) => {
       const fetchData = async () => {
         try {
           const response = await get(
-            `atleta/presenca/${id}/data_inicio/${watchStartDate}/data_fim/${watchEndDate}`
+            `presencas/${id}/data_inicio/${watchStartDate}/data_fim/${watchEndDate}`
           );
           const { totalPresenca, totalAusencia, porcentagemPresenca } = response?.data;
 

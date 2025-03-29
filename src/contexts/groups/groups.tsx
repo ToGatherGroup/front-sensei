@@ -11,7 +11,7 @@ type GroupState = {
 };
 
 const initialState = {
-    groupList: [] as Grupo[], // Inicializando como array vazio
+    groupList: [] as Grupo[],
     getGroups: async () => {},
     postGroup: async () => {},
     putGroup: async () => {},
@@ -35,8 +35,7 @@ export const GroupProvider = ({
       const getGroups = async () => {
         setIsLoading(true);
         try {
-          const response = await get(`/grupo`);
-          // Verificando se a resposta contém um array antes de atualizar o estado
+          const response = await get(`/grupos`);
           if (Array.isArray(response?.data)) {
             setGroupList(response.data);
           } else {
@@ -54,13 +53,12 @@ export const GroupProvider = ({
       const putGroup = async (id: number, grupoData: Partial<Grupo>) => {
         setIsLoading(true);
         try {
-          // Combinando o ID com os dados do grupo em um único objeto
           const bodyData = {
             id,
             ...grupoData
           };
           
-          const response = await put(`/grupo`, bodyData);
+          const response = await put(`/grupos`, bodyData);
           getGroups();
         } catch (error) {
           console.error("Erro ao atualizar grupo", error);
@@ -72,7 +70,7 @@ export const GroupProvider = ({
     const postGroup = async (name: string) => {
         setIsLoading(true);
         try {
-            const response = await post(`/grupo`, name);
+            const response = await post(`/grupos`, name);
             setGroupList(response?.data);
         } catch (error) {
             console.error("Erro ao obter lista de grupos", error);
