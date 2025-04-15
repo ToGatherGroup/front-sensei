@@ -37,7 +37,7 @@ const RelatorioAvaliacao = () => {
     if (selectedDate) {
       const fetchReports = async () => {
         try {
-          const response = await get(`atletas/avaliacoes/${selectedDate}`);
+          const response = await get(`atletas/avaliacao/${selectedDate}`);
           if (response) {
             const sortedData = response.data.sort(
               (a: IReportData, b: IReportData) => a.nome.localeCompare(b.nome)

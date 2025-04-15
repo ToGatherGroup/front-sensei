@@ -34,11 +34,11 @@ const Chamada = () => {
 
   useEffect(() => {
     api
-      .get("/atletas/lista", {
+      .get("/atletas", {
         showLoading: false,
       })
       ?.then(({ data }) => {
-        const atletas: Array<Atleta> = data;
+        const atletas: Array<Atleta> = data.content || data;
 
         atletas.forEach((atleta) => {
           /* MOCK.forEach((atleta) => { */
@@ -63,12 +63,15 @@ const Chamada = () => {
   function submit(data: any) {
     const formData: FormData = data.atletaCheckbox;
     const ids = formData
-      .filter((atleta) => atleta.value == true)
+      .filter((atleta) => atleta.value === true)
       .map((atleta) => atleta.atletaId);
-
-    if (!ids) return;
-
-    api.post("/atleta/chamada", ids)?.then(() => router.push("/"));
+  
+    if (ids.length === 0) {
+      alert("Selecione pelo menos um atleta para registrar a chamada.");
+      return;
+    }
+  
+    api.post("/presencas/chamadas", ids)?.then(() => router.push("/"));
   }
 
   return (

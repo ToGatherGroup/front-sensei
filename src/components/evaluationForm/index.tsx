@@ -158,7 +158,7 @@ const EvaluationForm = ({ id, method, viewMode = false }: Props) => {
       switch (method) {
         case "PUT":
           try {
-            const response = await get(`avaliacoes/${id}/${date}`);
+            const response = await get(`avaliacoes/${id}/data/${date}`);
             if (response && response.data && response.data.exercicios) {
               const exerciciosData = response.data.exercicios;
               const valuePrancha = (exerciciosData.prancha = ptToMinSec(
@@ -207,7 +207,7 @@ const EvaluationForm = ({ id, method, viewMode = false }: Props) => {
         forcaIsometricaMaos: minSecToPT(data.forcaIsometricaMaos),
       };
 
-      const response = await put("avaliacao", evaluationUpdate(formattedData));
+      const response = await put("avaliacoes", evaluationUpdate(formattedData));
       if (response?.status !== 202) {
         throw new Error("Erro ao atualizar avaliação");
       }

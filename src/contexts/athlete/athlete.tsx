@@ -132,7 +132,7 @@ export const AthleteProvider = ({
   const registerAthlete = async (athleteData: Atleta) => {
     setIsLoading(true);
     try {
-      const response = await post("atleta", athleteData);
+      const response = await post("atletas", athleteData);
 
       if (response) {
         router.push("/atleta/buscar");
