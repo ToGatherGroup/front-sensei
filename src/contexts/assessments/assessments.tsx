@@ -95,7 +95,7 @@ export const AssessmentsProvider = ({ children }: Props) => {
   const getIncompleteAssessments = async () => {
     setIsLoading(true);
     try {
-      const response = await get("/avaliacoes/incompletas");
+      const response = await get("/avaliacoes_incompletas");
       updateAssesment(response?.data);
       setModalVisible(true);
     } catch (error) {
