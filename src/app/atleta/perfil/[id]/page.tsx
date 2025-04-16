@@ -206,20 +206,6 @@ const Page = ({ params }: Props) => {
               className="mb-2 z-20"
             />
 
-            {/* Cadastrar campeonato */}
-            <Link
-              href={`${params.id}/cadastrar/campeonato`}
-              className="bg-transparent w-[40px] h-10 absolute z-40 bottom-[110px] right-0 translate-x-3 rounded-md hover:translate-x-8 hover:w-16 duration-300 peer/campeonato"
-            />
-            <div className="bg-white w-[80px] absolute z-10 bottom-[110px] right-0 translate-x-3 rounded-md peer-hover/campeonato:translate-x-8 duration-300">
-              <IconButton
-                href={`${params.id}/cadastrar/campeonato`}
-                src="/icons/add_campeonato_48x48.png"
-                alt="Edição"
-                className="ml-auto !h-10 !w-10"
-              />
-            </div>
-
             {/* Cadastrar Avaliação Física */}
             <Link
               href={`${params.id}/cadastrar/avaliacaoFisica`}
