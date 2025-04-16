@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getAtletas, getAtletasByName } from "@/api/endpoints";
+import { getAtletas, getAtletaByName } from "@/api/endpoints";
 
 //import AvatarAtleta from "@/components/avatarAtleta/page";
 import { apiToAtletas } from "@/api/middleware/atletas";
@@ -65,7 +65,7 @@ const AtletaSelecionar = () => {
 
       setLoading(true);
       const response = requestName
-        ? await getAtletasByName(
+        ? await getAtletaByName(
             requestName,
             page,
             ELEMENTS_PER_PAGE > MINIMUM_ELEMENTS_PER_PAGE

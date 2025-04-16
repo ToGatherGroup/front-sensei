@@ -5,9 +5,9 @@ export const getAtletas = (page: number, elementsQty: number | null) => {
     return axios.get(`/atletas?page=${page}`)
 }
 
-export const getAtletasByName = (name:string, page: number, elementsQty: number | null) => {
+export const getAtletaByName = (name:string, page: number, elementsQty: number | null) => {
     if (elementsQty) return axios.get(`/atletas/nome/${name}?page=${page}&size=${elementsQty}`);
-    return axios.get(`/atletas/nome/${name}?page=${page}`);
+    return axios.get(`/atleta/nome/${name}?page=${page}`);
 }
 
 export const getAvaliacaoPosturalDatas = (atletaId: number) => {
@@ -21,5 +21,5 @@ export const getAvaliacoesPosturais = (atletaId: number, data: string) => {
 }
 
 export const getCampeonatosByAtleta = (atletaId: number) => {
-    return axios.get(`/campeonato/lista/${atletaId}`);
+    return axios.get(`/campeonatos/${atletaId}/lista`);
 };

@@ -37,7 +37,7 @@ const AtletaCampeonatos = ({ params: { id } }: Props) => {
   // Função para enviar o formulário
   const submitForm = async (data: FormData) => {
     try {
-      const response = await post("campeonato", {
+      const response = await post("campeonatos", {
         nome: data.name,
         data: data.date,
         posicaoPodium: data.position,
