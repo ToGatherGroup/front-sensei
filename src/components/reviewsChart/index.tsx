@@ -24,15 +24,10 @@ export const ReviewsChart = ({ id, height, width }: ReviewsChartProps) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log(`Fetching data for atleta id: ${id}`);
         const response = await get(`avaliacoes/${id}`);
-        console.log("API response:", response);
         if (response?.data) {
           const { labels, values } = response.data;
-          console.log("Data received:", { labels, values });
           setApiData({ labels, values });
-        } else {
-          console.log("No data found in response");
         }
       } catch (error) {
         console.error("Erro ao solicitar a API", error);
@@ -43,21 +38,10 @@ export const ReviewsChart = ({ id, height, width }: ReviewsChartProps) => {
 
   const chartData = {
     labels: apiData ? apiData.labels : [],
-    // labels: [
-    //   "Core",
-    //   "Explosiva",
-    //   "Isométrica",
-    //   "Tornozelo",
-    //   "Abdominal",
-    //   "MMSS",
-    //   "Anaeróbica",
-    //   "Aeróbica",
-    // ],
     datasets: [
       {
         label: "Avaliação Atual",
         data: apiData ? apiData.values : [],
-        //data: [60, 70, 80, 75, 96, 70, 90, 70, 80],
         fill: true,
         backgroundColor: "rgba(54, 162, 235, 0.8)",
         borderColor: "rgb(54, 162, 235)",

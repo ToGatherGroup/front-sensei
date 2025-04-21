@@ -119,7 +119,6 @@ export const AssessmentsProvider = ({ children }: Props) => {
 
   const exerciseIsComplete = (exerciseName: string) => {
     if (assessment && assessment[0]?.exercicios?.[exerciseName] === undefined) {
-      console.log("exerciseName:", exerciseName);
       throw new Error(`exerciseName "${exerciseName}" incorreto.`);
     }
 

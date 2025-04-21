@@ -48,7 +48,6 @@ const AtletaCampeonatos = ({ params: { id } }: Props) => {
       if (response?.status !== 200) {
         throw new Error("Erro ao cadastrar campeonato");
       }
-      console.log("Campeonato cadastrado com sucesso!");
     } catch (error) {
       console.error("Erro ao cadastrar campeonato Api:", error);
       throw error;

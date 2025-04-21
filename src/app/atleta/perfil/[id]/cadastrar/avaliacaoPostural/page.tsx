@@ -176,7 +176,6 @@ const PosturalEvaluation = ({ params: { id } }: Props) => {
       }
       data.atletaModel = id;
       const preparedData = PosturalEvaluationToApi(data);
-      console.log("Prepared Data:", JSON.stringify(preparedData, null, 2));
       const response = await post(
         "avaliacoes_posturais",
         PosturalEvaluationToApi(data)

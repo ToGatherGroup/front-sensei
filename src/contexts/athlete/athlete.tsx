@@ -119,7 +119,6 @@ export const AthleteProvider = ({
       const response = await put("atleta", athleteData);
 
       if (response) { // Avaliar resposta se correta
-        console.log("Resposta recebida: response", response);
         router.push(`/atleta/perfil/${athleteData.id}`);
       }
     } catch (error) {

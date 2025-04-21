@@ -14,7 +14,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import PopupState, { bindMenu, bindHover } from 'material-ui-popup-state';
 import HoverMenu from 'material-ui-popup-state/HoverMenu'
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -183,13 +183,13 @@ function Header() {
               <Link
                 href={"/"}
               >
-                <Image
-                  width={90}
-                  height={50}
-                  alt="Logotipo Sensei"
-                  src="/logo_sensei_white.png"
-                  className={innerWidth < DESKTOP_WIDTH_BREAKPOINT ? "flex" : "hidden"}
-                  />
+              <Image
+                width={90}
+                height={50}
+                alt="Logotipo Sensei"
+                src="/logo_sensei_white.png"
+                className={innerWidth < DESKTOP_WIDTH_BREAKPOINT ? "flex" : "hidden"}
+              />
               </Link>
             </Box>
 
@@ -204,7 +204,7 @@ function Header() {
               justifyContent: "center",
             }}>
               {menuItems.map((item) => (
-                <>
+                <React.Fragment key={item.label}>
                   {item.childrens ?
                     <PopupState variant="popover" popupId={item.label} key={item.label}>
                       {(popupState) => (
@@ -256,7 +256,7 @@ function Header() {
                       </Link>
                   </Button>
                   }
-                </>
+                </React.Fragment>
               ))}
             </Box>
 
@@ -362,7 +362,7 @@ const MobileDrawer = () => {
       <List>
         {menuItems.map((menuItem) => (
           menuItem.childrens ?
-          <Box key={menuItem.path}>
+          <Box key={menuItem.label}>
             <ListItem disablePadding>
               <ListItemButton onClick={(event) => handleSubmenuClick(event, menuItem.label)}>
                 <ListItemIcon>

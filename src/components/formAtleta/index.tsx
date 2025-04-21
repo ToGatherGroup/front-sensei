@@ -87,9 +87,7 @@ const FormAtleta = ({ atleta, method }: Props) => {
         let finalAvatarBase64 = croppedImage;
 
         if (!finalAvatarBase64 && data.foto && data.foto[0]) {
-          console.log("Arquivo de imagem encontrado:", data.foto[0]);
           finalAvatarBase64 = await file2Base64(data.foto[0]);
-          console.log("Imagem convertida para Base64:", finalAvatarBase64);
         }
 
         if (finalAvatarBase64) {
@@ -99,7 +97,6 @@ const FormAtleta = ({ atleta, method }: Props) => {
           });
         } else {
           alert("Por favor, selecione uma imagem para o avatar.");
-          console.log("Nenhuma imagem foi selecionada.");
         }
       }
     } catch (error) {
@@ -349,7 +346,7 @@ const FormAtleta = ({ atleta, method }: Props) => {
                     borderWidth: 2,
                   },
                 }
-              )} endIcon={<img width={50} src="/icons/add_grupo.png" />} onClick={() => setOpenGroupModal(true)}>
+              )} endIcon={<img width={50} height="auto" src="/icons/add_grupo.png" />} onClick={() => setOpenGroupModal(true)}>
                 Novo Grupo
               </MuiButton>
               <ModalGroup

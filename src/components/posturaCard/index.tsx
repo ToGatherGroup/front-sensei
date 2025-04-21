@@ -93,7 +93,7 @@ const PosturaCard = ({
             posturasAtleta[viewSide]?.foto
               ? posturasAtleta[viewSide].foto
               : defaultImage
-          } //src={posturasAtleta[viewSide].foto}
+          }
           alt="Athlete Posture View"
           object-fit="contain"
           className="object-cover shadow rounded aspect-[4/12] max-h-[600px] w-full h-auto"

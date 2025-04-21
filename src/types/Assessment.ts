@@ -5,21 +5,12 @@ interface AssessmentTypeDetail {
   value: string;
 }
 
-export interface Assessment {
+interface Assessment {
   title: string;
   slug: string;
   slugCamelCase?: string;
   altTitle?: string;
   type: AssessmentTypeDetail;
-}
-
-export interface ListItemProps {
-  key: number;
-  id: number;
-  itemTitle: string;
-  assessments?: Assessment | Assessment[];
-  subItem?: string | string[];
-  isIMC?: boolean;
 }
 
 type Time = `PT${number}M${number}S`; // Example: "PT1M30S"
@@ -65,11 +56,6 @@ export type IncompleteAssessments = {
 export type ResponseIncompleteAssessmentAPI = {
   data: string;
   avaliacoesIncompletas: IncompleteAssessmentsAPI[];
-};
-
-export type ResponseIncompleteAssesment = {
-  data: Dayjs | null;
-  incompleteAssesments: IncompleteAssessments[];
 };
 
 export type AssessmentReducerState = {

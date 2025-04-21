@@ -118,9 +118,6 @@ export default function ListAvaliacao() {
                         >
                           <polyline points="6 9 12 15 18 9"></polyline>
                         </svg>
-                        {/* <span className="mr-2">{">"}</span>{" "} */}
-                        {/* Tentar inserir o icone aqui, usando ::before content url(iconPath). Use summary[open] para saber se o Modal está aberto ou fechado. Estilizar o details como default fechado, e estilizar aberto na tag details[open]*/}
-                        {/* https://stackoverflow.com/questions/61292792/css-selector-for-details-element-when-opened */}
                         <p>{exercicio.nestedExercise.nestedCategory}</p>
                         {(!assessment.exerciseIsComplete(
                           exercicio.exerciseName

@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { getAtletas, getAtletaByName } from "@/api/endpoints";
 
-//import AvatarAtleta from "@/components/avatarAtleta/page";
 import { apiToAtletas } from "@/api/middleware/atletas";
 
 import { TAtletas } from "@/types/TAtletas";

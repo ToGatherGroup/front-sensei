@@ -15,19 +15,3 @@ export interface IEvaluationData {
   testeDeLungeJoelhoEsquerdo: number;
   impulsaoVertical: number;
 }
-
-export interface IEvaluationDataApi {
-  data?: string | undefined;
-  peso: number;
-  altura: number;
-  prancha: Time;
-  flexoes: number;
-  abdominais: number;
-  burpees: number;
-  cooper: number;
-  rmTerra: number;
-  forcaIsometricaMaos: Time;
-  testeDeLungeJoelhoDireito: number;
-  testeDeLungeJoelhoEsquerdo: number;
-  impulsaoVertical: number;
-}

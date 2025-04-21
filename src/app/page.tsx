@@ -10,7 +10,6 @@ export default function Home() {
         alt="Logotipo do Instituto Sensei Divino"
         className="mx-6"
       />
-      {/* <h1 className="text-white text-[50px] font-bold">Sensei Divino</h1> */}
     </main>
   );
 }
