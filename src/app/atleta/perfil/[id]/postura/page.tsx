@@ -20,7 +20,7 @@ const PosturaPage = () => {
       const datasAvaliacao = await getAvaliacaoPosturalDatas(
         Number(parametros.id)
       );
-      setDatasAvaliacaoArray(datasAvaliacao.data); // `data.data`, bom demais.
+      setDatasAvaliacaoArray(datasAvaliacao.data);
     };
     fetchData();
   }, [parametros.id]);

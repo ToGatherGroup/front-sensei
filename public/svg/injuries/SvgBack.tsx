@@ -82,8 +82,6 @@ const SvgBack = ({
           clipRule: "evenodd",
         }}
         version="1.1"
-        // viewBox="1000 9000 21000 29700"
-        // viewBox={`1000 12000 20000 27000`}> //front
         viewBox={viewBoxValue}
       >
         <defs>

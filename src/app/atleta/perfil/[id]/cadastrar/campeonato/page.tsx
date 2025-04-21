@@ -23,7 +23,6 @@ type Props = {
 // Página de cadastro de campeonatos do atleta
 const AtletaCampeonatos = ({ params: { id } }: Props) => {
   // ID estático do atleta, para usá-lo remover o id acima que está como parâmetro
-  //const id = 2;
   const { post } = useApiProvider();
 
   // Configuração do formulário

@@ -131,11 +131,7 @@ export default function ListAvaliacao() {
                         )}
                       </div>
                     </summary>
-                    {/* <summary
-                      className={`bg-white box-border bg-auto w-full rounded-md font-semibold py-3 px-2 text-left transition duration-400 hover:ease-in hover:border-winePattern z-1 hover:z-0 hover:scale-y-125 hover:scale-x-110 cursor-pointer`}
-                    >
-                      {exercicio.nestedExercise.nestedCategory}
-                    </summary> */}
+
                     <Exercise
                       title={exercicio.title}
                       onClick={() => handleClick(exercicio.exercisePath)}
