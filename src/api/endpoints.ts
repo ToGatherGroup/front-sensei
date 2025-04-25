@@ -11,12 +11,10 @@ export const getAtletaByName = (name:string, page: number, elementsQty: number |
 }
 
 export const getAvaliacaoPosturalDatas = (atletaId: number) => {
-    console.log(`Requisição feita para /avaliacoes/postural/datas/${atletaId}`)
     return axios.get(`/avaliacoes/postural/datas/${atletaId}`);
 }
 
 export const getAvaliacoesPosturais = (atletaId: number, data: string) => {
-    console.log(`Requisição feita para /avaliacoes/posturais/${atletaId}/data/${data}`)
     return axios.get(`/avaliacoes/posturais/${atletaId}/data/${data}`);
 }
 

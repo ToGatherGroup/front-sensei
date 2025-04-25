@@ -10,7 +10,7 @@ import Button from "@/components/ui/button";
 import Link from "next/link";
 
 const PosturaPage = () => {
-  const [datasAvaliacaoArray, setDatasAvaliacaoArray] = useState<string[]>([]); //useState([])
+  const [datasAvaliacaoArray, setDatasAvaliacaoArray] = useState<string[]>([]);
   const [viewSide, setViewSide] = useState<number>(0);
   const parametros = useParams<{ id: string }>();
   const rotateIcon = "/icons/axis_z_rotate_counterclockwise_icon.png";
@@ -20,7 +20,7 @@ const PosturaPage = () => {
       const datasAvaliacao = await getAvaliacaoPosturalDatas(
         Number(parametros.id)
       );
-      setDatasAvaliacaoArray(datasAvaliacao.data); // `data.data`, bom demais.
+      setDatasAvaliacaoArray(datasAvaliacao.data);
     };
     fetchData();
   }, [parametros.id]);

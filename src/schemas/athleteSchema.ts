@@ -58,16 +58,5 @@ export const atletaCreateSchema = yup.object().shape({
     .optional()
     .typeError("Selecione um grupo."),
 
-
   isAtivo: yup.boolean().required().default(true)
-  //isAtivo: yup.number().required().default(1)
-
-  // isAtivo: yup.lazy((value) =>
-  //   typeof value !== 'boolean'
-  //     ? yup.boolean().transform((_, val) => {
-  //       console.log('val', !!val);
-  //       return !!val
-  //     }).required('Required field').default(true)
-  //     : yup.number().transform((val, rawValue) => console.log("val number:", val, "rawValue number:", rawValue))
-  // ),
 });

@@ -80,7 +80,6 @@ const SvgFront = ({
         fillRule: "evenodd",
         clipRule: "evenodd",
       }}
-      // viewBox="1000 12000 19000 5000"> mobile
       viewBox={viewBoxValue}
     >
       <defs>

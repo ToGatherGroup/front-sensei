@@ -77,7 +77,7 @@ const GrupoList = () => {
                   borderWidth: 2,
                 },
               })}
-              endIcon={<img width={50} src="/icons/add_grupo.png" />}
+              endIcon={<img width={50} height="auto" src="/icons/add_grupo.png" />}
               onClick={() => setOpenGroupModal(true)}
             >
               Novo Grupo

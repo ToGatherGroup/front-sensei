@@ -168,7 +168,6 @@ const EvaluationForm = ({ id, method, viewMode = false }: Props) => {
                 (exerciciosData.forcaIsometricaMaos = ptToMinSec(
                   exerciciosData.forcaIsometricaMaos
                 ));
-              console.log(exerciciosData);
               setExercicios(exerciciosData);
               setValue("peso", exerciciosData.peso);
               setValue("altura", exerciciosData.altura);
@@ -211,13 +210,6 @@ const EvaluationForm = ({ id, method, viewMode = false }: Props) => {
       if (response?.status !== 202) {
         throw new Error("Erro ao atualizar avaliação");
       }
-      //console.log("Envio de Dados do Formulário:", formattedData);
-      // console.log(id);
-      // console.log(date);
-      console.log(
-        "Envio de Dados Formatado para API:",
-        evaluationUpdate(formattedData)
-      );
     } catch (err) {
       console.error("Erro ao submeter formulário:", err);
     }
@@ -237,17 +229,11 @@ const EvaluationForm = ({ id, method, viewMode = false }: Props) => {
     if (response?.status !== 201) {
       throw new Error("Erro ao cadastrar avaliação");
     }
-    //console.log(formattedData);
-    console.log("Avaliação cadastrada com sucesso");
     reset();
     reset({
       prancha: "",
       forcaIsometricaMaos: "",
     });
-    console.log(
-      "Form POST submitted with data:",
-      evaluationToApiPost(formattedData)
-    );
   };
 
   const router = useRouter();
@@ -257,13 +243,11 @@ const EvaluationForm = ({ id, method, viewMode = false }: Props) => {
   ) => {
     switch (method) {
       case "PUT":
-        // console.log("clicado Alterar");
         await updateData(data);
         router.push("/relatorioAvaliacao");
 
         break;
       case "POST":
-        // console.log("clicado Cadastrar");
         await postData(data);
         break;
     }
@@ -415,7 +399,6 @@ const EvaluationForm = ({ id, method, viewMode = false }: Props) => {
             name="prancha"
             render={({ field: { ref, onChange, onBlur, value } }) => (
               <IMaskInput
-                // {...field}
                 inputRef={ref}
                 value={value}
                 onAccept={onChange}
@@ -449,7 +432,6 @@ const EvaluationForm = ({ id, method, viewMode = false }: Props) => {
             control={control}
             render={({ field: { ref, onChange, onBlur, value } }) => (
               <IMaskInput
-                // {...field}
                 inputRef={ref}
                 value={value}
                 onAccept={onChange}

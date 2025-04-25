@@ -1,4 +1,4 @@
-export enum lesoesFront {
+enum lesoesFront {
     ANTERIOR_TORAXICA = "Anterior Toráxica",
     ANTERIOR_ABDOMINAL = "Anterior Abdominal",
     ANTERIOR_PELVICA = "Anterior Pélvica",
@@ -25,7 +25,7 @@ export enum lesoesFront {
     MAO_ESQUERDA = "Mão Esquerda",
 }
 
-export enum lesoesBack {
+enum lesoesBack {
     POSTERIOR_CERVICAL = "Posterior Cervical",
     POSTERIOR_TORAXICA = "Posterior Torácica",
     POSTERIOR_LOMBAR = "Posterior Lombar",

@@ -118,9 +118,6 @@ export default function ListAvaliacao() {
                         >
                           <polyline points="6 9 12 15 18 9"></polyline>
                         </svg>
-                        {/* <span className="mr-2">{">"}</span>{" "} */}
-                        {/* Tentar inserir o icone aqui, usando ::before content url(iconPath). Use summary[open] para saber se o Modal está aberto ou fechado. Estilizar o details como default fechado, e estilizar aberto na tag details[open]*/}
-                        {/* https://stackoverflow.com/questions/61292792/css-selector-for-details-element-when-opened */}
                         <p>{exercicio.nestedExercise.nestedCategory}</p>
                         {(!assessment.exerciseIsComplete(
                           exercicio.exerciseName
@@ -134,11 +131,7 @@ export default function ListAvaliacao() {
                         )}
                       </div>
                     </summary>
-                    {/* <summary
-                      className={`bg-white box-border bg-auto w-full rounded-md font-semibold py-3 px-2 text-left transition duration-400 hover:ease-in hover:border-winePattern z-1 hover:z-0 hover:scale-y-125 hover:scale-x-110 cursor-pointer`}
-                    >
-                      {exercicio.nestedExercise.nestedCategory}
-                    </summary> */}
+
                     <Exercise
                       title={exercicio.title}
                       onClick={() => handleClick(exercicio.exercisePath)}

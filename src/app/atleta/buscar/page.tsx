@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { getAtletas, getAtletaByName } from "@/api/endpoints";
 
-//import AvatarAtleta from "@/components/avatarAtleta/page";
 import { apiToAtletas } from "@/api/middleware/atletas";
 
 import { TAtletas } from "@/types/TAtletas";
@@ -139,9 +138,6 @@ const AtletaSelecionar = () => {
             </li>
           ))}
           <li className="lastElement" />
-          {/* {loading && (
-            <div className="my-5 mx-auto border-solid border-[10px] border-white border-t-[10px] border-t-winePattern rounded-full w-[60px] h-[60px] animate-spin animate-duration-2000" />
-          )} */}
         </ul>
 
         {!loading && listAtleta.length <= 0 && lastPage && (

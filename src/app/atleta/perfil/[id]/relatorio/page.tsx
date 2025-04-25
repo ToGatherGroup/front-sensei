@@ -197,7 +197,6 @@ const IExerciciosDataSchema = yup.object().shape({
 const Relatorio = () => {
   const searchParams = useSearchParams();
   const date = searchParams.get("data") || "";
-  console.log(date);
   const nome = searchParams.get("nome");
   const id = searchParams.get("id");
 
@@ -283,7 +282,6 @@ const Relatorio = () => {
           exerciciosData.forcaIsometricaMaos = parseDuration(
             exerciciosData.forcaIsometricaMaos
           );
-          console.log(exerciciosData);
           setExercicios(exerciciosData);
           setValue("peso", exerciciosData.peso);
           setValue("altura", exerciciosData.altura);
@@ -317,13 +315,6 @@ const Relatorio = () => {
       if (response?.status !== 202) {
         throw new Error("Erro ao atualizar avaliação");
       }
-      // console.log("Envio deDados do Formulário:", formattedData);
-      // console.log(id);
-      // console.log(date);
-      console.log(
-        "Envio deDados do Formatado para Api:",
-        assessmentUpdate(formattedData)
-      );
     } catch (err) {
       console.error("Erro ao submeter formulário:", err);
     }

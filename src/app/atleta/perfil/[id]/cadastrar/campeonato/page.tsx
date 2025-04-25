@@ -23,7 +23,6 @@ type Props = {
 // Página de cadastro de campeonatos do atleta
 const AtletaCampeonatos = ({ params: { id } }: Props) => {
   // ID estático do atleta, para usá-lo remover o id acima que está como parâmetro
-  //const id = 2;
   const { post } = useApiProvider();
 
   // Configuração do formulário
@@ -48,7 +47,6 @@ const AtletaCampeonatos = ({ params: { id } }: Props) => {
       if (response?.status !== 200) {
         throw new Error("Erro ao cadastrar campeonato");
       }
-      console.log("Campeonato cadastrado com sucesso!");
     } catch (error) {
       console.error("Erro ao cadastrar campeonato Api:", error);
       throw error;
